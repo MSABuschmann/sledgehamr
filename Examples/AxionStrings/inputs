@@ -1,2 +1,9 @@
 # Select project
 project.project = AxionStrings
+
+# geometry
+geometry.prob_lo = 0.0 0.0 0.0
+geometry.prob_hi = 120.0  120.0  120.0
+
+# grid layout (starts counting at 0!)
+amr.max_level = 2

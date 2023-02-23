@@ -5,6 +5,8 @@
 #include <AMReX_ParallelDescriptor.H>
 #include <AMReX_Print.H>
 
+#include <SledgeHAMR.H>
+
 int main(int argc, char* argv[])
 {
 	amrex::Initialize(argc,argv);
@@ -15,8 +17,8 @@ int main(int argc, char* argv[])
 	// wallclock time
 	const double strt_total = amrex::ParallelDescriptor::second();
 
-
-
+	// start sledgeHAMR
+	SledgeHAMR sledge;
 		
 	// print runtime
 	double end_total = amrex::ParallelDescriptor::second() - strt_total;
