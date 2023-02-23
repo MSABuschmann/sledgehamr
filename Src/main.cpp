@@ -4,8 +4,10 @@
 #include <AMReX_BLProfiler.H>
 #include <AMReX_ParallelDescriptor.H>
 #include <AMReX_Print.H>
+#include <AMReX_ParmParse.H>
 
 #include <SledgeHAMR.H>
+#include <SledgeHAMR_Init.H>
 
 int main(int argc, char* argv[])
 {
@@ -18,6 +20,7 @@ int main(int argc, char* argv[])
 	const double strt_total = amrex::ParallelDescriptor::second();
 
 	// start sledgeHAMR
+	SledgeHAMR_Init init;
 	SledgeHAMR sledge;
 		
 	// print runtime

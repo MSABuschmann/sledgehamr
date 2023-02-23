@@ -1,9 +1,11 @@
 # Select project
-project.project = AxionStrings
+project.name = AxionStrings
 
 # geometry
-geometry.prob_lo = 0.0 0.0 0.0
-geometry.prob_hi = 120.0  120.0  120.0
+geometry.prob_lo = 0 0 0
+geometry.prob_hi = 23 23 23
 
-# grid layout (starts counting at 0!)
-amr.max_level = 2
+# grid layout
+amr.shadow_hierarchy = 1
+amr.coarse_level_grid_size = 128 
+amr.max_level = 2 #starts counting at 0!
