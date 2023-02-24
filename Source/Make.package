@@ -6,3 +6,4 @@ CEXE_sources += SledgeHAMR.cpp
 CEXE_headers += SledgeHAMR_Init.H
 CEXE_sources += SledgeHAMR_Init.cpp
 
+CEXE_headers += Projects.H

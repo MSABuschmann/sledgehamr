@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
 	// start sledgeHAMR
 	SledgeHAMR_Init init;
-	SledgeHAMR sledge;
+	SledgeHAMR *sledge = init.createInstance();
 		
 	// print runtime
 	double end_total = amrex::ParallelDescriptor::second() - strt_total;

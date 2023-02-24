@@ -5,6 +5,7 @@
 #include <AMReX_Print.H>
 
 #include <SledgeHAMR_Init.H>
+#include <Projects.H>
 
 SledgeHAMR_Init::SledgeHAMR_Init ()
 {
@@ -12,12 +13,17 @@ SledgeHAMR_Init::SledgeHAMR_Init ()
 	finish_AMReX_setup ();
 }
 
+SledgeHAMR* SledgeHAMR_Init::createInstance()
+{
+	SLEDGEHAMR_PROJECT(project_name);
+	amrex::Print() << "Project not found!" << std::endl;
+	return NULL;
+}
+
 void SledgeHAMR_Init::determine_project_id ()
 {
 	amrex::ParmParse pp("project");
-	std::string project_name;
 	pp.get("name",project_name);
-	amrex::Print() << "Selected project: " << project_name << std::endl;
 }
 
 void SledgeHAMR_Init::finish_AMReX_setup ()

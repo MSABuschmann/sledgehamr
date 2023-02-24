@@ -1,17 +1,19 @@
 # sledgeHAMR
-SRC = $(SLEDGEHAMR_HOME)/Source
+SLEDGEHAMR_HOME_ABS = $(realpath $(SLEDGEHAMR_HOME))
+SRC = $(SLEDGEHAMR_HOME_ABS)/Source
 VPATH_LOCATIONS   += $(SRC)
 INCLUDE_LOCATIONS += $(SRC)
 include $(SRC)/Make.package
 
 # Projects
-pdir = $(SLEDGEHAMR_HOME)/Projects
-VPATH_LOCATIONS   += $(pdir)/$(shell ls $(pdir)/)
-INCLUDE_LOCATIONS += $(pdir)/$(shell ls $(pdir)/)
+pdir = $(SLEDGEHAMR_HOME_ABS)/Projects
+PROJECTS = $(shell ls $(pdir)/)
+VPATH_LOCATIONS   += $(foreach dir, $(PROJECTS), $(pdir)/$(dir))
+INCLUDE_LOCATIONS += $(foreach dir, $(PROJECTS), $(pdir)/$(dir))
 CEXE_sources += $(shell ls $(pdir)/*/*.cpp | xargs -n 1 basename )
 CEXE_headers += $(shell ls $(pdir)/*/*.H | xargs -n 1 basename)
 
-$(info echo $(CEXE_sources))
+include $(SLEDGEHAMR_HOME_ABS)/Make.projects
 
 # SWWFT
 #include $(AMREX_HOME)/Src/Extern/SWFFT/Make.package       
