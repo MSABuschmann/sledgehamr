@@ -61,6 +61,12 @@ protected:
 	 * @param	ngrow	Grid growth factor	
 	 */
 	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override {};
+
+	/** @brief Holds the actual simulation data for all levels
+	 *         at two different states in time.
+	 */
+	std::vector<LevelData> grid_new;
+	std::vector<LevelData> grid_old;
 };
 
 #endif //SledgeHAMR_H_
