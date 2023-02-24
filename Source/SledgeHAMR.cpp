@@ -3,10 +3,13 @@
 SledgeHAMR::SledgeHAMR ()
 {
 	amrex::Print() << "Starting sledgeHAMR..." << std::endl;
+	level_synchronizer = new LevelSynchronizer(this);
 }
 
 SledgeHAMR::~SledgeHAMR ()
-{}
+{
+	delete level_synchronizer;
+}
 
 void SledgeHAMR::MakeNewLevelFromCoarse (int lev, amrex::Real time, const amrex::BoxArray& ba,
 					     const amrex::DistributionMapping& dm)
@@ -22,5 +25,5 @@ void SledgeHAMR::MakeNewLevelFromCoarse (int lev, amrex::Real time, const amrex:
 	grid_old[lev].t = time - 1.e200;
 
 	// Fill new level with coarse level data
-	level_synchronizer.FillCoarsePatch(lev, time, grid_new[lev]);
+	level_synchronizer->FillCoarsePatch(lev, time, grid_new[lev]);
 }

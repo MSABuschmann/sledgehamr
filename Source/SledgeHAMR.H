@@ -3,7 +3,10 @@
 
 #include <AMReX_AmrCore.H>
 
+#include <LevelData.H>
 #include <LevelSynchronizer.H>
+
+class LevelSynchronizer;
 
 /** @brief Base class for all derived projects. Combines all the ingredients
  *         to make this code work. 
@@ -68,7 +71,7 @@ protected:
 
 	/** @brief Instance to perform operations between two levels
 	 */
-	LevelSynchronizer level_synchronizer;
+	LevelSynchronizer * level_synchronizer;
 
 	/** @brief Holds the actual simulation data for all levels
 	 *         at two different states in time.
@@ -77,4 +80,4 @@ protected:
 	std::vector<LevelData> grid_old;
 };
 
-#endif //SledgeHAMR_H_l
+#endif //SledgeHAMR_H_

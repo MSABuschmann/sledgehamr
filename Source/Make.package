@@ -7,6 +7,7 @@ CEXE_headers += SledgeHAMR_Init.H
 CEXE_sources += SledgeHAMR_Init.cpp
 
 CEXE_headers += LevelSynchronizer.H
+CEXE_sources += LevelSynchronizer.cpp
 
 CEXE_headers += Projects.H
 CEXE_headers += LevelData.H
