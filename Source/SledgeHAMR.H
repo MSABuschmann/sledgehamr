@@ -3,46 +3,63 @@
 
 #include <AMReX_AmrCore.H>
 
+/** @brief Base class for all derived projects. Combines all the ingredients
+ *         to make this code work. 
+ */
 class SledgeHAMR
     : public amrex::AmrCore
 {
 public:
 
-	////////////////
-	// public member functions
-
-	// constructor
-	//             
 	SledgeHAMR ();
 	virtual ~SledgeHAMR ();
 
-
 protected:
 
-	// Make a new level using provided BoxArray and DistributionMapping and
-	// fill with interpolated coarse level data.
-	// overrides the pure virtual function in AmrCore
+	/** @brief Make a new level using provided BoxArray and DistributionMapping,
+	 *         and fills it with interpolated coarse level data.
+	 *         Overrides the pure virtual function in amrex::AmrCore.
+	 * @param	lev	Level to be created.
+	 * @param	time	Time of new grid.
+	 * @param	ba	New amrex::BoxArray.
+	 * @param	dm	New amrex::DistributionMapping.
+	 */
 	virtual void MakeNewLevelFromCoarse (int lev, amrex::Real time, const amrex::BoxArray& ba,
 						 const amrex::DistributionMapping& dm) override {};
 
-	// Remake an existing level using provided BoxArray and DistributionMapping and
-	// fill with existing fine and coarse data.
-	// overrides the pure virtual function in AmrCore
+	/** @brief Reake a new level using provided BoxArray and DistributionMapping,
+	 *         and fills it with interpolated coarse level data.
+	 *         Overrides the pure virtual function in amrex::AmrCore.
+	 * @param	lev	Level to be remade.
+	 * @param	time	Time of new grid.
+	 * @param	ba	New amrex::BoxArray.
+	 * @param	dm	New amrex::DistributionMapping.
+	 */
 	virtual void RemakeLevel (int lev, amrex::Real time, const amrex::BoxArray& ba,
 				      const amrex::DistributionMapping& dm) override {};
-
-	// Delete level data
-	// overrides the pure virtual function in AmrCore
+	
+	/** @brief Delete level data.
+	 * @param	lev	Level to be deleted.
+	 */
 	virtual void ClearLevel (int lev) override {};
 
-	// Make a new level from scratch using provided BoxArray and DistributionMapping.
-	// Only used during initialization.
-	// overrides the pure virtual function in AmrCore
+	/** @brief Make a new level from scratch using provided BoxArray and DistributionMapping.
+	 *         Only used during initialization.
+	 *         Overrides the pure virtual function in amrex::AmrCore.
+	 * @param	lev	Level to be created.
+	 * @param	time	Time of new grid.
+	 * @param	ba	New amrex::BoxArray.
+	 * @param	dm	New amrex::DistributionMapping.
+	 */
 	virtual void MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex::BoxArray& ba,
 						  const amrex::DistributionMapping& dm) override {};
 
-	// tag all cells for refinement
-	// overrides the pure virtual function in AmrCore
+	/** @brief Tag cells for refinement.
+	 *         Overrides the pure virtual function in amrex::AmrCore.
+	 * @param	lev	Level on which cells are tagged.
+	 * @param	time	Time of said level.
+	 * @param	ngrow	Grid growth factor	
+	 */
 	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override {};
 };
 
