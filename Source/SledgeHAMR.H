@@ -3,12 +3,16 @@
 
 #include <AMReX_AmrCore.H>
 
+#include <LevelSynchronizer.H>
+
 /** @brief Base class for all derived projects. Combines all the ingredients
  *         to make this code work. 
  */
 class SledgeHAMR
     : public amrex::AmrCore
 {
+	friend class LevelSynchronizer;
+
 public:
 
 	SledgeHAMR ();
@@ -25,7 +29,7 @@ protected:
 	 * @param	dm	New amrex::DistributionMapping.
 	 */
 	virtual void MakeNewLevelFromCoarse (int lev, amrex::Real time, const amrex::BoxArray& ba,
-						 const amrex::DistributionMapping& dm) override {};
+						 const amrex::DistributionMapping& dm) override;
 
 	/** @brief Reake a new level using provided BoxArray and DistributionMapping,
 	 *         and fills it with interpolated coarse level data.
@@ -62,6 +66,10 @@ protected:
 	 */
 	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override {};
 
+	/** @brief Instance to perform operations between two levels
+	 */
+	LevelSynchronizer level_synchronizer;
+
 	/** @brief Holds the actual simulation data for all levels
 	 *         at two different states in time.
 	 */
@@ -69,4 +77,4 @@ protected:
 	std::vector<LevelData> grid_old;
 };
 
-#endif //SledgeHAMR_H_
+#endif //SledgeHAMR_H_l
