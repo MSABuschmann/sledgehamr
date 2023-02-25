@@ -46,6 +46,7 @@ protected:
 				      const amrex::DistributionMapping& dm) override {};
 	
 	/** @brief Delete level data.
+	 *         Overrides the pure virtual function in amrex::AmrCore.
 	 * @param	lev	Level to be deleted.
 	 */
 	virtual void ClearLevel (int lev) override {};
