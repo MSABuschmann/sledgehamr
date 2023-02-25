@@ -23,31 +23,33 @@ public:
          *         This is used e.g. when a new level of refinement is added.
          * @param	lev	New level to be filled with data from lev=1.
 	 * @param	time	Time of new level.
-	 * @param	levdat	New level data.
+	 * @param	ld	New level data.
 	 */
-	void FillCoarsePatch (int lev, double time, LevelData& levdat);
+	void FillCoarsePatch (int lev, double time, LevelData& ld);
 
 	/** @brief Fills LevelData with data from valid regions and fills ghost cells.
 	 * 	   Works for single level and 2-level cases (interpolating from coarse).
 	 * @param	lev	(Fine) Level to be filled.
 	 * @param	time	Time of level.
-	 * @param	levdat	Level data to be filled.
+	 * @param	ld	Level data to be filled.
 	 */
-	void FillPatch (int lev, double time, LevelData& levdat) {};
+	void FillPatch (int lev, double time, LevelData& ld);
 
 private:	
 
 	/** @brief Fetches level data at a given level and time.
+	 *	   Needs to be amrex::Vector not std::vector.
 	 * @param	lev	Level at which data is to be fetched.
 	 * @param	time	Time at which data is to be fetched. If time 
 	 * 			does not align with t_old or t_new both states
 	 *			will be returned.
-	 * @param	levdat	Vector to be filled with fetched data. 
+	 * @return 		Vector with pointer to fetched data.
 	 */
-	void GetLevelData (int lev, double time, std::vector<LevelData*>& levdat);
+	amrex::Vector<LevelData*> GetLevelData (int lev, double time);
 
 	/** @brief Integer array containing the type of 
-	 *         boundary condition at each boundary edge
+	 *         boundary condition at each boundary edge.
+	 *	   Needs to be amrex::Vector not std::vector.
 	 */
 	amrex::Vector<amrex::BCRec> bcs;
 

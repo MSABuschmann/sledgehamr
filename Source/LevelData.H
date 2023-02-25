@@ -16,6 +16,8 @@ public:
 		: amrex::MultiFab {ba, dm, ncomp, nghost}
 		, t{time} {};
 
+	using amrex::MultiFab::MultiFab;
+
 	/** @brief Overload amrex::MultiFab::define function to include time.
 	 * @param	ba	Box array.
 	 * @param	dm	Distribution mapping.
@@ -27,11 +29,26 @@ public:
 	{
 		define(ba, dm, ncomp, nghost);
 		t = time;
-	};
+	}
 
 	using amrex::MultiFab::define;
 
-	/** @brief Time of amrex::MultiFab data.
+	/** @brief Static method that returns vector of times from a given LevelData vectorm
+	 * @param	lds	Vector of pointers to LevelData objects.
+	 * @return 		Vector of times.
+	 */
+	static amrex::Vector<double> getTimes(std::vector<LevelData*>& lds)
+	{
+		amrex::Vector<double> times;
+
+		for(LevelData* ld : lds){
+			times.push_back( ld->t );
+		}
+
+		return times;
+	};
+
+	/** @brief Time corresponding to amrex::MultiFab data.
 	 */
 	double t = 0.;
 };
