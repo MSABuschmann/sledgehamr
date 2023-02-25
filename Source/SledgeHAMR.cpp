@@ -38,6 +38,6 @@ void SledgeHAMR::RemakeLevel (int lev, amrex::Real time, const amrex::BoxArray& 
 	new_state.clear();
 
 	// remake old_grid
-	LevelData old_state(ba, dm, ncomp, nghost);
-	std::swap(old_state,grid_old[lev]);
+	grid_old[lev].clear();
+	grid_old[lev].define(ba, dm, ncomp, nghost);
 }
