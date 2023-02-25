@@ -49,7 +49,7 @@ protected:
 	 *         Overrides the pure virtual function in amrex::AmrCore.
 	 * @param	lev	Level to be deleted.
 	 */
-	virtual void ClearLevel (int lev) override {};
+	virtual void ClearLevel (int lev) override;
 
 	/** @brief Make a new level from scratch using provided BoxArray and DistributionMapping.
 	 *         Only used during initialization.

@@ -41,3 +41,9 @@ void SledgeHAMR::RemakeLevel (int lev, amrex::Real time, const amrex::BoxArray& 
 	grid_old[lev].clear();
 	grid_old[lev].define(ba, dm, ncomp, nghost);
 }
+
+void SledgeHAMR::ClearLevel (int lev)
+{
+	grid_new[lev].clear();
+	grid_old[lev].clear();
+}
