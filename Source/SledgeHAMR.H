@@ -43,7 +43,7 @@ protected:
 	 * @param	dm	New amrex::DistributionMapping.
 	 */
 	virtual void RemakeLevel (int lev, amrex::Real time, const amrex::BoxArray& ba,
-				      const amrex::DistributionMapping& dm) override {};
+				      const amrex::DistributionMapping& dm) override;
 	
 	/** @brief Delete level data.
 	 *         Overrides the pure virtual function in amrex::AmrCore.

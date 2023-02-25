@@ -19,13 +19,21 @@ class LevelSynchronizer
 public:
 	LevelSynchronizer (SledgeHAMR * owner);
 
-	/** @brief Fills LeveData with information from a coarse level.
+	/** @brief Fills LevelData with information from a coarse level.
          *         This is used e.g. when a new level of refinement is added.
          * @param	lev	New level to be filled with data from lev=1.
 	 * @param	time	Time of new level.
 	 * @param	levdat	New level data.
 	 */
 	void FillCoarsePatch (int lev, double time, LevelData& levdat);
+
+	/** @brief Fills LevelData with data from valid regions and fills ghost cells.
+	 * 	   Works for single level and 2-level cases (interpolating from coarse).
+	 * @param	lev	(Fine) Level to be filled.
+	 * @param	time	Time of level.
+	 * @param	levdat	Level data to be filled.
+	 */
+	void FillPatch (int lev, double time, LevelData& levdat) {};
 
 private:	
 

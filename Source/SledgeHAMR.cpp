@@ -14,16 +14,30 @@ SledgeHAMR::~SledgeHAMR ()
 void SledgeHAMR::MakeNewLevelFromCoarse (int lev, amrex::Real time, const amrex::BoxArray& ba,
 					     const amrex::DistributionMapping& dm)
 {
-	// Define a new level from scratch
 	const int ncomp = grid_new[lev-1].nComp();
 	const int nghost = grid_new[lev-1].nGrow();
 
-	grid_new[lev].define(ba, dm, ncomp, nghost);
+	// Define a new level from scratch
+	grid_new[lev].define(ba, dm, ncomp, nghost, time);
 	grid_old[lev].define(ba, dm, ncomp, nghost);
-
-	grid_new[lev].t = time;
-	grid_old[lev].t = time - 1.e200;
 
 	// Fill new level with coarse level data
 	level_synchronizer->FillCoarsePatch(lev, time, grid_new[lev]);
+}
+
+void SledgeHAMR::RemakeLevel (int lev, amrex::Real time, const amrex::BoxArray& ba, 
+				  const amrex::DistributionMapping& dm)
+{
+	const int ncomp = grid_new[lev].nComp();
+	const int nghost = grid_new[lev].nGrow();
+
+	// remake new_grid and fill with data
+	LevelData new_state(ba, dm, ncomp, nghost, grid_new[lev].t);
+	level_synchronizer->FillPatch(lev, time, new_state);
+	std::swap(new_state, grid_new[lev]);
+	new_state.clear();
+
+	// remake old_grid
+	LevelData old_state(ba, dm, ncomp, nghost);
+	std::swap(old_state,grid_old[lev]);
 }
