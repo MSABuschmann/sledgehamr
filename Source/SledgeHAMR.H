@@ -23,6 +23,17 @@ public:
 
 protected:
 
+	/** @brief Make a new level from scratch using provided BoxArray and DistributionMapping.
+	 *         Only used during initialization.
+	 *         Overrides the pure virtual function in amrex::AmrCore.
+	 * @param	lev	Level to be created.
+	 * @param	time	Time of new grid.
+	 * @param	ba	New amrex::BoxArray.
+	 * @param	dm	New amrex::DistributionMapping.
+	 */
+	virtual void MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex::BoxArray& ba,
+						  const amrex::DistributionMapping& dm) override;
+
 	/** @brief Make a new level using provided BoxArray and DistributionMapping,
 	 *         and fills it with interpolated coarse level data.
 	 *         Overrides the pure virtual function in amrex::AmrCore.
@@ -51,17 +62,6 @@ protected:
 	 */
 	virtual void ClearLevel (int lev) override;
 
-	/** @brief Make a new level from scratch using provided BoxArray and DistributionMapping.
-	 *         Only used during initialization.
-	 *         Overrides the pure virtual function in amrex::AmrCore.
-	 * @param	lev	Level to be created.
-	 * @param	time	Time of new grid.
-	 * @param	ba	New amrex::BoxArray.
-	 * @param	dm	New amrex::DistributionMapping.
-	 */
-	virtual void MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex::BoxArray& ba,
-						  const amrex::DistributionMapping& dm) override {};
-
 	/** @brief Tag cells for refinement.
 	 *         Overrides the pure virtual function in amrex::AmrCore.
 	 * @param	lev	Level on which cells are tagged.
@@ -79,6 +79,11 @@ protected:
 	 */
 	std::vector<LevelData> grid_new;
 	std::vector<LevelData> grid_old;
+
+	/** @brief Flag whether simulation should use a shadow hierarchy.
+	 *         To be set in inputs file.
+	 */
+	bool shadow_hierarchy = false;
 };
 
 #endif //SledgeHAMR_H_

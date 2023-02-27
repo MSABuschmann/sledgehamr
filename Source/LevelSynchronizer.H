@@ -35,6 +35,11 @@ public:
 	 */
 	void FillPatch (int lev, double time, LevelData& ld);
 
+	/** @brief Average down fine level (lev+1) onto coarse level (lev).
+	 * @param	lev	Coarse Level onto which to be averaged down.
+	 */
+	void AverageDownTo (int lev);
+
 private:	
 
 	/** @brief Fetches level data at a given level and time.

@@ -1,5 +1,6 @@
 #include <AMReX_PhysBCFunct.H>
 #include <AMReX_FillPatchUtil.H>
+#include <AMReX_MultiFabUtil.H>
 
 #include <LevelSynchronizer.H>
 
@@ -48,6 +49,12 @@ void LevelSynchronizer::FillPatch (int lev, double time, LevelData& ld)
 					  sim->geom[lev-1], sim->geom[lev], cphysbc, 0, fphysbc, 0, 
 					  sim->refRatio(lev-1), mapper, bcs, 0);
 	}
+}
+
+void LevelSynchronizer::AverageDownTo (int lev)
+{
+	amrex::average_down(sim->grid_new[lev+1], sim->grid_new[lev], sim->geom[lev+1], sim->geom[lev], 
+			    0, sim->grid_new[lev].nComp(), sim->refRatio(lev));
 }
 
 amrex::Vector<LevelData*> LevelSynchronizer::GetLevelData (int lev, double time)

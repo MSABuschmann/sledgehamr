@@ -11,6 +11,41 @@ SledgeHAMR::~SledgeHAMR ()
 	delete level_synchronizer;
 }
 
+void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex::BoxArray& ba,
+					     const amrex::DistributionMapping& dm)
+{
+	/* TODO Placeholders */
+	const int ncomp = 2;
+	const int nghost = 2;
+
+	// Define lowest level from scratch
+	grid_new[lev].define(ba, dm, ncomp, nghost, time);
+	grid_old[lev].define(ba, dm, ncomp, nghost);
+
+	// If shadow hierarchy is used, above level is the shadow level
+	// We now need to also make the coarse level.
+	if( shadow_hierarchy ){
+		++lev;
+
+		// create local copy of ba since ba is const
+		amrex::BoxArray rba;
+		rba.refine(2);
+		grid_new[lev].define(rba, dm, ncomp, nghost, time);
+		grid_old[lev].define(rba, dm, ncomp, nghost);
+
+		// already set for shadow level
+		SetBoxArray(lev, rba);
+		SetDistributionMap(lev, dm);
+	}
+
+	// Fill current level lev with initial state data
+	/* TODO */
+
+	// fill shadow level with data from coarse level
+	if( shadow_hierarchy )
+		level_synchronizer->AverageDownTo(0);
+}
+
 void SledgeHAMR::MakeNewLevelFromCoarse (int lev, amrex::Real time, const amrex::BoxArray& ba,
 					     const amrex::DistributionMapping& dm)
 {
