@@ -15,16 +15,16 @@ public:
  	 * @return Pointer to derived class instance cast to base. 
  	 *         Returns NULL if none found.
  	 */
-	SledgeHAMR* createInstance();
+	SledgeHAMR* CreateInstance();
 	
 private:
 	/** @brief Reads project name from inputs file
          */
-	void determine_project_name ();
+	void DetermineProjectName ();
 
 	/** @brief Set parameters such as 'amr.n_cell' for amrex::AmrCore
          */
-	void finish_AMReX_setup ();
+	void FinishAMReXSetup ();
 
 	/** @brief Contains 'project.name' from inputs file
  	 */
