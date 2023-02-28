@@ -10,4 +10,5 @@ CEXE_headers += LevelSynchronizer.H
 CEXE_sources += LevelSynchronizer.cpp
 
 CEXE_headers += LevelData.H
+CEXE_headers += Scalars.H
 CEXE_headers += Projects.H

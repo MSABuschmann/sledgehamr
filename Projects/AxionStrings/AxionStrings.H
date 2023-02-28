@@ -3,15 +3,15 @@
 
 #include <SledgeHAMR.H>
 
+/** @brief Class to simulate axion strings.
+ */
 class AxionStrings
     : public SledgeHAMR
 {
-public:
+	ADD_SCALARS(Psi1, Psi2, Pi1, Pi2);
 
-	// constructor
-	//             
+public:
 	AxionStrings ();
-	virtual ~AxionStrings ();
 };
 
 #endif //AxionStrings_H_

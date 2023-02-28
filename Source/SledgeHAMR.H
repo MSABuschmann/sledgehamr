@@ -5,6 +5,7 @@
 
 #include <LevelData.H>
 #include <LevelSynchronizer.H>
+#include <Scalars.H>
 
 class LevelSynchronizer;
 
@@ -84,6 +85,8 @@ protected:
 	 *         To be set in inputs file.
 	 */
 	bool shadow_hierarchy = false;
+
+	std::vector<ScalarField*> scalar_fields;
 };
 
 #endif //SledgeHAMR_H_
