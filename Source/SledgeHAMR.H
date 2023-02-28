@@ -86,6 +86,8 @@ protected:
 	 */
 	bool shadow_hierarchy = false;
 
+	/** @brief Holds pointers to all simulated scalar fields.
+	 */
 	std::vector<ScalarField*> scalar_fields;
 };
 
