@@ -15,7 +15,7 @@ void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex
 					     const amrex::DistributionMapping& dm)
 {
 	/* TODO Placeholders */
-	const int ncomp = 2;
+	const int ncomp = scalar_fields.size();
 	const int nghost = 2;
 
 	// Define lowest level from scratch
