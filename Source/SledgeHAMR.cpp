@@ -10,9 +10,13 @@ SledgeHAMR::SledgeHAMR ()
 	io_module = new IOModule(this);
 
 	ParseInput();
-	
+
+	// Fill various level vectors	
 	grid_new.resize(max_level+1);
 	grid_old.resize(max_level+1);
+
+	for(int lev=0; lev<=max_level; ++lev)
+		dimN.push_back( coarse_level_grid_size * pow(2,lev-shadow_hierarchy) );
 }
 
 SledgeHAMR::~SledgeHAMR ()
@@ -42,8 +46,9 @@ void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex
 		++lev;
 
 		// create local copy of ba since ba is const
-		amrex::BoxArray rba;
+		amrex::BoxArray rba = ba;
 		rba.refine(2);
+
 		grid_new[lev].define(rba, dm, ncomp, nghost, time);
 		grid_old[lev].define(rba, dm, ncomp, nghost);
 
@@ -102,6 +107,8 @@ void SledgeHAMR::ParseInput ()
 	{
 		amrex::ParmParse pp("amr");
 		pp.query("nghost", nghost);
+		pp.query("shadow_hierarchy", shadow_hierarchy);
+		pp.query("coarse_level_grid_size", coarse_level_grid_size);
 	}
 	
 	{

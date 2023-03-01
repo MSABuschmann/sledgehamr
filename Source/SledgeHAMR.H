@@ -111,7 +111,15 @@ protected:
 
 	/** @brief Start and end times of the simulation.
 	 */
-	double t_start = 0, t_end = 0;
+	double t_start, t_end;
+
+	/** @brief Number of cells in each direction for each level.
+	 */
+	std::vector<unsigned int> dimN;
+
+	/** @brief Number of coarse level cells in each direction. 
+	 */
+	int coarse_level_grid_size;
 
 private:
 
