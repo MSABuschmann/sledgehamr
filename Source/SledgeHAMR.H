@@ -71,7 +71,7 @@ protected:
 	 */
 	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override {};
 
-	/** @brief Instance to perform operations between two levels
+	/** @brief Instance to perform operations between two levels.
 	 */
 	LevelSynchronizer * level_synchronizer;
 
@@ -89,6 +89,16 @@ protected:
 	/** @brief Holds pointers to all simulated scalar fields.
 	 */
 	std::vector<ScalarField*> scalar_fields;
+
+	/** @brief Number of ghost cells.
+	 */
+	int nghost = 0;
+
+private:
+
+	/** @brief Parse various input parameters from inputs file.
+	 */
+	void ParseInput ();
 };
 
 #endif //SledgeHAMR_H_

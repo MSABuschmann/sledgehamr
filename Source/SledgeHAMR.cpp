@@ -1,9 +1,12 @@
+#include <AMReX_ParmParse.H>
+
 #include <SledgeHAMR.H>
 
 SledgeHAMR::SledgeHAMR ()
 {
 	amrex::Print() << "Starting sledgeHAMR..." << std::endl;
 	level_synchronizer = new LevelSynchronizer(this);
+	ParseInput();
 }
 
 SledgeHAMR::~SledgeHAMR ()
@@ -14,9 +17,7 @@ SledgeHAMR::~SledgeHAMR ()
 void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex::BoxArray& ba,
 					     const amrex::DistributionMapping& dm)
 {
-	/* TODO Placeholders */
 	const int ncomp = scalar_fields.size();
-	const int nghost = 2;
 
 	// Define lowest level from scratch
 	grid_new[lev].define(ba, dm, ncomp, nghost, time);
@@ -81,4 +82,10 @@ void SledgeHAMR::ClearLevel (int lev)
 {
 	grid_new[lev].clear();
 	grid_old[lev].clear();
+}
+
+void SledgeHAMR::ParseInput ()
+{
+	amrex::ParmParse pp("amr");
+	pp.query("nghost", nghost);
 }
