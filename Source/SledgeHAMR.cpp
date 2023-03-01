@@ -5,13 +5,24 @@
 SledgeHAMR::SledgeHAMR ()
 {
 	amrex::Print() << "Starting sledgeHAMR..." << std::endl;
+
 	level_synchronizer = new LevelSynchronizer(this);
+
 	ParseInput();
+	
+	grid_new.resize(max_level+1);
+	grid_old.resize(max_level+1);
 }
 
 SledgeHAMR::~SledgeHAMR ()
 {
 	delete level_synchronizer;
+}
+
+void SledgeHAMR::Init ()
+{
+	/* TODO: Check for checkpoint file etc. */
+	InitFromScratch( t_start );
 }
 
 void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex::BoxArray& ba,
@@ -86,6 +97,14 @@ void SledgeHAMR::ClearLevel (int lev)
 
 void SledgeHAMR::ParseInput ()
 {
-	amrex::ParmParse pp("amr");
-	pp.query("nghost", nghost);
+	{
+		amrex::ParmParse pp("amr");
+		pp.query("nghost", nghost);
+	}
+	
+	{
+		amrex::ParmParse pp("sim");
+		pp.get("t_start", t_start);
+		pp.get("t_end", t_end);
+	}
 }

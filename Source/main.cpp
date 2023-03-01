@@ -23,6 +23,7 @@ int main(int argc, char* argv[])
 	// start sledgeHAMR
 	SledgeHAMR_Init init;
 	SledgeHAMR *sledge = init.CreateInstance();
+	sledge->Init();
 		
 	// print runtime
 	double end_total = amrex::ParallelDescriptor::second() - strt_total;

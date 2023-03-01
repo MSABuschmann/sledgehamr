@@ -19,8 +19,15 @@ class SledgeHAMR
 
 public:
 
+	/** @brief Creates instances of submodules and reads input parameters.
+	 */
 	SledgeHAMR ();
+
 	virtual ~SledgeHAMR ();
+
+	/** @brief Initalizes data from scratch or from checkpoint file. 
+	 */
+	void Init ();
 
 protected:
 
@@ -46,7 +53,7 @@ protected:
 	virtual void MakeNewLevelFromCoarse (int lev, amrex::Real time, const amrex::BoxArray& ba,
 						 const amrex::DistributionMapping& dm) override;
 
-	/** @brief Reake a new level using provided BoxArray and DistributionMapping,
+	/** @brief Remake a new level using provided BoxArray and DistributionMapping,
 	 *         and fills it with interpolated coarse level data.
 	 *         Overrides the pure virtual function in amrex::AmrCore.
 	 * @param	lev	Level to be remade.
@@ -93,6 +100,10 @@ protected:
 	/** @brief Number of ghost cells.
 	 */
 	int nghost = 0;
+
+	/** @brief Start and end times of the simulation.
+	 */
+	double t_start = 0, t_end = 0;
 
 private:
 

@@ -39,12 +39,19 @@ void SledgeHAMR_Init::FinishAMReXSetup ()
 	bool shadow_hierarchy = false;
 
 	amrex::ParmParse pp("amr");
-	pp.get("coarse_level_grid_size",grid_size);
-	pp.get("shadow_hierarchy",shadow_hierarchy);
+	pp.get("coarse_level_grid_size", grid_size);
+	pp.get("shadow_hierarchy", shadow_hierarchy);
 
 	if( shadow_hierarchy )
 		grid_size /= 2;
 
 	std::vector<int> vect(3,grid_size);
-	pp.addarr("n_cell",vect);
+	pp.addarr("n_cell", vect);
+
+	// Determine maximum number of levels.
+	int max_refinement_levels = 0;
+	pp.get("max_refinement_levels", max_refinement_levels);
+
+	int max_level = max_refinement_levels + shadow_hierarchy;
+	pp.add("max_level", max_level);
 }

@@ -1,6 +1,10 @@
 # Select project
 project.name = AxionStrings
 
+# simulation parameters
+sim.t_start = 0
+sim.t_end = 10
+
 # geometry
 geometry.prob_lo = 0 0 0
 geometry.prob_hi = 23 23 23
@@ -8,4 +12,5 @@ geometry.prob_hi = 23 23 23
 # grid layout
 amr.shadow_hierarchy = 1
 amr.coarse_level_grid_size = 128 
-amr.max_level = 2 #starts counting at 0!
+amr.max_refinement_levels = 2
+amr.nghost = 1
