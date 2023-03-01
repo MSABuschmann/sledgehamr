@@ -59,11 +59,11 @@ private:
 	amrex::Vector<amrex::BCRec> bcs;
 
 	/** @brief Pointer to AMReX interpolator to be
-  	 * 	   used between levels 
+  	 * 	   used between levels.
 	 */
 	amrex::Interpolater * mapper = nullptr;
 
-	/** @brief Pointer to owner on whose data this class operates
+	/** @brief Pointer to owner on whose data this class operates.
 	 */
 	SledgeHAMR * sim;		
 };

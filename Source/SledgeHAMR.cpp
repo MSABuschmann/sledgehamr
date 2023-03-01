@@ -7,6 +7,7 @@ SledgeHAMR::SledgeHAMR ()
 	amrex::Print() << "Starting sledgeHAMR..." << std::endl;
 
 	level_synchronizer = new LevelSynchronizer(this);
+	io_module = new IOModule(this);
 
 	ParseInput();
 	
@@ -17,6 +18,7 @@ SledgeHAMR::SledgeHAMR ()
 SledgeHAMR::~SledgeHAMR ()
 {
 	delete level_synchronizer;
+	delete io_module;
 }
 
 void SledgeHAMR::Init ()
@@ -51,7 +53,7 @@ void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex
 	}
 
 	// Fill current level lev with initial state data
-	/* TODO */
+	io_module->FillLevelFromFile(lev);
 
 	// fill shadow level with data from coarse level
 	if( shadow_hierarchy )

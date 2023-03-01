@@ -5,9 +5,11 @@
 
 #include <LevelData.H>
 #include <LevelSynchronizer.H>
+#include <IOModule.H>
 #include <Scalars.H>
 
 class LevelSynchronizer;
+class IOModule;
 
 /** @brief Base class for all derived projects. Combines all the ingredients
  *         to make this code work. 
@@ -16,6 +18,7 @@ class SledgeHAMR
     : public amrex::AmrCore
 {
 	friend class LevelSynchronizer;
+	friend class IOModule;
 
 public:
 
@@ -81,6 +84,11 @@ protected:
 	/** @brief Instance to perform operations between two levels.
 	 */
 	LevelSynchronizer * level_synchronizer;
+
+	/** @brief Module that handles all IO operations
+	 * 	   (with the exception of parsing the inputs file
+	 */
+	IOModule * io_module;
 
 	/** @brief Holds the actual simulation data for all levels
 	 *         at two different states in time.
