@@ -54,24 +54,53 @@ void IOModule::FillLevelFromFile_NoChunks (int lev)
 		// If no file found, fill level with 0's. 
 		// Otherwise read file and fill LevelData.
 		if( initial_state_file_component == "" ){
-			FillLevelFromConst(lev, 0);
+			FillLevelFromConst(lev, f2, 0);
 		}else{
 			ReadFromHDF5(initial_state_file_component, 
 					{sim->scalar_fields[f2]->name, "data"},
 					input_data);
-			FillLevelFromArray(lev, input_data);
+			FillLevelFromArray(lev, f2, input_data, dimN);
 		}
 	}
 
 	delete[] input_data;	
 }
 
-void IOModule::FillLevelFromArray (int lev, double* d)
+void IOModule::FillLevelFromArray (int lev, const int comp, double* data, 
+				       const unsigned long long dimN)
 {
-	/* TODO */
+	LevelData& state = sim->grid_new[lev];
+	
+	#pragma omp parallel
+	for ( amrex::MFIter mfi(state, amrex::TilingIfNotGPU()); mfi.isValid(); ++mfi )
+	{
+		const amrex::Box& bx = mfi.tilebox();
+		const auto& state_arr = state.array(mfi);
+
+		amrex::ParallelFor(bx,
+		 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+			unsigned long long ind =  (unsigned long long)i * dimN*dimN 
+						+ (unsigned long long)j * dimN
+						+ (unsigned long long)k;
+			state_arr(i,j,k,comp) = data[ind];
+		});
+	}
 }
 
-void IOModule::FillLevelFromConst (int lev, const double c)
+void IOModule::FillLevelFromConst (int lev, const int comp, const double c)
 {
-	/* TODO */
+	LevelData& state = sim->grid_new[lev];
+
+	#pragma omp parallel
+	for ( amrex::MFIter mfi(state, amrex::TilingIfNotGPU()); mfi.isValid(); ++mfi )
+	{
+		const amrex::Box& bx = mfi.tilebox();
+		const auto& state_arr = state.array(mfi);
+
+		amrex::ParallelFor(bx,
+		 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+			state_arr(i,j,k,comp) = c;
+		});
+	}
+
 }

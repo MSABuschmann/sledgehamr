@@ -36,15 +36,20 @@ private:
 
 	/** @brief Copies data from array into LevelData.
 	 * @param	lev	Level to be filled with data.
-	 * @param	d	Data array.
+	 * @param	comp	Component to be filled.
+	 * @param	data	Data array.
+	 * @param	dimN	Number of cells in each direction
+	 *			of level lev.
 	 */
-	void FillLevelFromArray (int lev, double* d);
+	void FillLevelFromArray (int lev, const int comp, double* data, 
+				     const unsigned long long dimN);
 
 	/** @brief Fills LevelData with a constant value.
 	 * @param	lev	Level to be filled with data.
+	 * @param	comp	Component to be filled.
 	 * @param	c	Constant.
 	 */
-	void FillLevelFromConst (int lev, const double c);
+	void FillLevelFromConst (int lev, const int comp, const double c);
 
 	/** @brief Reads dataset from HDF5 file. 
 	 * @param	filename	Name of HDF5 file.
