@@ -34,6 +34,16 @@ void SledgeHAMR::Init ()
 	InitFromScratch( t_start );
 }
 
+void SledgeHAMR::Evolve ()
+{
+	while( grid_new[0].t < t_end ){
+		TimeStep(0);
+
+		/* TODO */
+		break;
+	}
+}
+
 void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex::BoxArray& ba,
 					     const amrex::DistributionMapping& dm)
 {
@@ -121,4 +131,9 @@ void SledgeHAMR::ParseInput ()
 		pp.get("L", L);
 		pp.get("cfl", cfl);
 	}
+}
+
+void SledgeHAMR::TimeStep (int lev)
+{
+	/* TODO */
 }

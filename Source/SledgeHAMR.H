@@ -32,6 +32,10 @@ public:
 	 */
 	void Init ();
 
+	/** @brief Starts the evolution
+	 */
+	void Evolve ();
+
 protected:
 
 	/** @brief Make a new level from scratch using provided BoxArray and DistributionMapping.
@@ -138,6 +142,12 @@ private:
 	/** @brief Parse various input parameters from inputs file.
 	 */
 	void ParseInput ();
+
+	/** @brief Does one time step at a given level.
+	 * 	   This function is recursive.
+	 * @param	lev	Level to advance.
+	 */
+	void TimeStep (int lev);
 };
 
 #endif //SledgeHAMR_H_
