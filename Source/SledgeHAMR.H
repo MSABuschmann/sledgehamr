@@ -113,6 +113,14 @@ protected:
 	 */
 	double t_start, t_end;
 
+	/** @brief Time step size and grid spacing at each level.
+	 */
+	std::vector<double> dt, dx;
+
+	/** @brief CFL criteria.
+	 */
+	double cfl;
+
 	/** @brief Box length.
 	 */
 	double L;

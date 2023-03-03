@@ -4,10 +4,8 @@ project.name = AxionStrings
 # simulation parameters
 sim.t_start = 0
 sim.t_end = 10
-
-# geometry
-geometry.prob_lo = 0 0 0
-geometry.prob_hi = 23 23 23
+sim.L = 23
+sim.cfl = 0.3
 
 # grid layout
 amr.shadow_hierarchy = 1

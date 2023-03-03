@@ -15,8 +15,11 @@ SledgeHAMR::SledgeHAMR ()
 	grid_new.resize(max_level+1);
 	grid_old.resize(max_level+1);
 
-	for(int lev=0; lev<=max_level; ++lev)
+	for(int lev=0; lev<=max_level; ++lev){
 		dimN.push_back( coarse_level_grid_size * pow(2,lev-shadow_hierarchy) );
+		dx.push_back( L/(double)dimN[lev] );
+		dt.push_back( dx[lev] * cfl );
+	}
 }
 
 SledgeHAMR::~SledgeHAMR ()
@@ -116,5 +119,6 @@ void SledgeHAMR::ParseInput ()
 		pp.get("t_start", t_start);
 		pp.get("t_end", t_end);
 		pp.get("L", L);
+		pp.get("cfl", cfl);
 	}
 }

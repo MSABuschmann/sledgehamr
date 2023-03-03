@@ -59,8 +59,11 @@ void SledgeHAMR_Init::FinishAMReXSetup ()
 	amrex::ParmParse pp_sim("sim");
 	double L;
 	pp_sim.get("L", L);
+
 	std::vector<double> prob_lo(3,0);
 	std::vector<double> prob_hi(3,L);
-	pp_amr.addarr("geometry.prob_lo", prob_lo);
-	pp_amr.addarr("geometry.prob_hi", prob_hi);
+
+	amrex::ParmParse pp_geo("geometry");
+	pp_geo.addarr("prob_lo", prob_lo);
+	pp_geo.addarr("prob_hi", prob_hi);
 }
