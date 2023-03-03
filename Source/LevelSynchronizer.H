@@ -66,6 +66,18 @@ private:
 	/** @brief Pointer to owner on whose data this class operates.
 	 */
 	SledgeHAMR * sim;		
+
+	/** @brief enum for the various interpolation types
+	 */
+    	enum InterpType{ 
+        	PCInterp = 0, 
+        	NodeBilinear, 
+        	CellConservativeLinear, 
+        	CellBilinear, 
+        	CellQuadratic, 
+        	CellConservativeProtected, 
+        	CellConservativeQuartic 
+	}; 
 };
 
 #endif // LevelSynchronizer_H_

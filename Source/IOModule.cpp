@@ -102,5 +102,4 @@ void IOModule::FillLevelFromConst (int lev, const int comp, const double c)
 			state_arr(i,j,k,comp) = c;
 		});
 	}
-
 }

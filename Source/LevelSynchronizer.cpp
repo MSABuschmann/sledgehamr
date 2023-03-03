@@ -7,6 +7,38 @@
 LevelSynchronizer::LevelSynchronizer(SledgeHAMR * owner)
 {
 	sim = owner;
+	
+	const int ncomp = sim->scalar_fields.size();
+	
+	// Boundary conditions
+	bcs.resize(ncomp);
+	for(int n = 0; n < ncomp; ++n){
+		for(int i = 0; i < AMREX_SPACEDIM; ++i){
+			// is_periodic overrides inputs in domain_(lo/hi)_bc_type
+			if( sim->Geom(0).isPeriodic(i) ){
+				bcs[n].setLo(i, amrex::BCType::int_dir);
+				bcs[n].setHi(i, amrex::BCType::int_dir);
+			}else{
+				bcs[n].setLo(i, amrex::BCType::reflect_odd);
+				bcs[n].setHi(i, amrex::BCType::reflect_odd);
+			}
+		}
+	}
+
+	// Set interpolation type between levels
+	amrex::ParmParse pp("amr");
+	int interpolation_type = InterpType::CellConservativeQuartic;
+	pp.query("interpolation_type", interpolation_type);
+	
+	if( interpolation_type == InterpType::CellConservativeLinear ){
+		mapper = &amrex::cell_cons_interp;
+	}else if( interpolation_type == InterpType::CellConservativeQuartic ){
+		mapper = &amrex::quartic_interp;
+	}else if( interpolation_type == InterpType::PCInterp ){
+		mapper = &amrex::pc_interp;
+	}else{
+		amrex::Error("Unsupported interpolation type");
+	}
 }
 
 void LevelSynchronizer::FillCoarsePatch (int lev, double time, LevelData& ld)
