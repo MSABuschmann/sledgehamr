@@ -113,6 +113,10 @@ protected:
 	 */
 	double t_start, t_end;
 
+	/** @brief Box length.
+	 */
+	double L;
+
 	/** @brief Number of cells in each direction for each level.
 	 */
 	std::vector<unsigned int> dimN;

@@ -115,5 +115,6 @@ void SledgeHAMR::ParseInput ()
 		amrex::ParmParse pp("sim");
 		pp.get("t_start", t_start);
 		pp.get("t_end", t_end);
+		pp.get("L", L);
 	}
 }
