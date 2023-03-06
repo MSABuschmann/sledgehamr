@@ -5,10 +5,12 @@
 
 #include <LevelData.H>
 #include <LevelSynchronizer.H>
+#include <TimeStepper.H>
 #include <IOModule.H>
 #include <Scalars.H>
 
 class LevelSynchronizer;
+class TimeStepper;
 class IOModule;
 
 /** @brief Base class for all derived projects. Combines all the ingredients
@@ -18,6 +20,7 @@ class SledgeHAMR
     : public amrex::AmrCore
 {
 	friend class LevelSynchronizer;
+	friend class TimeStepper;
 	friend class IOModule;
 
 public:
@@ -89,6 +92,11 @@ protected:
 	 */
 	LevelSynchronizer * level_synchronizer;
 
+	/** @brief Instance to perform the sub-cycling in time and
+	 * 	   that handles regrid calls.
+	 */
+	TimeStepper * time_stepper;
+
 	/** @brief Module that handles all IO operations
 	 * 	   (with the exception of parsing the inputs file
 	 */
@@ -142,12 +150,6 @@ private:
 	/** @brief Parse various input parameters from inputs file.
 	 */
 	void ParseInput ();
-
-	/** @brief Does one time step at a given level.
-	 * 	   This function is recursive.
-	 * @param	lev	Level to advance.
-	 */
-	void TimeStep (int lev);
 };
 
 #endif //SledgeHAMR_H_

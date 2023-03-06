@@ -6,7 +6,9 @@ SledgeHAMR::SledgeHAMR ()
 {
 	amrex::Print() << "Starting sledgeHAMR..." << std::endl;
 
+	// Initialize modules
 	level_synchronizer = new LevelSynchronizer(this);
+	time_stepper = new TimeStepper(this);
 	io_module = new IOModule(this);
 
 	ParseInput();
@@ -37,7 +39,11 @@ void SledgeHAMR::Init ()
 void SledgeHAMR::Evolve ()
 {
 	while( grid_new[0].t < t_end ){
-		TimeStep(0);
+		// Advance shadow/coarse step and 
+		// synchronize time on all levels to
+		// avoid floating point precision errors.
+		time_stepper->Advance(0);
+		time_stepper->SynchronizeTimes();
 
 		/* TODO */
 		break;
@@ -131,9 +137,4 @@ void SledgeHAMR::ParseInput ()
 		pp.get("L", L);
 		pp.get("cfl", cfl);
 	}
-}
-
-void SledgeHAMR::TimeStep (int lev)
-{
-	/* TODO */
 }

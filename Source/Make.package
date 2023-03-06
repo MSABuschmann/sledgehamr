@@ -12,6 +12,9 @@ CEXE_sources += LevelSynchronizer.cpp
 CEXE_headers += IOModule.H
 CEXE_sources += IOModule.cpp
 
+CEXE_headers += TimeStepper.H
+CEXE_sources += TimeStepper.cpp
+
 CEXE_headers += LevelData.H
 CEXE_headers += Scalars.H
 CEXE_headers += Projects.H
