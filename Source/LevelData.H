@@ -51,6 +51,11 @@ public:
 	/** @brief Time corresponding to amrex::MultiFab data.
 	 */
 	double t = 0.;
+
+	/** @brief Flag as to whether the MutliFab has
+	 *	   truncation errors encoded into it.
+	 */
+	bool contains_truncation_errors = false;
 };
 
 #endif // LevelData_H_

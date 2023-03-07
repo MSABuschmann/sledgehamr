@@ -41,7 +41,9 @@ void TimeStepper::SynchronizeLevels (int lev)
 			// average lev+1 onto lev.
                         sim->level_synchronizer->AverageDownTo(lev);
 
-                        // has_trunc[lev+1] = false; /* TODO */
+			// since we averaged down we do not have truncation errors
+			// available at lev+1.
+               		sim->grid_old[lev+1].contains_truncation_errors = false; 
                 }
         }
 
@@ -50,8 +52,7 @@ void TimeStepper::SynchronizeLevels (int lev)
 		// compute truncation errors for level lev and
 		// average down between lev and lev-1.
                 sim->level_synchronizer->ComputeTruncationErrors(lev);
-                
-		// has_trunc[lev] = true; /* TODO */
+               	sim->grid_old[lev].contains_truncation_errors = true; 
         }
 }
 
