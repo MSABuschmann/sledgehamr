@@ -15,16 +15,37 @@ public:
 	TimeStepper (SledgeHAMR * owner);	
 
 	/** @brief Recursive function and the core of the
-	 *	   sub-cycling time algorithm. Advances a given 
- 	 *	   level by dt[level].
+	 *	   sub-cycling in time algorithm. Advances
+ 	 *	   a given level by dt[level].
 	 * @param	lev	Level to be advanced.
 	 */
 	void Advance (int lev);
 
+private:
+
+	/** @brief Synchronizes two levels by averaging down.
+	 *	   Computes truncation errors if regrid is
+	 *	   scheduled.
+	 * @param	lev	Synchronizes lev with either 
+	 *			lev-1 or lev+1 depending on the 
+	 *			regrid status.
+	 */
+	void SynchronizeLevels (int lev);	
+
 	/** @brief Synchronizes the time of all levels.
+	 *	   This is needed to avoid de-synchronization
+	 *	   due to floating point precission errors
+	 * 	   during t -> t + dt operations.
 	 */
 	void SynchronizeTimes ();
-private:
+
+
+	/** @brief Prints message before and after each level
+	 *	   has been advanced.
+	 * @param	lev	Level that has/will be advanced.
+	 */
+	void PreAdvanceMessage (int lev);
+	void PostAdvanceMessage (int lev);
 	
 	/** @brief Pointer to owner on whose data this class operates.
 	 */

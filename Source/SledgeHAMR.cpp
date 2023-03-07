@@ -39,11 +39,8 @@ void SledgeHAMR::Init ()
 void SledgeHAMR::Evolve ()
 {
 	while( grid_new[0].t < t_end ){
-		// Advance shadow/coarse step and 
-		// synchronize time on all levels to
-		// avoid floating point precision errors.
+		// Advance all levels starting at lev=0.
 		time_stepper->Advance(0);
-		time_stepper->SynchronizeTimes();
 
 		/* TODO */
 		break;

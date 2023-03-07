@@ -89,6 +89,11 @@ void LevelSynchronizer::AverageDownTo (int lev)
 			    0, sim->grid_new[lev].nComp(), sim->refRatio(lev));
 }
 
+void LevelSynchronizer::ComputeTruncationErrors (int lev)
+{
+	/* TODO */
+}
+
 amrex::Vector<LevelData*> LevelSynchronizer::GetLevelData (int lev, double time)
 {
 	amrex::Vector<LevelData*> ld;	

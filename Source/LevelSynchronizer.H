@@ -40,6 +40,14 @@ public:
 	 */
 	void AverageDownTo (int lev);
 
+	/** @brief Compute truncation errors for level lev and saves them 
+	 *	   in sim->grid_old[lev]. Also averages down lev onto lev-1 
+	 *	   at the same time.
+	 * @param	lev 	Level for which truncation errors are to 
+	 *			be computed.
+	 */
+	void ComputeTruncationErrors (int lev);
+
 private:	
 
 	/** @brief Fetches level data at a given level and time.
