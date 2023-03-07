@@ -6,11 +6,13 @@
 #include <LevelData.H>
 #include <LevelSynchronizer.H>
 #include <TimeStepper.H>
+#include <Integrator.H>
 #include <IOModule.H>
 #include <Scalars.H>
 
 class LevelSynchronizer;
 class TimeStepper;
+class Integrator;
 class IOModule;
 
 /** @brief Base class for all derived projects. Combines all the ingredients
@@ -21,6 +23,7 @@ class SledgeHAMR
 {
 	friend class LevelSynchronizer;
 	friend class TimeStepper;
+	friend class Integrator;
 	friend class IOModule;
 
 public:
@@ -86,7 +89,7 @@ protected:
 	 * @param	time	Time of said level.
 	 * @param	ngrow	Grid growth factor	
 	 */
-	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override {};
+	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override { /* TODO */ };
 
 	/** @brief Instance to perform operations between two levels.
 	 */

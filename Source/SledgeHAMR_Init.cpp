@@ -66,4 +66,14 @@ void SledgeHAMR_Init::FinishAMReXSetup ()
 	amrex::ParmParse pp_geo("geometry");
 	pp_geo.addarr("prob_lo", prob_lo);
 	pp_geo.addarr("prob_hi", prob_hi);
+
+	// Set Integrator type
+	amrex::ParmParse pp_inte("integration");
+	int inte_type;
+	pp_inte.get("type", inte_type);
+
+	if( inte_type >= 0 && inte_type <= 4 ){
+		pp_inte.add("type", 1);
+		pp_inte.add("rk.type", inte_type);
+	}
 }

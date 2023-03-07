@@ -2,8 +2,10 @@
 #define TimeStepper_H_
 
 #include <SledgeHAMR.H>
+#include <Integrator.H>
 
 class SledgeHAMR;
+class Integrator;
 
 /** @brief Class that takes care of the sub-cycling in time algorithm
  *	   as well as the scheduling regrids.
@@ -13,6 +15,8 @@ class TimeStepper
 public:
 
 	TimeStepper (SledgeHAMR * owner);	
+
+	~TimeStepper ();
 
 	/** @brief Recursive function and the core of the
 	 *	   sub-cycling in time algorithm. Advances
@@ -46,7 +50,9 @@ private:
 	 */
 	void PreAdvanceMessage (int lev);
 	void PostAdvanceMessage (int lev);
-	
+
+	Integrator * integrator;
+
 	/** @brief Pointer to owner on whose data this class operates.
 	 */
 	SledgeHAMR * sim;

@@ -100,7 +100,7 @@ amrex::Vector<LevelData*> LevelSynchronizer::GetLevelData (int lev, double time)
 	LevelData * New = &sim->grid_new[lev]; 
 	LevelData * Old = &sim->grid_old[lev]; 
 
-	double teps = (New->t - Old->t)*1.e-3;
+	double teps = fabs(New->t - Old->t)*1.e-3;
 
 	// Add either new, old or both states
 	if( time > New->t - teps && time < New->t + teps ){

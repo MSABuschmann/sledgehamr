@@ -1,13 +1,32 @@
-# Select project
+# -------------------------------------------------- Select project
 project.name = AxionStrings
 
-# simulation parameters
-sim.t_start = 0
-sim.t_end = 10
+# -------------------------------------------------- Simulation parameters
+sim.t_start = 0.1
+sim.t_end = 0.8
 sim.L = 23
 sim.cfl = 0.3
 
-# grid layout
+# --------------------------------------------------- Integration
+### 0 = User-specified Butcher Tableau
+### 1 = Forward Euler
+### 2 = Trapezoid Method
+### 3 = SSPRK3 Method
+### 4 = RK4 Method
+### 5 = Low-Storage SSPRK3 Method
+integration.type = 3
+
+## If using a user-specified Butcher Tableau, then
+## set nodes, weights, and table entries here:
+#
+## The Butcher Tableau is read as a flattened,
+## lower triangular matrix (but including the diagonal)
+## in row major format.
+integration.rk.weights = 1
+integration.rk.nodes = 0
+integration.rk.tableau = 0.0
+
+# --------------------------------------------------- AMR parameters
 amr.shadow_hierarchy = 1
 amr.coarse_level_grid_size = 128 
 amr.max_refinement_levels = 2

@@ -3,6 +3,25 @@
 TimeStepper::TimeStepper (SledgeHAMR * owner)
 {
 	sim = owner;
+
+	// Initialize the correct integrator	
+	amrex::ParmParse pp_inte("integration");
+	int inte_type;
+	pp_inte.get("type", inte_type);
+	if( inte_type == 1 ){
+		integrator = new Integrator(sim);
+	}else if( inte_type == 5 ){
+		// low-storage SSPRK3
+		/* TODO */
+		amrex::Abort("#error: Integration type not yet implemented");	
+	}else{
+		amrex::Abort("#error: Unknown integration type: " + std::to_string(inte_type));	
+	}
+}
+
+TimeStepper::~TimeStepper ()
+{
+	delete integrator;
 }
 
 void TimeStepper::Advance (int lev)
@@ -12,13 +31,16 @@ void TimeStepper::Advance (int lev)
 
 	PreAdvanceMessage(lev);
 
-	// integrator->Advance(lev);
-	/* TODO */
+	// Advance this level.
+	integrator->Advance(lev);
 
 	PostAdvanceMessage(lev);
 
-	if( lev != sim->finest_level )
+	// Advance any finer levels twice.
+	if( lev != sim->finest_level ){
 		Advance(lev+1);
+		Advance(lev+1);
+	}
 
 	SynchronizeLevels(lev);
 
@@ -33,7 +55,7 @@ void TimeStepper::SynchronizeLevels (int lev)
 {
         if( lev < sim->finest_level )
         {
-                if( sim->shadow_hierarchy /* && Regrid scheduled TODO */ )
+                if( sim->shadow_hierarchy && false /* Regrid scheduled TODO */ )
                 {
                         // a regrid is scheduled so we do not synchronize levels quite yet 
 			// in order to compute truncation errors first.
@@ -47,7 +69,7 @@ void TimeStepper::SynchronizeLevels (int lev)
                 }
         }
 
-        if( lev > 0 && sim->shadow_hierarchy /*&& Regrid scheduled TODO */ )
+        if( lev > 0 && sim->shadow_hierarchy && false /* Regrid scheduled TODO */ )
         {
 		// compute truncation errors for level lev and
 		// average down between lev and lev-1.
@@ -70,5 +92,5 @@ void TimeStepper::PreAdvanceMessage (int lev)
 
 void TimeStepper::PostAdvanceMessage (int lev)
 {
-	amrex::Print() << "[Level " << lev << "] Advanced." << std::endl;
+	amrex::Print() << "[Level " << lev << "] Advanced to t=" << sim->grid_new[lev].t << "." << std::endl;
 }

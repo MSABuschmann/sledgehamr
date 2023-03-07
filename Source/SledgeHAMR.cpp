@@ -7,7 +7,6 @@ SledgeHAMR::SledgeHAMR ()
 	amrex::Print() << "Starting sledgeHAMR..." << std::endl;
 
 	// Initialize modules
-	level_synchronizer = new LevelSynchronizer(this);
 	time_stepper = new TimeStepper(this);
 	io_module = new IOModule(this);
 
@@ -27,11 +26,17 @@ SledgeHAMR::SledgeHAMR ()
 SledgeHAMR::~SledgeHAMR ()
 {
 	delete level_synchronizer;
+	delete time_stepper;
 	delete io_module;
 }
 
 void SledgeHAMR::Init ()
 {
+	// Initialize here and not in the SledgeHAMR constructor such that it
+	// knows about the number of scalar fields during construction.
+	// Necessary so it can initialize boundary conditions.
+	level_synchronizer = new LevelSynchronizer(this);
+
 	/* TODO: Check for checkpoint file etc. */
 	InitFromScratch( t_start );
 }
@@ -40,10 +45,9 @@ void SledgeHAMR::Evolve ()
 {
 	while( grid_new[0].t < t_end ){
 		// Advance all levels starting at lev=0.
+		// This performs an entire shadow/coarse level time step.
+		amrex::Print() << std::endl;
 		time_stepper->Advance(0);
-
-		/* TODO */
-		break;
 	}
 }
 
@@ -56,6 +60,9 @@ void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex
 	grid_new[lev].define(ba, dm, ncomp, nghost, time);
 	grid_old[lev].define(ba, dm, ncomp, nghost);
 
+	SetBoxArray(lev, ba);
+	SetDistributionMap(lev, dm);
+	
 	// If shadow hierarchy is used, above level is the shadow level
 	// We now need to also make the coarse level.
 	if( shadow_hierarchy ){
