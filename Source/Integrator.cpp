@@ -22,6 +22,7 @@ void Integrator::Advance (int lev)
 	/* Integrate from (y,t) = (Sborder, time) by dt_lev to set S_new. */
 
 	// Create integrator with the old state
+	/* TODO Only create once */
 	amrex::TimeIntegrator<amrex::MultiFab> integrator(Sborder);
 	const auto geom_lev = sim->geom[lev];
 
@@ -35,9 +36,7 @@ void Integrator::Advance (int lev)
 	auto post_update_fun = [&](amrex::MultiFab& S_data, const double time) {
 		// Fill ghost cells for S_data from interior & periodic BCs
 		// and from interpolating coarser data in space/time at the current stage time.
-		
-		//sim->level_synchronizer->FillIntermediatePatch(lev, time, S_data);
-		/* TODO */
+		sim->level_synchronizer->FillIntermediatePatch(lev, time, S_data);
 	};
 
 	integrator.set_rhs(source_fun);

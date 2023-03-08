@@ -5,6 +5,9 @@
 
 class SledgeHAMR;
 
+/** @brief Pure virtual base class that handles the time
+ *	   integration for a single level.
+ */
 class Integrator
 {
 public:
@@ -13,7 +16,7 @@ public:
 	/** @brief Advances a single level.
 	 * @param	lev	Level to be advanced.
 	 */
-	void Advance (int lev);
+	virtual void Advance (int lev);
 
 private:
 

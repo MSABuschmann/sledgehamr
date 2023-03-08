@@ -21,6 +21,7 @@ class IOModule;
 class SledgeHAMR
     : public amrex::AmrCore
 {
+	// Give submodules access to data.
 	friend class LevelSynchronizer;
 	friend class TimeStepper;
 	friend class Integrator;

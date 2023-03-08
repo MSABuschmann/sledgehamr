@@ -51,6 +51,9 @@ private:
 	void PreAdvanceMessage (int lev);
 	void PostAdvanceMessage (int lev);
 
+	/** @brief Pointer to module that performs the actual 
+	 *	   time integration.
+	 */
 	Integrator * integrator;
 
 	/** @brief Pointer to owner on whose data this class operates.

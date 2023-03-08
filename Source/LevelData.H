@@ -3,7 +3,7 @@
 
 #include <AMReX_MultiFab.H>
 
-/** @brief Struct that holds the MultiFab data while 
+/** @brief Class that holds the MultiFab data while 
  *  	   keeping track of time
  */
 class LevelData
@@ -33,16 +33,18 @@ public:
 
 	using amrex::MultiFab::define;
 
-	/** @brief Static method that returns vector of times from a given LevelData vectorm
-	 * @param	lds	Vector of pointers to LevelData objects.
-	 * @return 		Vector of times.
+	/** @brief Static method that returns vector of times from a given LevelData vector.
+	 * @param	mfs	Vector of pointers to MultiFab objects. 
+	 *			MultiFab needs to be castable to LevelData. 
+	 * @return 		Vector of times. Needs to be amrex::Vector to be
+	 *			usable with e.g. amrex::FillPatchTwoLevels.
 	 */
-	static amrex::Vector<double> getTimes(std::vector<LevelData*>& lds)
+	static amrex::Vector<double> getTimes(std::vector<amrex::MultiFab*>& mfs)
 	{
 		amrex::Vector<double> times;
 
-		for(LevelData* ld : lds){
-			times.push_back( ld->t );
+		for(amrex::MultiFab* mf : mfs){
+			times.push_back( static_cast<LevelData*>(mf)->t );
 		}
 
 		return times;

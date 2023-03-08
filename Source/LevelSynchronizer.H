@@ -25,15 +25,24 @@ public:
 	 * @param	time	Time of new level.
 	 * @param	ld	New level data.
 	 */
-	void FillCoarsePatch (int lev, double time, LevelData& ld);
+	void FillCoarsePatch (int lev, double time, amrex::MultiFab& ld);
 
-	/** @brief Fills LevelData with data from valid regions and fills ghost cells.
+	/** @brief Fills MultiFab with data from valid regions and fills ghost cells.
 	 * 	   Works for single level and 2-level cases (interpolating from coarse).
 	 * @param	lev	(Fine) Level to be filled.
 	 * @param	time	Time of level.
-	 * @param	ld	Level data to be filled.
+	 * @param	mf	MultiFab to be filled.
 	 */
-	void FillPatch (int lev, double time, LevelData& ld);
+	void FillPatch (int lev, double time, amrex::MultiFab& mf);
+
+	/** @brief Fills MultiFab with data from valid regions and fills ghost cells 
+	 *	   during intermediate time steps.
+	 * 	   Works for single level and 2-level cases (interpolating from coarse).
+	 * @param	lev	(Fine) Level to be filled.
+	 * @param	time	Time of level.
+	 * @param	mf	MultiFab to be filled.
+	 */
+	void FillIntermediatePatch (int lev, double time, amrex::MultiFab& mf);
 
 	/** @brief Average down fine level (lev+1) onto coarse level (lev).
 	 * @param	lev	Coarse Level onto which to be averaged down.
@@ -58,7 +67,7 @@ private:
 	 *			will be returned.
 	 * @return 		Vector with pointer to fetched data.
 	 */
-	amrex::Vector<LevelData*> GetLevelData (int lev, double time);
+	amrex::Vector<amrex::MultiFab*> GetLevelData (int lev, double time);
 
 	/** @brief Integer array containing the type of 
 	 *         boundary condition at each boundary edge.
