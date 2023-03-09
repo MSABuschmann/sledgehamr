@@ -204,7 +204,10 @@ void IOModule::WriteSingleSlice (double time, const LevelData* state, hid_t file
 	}
 
 	// Write header information for this slice
-	double header_data[4] = {time, (double)amrex::ParallelDescriptor::NProcs(), (double)le1.size()};
+	double header_data[4] = {time, 
+				(double)amrex::ParallelDescriptor::NProcs(),
+				(double)(sim->finest_level - sim->shadow_hierarchy),
+				(double)le1.size()};
 	WriteToHDF5(file_id, "Header_"+ident, header_data, 4);
 
 	// Write box dimensions so we can reassemble slice.
