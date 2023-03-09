@@ -57,17 +57,47 @@ private:
 	 */
 	void FillLevelFromConst (int lev, const int comp, const double c);
 
+	/** @brief OUTPUT_FCT. Writes slices along all three directions
+	 *	   and all scalar fields.	
+	 * @param	time	Current time.
+	 * @param	prefix	Output path.
+	 */
+	void WriteSlices (double time, std::string prefix);
+
+	/** @brief Writes an individual slice along one direction to file
+	 *	   for all scalar fields.
+	 * @param	time	Current time.
+	 * @param	state	Pointer to full grid from which the slice shall be taken.
+	 * @param	file_id	ID of HDF5 file.
+	 * @param	ident	String identification for slice, e.g. 'x'.
+	 * @param	d1	Axis along which the slice shall be taken.
+	 * @param	d2	First orthogonal direction.
+	 * @param	d3	Second. orthogonal direction.
+	 */
+	void WriteSingleSlice (double time, const LevelData* state, hid_t file_id, std::string ident, 
+					unsigned int d1, unsigned int d2, unsigned int d3);
+
 	/** @brief Reads dataset from HDF5 file. 
 	 * @param	filename	Name of HDF5 file.
 	 * @param	dnames		Vector of datasets to be tried.
 	 *				First dataset to be found will be read.
 	 * @param	data		Data pointer to be filled with data.
+	 *				Can be double, float or int.
 	 */
 	template <typename T> 
 	void ReadFromHDF5 (std::string filename, std::vector<std::string> dnames,
-				      T* data);
+				       T* data);
 
-	void WriteSlices (double time, std::string prefix);
+	/** @brief Write dataset to HDF5 file. 
+	 * @param	file_id		ID of HDF5 file.
+	 * @param	dset		Name of dataset.
+	 * @param	data		Pointer to data.
+	 *				Can be double, float or int.
+	 * @param	size		Size of data.
+	 */
+	template <typename T> 
+	void WriteToHDF5(hid_t file_id, std::string dset, T* data, 
+			       unsigned long long size);
 
 	/** @brief Pointer to owner on whose data this class operates.
 	 */

@@ -74,6 +74,7 @@ void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex
 	// We now need to also make the coarse level.
 	if( shadow_hierarchy ){
 		++lev;
+		++finest_level;
 
 		// create local copy of ba since ba is const
 		amrex::BoxArray rba = ba;
