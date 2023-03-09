@@ -6,6 +6,7 @@
 #include <AMReX_ParmParse.H>
 
 #include <SledgeHAMR.H>
+#include <OutputModule.H>
 
 class SledgeHAMR;
 
@@ -17,12 +18,17 @@ class IOModule
 public:
 	IOModule (SledgeHAMR * owner);
 
+	/** @brief Writes output if requested.
+	 */
+	void Write (bool force=false);
+
 	/** @brief Fills a given level with data from hdf5 file(s).
 	 * @param	lev	Level to be filled with data.
 	 */
 	void FillLevelFromFile (int lev);
 
 private:
+
 	/** @brief Fills a given level with chunked data 
 	 *	   distributed over many files.
 	 * @param	lev	Level to be filled with data.
@@ -58,12 +64,18 @@ private:
 	 * @param	data		Data pointer to be filled with data.
 	 */
 	template <typename T> 
-	void ReadFromHDF5(std::string filename, std::vector<std::string> dnames,
+	void ReadFromHDF5 (std::string filename, std::vector<std::string> dnames,
 				      T* data);
+
+	void WriteSlices (double time, std::string prefix);
 
 	/** @brief Pointer to owner on whose data this class operates.
 	 */
 	SledgeHAMR * sim;
+
+	/** @brief Vector of output modules
+	 */
+	std::vector<OutputModule> output;
 };
 
 #include "IOModule.tcc"

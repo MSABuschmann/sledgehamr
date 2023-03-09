@@ -44,11 +44,18 @@ void SledgeHAMR::Init ()
 void SledgeHAMR::Evolve ()
 {
 	while( grid_new[0].t < t_end ){
-		// Advance all levels starting at lev=0.
-		// This performs an entire shadow/coarse level time step.
 		amrex::Print() << std::endl;
+
+		// Advance all levels starting at lev=0.
+		// This performs an entire shadow/coarse level time step.	
 		time_stepper->Advance(0);
+
+		// Write any output if requested.
+		io_module->Write();
 	}
+	
+	// Force write at the end of simulation.	
+	io_module->Write(true);
 }
 
 void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex::BoxArray& ba,

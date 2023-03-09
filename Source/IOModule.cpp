@@ -3,6 +3,28 @@
 IOModule::IOModule (SledgeHAMR * owner)
 {
 	sim = owner;
+
+	// Determine and create output folder
+	amrex::ParmParse pp("output");
+	std::string output_folder;
+	pp.get("output_folder", output_folder);
+	amrex::UtilCreateDirectory(output_folder.c_str(), 0755);
+
+	// Add various output formats
+	double interval_slices = -1;
+	pp.query("interval_slices", interval_slices);
+
+	if( interval_slices >= 0 ){
+		OutputModule out1(output_folder + "/slices", OUTPUT_FCT(IOModule::WriteSlices),
+					interval_slices); 
+		output.push_back( out1 );
+	}
+}
+
+void IOModule::Write (bool force)
+{
+	for( OutputModule& out : output )
+		out.Write(sim->grid_new[0].t, force);
 }
 
 void IOModule::FillLevelFromFile (int lev)
@@ -102,4 +124,10 @@ void IOModule::FillLevelFromConst (int lev, const int comp, const double c)
 			state_arr(i,j,k,comp) = c;
 		});
 	}
+}
+
+void IOModule::WriteSlices (double time, std::string prefix)
+{
+	amrex::Print() << "Write slices: " << prefix << " " << std::endl;
+	/* TODO */
 }
