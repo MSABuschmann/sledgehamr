@@ -36,7 +36,7 @@ class Output:
 
 		# Loop over fields, files, and boxes to reassemble data
 		for s in fields:
-			field = np.zero((dim,dim), dtype=np.float32)
+			field = np.zeros((dim,dim), dtype=np.float32)
 			for f in range(ranks):
 				file = folder + '/' + str(i)\
 					+ '/Level_'+str(level)\
