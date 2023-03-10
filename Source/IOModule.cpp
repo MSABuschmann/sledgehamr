@@ -140,15 +140,15 @@ void IOModule::WriteSlices (double time, std::string prefix)
 		const LevelData* state = &sim->grid_new[lev];
 
 		// Write output to file
-		WriteSingleSlice(time, state, file_id, "x", 0, 1, 2); 
-		WriteSingleSlice(time, state, file_id, "y", 1, 0, 2); 
-		WriteSingleSlice(time, state, file_id, "z", 2, 0, 1); 
+		WriteSingleSlice(time, state, lev, file_id, "x", 0, 1, 2); 
+		WriteSingleSlice(time, state, lev, file_id, "y", 1, 0, 2); 
+		WriteSingleSlice(time, state, lev, file_id, "z", 2, 0, 1); 
 
 		H5Fclose(file_id);
 	}
 }
 
-void IOModule::WriteSingleSlice (double time, const LevelData* state, hid_t file_id, std::string ident, 
+void IOModule::WriteSingleSlice (double time, const LevelData* state, int lev, hid_t file_id, std::string ident, 
 					unsigned int d1, unsigned int d2, unsigned int d3)
 {
 	std::vector<int> le1,he1;
@@ -204,11 +204,12 @@ void IOModule::WriteSingleSlice (double time, const LevelData* state, hid_t file
 	}
 
 	// Write header information for this slice
-	double header_data[4] = {time, 
+	double header_data[5] = {time, 
 				(double)amrex::ParallelDescriptor::NProcs(),
 				(double)(sim->finest_level - sim->shadow_hierarchy),
+				(double)sim->dimN[lev],
 				(double)le1.size()};
-	WriteToHDF5(file_id, "Header_"+ident, header_data, 4);
+	WriteToHDF5(file_id, "Header_"+ident, header_data, 5);
 
 	// Write box dimensions so we can reassemble slice.
 	WriteToHDF5(file_id, "le1_"+ident, (int*)&le1[0], le1.size());

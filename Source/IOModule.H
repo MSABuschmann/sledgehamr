@@ -74,7 +74,7 @@ private:
 	 * @param	d2	First orthogonal direction.
 	 * @param	d3	Second. orthogonal direction.
 	 */
-	void WriteSingleSlice (double time, const LevelData* state, hid_t file_id, std::string ident, 
+	void WriteSingleSlice (double time, const LevelData* state, int lev, hid_t file_id, std::string ident, 
 					unsigned int d1, unsigned int d2, unsigned int d3);
 
 	/** @brief Reads dataset from HDF5 file. 
