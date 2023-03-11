@@ -3,7 +3,7 @@ project.name = AxionStrings
 
 # -------------------------------------------------- Simulation parameters
 sim.t_start = 0.1
-sim.t_end = 0.8
+sim.t_end = 0.4
 sim.L = 23
 sim.cfl = 0.3
 
@@ -31,6 +31,9 @@ amr.shadow_hierarchy = 1
 amr.coarse_level_grid_size = 128 
 amr.max_refinement_levels = 2
 amr.nghost = 1
+
+# -------------------------------------------------- Input parameters
+input.initial_state = initial_state.hdf5
 
 # -------------------------------------------------- Output settings
 output.output_folder = output
