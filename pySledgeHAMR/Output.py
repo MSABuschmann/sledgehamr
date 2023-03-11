@@ -8,11 +8,13 @@ class Output:
 	## Crawls the output and loads headers.
 	def __init__(self, output_folder):
 		self._prefix = output_folder
+		self._slice_headers = []
+
 		self.__ParseFolderStructure()
 
 	## Returns array of times at which slices have been written.
 	def GetTimesOfSlices(self):
-		print( self._slice_headers[:,0] )
+		return self._slice_headers[:,0] 
 
 	## Returns a slice.
 	# @param	i		Number of slice to be read.
