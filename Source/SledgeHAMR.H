@@ -32,7 +32,7 @@ class IOModule;
 			amrex::ParallelFor(bx,\
 			[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept\
 			{\
-				RHS(i, j, k, time, rhs_fab, state_fab);\
+				RHS(i, j, k, time, lev, rhs_fab, state_fab);\
 			});\
 		}\
 	};

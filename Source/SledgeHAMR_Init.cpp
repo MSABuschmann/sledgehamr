@@ -62,10 +62,12 @@ void SledgeHAMR_Init::FinishAMReXSetup ()
 
 	std::vector<double> prob_lo(3,0);
 	std::vector<double> prob_hi(3,L);
+	std::vector<int> periodic(3,1);
 
 	amrex::ParmParse pp_geo("geometry");
 	pp_geo.addarr("prob_lo", prob_lo);
 	pp_geo.addarr("prob_hi", prob_hi);
+	pp_geo.addarr("is_periodic", periodic);
 
 	// Set Integrator type
 	amrex::ParmParse pp_inte("integration");

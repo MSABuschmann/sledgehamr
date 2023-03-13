@@ -21,6 +21,7 @@ CEXE_sources += TimeStepper.cpp
 CEXE_headers += Integrator.H
 CEXE_sources += Integrator.cpp
 
+CEXE_headers += SledgeHAMR_Utils.H
 CEXE_headers += LevelData.H
 CEXE_headers += Scalars.H
 CEXE_headers += Projects.H

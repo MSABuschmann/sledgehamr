@@ -2,6 +2,7 @@
 #define AxionStrings_H_
 
 #include <SledgeHAMR.H>
+#include <SledgeHAMR_Utils.H>
 
 /** @brief Class to simulate axion strings.
  */
@@ -23,10 +24,12 @@ protected:
 	 * @param	i		i-th cell.
 	 * @param	j		j-th cell.
 	 * @param	k		k-th cell.
+	 * @param	time		Current time.
+	 * @param	lev		Currentl level.
 	 * @param	rhs_fab		Container to be filled with RHS.
 	 * @param	state_fab	Data from which to calculate RHS.
 	 */
-	inline void RHS (const int i, const int j, const int k, const double time,
+	inline void RHS (const int i, const int j, const int k, const double time, const int lev,
 	 		    amrex::Array4<double> const& rhs_fab, 
 			    amrex::Array4<double const> const& state_fab)
 	{
@@ -38,13 +41,19 @@ protected:
 
 		double eta = time;
 
+		// Compute Laplacians.
+		double dx2 = dx[lev] * dx[lev];
+		constexpr unsigned int order = 1;
+		double Lap_Psi1 = SledgeHAMR_Utils::Laplacian<order>(state_fab, i, j, k, Scalar::Psi1, dx2);
+		double Lap_Psi2 = SledgeHAMR_Utils::Laplacian<order>(state_fab, i, j, k, Scalar::Psi2, dx2);
+
 		// Compute EOM
 		double cross_term = eta*eta*( Psi1*Psi1 + Psi2*Psi2 - 1. ) + 0.56233;
 		
 		rhs_fab(i, j, k, Scalar::Psi1) =  Pi1;
 		rhs_fab(i, j, k, Scalar::Psi2) =  Pi2;
-		rhs_fab(i, j, k, Scalar::Pi1)  = -Pi1*2./eta - Psi1 * cross_term;
-		rhs_fab(i, j, k, Scalar::Pi2)  = -Pi2*2./eta - Psi2 * cross_term;	
+		rhs_fab(i, j, k, Scalar::Pi1)  = -Pi1*2./eta + Lap_Psi1 - Psi1 * cross_term;
+		rhs_fab(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + Lap_Psi2 - Psi2 * cross_term;	
 	};
 };
 

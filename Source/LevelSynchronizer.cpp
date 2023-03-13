@@ -14,14 +14,8 @@ LevelSynchronizer::LevelSynchronizer(SledgeHAMR * owner)
 	bcs.resize(ncomp);
 	for(int n = 0; n < ncomp; ++n){
 		for(int i = 0; i < AMREX_SPACEDIM; ++i){
-			// is_periodic overrides inputs in domain_(lo/hi)_bc_type
-			if( sim->Geom(0).isPeriodic(i) ){
-				bcs[n].setLo(i, amrex::BCType::int_dir);
-				bcs[n].setHi(i, amrex::BCType::int_dir);
-			}else{
-				bcs[n].setLo(i, amrex::BCType::reflect_odd);
-				bcs[n].setHi(i, amrex::BCType::reflect_odd);
-			}
+			bcs[n].setLo(i, amrex::BCType::int_dir);
+			bcs[n].setHi(i, amrex::BCType::int_dir);
 		}
 	}
 
