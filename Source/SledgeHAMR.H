@@ -92,6 +92,20 @@ protected:
 	 */
 	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override { /* TODO */ };
 
+	/** @brief Virtual function that loops over a state to fill the RHS. Has to be defined by
+	 *	   derived project class, though this will be hidden from the user. Reason for this
+	 *	   is so that the RHS function, declared also by the project class, can be inlined 
+	 *	   within this function, which it otherwise couldn't as it is not clear at compile time
+	 *	   which project will be run.
+	 * @param	rhs_mf		Empty MultiFab to be filled with RHS.
+	 * @param	state_mf	State from which the RHS is to be computed.	
+	 * @param	time		Current time.
+	 * @param	geom		Geometry of the current level.
+	 * @param	lev		Currently level.
+	 */
+	virtual void FillRHS (amrex::MultiFab& rhs_mf, const amrex::MultiFab& state_mf, const double time, 
+					       const amrex::Geometry& geom, int lev) = 0;
+
 	/** @brief Instance to perform operations between two levels.
 	 */
 	LevelSynchronizer * level_synchronizer;

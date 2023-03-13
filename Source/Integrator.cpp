@@ -28,8 +28,7 @@ void Integrator::Advance (int lev)
 
 	// Create a RHS source function we will integrate
 	auto source_fun = [&](amrex::MultiFab& rhs, const amrex::MultiFab& state, const double time){
-		//FillRHS(rhs, state, time, geom_lev, lev);
-		/* TODO */
+		sim->FillRHS(rhs, state, time, geom_lev, lev);
 	};
 
 	// Create a function to call after updating a state
