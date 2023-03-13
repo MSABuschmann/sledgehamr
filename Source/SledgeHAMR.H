@@ -15,6 +15,28 @@ class TimeStepper;
 class Integrator;
 class IOModule;
 
+#define DO_PRAGMA(x) _Pragma(#x)
+
+/** @brief Macro to override the SledgeHAMR::FillRHS function within the project class.
+ *	   Will autmatically be added by the ADD_SCALARS macro to the project. This is 
+ *	   needed to ensure the RHS function can be inlined by the compiler.
+ */
+#define FILL_RHS virtual void FillRHS (amrex::MultiFab& rhs_mf, const amrex::MultiFab& state_mf, const double time,\
+					       const amrex::Geometry& geom, int lev) override\
+	{\
+		DO_PRAGMA(omp parallel)\
+		for ( amrex::MFIter mfi(rhs_mf, true); mfi.isValid(); ++mfi ){\
+			const amrex::Box& bx = mfi.tilebox();\
+			const amrex::Array4<double>& rhs_fab = rhs_mf.array(mfi);\
+			const amrex::Array4<double const>& state_fab = state_mf.array(mfi);\
+			amrex::ParallelFor(bx,\
+			[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept\
+			{\
+				RHS(i, j, k, time, rhs_fab, state_fab);\
+			});\
+		}\
+	};
+
 /** @brief Base class for all derived projects. Combines all the ingredients
  *         to make this code work. 
  */

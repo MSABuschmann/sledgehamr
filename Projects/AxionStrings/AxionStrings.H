@@ -14,29 +14,12 @@ public:
 	 */
 	ADD_SCALARS(Psi1, Psi2, Pi1, Pi2);
 
-	virtual void FillRHS (amrex::MultiFab& rhs_mf, const amrex::MultiFab& state_mf, const double time, 
-					       const amrex::Geometry& geom, int lev) override
-	{
-		#pragma omp parallel
-		for ( amrex::MFIter mfi(rhs_mf, true); mfi.isValid(); ++mfi ){
-			const amrex::Box& bx = mfi.tilebox();
-			const amrex::Array4<double>& rhs_fab = rhs_mf.array(mfi);
-			const amrex::Array4<double const>& state_fab = state_mf.array(mfi);
-
-			// For each grid, loop over all the valid points
-			amrex::ParallelFor(bx,
-			[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
-			{
-				RHS(i, j, k, time, rhs_fab, state_fab);
-			});
-		}
-	};
-
 	AxionStrings ();
 
 protected:
 
-	/** @brief Inline function that calculates the EOM at a single cell.
+	/** @brief Inline function that calculates the RHS of the EOM at a single cell.
+	 *	   Function body should be defined within this class definition.
 	 * @param	i		i-th cell.
 	 * @param	j		j-th cell.
 	 * @param	k		k-th cell.

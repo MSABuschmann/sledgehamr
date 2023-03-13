@@ -3,6 +3,8 @@
 
 #include <boost/preprocessor.hpp>
 
+#include <SledgeHAMR.H>
+
 /** @brief Macros to declare and initialize scalar fields within SledgeHAMR class.
  */
 #define ADD_SCALAR(field) ScalarField BOOST_PP_CAT(_s_, field)  = {#field, scalar_fields};
@@ -17,16 +19,19 @@
         BOOST_PP_SEQ_FOR_EACH(SCALAR_ENUM_VALUE, _, BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
     };
 
-/** @brief Macro to add multiple scalar fields to SledgeHAMR class. 
-  *	   All added fields will be simulated.
+/** @brief Macro to add multiple scalar fields to project class. All added fields will be
+  *	   simulated. Also overrides the SledgeHAMR::FillRHS.
   *	   Ultimately expands to ADD_SCALARS(a,b,c) -> ScalarField _s_a = {"a", scalar_fields};
   *						       ScalarField _s_b = {"b", scalar_fields};
   *						       ScalarField _s_c = {"c", scalar_fields};
   *						       enum Scalar {a, b, c}; 
+  *						       virtual void FillRHS ( ...
+  *							...
   */
 #define ADD_SCALARS(...) \
 	BOOST_PP_SEQ_FOR_EACH(EXPAND_SCALARS, _, BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
-	SCALAR_ENUM(Scalar, __VA_ARGS__)
+	SCALAR_ENUM(Scalar, __VA_ARGS__)\
+	FILL_RHS
 
 /** @brief Class to keep track of scalar fields.
  */
