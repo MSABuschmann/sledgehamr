@@ -3,11 +3,25 @@ project.name = AxionStrings
 
 # -------------------------------------------------- Simulation parameters
 sim.t_start = 0.1
-sim.t_end = 0.4
+sim.t_end = 1.5
 sim.L = 23
 sim.cfl = 0.3
 
-# -------------------------------------------------- Integration
+# -------------------------------------------------- AMR parameters
+amr.shadow_hierarchy = 0
+amr.coarse_level_grid_size = 128 
+amr.max_refinement_levels = 2
+amr.nghost = 1
+amr.regrid_dt = 0.3
+
+# -------------------------------------------------- Input parameters
+input.initial_state = initial_state.hdf5
+
+# -------------------------------------------------- Output settings
+output.output_folder = output
+output.interval_slices = 0.5
+
+# -------------------------------------------------- Integrator
 ### 0 = User-specified Butcher Tableau
 ### 1 = Forward Euler
 ### 2 = Trapezoid Method
@@ -25,16 +39,3 @@ integration.type = 3
 integration.rk.weights = 1
 integration.rk.nodes = 0
 integration.rk.tableau = 0.0
-
-# -------------------------------------------------- AMR parameters
-amr.shadow_hierarchy = 1
-amr.coarse_level_grid_size = 128 
-amr.max_refinement_levels = 2
-amr.nghost = 1
-
-# -------------------------------------------------- Input parameters
-input.initial_state = initial_state.hdf5
-
-# -------------------------------------------------- Output settings
-output.output_folder = output
-output.interval_slices = 0.5

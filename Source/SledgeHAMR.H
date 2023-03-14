@@ -128,6 +128,18 @@ protected:
 	virtual void FillRHS (amrex::MultiFab& rhs_mf, const amrex::MultiFab& state_mf, const double time, 
 					       const amrex::Geometry& geom, int lev) = 0;
 
+	/** @brief Function to check whether a given level is allowed
+	 *	   to be created by a given time. Can be overridden by
+	 *	   the project class. Will always allow a level to be
+	 *	   created by default.
+	 * @param 	lev	Level to be created.
+	 * @param	time	Time before which the level would be
+	 *			created.
+	 * @return	If the given level is allowed to be created.
+	 */
+	virtual bool CanCreateLevel (int lev, double time)
+	{ return true; };
+
 	/** @brief Instance to perform operations between two levels.
 	 */
 	LevelSynchronizer * level_synchronizer;

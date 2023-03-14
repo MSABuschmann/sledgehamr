@@ -43,13 +43,40 @@ private:
 	 */
 	void SynchronizeTimes ();
 
-
 	/** @brief Prints message before and after each level
 	 *	   has been advanced.
 	 * @param	lev	Level that has/will be advanced.
 	 */
 	void PreAdvanceMessage (int lev);
 	void PostAdvanceMessage (int lev);
+
+	/** @brief Schedules a regrid ahead of such that we can
+	 *	   compute truncations errors first.
+	 * @param	lev	Level at which to tag cells.
+	 */
+	void ScheduleRegrid (int lev);
+
+	/** @brief Performs a regrid if needed if no truncation
+	 *	   tags are to be performed.
+	 * @param	lev	Level at which to tag cells.
+	 */
+	void NoShadowRegrid (int lev);
+
+	/** @brief Performs the actual regrid, either local or
+	 *	   global as appropriate.
+	 * @param	lev	Level at which to tag cells.
+	 * @param	time	Current time.
+	 */
+	void DoRegrid (int lev, double time);
+
+	/** @brief Vector of regridding intervals at each level.
+	 */
+	std::vector<double> regrid_dt;
+
+	/** @brief Vector of times at which a given level has been
+	 *  	   regridded last.
+	 */
+	std::vector<double> last_regrid_time;
 
 	/** @brief Pointer to module that performs the actual 
 	 *	   time integration.

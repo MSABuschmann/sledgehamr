@@ -79,7 +79,7 @@ void LevelSynchronizer::FillPatch (int lev, double time, amrex::MultiFab& mf)
 
 void LevelSynchronizer::FillIntermediatePatch (int lev, double time, amrex::MultiFab& mf)
 {
-//	FillPatch(lev, time, mf);
+	FillPatch(lev, time, mf);
 }
 
 void LevelSynchronizer::AverageDownTo (int lev)
