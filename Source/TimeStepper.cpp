@@ -155,9 +155,30 @@ void TimeStepper::NoShadowRegrid (int lev)
 
 void TimeStepper::DoRegrid (int lev, double time)
 {
-	/* TODO */
-	amrex::Print() << "Perform regrid at level " << lev << " and t=" << time << std::endl;
+	amrex::Print() << "Perform regrid at level " << lev << std::endl;
 
+	// Try local regrid first.
+	bool successfull = false;
+	/* TODO Implement local regrid */	
+	if( true ){
+		// successfull = local_regrid();
+	}else{
+		amrex::Print() << "Skip local regrid." << std::endl;
+	}
+
+	// Do global regrid if local regrid failed.
+	if( !successfull )
+	{
+		amrex::Print() << "Perform global regrid at level " << lev << std::endl;
+		sim->regrid(lev, time);
+
+		/* TODO: Fix possible nesting issues through local regrid */
+		//if( ... ){
+		//	local_regrid();
+		//}
+	}
+
+	// Update las regrid times for all levels that have been regridded.
 	for(int l=lev; l <= sim->finest_level; ++l){
 		last_regrid_time[l] = time;
 	}

@@ -64,8 +64,10 @@ void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex
 	const int ncomp = scalar_fields.size();
 
 	// Define lowest level from scratch
+	amrex::AllPrint() << "define ld" << std::flush<<std::endl;
 	grid_new[lev].define(ba, dm, ncomp, nghost, time);
 	grid_old[lev].define(ba, dm, ncomp, nghost);
+	amrex::AllPrint() << "done def ld" << std::flush <<std::endl;
 
 	SetBoxArray(lev, ba);
 	SetDistributionMap(lev, dm);
@@ -80,8 +82,10 @@ void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex
 		amrex::BoxArray rba = ba;
 		rba.refine(2);
 
+	amrex::AllPrint() << "define ld" << std::flush<<std::endl;
 		grid_new[lev].define(rba, dm, ncomp, nghost, time);
 		grid_old[lev].define(rba, dm, ncomp, nghost);
+	amrex::AllPrint() << "done def ld" << std::flush <<std::endl;
 
 		// already set for shadow level
 		SetBoxArray(lev, rba);
@@ -131,6 +135,32 @@ void SledgeHAMR::ClearLevel (int lev)
 {
 	grid_new[lev].clear();
 	grid_old[lev].clear();
+}
+
+void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow)
+{
+	// Current state.
+	const amrex::MultiFab& state = grid_new[lev];
+
+	// State containing truncation errors
+	// if they have been calculated.
+	const amrex::MultiFab& state_te = grid_old[lev];
+
+	// Loop over boxes and cells.
+	#pragma omp parallel
+	for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
+		const amrex::Box& tilebox  = mfi.tilebox();
+		const amrex::Array4<double const>& state_fab    = state.array(mfi);
+		const amrex::Array4<double const>& state_fab_te = state_te.array(mfi);
+	 	const amrex::Array4<char>& tag_arr = tags.array(mfi);
+
+		// Tag with or without truncation errors.
+		if ( shadow_hierarchy ) {
+			ErrorEstWithTE(state_fab, state_fab_te, tag_arr, tilebox, time, lev);
+		}else{
+			//ErrorEstWithoutTE(state_fab, tilebox, tags, time);
+		}
+	}
 }
 
 void SledgeHAMR::ParseInput ()

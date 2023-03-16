@@ -37,6 +37,18 @@ class IOModule;
 		}\
 	};
 
+#define ERROR_EST_WITH_TE virtual void ErrorEstWithTE  (const amrex::Array4<double const>& state_fab,\
+							const amrex::Array4<double const>& state_fab_te,\
+							const amrex::Array4<char>& tagarr,\
+							const amrex::Box& tilebox, double time, int lev)\
+	{\
+		amrex::ParallelFor(tilebox,\
+		[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {\
+			bool res = TagCellForRefinement(i, j, k, time, lev, state_fab);\
+			tagarr(i,j,k) = res == true ? amrex::TagBox::SET : amrex::TagBox::CLEAR;\
+		});\
+	};\
+
 /** @brief Base class for all derived projects. Combines all the ingredients
  *         to make this code work. 
  */
@@ -112,7 +124,12 @@ protected:
 	 * @param	time	Time of said level.
 	 * @param	ngrow	Grid growth factor	
 	 */
-	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override { /* TODO */ };
+	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override;
+
+	virtual void ErrorEstWithTE (const amrex::Array4<double const>& state_fab,
+				     const amrex::Array4<double const>& state_fab_te,
+				     const amrex::Array4<char>& tagarr,
+				     const amrex::Box& tilebox, double time, int lev) = 0;
 
 	/** @brief Virtual function that loops over a state to fill the RHS. Has to be defined by
 	 *	   derived project class, though this will be hidden from the user. Reason for this

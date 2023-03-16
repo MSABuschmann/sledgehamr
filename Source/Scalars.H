@@ -20,18 +20,19 @@
     };
 
 /** @brief Macro to add multiple scalar fields to project class. All added fields will be
-  *	   simulated. Also overrides the SledgeHAMR::FillRHS.
+  *	   simulated. Also overrides SledgeHAMR::FillRHS and SledgeHAMR::ErrorEstWithTE.
   *	   Ultimately expands to ADD_SCALARS(a,b,c) -> ScalarField _s_a = {"a", scalar_fields};
   *						       ScalarField _s_b = {"b", scalar_fields};
   *						       ScalarField _s_c = {"c", scalar_fields};
   *						       enum Scalar {a, b, c}; 
   *						       virtual void FillRHS ( ...
-  *							...
+  *						       virtual void ErrorEstWithTE ( ...
   */
 #define ADD_SCALARS(...) \
 	BOOST_PP_SEQ_FOR_EACH(EXPAND_SCALARS, _, BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
 	SCALAR_ENUM(Scalar, __VA_ARGS__)\
-	FILL_RHS
+	FILL_RHS\
+	ERROR_EST_WITH_TE
 
 /** @brief Class to keep track of scalar fields.
  */

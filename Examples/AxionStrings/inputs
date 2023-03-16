@@ -8,7 +8,7 @@ sim.L = 23
 sim.cfl = 0.3
 
 # -------------------------------------------------- AMR parameters
-amr.shadow_hierarchy = 0
+amr.shadow_hierarchy = 1
 amr.coarse_level_grid_size = 128 
 amr.max_refinement_levels = 2
 amr.nghost = 1

@@ -10,7 +10,7 @@ class LevelData
     : public amrex::MultiFab
 {
 public:
-	LevelData () {};
+	LevelData () : amrex::MultiFab {} {};
 
 	LevelData (amrex::BoxArray ba, amrex::DistributionMapping dm, int ncomp, int nghost, double time=0)
 		: amrex::MultiFab {ba, dm, ncomp, nghost}

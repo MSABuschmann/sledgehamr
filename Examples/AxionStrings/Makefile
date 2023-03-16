@@ -9,6 +9,7 @@ COMP      = gnu
 # Optional debugging option within AMReX
 DEBUG 		= FALSE
 USE_ASSERTION 	= FALSE
+FSANITIZER	= FALSE
 MEM_PROFILE 	= FALSE
 PROFILE 	= FALSE
 TRACE_PROFILE 	= FALSE
