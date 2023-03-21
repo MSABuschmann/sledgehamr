@@ -1,4 +1,5 @@
 #include <TimeStepper.H>
+#include <SledgeHAMR_Utils.H>
 
 TimeStepper::TimeStepper (SledgeHAMR * owner)
 {
@@ -28,7 +29,7 @@ TimeStepper::TimeStepper (SledgeHAMR * owner)
 
 	for(int lev=0; lev<=sim->max_level; ++lev){
 		regrid_dt.push_back( reg_dt * pow(2, lev - sim->shadow_hierarchy) );
-		last_regrid_time.push_back( -1e99 );
+		last_regrid_time.push_back( sim->t_start );
 	}
 }
 
@@ -113,13 +114,34 @@ void TimeStepper::SynchronizeTimes ()
 
 void TimeStepper::PreAdvanceMessage (int lev)
 {
-	amrex::Print() << "[Level " << lev << "] Advancing ..." << std::endl;
-}
+	std::string level_message = LevelMessage(lev);
 
+	long ncells = sim->CountCells(lev);
+	double coverage_fraction = (double)ncells / pow(sim->dimN[lev],3)*100;
+	int nba = sim->grid_new[lev].boxArray().size();
+
+	amrex::Print()  << std::left << std::setw(50) << level_message
+			<< "Advancing " << ncells << " cells in " << nba << " boxes ... "
+			<< "(" << coverage_fraction << "\% coverage)" << std::endl;
+}
 
 void TimeStepper::PostAdvanceMessage (int lev)
 {
-	amrex::Print() << "[Level " << lev << "] Advanced to t=" << sim->grid_new[lev].t << "." << std::endl;
+	std::string level_message = LevelMessage(lev);
+
+	amrex::Print()  << std::left << std::setw(50) << level_message
+	 		<< "Advanced to t=" << sim->grid_new[lev].t << " by " 
+			<< "dt=" << sim->dt[lev] << "." << std::endl;
+}
+
+std::string TimeStepper::LevelMessage (int lev)
+{
+	std::string level_name = SledgeHAMR_Utils::LevelName(lev, sim->shadow_hierarchy);
+	std::string out = "  ";
+	for(int i=1;i<=lev;++i)
+		out += "| ";
+	out += "Level " + std::to_string(lev) + " (" + level_name + ")] ";
+	return out;
 }
 
 void TimeStepper::ScheduleRegrid (int lev)
@@ -129,7 +151,15 @@ void TimeStepper::ScheduleRegrid (int lev)
 
 void TimeStepper::NoShadowRegrid (int lev)
 {
+	double time = sim->grid_new[lev].t;
+
 	/* TODO: Implement semi-static case */
+
+	// Skip regrid right at the beginning of the sim
+	// Allowed to be overwritten if no truncation errors
+	// are used (TODO).
+	if( time == sim->t_start )
+		return;
 
         // Regrid changes level "lev+1" so we don't regrid on max_level
         if( lev >= sim->max_level )
@@ -138,7 +168,6 @@ void TimeStepper::NoShadowRegrid (int lev)
 	// Check if enough time since last regrid has passed.
 	// We add dt[lev] since we do not want to violate this criteria
 	// next time around in case we skip this regrid.
-	double time = sim->grid_new[lev].t;
 	if( time + sim->dt[lev] <= last_regrid_time[lev] + regrid_dt[lev] )
 		return;
 
@@ -155,10 +184,9 @@ void TimeStepper::NoShadowRegrid (int lev)
 
 void TimeStepper::DoRegrid (int lev, double time)
 {
-	amrex::Print() << "Perform regrid at level " << lev << std::endl;
-
 	// Try local regrid first.
 	bool successfull = false;
+
 	/* TODO Implement local regrid */	
 	if( true ){
 		// successfull = local_regrid();
@@ -171,6 +199,7 @@ void TimeStepper::DoRegrid (int lev, double time)
 	{
 		amrex::Print() << "Perform global regrid at level " << lev << std::endl;
 		sim->regrid(lev, time);
+		amrex::Print() << std::endl;
 
 		/* TODO: Fix possible nesting issues through local regrid */
 		//if( ... ){

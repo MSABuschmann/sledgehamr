@@ -64,17 +64,15 @@ void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex
 	const int ncomp = scalar_fields.size();
 
 	// Define lowest level from scratch
-	amrex::AllPrint() << "define ld" << std::flush<<std::endl;
 	grid_new[lev].define(ba, dm, ncomp, nghost, time);
 	grid_old[lev].define(ba, dm, ncomp, nghost);
-	amrex::AllPrint() << "done def ld" << std::flush <<std::endl;
 
 	SetBoxArray(lev, ba);
 	SetDistributionMap(lev, dm);
 	
 	// If shadow hierarchy is used, above level is the shadow level
 	// We now need to also make the coarse level.
-	if( shadow_hierarchy ){
+	if( shadow_hierarchy && lev == 0 ){
 		++lev;
 		++finest_level;
 
@@ -82,10 +80,8 @@ void SledgeHAMR::MakeNewLevelFromScratch (int lev, amrex::Real time, const amrex
 		amrex::BoxArray rba = ba;
 		rba.refine(2);
 
-	amrex::AllPrint() << "define ld" << std::flush<<std::endl;
 		grid_new[lev].define(rba, dm, ncomp, nghost, time);
 		grid_old[lev].define(rba, dm, ncomp, nghost);
-	amrex::AllPrint() << "done def ld" << std::flush <<std::endl;
 
 		// already set for shadow level
 		SetBoxArray(lev, rba);
@@ -139,6 +135,12 @@ void SledgeHAMR::ClearLevel (int lev)
 
 void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow)
 {
+	// Skip regrid right at the beginning of the sim
+	// Allowed to be overwritten if no truncation errors
+	// are used (TODO).
+	if( time == t_start )
+		return;
+
 	// Current state.
 	const amrex::MultiFab& state = grid_new[lev];
 
@@ -146,8 +148,11 @@ void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, 
 	// if they have been calculated.
 	const amrex::MultiFab& state_te = grid_old[lev];
 
+	// Count number of tags.
+	int ntags_user = 0;
+
 	// Loop over boxes and cells.
-	#pragma omp parallel
+	#pragma omp parallel reduction(+: ntags_user)
 	for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
 		const amrex::Box& tilebox  = mfi.tilebox();
 		const amrex::Array4<double const>& state_fab    = state.array(mfi);
@@ -156,11 +161,19 @@ void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, 
 
 		// Tag with or without truncation errors.
 		if ( shadow_hierarchy ) {
-			ErrorEstWithTE(state_fab, state_fab_te, tag_arr, tilebox, time, lev);
+			ErrorEstWithTE(state_fab, state_fab_te, tag_arr, tilebox, 
+					time, lev, &ntags_user);
 		}else{
-			//ErrorEstWithoutTE(state_fab, tilebox, tags, time);
+			ErrorEstWithoutTE(state_fab, state_fab_te, tag_arr, tilebox, 
+				 	   time, lev, &ntags_user);
 		}
 	}
+
+	amrex::ParallelDescriptor::ReduceIntSum(ntags_user, 0);
+
+	// Print statistics.
+	amrex::Print() << "  Tagged cells at level " << lev << ":" << std::endl;
+	amrex::Print() << "    User-defined tags: " << ntags_user << std::endl;
 }
 
 void SledgeHAMR::ParseInput ()

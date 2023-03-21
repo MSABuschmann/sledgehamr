@@ -55,7 +55,7 @@ void SledgeHAMR_Init::FinishAMReXSetup ()
 	int max_level = max_refinement_levels + shadow_hierarchy;
 	pp_amr.add("max_level", max_level);
 
-	// Set box dimensions
+	// Set box dimensions.
 	amrex::ParmParse pp_sim("sim");
 	double L;
 	pp_sim.get("L", L);
@@ -69,7 +69,7 @@ void SledgeHAMR_Init::FinishAMReXSetup ()
 	pp_geo.addarr("prob_hi", prob_hi);
 	pp_geo.addarr("is_periodic", periodic);
 
-	// Set Integrator type
+	// Set Integrator type.
 	amrex::ParmParse pp_inte("integration");
 	int inte_type;
 	pp_inte.get("type", inte_type);

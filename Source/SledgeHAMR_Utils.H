@@ -1,3 +1,6 @@
+#ifndef SledgeHAMR_Utils_H_
+#define SledgeHAMR_Utils_H_
+
 namespace SledgeHAMR_Utils{
 
 	/** @brief Calculates the Laplacian at a given order. Only 0th, 1st and 2nd order 
@@ -46,4 +49,37 @@ namespace SledgeHAMR_Utils{
 			     state_fab(i, j, k + 1, c) + state_fab(i, j, k - 1, c) )
 		      - 90.*state_fab(i,j,k,c) ) / (12.*dx2);
 	};
+
+	/** @brief Returns string of ordinal number suffix for small positive
+	 *	   numbers.
+	 * @param	num	Number.
+	 */
+	static std::string OrdinalNumberSuffix(int num)
+	{
+		if( num == 1 ) return "st";
+		if( num == 2 ) return "nd";
+		if( num == 3 ) return "rd";
+		return "th";
+	}
+
+	/** @brief Returns string containing the name of the level.
+	 * @param	lev		Level.
+	 * @param	shadow_hierachy Whether a shadow hierarchy 
+	 *				has been used.
+	 */
+	static std::string LevelName(int lev, bool shadow_hierarchy)
+	{
+		if( lev==0 && shadow_hierarchy )
+			return "shadow level";
+
+		if( (lev==0 && !shadow_hierarchy) ||
+		    (lev==1 &&  shadow_hierarchy) )
+			return "coarse level";
+
+		int refnum = lev - shadow_hierarchy;
+		return std::to_string(refnum) + OrdinalNumberSuffix(refnum)
+			+ " refinement";
+	};
 };
+
+#endif // SledgeHAMR_Utils_H_

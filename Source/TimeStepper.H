@@ -49,6 +49,7 @@ private:
 	 */
 	void PreAdvanceMessage (int lev);
 	void PostAdvanceMessage (int lev);
+	std::string LevelMessage (int lev);
 
 	/** @brief Schedules a regrid ahead of such that we can
 	 *	   compute truncations errors first.

@@ -32,7 +32,8 @@
 	BOOST_PP_SEQ_FOR_EACH(EXPAND_SCALARS, _, BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
 	SCALAR_ENUM(Scalar, __VA_ARGS__)\
 	FILL_RHS\
-	ERROR_EST_WITH_TE
+	ERROR_EST_WITH_TE\
+	ERROR_EST_WITHOUT_TE
 
 /** @brief Class to keep track of scalar fields.
  */

@@ -40,12 +40,34 @@ class IOModule;
 #define ERROR_EST_WITH_TE virtual void ErrorEstWithTE  (const amrex::Array4<double const>& state_fab,\
 							const amrex::Array4<double const>& state_fab_te,\
 							const amrex::Array4<char>& tagarr,\
-							const amrex::Box& tilebox, double time, int lev)\
+							const amrex::Box& tilebox, double time, int lev,\
+							int* ntags_user)\
 	{\
 		amrex::ParallelFor(tilebox,\
 		[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {\
+			tagarr(i,j,k) = amrex::TagBox::CLEAR;\
 			bool res = TagCellForRefinement(i, j, k, time, lev, state_fab);\
-			tagarr(i,j,k) = res == true ? amrex::TagBox::SET : amrex::TagBox::CLEAR;\
+			if( res ){\
+				tagarr(i,j,k) = amrex::TagBox::SET;\
+				(*ntags_user)++;\
+			}\
+		});\
+	};\
+
+#define ERROR_EST_WITHOUT_TE virtual void ErrorEstWithoutTE  (const amrex::Array4<double const>& state_fab,\
+							      const amrex::Array4<double const>& state_fab_te,\
+							      const amrex::Array4<char>& tagarr,\
+							      const amrex::Box& tilebox, double time, int lev,\
+							      int* ntags_user)\
+	{\
+		amrex::ParallelFor(tilebox,\
+		[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {\
+			tagarr(i,j,k) = amrex::TagBox::CLEAR;\
+			bool res = TagCellForRefinement(i, j, k, time, lev, state_fab);\
+			if( res ){\
+				tagarr(i,j,k) = amrex::TagBox::SET;\
+				(*ntags_user)++;\
+			}\
 		});\
 	};\
 
@@ -120,16 +142,25 @@ protected:
 
 	/** @brief Tag cells for refinement.
 	 *         Overrides the pure virtual function in amrex::AmrCore.
-	 * @param	lev	Level on which cells are tagged.
-	 * @param	time	Time of said level.
-	 * @param	ngrow	Grid growth factor	
+	 * @param	lev		Level on which cells are tagged.
+	 * @param	time		Time of said level.
+	 * @param	ngrow		Grid growth factor.
+	 * @param	ntags_user	Counts number of user-defined tags.
 	 */
 	virtual void ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow) override;
 
 	virtual void ErrorEstWithTE (const amrex::Array4<double const>& state_fab,
 				     const amrex::Array4<double const>& state_fab_te,
 				     const amrex::Array4<char>& tagarr,
-				     const amrex::Box& tilebox, double time, int lev) = 0;
+				     const amrex::Box& tilebox, double time, int lev,
+				     int* ntags_user) = 0;
+	
+	virtual void ErrorEstWithoutTE (const amrex::Array4<double const>& state_fab,
+				        const amrex::Array4<double const>& state_fab_te,
+				        const amrex::Array4<char>& tagarr,
+				        const amrex::Box& tilebox, double time, int lev,
+				        int* ntags_user) = 0;
+
 
 	/** @brief Virtual function that loops over a state to fill the RHS. Has to be defined by
 	 *	   derived project class, though this will be hidden from the user. Reason for this
