@@ -43,14 +43,15 @@ void SledgeHAMR::Init ()
 
 void SledgeHAMR::Evolve ()
 {
+	// Main loop over time.
 	while( grid_new[0].t < t_end ){
-		amrex::Print() << std::endl;
-
 		// Advance all levels starting at lev=0.
 		// This performs an entire shadow/coarse level time step.	
+		amrex::Print() << std::endl;
 		time_stepper->Advance(0);
 
 		// Write any output if requested.
+		amrex::Print() << std::endl;
 		io_module->Write();
 	}
 	
@@ -169,6 +170,7 @@ void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, 
 		}
 	}
 
+	// Collect all tags across MPI ranks.
 	amrex::ParallelDescriptor::ReduceIntSum(ntags_user, 0);
 
 	// Print statistics.

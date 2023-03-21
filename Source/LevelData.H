@@ -3,8 +3,7 @@
 
 #include <AMReX_MultiFab.H>
 
-/** @brief Class that holds the MultiFab data while 
- *  	   keeping track of time
+/** @brief Class that holds the MultiFab data while also keeping track of time.
  */
 class LevelData
     : public amrex::MultiFab
@@ -12,6 +11,13 @@ class LevelData
 public:
 	LevelData () : amrex::MultiFab {} {};
 
+	/** @brief Construct data using the given grid layout.
+	 * @param	ba	BoxArray.
+	 * @param	dm	DistributionMapping.
+	 * @param	ncomp	Total number of scalar fields components.
+	 * @param	nghost	Number of ghost cells.
+	 * @param	time	Time.
+	 */
 	LevelData (amrex::BoxArray ba, amrex::DistributionMapping dm, int ncomp, int nghost, double time=0)
 		: amrex::MultiFab {ba, dm, ncomp, nghost}
 		, t{time} {};
@@ -19,11 +25,11 @@ public:
 	using amrex::MultiFab::MultiFab;
 
 	/** @brief Overload amrex::MultiFab::define function to include time.
-	 * @param	ba	Box array.
-	 * @param	dm	Distribution mapping.
-	 * @param	ncomp	Number of scalar components.
+	 * @param	ba	BoxArray.
+	 * @param	dm	DistributionMapping.
+	 * @param	ncomp	Total number of scalar components.
 	 * @param	nghost	Number of ghost cells.
-	 * @param	time 	t.
+	 * @param	time 	Time.
 	 */
 	void define(amrex::BoxArray ba, amrex::DistributionMapping dm, int ncomp, int nghost, double time)
 	{
