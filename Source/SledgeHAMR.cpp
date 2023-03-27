@@ -37,6 +37,8 @@ void SledgeHAMR::Init ()
 	// Necessary so it can initialize boundary conditions.
 	level_synchronizer = new LevelSynchronizer(this);
 
+	ParseInputScalars();
+
 	/* TODO: Check for checkpoint file etc. */
 	InitFromScratch( t_start );
 }
@@ -150,10 +152,12 @@ void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, 
 	const amrex::MultiFab& state_te = grid_old[lev];
 
 	// Count number of tags.
+	int ntags_total = 0;
 	int ntags_user = 0;
+	std::vector<int> ntags_trunc(scalar_fields.size(), 0);
 
 	// Loop over boxes and cells.
-	#pragma omp parallel reduction(+: ntags_user)
+	#pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user) reduction(vec_int_plus : ntags_trunc) 
 	for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
 		const amrex::Box& tilebox  = mfi.tilebox();
 		const amrex::Array4<double const>& state_fab    = state.array(mfi);
@@ -163,19 +167,35 @@ void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, 
 		// Tag with or without truncation errors.
 		if ( shadow_hierarchy ) {
 			ErrorEstWithTE(state_fab, state_fab_te, tag_arr, tilebox, 
-					time, lev, &ntags_user);
+					time, lev, &ntags_total, &ntags_user, &(ntags_trunc[0]));
 		}else{
 			ErrorEstWithoutTE(state_fab, state_fab_te, tag_arr, tilebox, 
-				 	   time, lev, &ntags_user);
+				 	   time, lev, &ntags_total);
 		}
 	}
 
 	// Collect all tags across MPI ranks.
-	amrex::ParallelDescriptor::ReduceIntSum(ntags_user, 0);
+	amrex::ParallelDescriptor::ReduceIntSum(ntags_total, 0);
+
+	if( shadow_hierarchy ){
+		amrex::ParallelDescriptor::ReduceIntSum(ntags_user, 0);
+		amrex::ParallelDescriptor::ReduceIntSum(&(ntags_trunc[0]), ntags_trunc.size(), 0);
+	}
 
 	// Print statistics.
-	amrex::Print() << "  Tagged cells at level " << lev << ":" << std::endl;
-	amrex::Print() << "    User-defined tags: " << ntags_user << std::endl;
+	long ncells = CountCells(lev);
+	double ftotal = (double)ntags_total/(double)ncells;
+	double fuser  = (double)ntags_user /(double)ncells;
+	amrex::Print()  << "  Tagged cells at level " << lev << ": " << ntags_total << " of " << ncells 
+			<< " (" << ftotal*100. << "\%)" << std::endl;
+	if( shadow_hierarchy ){
+		amrex::Print() << "    User-defined tags: " << ntags_user << std::endl;
+
+		for(int i=0; i<scalar_fields.size(); ++i){
+			amrex::Print()  << "    Truncation error tags on " << scalar_fields[i]->name 
+					<< ": " << ntags_trunc[i] << std::endl;
+		}
+	}
 }
 
 void SledgeHAMR::ParseInput ()
@@ -185,7 +205,7 @@ void SledgeHAMR::ParseInput ()
 		pp.query("nghost", nghost);
 		pp.query("shadow_hierarchy", shadow_hierarchy);
 		pp.query("coarse_level_grid_size", coarse_level_grid_size);
-	}
+        }
 	
 	{
 		amrex::ParmParse pp("sim");
@@ -193,5 +213,19 @@ void SledgeHAMR::ParseInput ()
 		pp.get("t_end", t_end);
 		pp.get("L", L);
 		pp.get("cfl", cfl);
+	}
+}
+
+void SledgeHAMR::ParseInputScalars ()
+{
+	te_crit.resize( scalar_fields.size() );
+	double te_crit_default = 1e99;
+
+	amrex::ParmParse pp("amr");
+	pp.query("te_crit", te_crit_default);
+	for(int n=0; n<scalar_fields.size(); ++n){
+		te_crit[n] = te_crit_default;
+		std::string ident = "te_crit_" + scalar_fields[n]->name;
+		pp.query(ident.c_str(), te_crit[n]);
 	}
 }

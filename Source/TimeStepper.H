@@ -49,13 +49,28 @@ private:
 	 */
 	void PreAdvanceMessage (int lev);
 	void PostAdvanceMessage (int lev);
-	std::string LevelMessage (int lev);
+	std::string LevelMessage (int lev, int istep);
 
 	/** @brief Schedules a regrid ahead of such that we can
 	 *	   compute truncations errors first.
 	 * @param	lev	Level at which to tag cells.
 	 */
 	void ScheduleRegrid (int lev);
+
+	/** @brief Checks whether a regrid has been scheduled
+	 * 	   and triggers a regrid if so.
+	 * @param	lev	Current level.
+	 */
+	void CheckRegridSchedule (int lev);
+
+	/** @brief Checks if a regrid at a given step and level
+	 *	   has been scheduled and returns its index. Will
+	 *	   return -1 if not found.
+	 * @param 	vec	Regrid schedule of a level.
+	 * @param	target	Time step to check.
+	 * @return	Index of target within vec. -1 if not found.
+	 */
+	int GetIndexOfScheduledRegrid (std::vector<int>& vec, int target);
 
 	/** @brief Performs a regrid if needed if no truncation
 	 *	   tags are to be performed.
@@ -78,6 +93,18 @@ private:
 	 *  	   regridded last.
 	 */
 	std::vector<double> last_regrid_time;
+
+	/** @brief Vector for each level containing the step
+	 *	   numbers at we want to perform a regrid.
+	 *	   Needed such that we can compute truncation
+	 *	   errors in time.
+	 */
+	std::vector< std::vector<int> > scheduled_regrids;
+
+	/** @brief Vector containing for each scheduled regrid
+	 *	   which level is the coarsest.
+	 */
+	std::vector<int> regrid_level;
 
 	/** @brief Pointer to module that performs the actual 
 	 *	   time integration.

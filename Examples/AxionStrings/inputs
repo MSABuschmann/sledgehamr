@@ -8,7 +8,7 @@ sim.L = 23
 sim.cfl = 0.3
 
 # -------------------------------------------------- AMR parameters
-amr.shadow_hierarchy = 0
+amr.shadow_hierarchy = 1
 amr.max_refinement_levels = 2
 amr.nghost = 1
 amr.coarse_level_grid_size = 128 
@@ -18,6 +18,8 @@ amr.blocking_factor = 4
 
 amr.n_error_buf = 4
 amr.regrid_dt = 0.3
+
+amr.te_crit = 1e-3
 
 # -------------------------------------------------- Input parameters
 input.initial_state = initial_state.hdf5

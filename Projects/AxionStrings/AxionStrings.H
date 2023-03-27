@@ -17,7 +17,7 @@ public:
 
 protected:
 
-	/** @brief Inline function that calculates the RHS of the EOM at a single cell.
+	/** @brief Function that calculates the RHS of the EOM at a single cell.
 	 * @param	i		i-th cell index.
 	 * @param	j		j-th cell index.
 	 * @param	k		k-th cell index.
@@ -53,7 +53,8 @@ protected:
 		rhs_fab(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + LaplacianPsi2 - Psi2 * cross_term;	
 	};
 
-	/** @brief Inline function that tags a single cell for refinement.
+	/** @brief Function that tags individual cells for refinement.
+	 * 	   TODO: Make virtual.
 	 * @param	i		i-th cell index.
 	 * @param	j		j-th cell index.
 	 * @param	k		k-th cell index.
@@ -78,6 +79,8 @@ protected:
 
 		return false;
 	};
+
+private:
 
 	/** @brief Computes the winding factor along a given axis. Will be non-zero
 	 *	   if plaquette is pierced by a string.

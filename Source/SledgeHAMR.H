@@ -109,7 +109,7 @@ protected:
 				     const amrex::Array4<double const>& state_fab_te,
 				     const amrex::Array4<char>& tagarr,
 				     const amrex::Box& tilebox, double time, int lev,
-				     int* ntags_user) = 0;
+				     int* ntags_total, int* ntags_user, int* ntags_trunc) = 0;
 
 	/** @brief Same as ErrorEstWithTE function but does not include
 	 *	   truncation error tags.	
@@ -118,7 +118,7 @@ protected:
 				        const amrex::Array4<double const>& state_fab_te,
 				        const amrex::Array4<char>& tagarr,
 				        const amrex::Box& tilebox, double time, int lev,
-				        int* ntags_user) = 0;
+				        int* ntags_total) = 0;
 
 
 	/** @brief Virtual function that loops over a state to fill the RHS. Has to be defined by
@@ -144,8 +144,29 @@ protected:
 	 *			created.
 	 * @return	If the given level is allowed to be created.
 	 */
-	virtual bool CanCreateLevel (int lev, double time)
+	virtual bool CreateLevelIf (int lev, double time)
 	{ return true; };
+
+	/** @brief TODO
+	 */
+	inline bool TruncationErrorTag(int i, int j, int k, double time, int lev, 
+					const amrex::Array4<double const>& state_fab_te,
+					int* ntags_trunc)
+	{
+		// truncation errors for scalar field components saved in even indices.
+		if( i%2 != 0 || j%2 != 0 || k%2 != 0 )
+			return false; 
+
+		bool res = false;
+		for(int n=0; n<scalar_fields.size(); ++n){
+			if( state_fab_te(i,j,k,n) >= te_crit[n] ){
+				res = true;
+				ntags_trunc[n] += 8;
+			}
+		}
+
+		return res;
+	};
 
 	/** @brief Instance to perform operations between two levels.
 	 */
@@ -204,11 +225,22 @@ protected:
 	 */
 	int coarse_level_grid_size;
 
+	/** @brief Truncation error thresholds.
+	 */
+	std::vector<double> te_crit;
+
 private:
 
 	/** @brief Parse various input parameters from inputs file.
 	 */
 	void ParseInput ();
+
+	/** @brief Parse various scalar dependent input parameters from inputs file.
+	 * 	   This cannot be done in ParseInput as the project class has not been
+	 * 	   constructed at this point, hence we have no knowledge about the
+	 *	   scalars quite yet. This function will be called in Init() instead.
+	 */
+	void ParseInputScalars ();
 };
 
 #endif //SledgeHAMR_H_

@@ -178,16 +178,16 @@ void IOModule::WriteSingleSlice (double time, const LevelData* state, int lev, h
 			// Copy data into flattened array for each scalar field.
 			unsigned long Len = dim1 * dim2;
 			float *output_arr = new float[Len]();
-			for(int f=0; f<sim->scalar_fields.size(); f++){
-				for(int i=l1; i<h1; i++){
-					for(int j=l2; j<h2; j++){
+			for(int f=0; f<sim->scalar_fields.size(); ++f){
+				for(int i=l1; i<h1; ++i){
+					for(int j=l2; j<h2; ++j){
 						int ind = (i-l1)*dim2 + (j-l2);
 
 						if( d1 == 0 ){
 							output_arr[ ind ] = state_arr(0,i,j,f);
                                                 }else if( d1 == 1 ){
 							output_arr[ ind ] = state_arr(i,0,j,f);
-						}else if( d2 == 2 ){
+						}else if( d1 == 2 ){
 							output_arr[ ind ] = state_arr(i,j,0,f);
                                         	}
 					}
@@ -212,8 +212,10 @@ void IOModule::WriteSingleSlice (double time, const LevelData* state, int lev, h
 	WriteToHDF5(file_id, "Header_"+ident, header_data, 5);
 
 	// Write box dimensions so we can reassemble slice.
-	WriteToHDF5(file_id, "le1_"+ident, (int*)&le1[0], le1.size());
-	WriteToHDF5(file_id, "le2_"+ident, (int*)&le2[0], le2.size());
-	WriteToHDF5(file_id, "he1_"+ident, (int*)&he1[0], he1.size());
-	WriteToHDF5(file_id, "he2_"+ident, (int*)&he2[0], he2.size());
+	if( le1.size() > 0 ){
+		WriteToHDF5(file_id, "le1_"+ident, (int*)&(le1[0]), le1.size());
+		WriteToHDF5(file_id, "le2_"+ident, (int*)&(le2[0]), le2.size());
+		WriteToHDF5(file_id, "he1_"+ident, (int*)&(he1[0]), he1.size());
+		WriteToHDF5(file_id, "he2_"+ident, (int*)&(he2[0]), he2.size());
+	}
 }

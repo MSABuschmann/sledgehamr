@@ -43,4 +43,5 @@ void Integrator::Advance (int lev)
 	integrator.advance(Sborder, S_new, sim->grid_old[lev].t, sim->dt[lev]);
 
 	sim->grid_new[lev].t = sim->grid_old[lev].t + sim->dt[lev];
+	sim->grid_new[lev].istep = sim->grid_old[lev].istep + 1;
 }

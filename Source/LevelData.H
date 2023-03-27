@@ -3,7 +3,8 @@
 
 #include <AMReX_MultiFab.H>
 
-/** @brief Class that holds the MultiFab data while also keeping track of time.
+/** @brief Class that holds the MultiFab data while also keeping track i
+ *	   of time and step numbers.
  */
 class LevelData
     : public amrex::MultiFab
@@ -59,6 +60,10 @@ public:
 	/** @brief Time corresponding to amrex::MultiFab data.
 	 */
 	double t = 0.;
+
+	/** @brief How often this level has been advanced.
+	 */
+	int istep = 0;
 
 	/** @brief Flag as to whether the MutliFab has
 	 *	   truncation errors encoded into it.
