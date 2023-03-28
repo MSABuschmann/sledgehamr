@@ -86,12 +86,92 @@ void LevelSynchronizer::AverageDownTo (int lev)
 {
 	amrex::average_down(sim->grid_new[lev+1], sim->grid_new[lev], sim->geom[lev+1], sim->geom[lev], 
 			    0, sim->grid_new[lev].nComp(), sim->refRatio(lev));
+
+	// Since we averaged down we do not have truncation errors
+	// available at lev+1.
+       	sim->grid_old[lev+1].contains_truncation_errors = false; 
 }
 
 void LevelSynchronizer::ComputeTruncationErrors (int lev)
 {
-	/* TODO */
+	amrex::MultiFab& S_crse = sim->grid_new[lev-1];
+	amrex::MultiFab& S_fine = sim->grid_new[lev];
+	amrex::MultiFab& S_te   = sim->grid_old[lev];
+	const int ncomp = sim->scalar_fields.size();
+
+	// Coarsen() the fine stuff on processors owning the fine data.
+	amrex::BoxArray crse_S_fine_BA = S_fine.boxArray(); 
+	crse_S_fine_BA.coarsen(2);
+
+	if( crse_S_fine_BA == S_crse.boxArray() && S_fine.DistributionMap() == S_crse.DistributionMap() ){
+		#pragma omp parallel
+		for( amrex::MFIter mfi(S_crse, true); mfi.isValid(); ++mfi ){
+			//  NOTE: The tilebox is defined at the coarse level.
+			const amrex::Box& bx = mfi.tilebox();
+			amrex::Array4<double> const& crsearr = S_crse.array(mfi);
+			amrex::Array4<double const> const& finearr = S_fine.const_array(mfi);
+			amrex::Array4<double> const& tearr = S_te.array(mfi);
+
+			AMREX_HOST_DEVICE_PARALLEL_FOR_3D(bx, i, j, k,
+			{
+				AverageDownWithTruncationError(i, j, k, ncomp, crsearr, finearr, tearr);
+			});
+		}
+	}else{
+		amrex::MultiFab crse_S_fine(crse_S_fine_BA, S_fine.DistributionMap(), ncomp, 0, amrex::MFInfo(), amrex::FArrayBoxFactory());
+		crse_S_fine.ParallelCopy(S_crse, 0, 0, ncomp);
+
+		#pragma omp parallel
+		for( amrex::MFIter mfi(crse_S_fine, true); mfi.isValid(); ++mfi ){
+			//  NOTE: The tilebox is defined at the coarse level.
+			const amrex::Box& bx = mfi.tilebox();
+			amrex::Array4<double> const& crsearr = crse_S_fine.array(mfi);
+			amrex::Array4<double const> const& finearr = S_fine.const_array(mfi);
+			amrex::Array4<double> const& tearr = S_te.array(mfi);
+
+			//  NOTE: We copy from component scomp of the fine fab into component 0 of the crse fab
+			//        because the crse fab is a temporary which was made starting at comp 0, it is
+			//        not part of the actual crse multifab which came in.
+			AMREX_HOST_DEVICE_PARALLEL_FOR_3D(bx, i, j, k,
+			{
+				AverageDownWithTruncationError(i, j, k, ncomp, crsearr, finearr, tearr);
+			});
+		}
+
+		S_crse.ParallelCopy(crse_S_fine, 0, 0, ncomp);
+	}
+
+	// We now have saved truncation errors.
+	sim->grid_old[lev].contains_truncation_errors = true;
 }
+
+inline void LevelSynchronizer::AverageDownWithTruncationError (int i, int j, int k, const int ncomp,
+								amrex::Array4<double> const& crse, 
+								amrex::Array4<double const> const& fine, 
+								amrex::Array4<double> const& te)
+{
+	const int ratio = 2;
+	const double volfrac = 1.0/(double)(ratio*ratio*ratio);
+	const int ii = i*ratio;
+	const int jj = j*ratio;
+	const int kk = k*ratio;
+		
+	/* TODO: Do custom functions */
+       
+	for(int n = 0; n < ncomp; ++n ){ 
+		double c = fine(ii, jj, kk, n);
+		c += fine(ii+1, jj  , kk  , n);
+		c += fine(ii  , jj+1, kk  , n);
+		c += fine(ii  , jj  , kk+1, n);
+		c += fine(ii+1, jj+1, kk, n);
+		c += fine(ii+1, jj  , kk+1, n);
+		c += fine(ii  , jj+1, kk+1, n);
+		c += fine(ii+1, jj+1, kk+1, n);
+
+		te(ii,jj,kk,n) = fabs(crse(i,j,k,n) - volfrac * c);
+		crse(i,j,k,n) = volfrac * c;
+	}
+}   
 
 amrex::Vector<amrex::MultiFab*> LevelSynchronizer::GetLevelData (int lev, double time)
 {

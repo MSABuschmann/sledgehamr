@@ -48,8 +48,8 @@
 				(*ntags_user)++;\
 				(*ntags_total)++;\
 			}\
-			res = TruncationErrorTag(i, j, k, time, lev, state_fab_te, ntags_trunc);\
-			if( res ){\
+			bool te_res = TruncationErrorTag(i, j, k, time, lev, state_fab_te, ntags_trunc);\
+			if( te_res ){\
 				tagarr(i  ,j  ,k  ) = amrex::TagBox::SET;\
 				tagarr(i+1,j  ,k  ) = amrex::TagBox::SET;\
 				tagarr(i  ,j+1,k  ) = amrex::TagBox::SET;\
@@ -58,7 +58,7 @@
 				tagarr(i  ,j+1,k+1) = amrex::TagBox::SET;\
 				tagarr(i+1,j  ,k+1) = amrex::TagBox::SET;\
 				tagarr(i+1,j+1,k+1) = amrex::TagBox::SET;\
-				(*ntags_total) += 8;\
+				(*ntags_total) += 8 - (int)res;\
 			}\
 		});\
 	};\

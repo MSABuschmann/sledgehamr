@@ -147,10 +147,18 @@ protected:
 	virtual bool CreateLevelIf (int lev, double time)
 	{ return true; };
 
-	/** @brief TODO
+	/** @brief Identifies cells that violate the truncation error threshold.
+	 * @param	i		i-th cell index.
+	 * @param	j		j-th cell index.
+	 * @param	k		k-th cell index.
+	 * @param	time 		Current time.
+	 * @param	lev		Current level.
+	 * @param	te		Truncation errors.
+	 * @param	ntags_trunc	Counts number of tags.
+	 * @return	If truncation error threshold has been exceeded.
 	 */
 	inline bool TruncationErrorTag(int i, int j, int k, double time, int lev, 
-					const amrex::Array4<double const>& state_fab_te,
+					const amrex::Array4<double const>& te,
 					int* ntags_trunc)
 	{
 		// truncation errors for scalar field components saved in even indices.
@@ -159,7 +167,7 @@ protected:
 
 		bool res = false;
 		for(int n=0; n<scalar_fields.size(); ++n){
-			if( state_fab_te(i,j,k,n) >= te_crit[n] ){
+			if( te(i,j,k,n) >= te_crit[n] ){
 				res = true;
 				ntags_trunc[n] += 8;
 			}

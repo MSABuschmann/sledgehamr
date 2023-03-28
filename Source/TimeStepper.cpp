@@ -99,19 +99,16 @@ void TimeStepper::SynchronizeLevels (int lev)
                 }else{
 			// average lev+1 onto lev.
                         sim->level_synchronizer->AverageDownTo(lev);
-
-			// since we averaged down we do not have truncation errors
-			// available at lev+1.
-               		sim->grid_old[lev+1].contains_truncation_errors = false; 
-                }
+        	}
         }
 
         if( lev > 0 && sim->shadow_hierarchy && index != -1 )
         {
+		amrex::Print() << "Compute truncation errors between " << lev << " " << lev-1 << std::endl;
+
 		// compute truncation errors for level lev and
 		// average down between lev and lev-1.
                 sim->level_synchronizer->ComputeTruncationErrors(lev);
-               	sim->grid_old[lev].contains_truncation_errors = true; 
         }
 }
 

@@ -59,6 +59,22 @@ public:
 
 private:	
 
+	/** @brief Averages down a set of fine level cells onto a coarse
+	 *	   level cell. Computes truncation errors at the same time.
+	 * @param	i	i-th cell index.
+	 * @param	j	j-th cell index.
+	 * @param	k	k-th cell index.
+	 * @param	ncomp	Number of scalar fields.
+	 * @param	crse	Coarse level data.
+	 * @param	fine	Fine level data.
+	 * @param	te	Container to save truncation errors.
+	 *			Same dimensions as fine.
+	 */
+	void AverageDownWithTruncationError (int i, int j, int k, const int ncomp,
+						amrex::Array4<double> const& crse, 
+						amrex::Array4<double const> const& fine, 
+						amrex::Array4<double> const& te);
+
 	/** @brief Fetches level data at a given level and time.
 	 *	   Needs to be amrex::Vector not std::vector.
 	 * @param	lev	Level at which data is to be fetched.
