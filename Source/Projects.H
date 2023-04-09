@@ -6,7 +6,7 @@
 #include<AxionStrings.H>
 
 #define SLEDGEHAMR_PROJECT(str) {\
-   if( str == "AxionStrings" ) return new AxionStrings;\
+   if( str == "AxionStrings" ) return new AxionStrings::AxionStrings;\
 }
 
 #endif

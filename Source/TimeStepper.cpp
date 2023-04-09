@@ -179,7 +179,7 @@ void TimeStepper::ScheduleRegrid (int lev)
 	// this regrid.
 	if( !sim->CreateLevelIf(lev+1, time + 3.*sim->dt[lev]) )
 		return;
-        
+
 	// Check if enough time since last regrid has passed.
 	// We add 3*dt[lev] since we do not want to violate this criteria
 	// next time around in case we skip this regrid.

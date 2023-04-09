@@ -7,6 +7,19 @@
 #include <SledgeHAMR.H>
 #include <LevelData.H>
 
+struct NullFill                                                                  
+{                                                                                
+    AMREX_GPU_DEVICE                                                             
+    void operator() (const amrex::IntVect& /*iv*/, amrex::Array4<amrex::Real> const& /*dest*/,        
+                     const int /*dcomp*/, const int /*numcomp*/,                 
+                     amrex::GeometryData const& /*geom*/, const amrex::Real /*time*/,          
+                     const amrex::BCRec* /*bcr*/, const int /*bcomp*/,                  
+                     const int /*orig_comp*/) const                              
+        {                                                                        
+            // no physical boundaries to fill because it is all periodic         
+        }                                                                        
+};
+
 class SledgeHAMR;
 
 /** @brief This class handles all operations between two levels
@@ -58,22 +71,6 @@ public:
 	void ComputeTruncationErrors (int lev);
 
 private:	
-
-	/** @brief Averages down a set of fine level cells onto a coarse
-	 *	   level cell. Computes truncation errors at the same time.
-	 * @param	i	i-th cell index.
-	 * @param	j	j-th cell index.
-	 * @param	k	k-th cell index.
-	 * @param	ncomp	Number of scalar fields.
-	 * @param	crse	Coarse level data.
-	 * @param	fine	Fine level data.
-	 * @param	te	Container to save truncation errors.
-	 *			Same dimensions as fine.
-	 */
-	void AverageDownWithTruncationError (int i, int j, int k, const int ncomp,
-						amrex::Array4<double> const& crse, 
-						amrex::Array4<double const> const& fine, 
-						amrex::Array4<double> const& te);
 
 	/** @brief Fetches level data at a given level and time.
 	 *	   Needs to be amrex::Vector not std::vector.

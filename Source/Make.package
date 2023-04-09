@@ -26,3 +26,4 @@ CEXE_headers += LevelData.H
 CEXE_headers += Scalars.H
 CEXE_headers += Projects.H
 CEXE_headers += Macros.H
+CEXE_headers += Kernels.H

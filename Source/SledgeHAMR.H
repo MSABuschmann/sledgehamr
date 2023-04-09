@@ -10,6 +10,7 @@
 #include <Integrator.H>
 #include <IOModule.H>
 #include <Scalars.H>
+#include <Kernels.H>
 
 class LevelSynchronizer;
 class TimeStepper;
@@ -105,21 +106,26 @@ protected:
 	 * @param	lev		Current level.
 	 * @param	ntags_user	Counts number of user-defined tags.
 	 */
-	virtual void ErrorEstWithTE (const amrex::Array4<double const>& state_fab,
+	virtual void ErrorEstWithTECPU (const amrex::Array4<double const>& state_fab,
 				     const amrex::Array4<double const>& state_fab_te,
 				     const amrex::Array4<char>& tagarr,
 				     const amrex::Box& tilebox, double time, int lev,
 				     int* ntags_total, int* ntags_user, int* ntags_trunc) = 0;
+	virtual void ErrorEstWithTEGPU (const amrex::Array4<double const>& state_fab,
+				     const amrex::Array4<double const>& state_fab_te,
+				     const amrex::Array4<char>& tagarr,
+				     const amrex::Box& tilebox, double time, int lev) = 0;
 
 	/** @brief Same as ErrorEstWithTE function but does not include
 	 *	   truncation error tags.	
 	 */
-	virtual void ErrorEstWithoutTE (const amrex::Array4<double const>& state_fab,
-				        const amrex::Array4<double const>& state_fab_te,
+	virtual void ErrorEstWithoutTECPU (const amrex::Array4<double const>& state_fab,
 				        const amrex::Array4<char>& tagarr,
 				        const amrex::Box& tilebox, double time, int lev,
 				        int* ntags_total) = 0;
-
+	virtual void ErrorEstWithoutTEGPU (const amrex::Array4<double const>& state_fab,
+				        const amrex::Array4<char>& tagarr,
+				        const amrex::Box& tilebox, double time, int lev) = 0;
 
 	/** @brief Virtual function that loops over a state to fill the RHS. Has to be defined by
 	 *	   derived project class, though this will be hidden from the user. Reason for this
@@ -146,35 +152,6 @@ protected:
 	 */
 	virtual bool CreateLevelIf (int lev, double time)
 	{ return true; };
-
-	/** @brief Identifies cells that violate the truncation error threshold.
-	 * @param	i		i-th cell index.
-	 * @param	j		j-th cell index.
-	 * @param	k		k-th cell index.
-	 * @param	time 		Current time.
-	 * @param	lev		Current level.
-	 * @param	te		Truncation errors.
-	 * @param	ntags_trunc	Counts number of tags.
-	 * @return	If truncation error threshold has been exceeded.
-	 */
-	inline bool TruncationErrorTag(int i, int j, int k, double time, int lev, 
-					const amrex::Array4<double const>& te,
-					int* ntags_trunc)
-	{
-		// truncation errors for scalar field components saved in even indices.
-		if( i%2 != 0 || j%2 != 0 || k%2 != 0 )
-			return false; 
-
-		bool res = false;
-		for(int n=0; n<scalar_fields.size(); ++n){
-			if( te(i,j,k,n) >= te_crit[n] ){
-				res = true;
-				ntags_trunc[n] += 8;
-			}
-		}
-
-		return res;
-	};
 
 	/** @brief Instance to perform operations between two levels.
 	 */
@@ -239,6 +216,11 @@ protected:
 
 private:
 
+	/* @brief TODO
+	 */
+	void DoErrorEstCPU (int lev, amrex::TagBoxArray& tags, double time);
+	void DoErrorEstGPU (int lev, amrex::TagBoxArray& tags, double time);
+
 	/** @brief Parse various input parameters from inputs file.
 	 */
 	void ParseInput ();
@@ -249,6 +231,10 @@ private:
 	 *	   scalars quite yet. This function will be called in Init() instead.
 	 */
 	void ParseInputScalars ();
+
+	/* @brief Whether tagging should be performed on gpu if possible.
+	 */
+	bool tagging_on_gpu = false;
 };
 
 #endif //SledgeHAMR_H_

@@ -1,8 +1,6 @@
 #ifndef Scalars_H_
 #define Scalars_H_
 
-#include <boost/preprocessor.hpp>
-
 #include <SledgeHAMR.H>
 /** @brief Class to keep track of scalar fields.
  */

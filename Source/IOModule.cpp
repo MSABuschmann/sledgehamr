@@ -92,19 +92,24 @@ void IOModule::FillLevelFromArray (int lev, const int comp, double* data,
 				       const unsigned long long dimN)
 {
 	LevelData& state = sim->grid_new[lev];
-	
-	#pragma omp parallel
+
+	#pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
 	for ( amrex::MFIter mfi(state, amrex::TilingIfNotGPU()); mfi.isValid(); ++mfi ){
 		const amrex::Box& bx = mfi.tilebox();
 		const auto& state_arr = state.array(mfi);
 
-		amrex::ParallelFor(bx,
-		 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+		const amrex::Dim3 lo = amrex::lbound(bx);
+		const amrex::Dim3 hi = amrex::ubound(bx);
+                                                                                 
+		for (int k = lo.z; k <= hi.z; ++k) {
+		for (int j = lo.y; j <= hi.y; ++j) {
+		AMREX_PRAGMA_SIMD
+		for (int i = lo.x; i <= hi.x; ++i) {
 			unsigned long long ind =  (unsigned long long)i * dimN*dimN 
 						+ (unsigned long long)j * dimN
 						+ (unsigned long long)k;
 			state_arr(i,j,k,comp) = data[ind];
-		});
+		}}}
 	}
 }
 
@@ -112,7 +117,7 @@ void IOModule::FillLevelFromConst (int lev, const int comp, const double c)
 {
 	LevelData& state = sim->grid_new[lev];
 
-	#pragma omp parallel
+	#pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
 	for ( amrex::MFIter mfi(state, amrex::TilingIfNotGPU()); mfi.isValid(); ++mfi ){
 		const amrex::Box& bx = mfi.tilebox();
 		const auto& state_arr = state.array(mfi);

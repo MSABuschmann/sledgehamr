@@ -1,3 +1,5 @@
+#include <type_traits>
+
 #include <AMReX_ParmParse.H>
 
 #include <SledgeHAMR.H>
@@ -6,11 +8,11 @@ SledgeHAMR::SledgeHAMR ()
 {
 	amrex::Print() << "Starting sledgeHAMR..." << std::endl;
 
+	ParseInput();
+
 	// Initialize modules
 	time_stepper = new TimeStepper(this);
 	io_module = new IOModule(this);
-
-	ParseInput();
 
 	// Fill various level vectors	
 	grid_new.resize(max_level+1);
@@ -144,6 +146,14 @@ void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, 
 	if( time == t_start )
 		return;
 
+	if (tagging_on_gpu)
+		DoErrorEstGPU(lev, tags, time);
+	else 
+		DoErrorEstCPU(lev, tags, time);
+}
+
+void SledgeHAMR::DoErrorEstCPU (int lev, amrex::TagBoxArray& tags, double time)
+{
 	// Current state.
 	const amrex::MultiFab& state = grid_new[lev];
 
@@ -151,13 +161,13 @@ void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, 
 	// if they have been calculated.
 	const amrex::MultiFab& state_te = grid_old[lev];
 
-	// Count number of tags.
+	// Initialize tag counters.
 	int ntags_total = 0;
 	int ntags_user = 0;
 	std::vector<int> ntags_trunc(scalar_fields.size(), 0);
 
 	// Loop over boxes and cells.
-	#pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user) reduction(vec_int_plus : ntags_trunc) 
+	#pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user) reduction(vec_int_plus : ntags_trunc)
 	for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
 		const amrex::Box& tilebox  = mfi.tilebox();
 		const amrex::Array4<double const>& state_fab    = state.array(mfi);
@@ -166,10 +176,10 @@ void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, 
 
 		// Tag with or without truncation errors.
 		if ( shadow_hierarchy ) {
-			ErrorEstWithTE(state_fab, state_fab_te, tag_arr, tilebox, 
+			ErrorEstWithTECPU(state_fab, state_fab_te, tag_arr, tilebox, 
 					time, lev, &ntags_total, &ntags_user, &(ntags_trunc[0]));
 		}else{
-			ErrorEstWithoutTE(state_fab, state_fab_te, tag_arr, tilebox, 
+			ErrorEstWithoutTECPU(state_fab, tag_arr, tilebox, 
 				 	   time, lev, &ntags_total);
 		}
 	}
@@ -195,7 +205,35 @@ void SledgeHAMR::ErrorEst (int lev, amrex::TagBoxArray& tags, amrex::Real time, 
 			amrex::Print()  << "    Truncation error tags on " << scalar_fields[i]->name 
 					<< ": " << ntags_trunc[i] << std::endl;
 		}
+	}	
+}
+
+void SledgeHAMR::DoErrorEstGPU (int lev, amrex::TagBoxArray& tags, double time)
+{
+	// Current state.
+	const amrex::MultiFab& state = grid_new[lev];
+
+	// State containing truncation errors
+	// if they have been calculated.
+	const amrex::MultiFab& state_te = grid_old[lev];
+
+	// Loop over boxes and cells.
+	#pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
+	for (amrex::MFIter mfi(state, amrex::TilingIfNotGPU()); mfi.isValid(); ++mfi) {
+		const amrex::Box& tilebox  = mfi.tilebox();
+		const amrex::Array4<double const>& state_fab    = state.array(mfi);
+		const amrex::Array4<double const>& state_fab_te = state_te.array(mfi);
+	 	const amrex::Array4<char>& tag_arr = tags.array(mfi);
+
+		// Tag with or without truncation errors.
+		if ( shadow_hierarchy ) {
+			ErrorEstWithTEGPU(state_fab, state_fab_te, tag_arr, tilebox, time, lev);
+		}else{
+			ErrorEstWithoutTEGPU(state_fab, tag_arr, tilebox, time, lev);
+		}
 	}
+
+	amrex::Print()  << "  Tagged cells at level " << lev << "." << std::endl;
 }
 
 void SledgeHAMR::ParseInput ()
@@ -205,6 +243,7 @@ void SledgeHAMR::ParseInput ()
 		pp.query("nghost", nghost);
 		pp.query("shadow_hierarchy", shadow_hierarchy);
 		pp.query("coarse_level_grid_size", coarse_level_grid_size);
+		pp.query("tagging_on_gpu", tagging_on_gpu);
         }
 	
 	{

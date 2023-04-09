@@ -12,21 +12,22 @@ namespace SledgeHAMR_Utils{
 	 * @param	c		Scalar component.
 	 * @param	dx2		Squared grid spacing.
 	 */
-	template<unsigned int>
-	inline double Laplacian(amrex::Array4<amrex::Real const> const& state_fab,
+	template<unsigned int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+	double Laplacian(amrex::Array4<amrex::Real const> const& state_fab,
 					const int i, const int j, const int k, 
 					const int c, const double dx2);
 
 	template <>
-	inline double Laplacian<0>(amrex::Array4<amrex::Real const> const& state_fab,
+	AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+	double Laplacian<0>(amrex::Array4<amrex::Real const> const& state_fab,
 					const int i, const int j, const int k, 
 					const int c, const double dx2)
 	{
 		return 0;
 	};
 
-	template <>
-	inline double Laplacian<1>(amrex::Array4<amrex::Real const> const& state_fab,
+	template <> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+	double Laplacian<1>(amrex::Array4<amrex::Real const> const& state_fab,
 					const int i, const int j, const int k, 
 					const int c, const double dx2)
 	{
@@ -36,8 +37,8 @@ namespace SledgeHAMR_Utils{
 			6.*state_fab(i,j,k,c)) / dx2;
 	};
 
-	template <>
-	inline double Laplacian<2>(amrex::Array4<amrex::Real const> const& state_fab,
+	template <> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+	double Laplacian<2>(amrex::Array4<amrex::Real const> const& state_fab,
 					const int i, const int j, const int k, 
 					const int c, const double dx2)
 	{

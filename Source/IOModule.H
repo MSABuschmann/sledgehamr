@@ -27,6 +27,13 @@ public:
 	 */
 	void FillLevelFromFile (int lev);
 
+	/** @brief Fills LevelData with a constant value.
+	 * @param	lev	Level to be filled with data.
+	 * @param	comp	Component to be filled.
+	 * @param	c	Constant.
+	 */
+	void FillLevelFromConst (int lev, const int comp, const double c);
+
 private:
 
 	/** @brief Fills a given level with chunked data 
@@ -49,13 +56,6 @@ private:
 	 */
 	void FillLevelFromArray (int lev, const int comp, double* data, 
 				     const unsigned long long dimN);
-
-	/** @brief Fills LevelData with a constant value.
-	 * @param	lev	Level to be filled with data.
-	 * @param	comp	Component to be filled.
-	 * @param	c	Constant.
-	 */
-	void FillLevelFromConst (int lev, const int comp, const double c);
 
 	/** @brief OUTPUT_FCT. Writes slices along all three directions
 	 *	   and all scalar fields.	
