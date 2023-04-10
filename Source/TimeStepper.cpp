@@ -28,7 +28,7 @@ TimeStepper::TimeStepper (SledgeHAMR * owner)
 	pp_amr.query("regrid_dt", reg_dt);
 
 	for(int lev=0; lev<=sim->max_level; ++lev){
-		regrid_dt.push_back( reg_dt * pow(2, lev - sim->shadow_hierarchy) );
+		regrid_dt.push_back( reg_dt / pow(2, lev - sim->shadow_hierarchy) );
 		last_regrid_time.push_back( sim->t_start );
 	}
 
@@ -191,7 +191,7 @@ void TimeStepper::ScheduleRegrid (int lev)
 	// to be performed at the end of this levels time step and therefore 
 	// several timesteps away from now for finer levels.
 	for (int k = lev; k <= sim->finest_level; ++k) {
-		scheduled_regrids[k].push_back(istep + pow(2,k-lev));
+		scheduled_regrids[k].push_back(sim->grid_new[k].istep + pow(2,k-lev));
 	}
 
 	// Tell the coarser level as well we need truncation error estimates.
