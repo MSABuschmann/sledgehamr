@@ -61,7 +61,7 @@ private:
 	 * 	   and triggers a regrid if so.
 	 * @param	lev	Current level.
 	 */
-	void CheckRegridSchedule (int lev);
+	void DoRegridIfScheduled (int lev);
 
 	/** @brief Checks if a regrid at a given step and level
 	 *	   has been scheduled and returns its index. Will

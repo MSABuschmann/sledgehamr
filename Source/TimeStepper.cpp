@@ -72,7 +72,7 @@ void TimeStepper::Advance (int lev)
 	SynchronizeLevels(lev);
 
 	// regrid if needed
-	CheckRegridSchedule(lev);
+	DoRegridIfScheduled(lev);
 
 	// Synchronize times to avoid any floating point
 	// precision errors from advancing times on each 
@@ -207,7 +207,7 @@ void TimeStepper::ScheduleRegrid (int lev)
 			<< scheduled_regrids[lev].back()-1 << std::endl;
 }
 
-void TimeStepper::CheckRegridSchedule (int lev)
+void TimeStepper::DoRegridIfScheduled (int lev)
 {
 	double time  = sim->grid_new[lev].t;
 	int    istep = sim->grid_new[lev].istep; 
