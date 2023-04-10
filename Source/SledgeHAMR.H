@@ -138,7 +138,7 @@ protected:
 	 * @param	geom		Geometry of the current level.
 	 * @param	lev		Currently level.
 	 */
-	virtual void FillRHS (amrex::MultiFab& rhs_mf, const amrex::MultiFab& state_mf, const double time, 
+	virtual void FillRhs (amrex::MultiFab& rhs_mf, const amrex::MultiFab& state_mf, const double time, 
 					       const amrex::Geometry& geom, int lev) = 0;
 
 	/** @brief Function to check whether a given level is allowed

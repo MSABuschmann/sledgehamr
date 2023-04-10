@@ -9,7 +9,7 @@ namespace AxionStrings{
 ADD_SCALARS(Psi1, Psi2, Pi1, Pi2);
 
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-void RHS (const int i, const int j, const int k, const double time, const int
+void Rhs (const int i, const int j, const int k, const double time, const int
 lev, const double dx, amrex::Array4<double> const& rhs_fab, amrex::Array4<double const> const& state_fab)
 {
 	// Fetch field values.
@@ -111,15 +111,10 @@ class AxionStrings
     : public SledgeHAMR
 {
 public:
-	AxionStrings (){
-		scalar_fields = l_scalar_fields;
-		amrex::Print() << "Starting AxionStrings project..." << std::endl;
-		amrex::Print() << "Number of field components: " << scalar_fields.size()
-<< std::endl;
-		amrex::Print() << std::endl;
-	};
 
-	virtual void FillRHS (amrex::MultiFab& rhs_mf, const amrex::MultiFab& state_mf, const double time,
+	START_PROJECT(AxionStrings)
+
+	virtual void FillRhs (amrex::MultiFab& rhs_mf, const amrex::MultiFab& state_mf, const double time,
 					       const amrex::Geometry& geom, int lev) override
 	{
 		double l_dx = dx[lev];
@@ -131,7 +126,7 @@ public:
 			amrex::ParallelFor(bx,
 			[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
 			{
-				RHS(i, j, k, time, lev, l_dx, rhs_fab, state_fab);
+				Rhs(i, j, k, time, lev, l_dx, rhs_fab, state_fab);
 			});
 		}
 	};

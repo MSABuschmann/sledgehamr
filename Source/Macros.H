@@ -39,4 +39,19 @@
 	BOOST_PP_SEQ_FOR_EACH(EXPAND_SCALARS, _, BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
 	SCALAR_ENUM(Scalar, __VA_ARGS__)\
 
+/** @brief TODO
+ */
+#define PRJ_CONSTRUCTOR(prj) \
+	prj (){ \
+		scalar_fields = l_scalar_fields;\
+		amrex::Print() << "Starting "  << #prj << " project..." << std::endl;\
+		amrex::Print() << "Number of field components: " << scalar_fields.size() << std::endl;\
+		amrex::Print() << std::endl;\
+	};
+
+/** @brief TODO
+ */
+#define START_PROJECT(prj) \
+	PRJ_CONSTRUCTOR(prj)
+
 #endif // Macros_H_
