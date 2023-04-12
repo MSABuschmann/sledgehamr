@@ -1,5 +1,5 @@
-#include <Integrator.H>
-#include <LevelData.H>
+#include <integrator.h>
+#include <level_data.h>
 
 #include <AMReX_TimeIntegrator.H>
 

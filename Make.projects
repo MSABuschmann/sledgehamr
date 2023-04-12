@@ -1,4 +1,4 @@
-genfile = $(SRC)/Projects.H
+genfile = $(SRC)/projects.h
 
 $(shell echo "/* This file is auto-generated. MODIFICATIONS ARE FUTILE! */" > $(genfile))
 $(shell echo "" >> $(genfile))
@@ -7,7 +7,7 @@ $(shell echo "#ifndef Projects_H_" >> $(genfile))
 $(shell echo "#define Projects_H_" >> $(genfile))
 $(shell echo "" >> $(genfile))
 
-$(foreach prj, $(PROJECTS), $(shell echo "#include<$(prj).H>" >> $(genfile)))
+$(foreach prj, $(PROJECTS), $(shell echo "#include<$(prj).h>" >> $(genfile)))
 $(shell echo "" >> $(genfile))
 
 $(shell echo "#define SLEDGEHAMR_PROJECT(str) {\\" >> $(genfile))

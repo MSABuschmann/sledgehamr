@@ -1,7 +1,7 @@
 #ifndef Integrator_H_
 #define Integrator_H_
 
-#include <SledgeHAMR.H>
+#include <sledgehamr.h>
 
 class SledgeHAMR;
 
