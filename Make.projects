@@ -11,7 +11,7 @@ $(foreach prj, $(PROJECTS), $(shell echo "#include<$(prj).H>" >> $(genfile)))
 $(shell echo "" >> $(genfile))
 
 $(shell echo "#define SLEDGEHAMR_PROJECT(str) {\\" >> $(genfile))
-$(foreach prj, $(PROJECTS), $(shell echo "   if( str == \"$(prj)\" ) return new $(prj);\\" >> $(genfile)))
+$(foreach prj, $(PROJECTS), $(shell echo "   if( str == \"$(prj)\" ) return new $(prj)::$(prj);\\" >> $(genfile)))
 $(shell echo "}" >> $(genfile))
 $(shell echo "" >> $(genfile))
 

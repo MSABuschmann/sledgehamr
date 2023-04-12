@@ -51,7 +51,140 @@
 
 /** @brief TODO
  */
+#define PRJ_FILLRHS virtual void FillRhs \
+	(amrex::MultiFab& rhs_mf, const amrex::MultiFab& state_mf, const double time,\
+					       const amrex::Geometry& geom, int lev) override\
+	{\
+		double l_dx = dx[lev];\
+		DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion()))\
+		for ( amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); mfi.isValid(); ++mfi ){\
+			const amrex::Box& bx = mfi.tilebox();\
+			const amrex::Array4<double>& rhs_fab = rhs_mf.array(mfi);\
+			const amrex::Array4<double const>& state_fab = state_mf.array(mfi);\
+			amrex::ParallelFor(bx,\
+			[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept\
+			{\
+				Rhs(i, j, k, time, lev, l_dx, rhs_fab, state_fab);\
+			});\
+		}\
+	};
+/** @brief TODO
+ */
+#define PRJ_ERRORESTWITHTECPU virtual void ErrorEstWithTECPU \
+ 	(const amrex::Array4<double const>& state_fab,\
+	const amrex::Array4<double const>& state_fab_te,\
+	const amrex::Array4<char>& tagarr,\
+	const amrex::Box& tilebox, double time, int lev,\
+	int* ntags_total, int* ntags_user, int* ntags_trunc) override\
+	{\
+		const amrex::Dim3 lo = amrex::lbound(tilebox);\
+		const amrex::Dim3 hi = amrex::ubound(tilebox);\
+		for (int k = lo.z; k <= hi.z; ++k) {\
+		for (int j = lo.y; j <= hi.y; ++j) {\
+		AMREX_PRAGMA_SIMD\
+		for (int i = lo.x; i <= hi.x; ++i) {\
+			tagarr(i,j,k) = amrex::TagBox::CLEAR;\
+			bool res = false;\
+			res = TagCellForRefinement( i, j, k, time, lev, state_fab);\
+			if( res ){\
+				tagarr(i,j,k) = amrex::TagBox::SET;\
+				(*ntags_user)++;\
+				(*ntags_total)++;\
+			}\
+			bool te_res =\
+SledgeHAMR_Kernels::TruncationErrorTagCPU(i,\
+j, k, time, lev, state_fab_te, te_crit, ntags_trunc);\
+			if( te_res ){\
+				tagarr(i  ,j  ,k  ) = amrex::TagBox::SET;\
+				tagarr(i+1,j  ,k  ) = amrex::TagBox::SET;\
+				tagarr(i  ,j+1,k  ) = amrex::TagBox::SET;\
+				tagarr(i  ,j  ,k+1) = amrex::TagBox::SET;\
+				tagarr(i+1,j+1,k  ) = amrex::TagBox::SET;\
+				tagarr(i  ,j+1,k+1) = amrex::TagBox::SET;\
+				tagarr(i+1,j  ,k+1) = amrex::TagBox::SET;\
+				tagarr(i+1,j+1,k+1) = amrex::TagBox::SET;\
+				(*ntags_total) += 8 - (int)res;\
+			}\
+		}}}\
+	};
+
+/** @brief TODO
+ */
+#define PRJ_ERRORESTWITHTEGPU virtual void ErrorEstWithTEGPU  (const amrex::Array4<double const>& state_fab,\
+							const amrex::Array4<double const>& state_fab_te,\
+							const amrex::Array4<char>& tagarr,\
+							const amrex::Box& tilebox, double time, int lev) override\
+	{\
+		amrex::Gpu::AsyncArray<double> l_te_crit_arr(&te_crit[0],te_crit.size());\
+		double* l_te_crit = l_te_crit_arr.data();\
+		amrex::ParallelFor(tilebox,\
+		[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {\
+			tagarr(i,j,k) = amrex::TagBox::CLEAR;\
+			bool res = TagCellForRefinement(i, j, k, time, lev, state_fab);\
+			if( res ){\
+				tagarr(i,j,k) = amrex::TagBox::SET;\
+			}\
+			bool te_res = SledgeHAMR_Kernels::TruncationErrorTagGPU(i,\
+j, k, time, lev, state_fab_te, l_te_crit);\
+			if( te_res ){\
+				tagarr(i  ,j  ,k  ) = amrex::TagBox::SET;\
+				tagarr(i+1,j  ,k  ) = amrex::TagBox::SET;\
+				tagarr(i  ,j+1,k  ) = amrex::TagBox::SET;\
+				tagarr(i  ,j  ,k+1) = amrex::TagBox::SET;\
+				tagarr(i+1,j+1,k  ) = amrex::TagBox::SET;\
+				tagarr(i  ,j+1,k+1) = amrex::TagBox::SET;\
+				tagarr(i+1,j  ,k+1) = amrex::TagBox::SET;\
+				tagarr(i+1,j+1,k+1) = amrex::TagBox::SET;\
+			}\
+		});\
+	};
+
+/** @brief TODO
+ */
+#define PRJ_ERRORESTWITHOUTTECPU virtual void ErrorEstWithoutTECPU  (const amrex::Array4<double const>& state_fab,\
+							const amrex::Array4<char>& tagarr,\
+							const amrex::Box& tilebox, double time, int lev,\
+							int* ntags_total) override\
+	{\
+		const amrex::Dim3 lo = amrex::lbound(tilebox);\
+		const amrex::Dim3 hi = amrex::ubound(tilebox);\
+		for (int k = lo.z; k <= hi.z; ++k) {\
+		for (int j = lo.y; j <= hi.y; ++j) {\
+		AMREX_PRAGMA_SIMD\
+		for (int i = lo.x; i <= hi.x; ++i) {\
+			tagarr(i,j,k) = amrex::TagBox::CLEAR;\
+			bool res = TagCellForRefinement(i, j, k, time, lev, state_fab);\
+			if( res ){\
+				tagarr(i,j,k) = amrex::TagBox::SET;\
+				(*ntags_total)++;\
+			}\
+		}}}\
+	};
+
+/** @brief TODO
+ */
+#define PRJ_ERRORESTWITHOUTTEGPU virtual void ErrorEstWithoutTEGPU  (const amrex::Array4<double const>& state_fab,\
+					    const amrex::Array4<char>& tagarr,\
+					    const amrex::Box& tilebox, double time, int lev) override\
+	{\
+		amrex::ParallelFor(tilebox,\
+		[=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {\
+			tagarr(i,j,k) = amrex::TagBox::CLEAR;\
+			bool res = TagCellForRefinement(i, j, k, time, lev, state_fab);\
+			if( res ){\
+				tagarr(i,j,k) = amrex::TagBox::SET;\
+			}\
+		});\
+	};
+
+/** @brief TODO
+ */
 #define START_PROJECT(prj) \
-	PRJ_CONSTRUCTOR(prj)
+	PRJ_CONSTRUCTOR(prj)\
+	PRJ_FILLRHS\
+	PRJ_ERRORESTWITHTECPU\
+	PRJ_ERRORESTWITHTEGPU\
+	PRJ_ERRORESTWITHOUTTECPU\
+	PRJ_ERRORESTWITHOUTTEGPU
 
 #endif // Macros_H_
