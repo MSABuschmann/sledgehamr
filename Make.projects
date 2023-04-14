@@ -3,16 +3,16 @@ genfile = $(SRC)/projects.h
 $(shell echo "/* This file is auto-generated. MODIFICATIONS ARE FUTILE! */" > $(genfile))
 $(shell echo "" >> $(genfile))
 
-$(shell echo "#ifndef Projects_H_" >> $(genfile))
-$(shell echo "#define Projects_H_" >> $(genfile))
+$(shell echo "#ifndef SLEDGEHAMR_PROJECTS_H_" >> $(genfile))
+$(shell echo "#define SLEDGEHAMR_PROJECTS_H_" >> $(genfile))
 $(shell echo "" >> $(genfile))
 
-$(foreach prj, $(PROJECTS), $(shell echo "#include<$(prj).h>" >> $(genfile)))
+$(foreach prj, $(PROJECTS), $(shell echo "#include \"$(prj).h\"" >> $(genfile)))
 $(shell echo "" >> $(genfile))
 
 $(shell echo "#define SLEDGEHAMR_PROJECT(str) {\\" >> $(genfile))
-$(foreach prj, $(PROJECTS), $(shell echo "   if( str == \"$(prj)\" ) return new $(prj)::$(prj);\\" >> $(genfile)))
+$(foreach prj, $(PROJECTS), $(shell echo "   if (str == \"$(prj)\") return new $(prj)::$(prj);\\" >> $(genfile)))
 $(shell echo "}" >> $(genfile))
 $(shell echo "" >> $(genfile))
 
-$(shell echo "#endif" >> $(genfile))
+$(shell echo "#endif // SLEDGEHAMR_PROJECTS_H_" >> $(genfile))

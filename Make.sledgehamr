@@ -11,12 +11,12 @@ PROJECTS = $(shell ls $(pdir)/)
 VPATH_LOCATIONS   += $(foreach dir, $(PROJECTS), $(pdir)/$(dir))
 INCLUDE_LOCATIONS += $(foreach dir, $(PROJECTS), $(pdir)/$(dir))
 CEXE_sources += $(shell ls $(pdir)/*/*.cpp | xargs -n 1 basename )
-CEXE_headers += $(shell ls $(pdir)/*/*.H | xargs -n 1 basename)
+CEXE_headers += $(shell ls $(pdir)/*/*.h | xargs -n 1 basename)
 
 include $(SLEDGEHAMR_HOME_ABS)/Make.projects
 
 # SWFFT
-#include $(AMREX_HOME)/Src/Extern/SWFFT/Make.package       
+#include $(AMREX_HOME)/Src/Extern/SWFFT/Make.package
 #INCLUDE_LOCATIONS += $(AMREX_HOME)/Src/Extern/SWFFT
 #VPATH_LOCATIONS   += $(AMREX_HOME)/Src/Extern/SWFFT
 #LIBRARIES += -L$(FFTW_DIR) -lfftw3_mpi -lfftw3_omp -lfftw3

@@ -1,28 +1,33 @@
-#ifndef Integrator_H_
-#define Integrator_H_
+#ifndef SLEDGEHAMR_INTEGRATOR_H_
+#define SLEDGEHAMR_INTEGRATOR_H_
 
-#include <sledgehamr.h>
+#include "sledgehamr.h"
 
-class SledgeHAMR;
+namespace sledgehamr {
 
-/** @brief Pure virtual base class that handles the time
- *	   integration for a single level.
+class Sledgehamr;
+
+/** @brief Pure virtual base class that handles the time integration for a
+ *         single level.
+ *         TODO: Currently not pure virtual, needs to be expanded for other
+ *               integrators.
  */
-class Integrator
-{
-public:
-	Integrator (SledgeHAMR * owner);
+class Integrator {
+  public:
+    Integrator(Sledgehamr* owner);
 
-	/** @brief Advances a single level.
-	 * @param	lev	Level to be advanced.
-	 */
-	virtual void Advance (int lev);
+    /** @brief Advances a single level.
+     * @param   lev Level to be advanced.
+     */
+    virtual void Advance(int lev);
 
-private:
+  private:
 
-	/** @brief Pointer to owner on whose data this class operates.
-	 */	
-	SledgeHAMR * sim;
+    /** @brief Pointer to owner on whose data this class operates.
+     */
+    Sledgehamr* sim;
 };
 
-#endif // Integrator_H_
+}; // namespace sledgehamr
+
+#endif // SLEDGEHAMR_INTEGRATOR_H_

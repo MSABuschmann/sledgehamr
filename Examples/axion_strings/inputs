@@ -1,5 +1,5 @@
 # -------------------------------------------------- Select project
-project.name = AxionStrings
+project.name = axion_strings
 
 # -------------------------------------------------- Simulation parameters
 sim.t_start = 0.1
@@ -11,7 +11,7 @@ sim.cfl = 0.3
 amr.shadow_hierarchy = 1
 amr.max_refinement_levels = 2
 amr.nghost = 1
-amr.coarse_level_grid_size = 128 
+amr.coarse_level_grid_size = 128
 
 amr.max_grid_size = 1024
 amr.blocking_factor = 4

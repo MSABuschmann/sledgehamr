@@ -1,12 +1,12 @@
 /* This file is auto-generated. MODIFICATIONS ARE FUTILE! */
 
-#ifndef Projects_H_
-#define Projects_H_
+#ifndef SLEDGEHAMR_PROJECTS_H_
+#define SLEDGEHAMR_PROJECTS_H_
 
-#include<AxionStrings.H>
+#include "axion_strings.h"
 
 #define SLEDGEHAMR_PROJECT(str) {\
-   if( str == "AxionStrings" ) return new AxionStrings::AxionStrings;\
+   if (str == "axion_strings") return new axion_strings::axion_strings;\
 }
 
-#endif
+#endif // SLEDGEHAMR_PROJECTS_H_
