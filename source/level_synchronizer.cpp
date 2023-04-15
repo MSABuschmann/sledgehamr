@@ -173,7 +173,7 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
         crse_S_fine.ParallelCopy(S_crse, 0, 0, S_crse.nComp());
 
 #ifdef AMREX_USE_GPU
-        ifi (amrex::Gpu::inLaunchRegion() && crse_S_fine.isFusingCandidate()) {
+        if (amrex::Gpu::inLaunchRegion() && crse_S_fine.isFusingCandidate()) {
             auto const& crsema = crse_S_fine.arrays();
             auto const& finema = S_fine.const_arrays();
             auto const& tema = S_te.arrays();
