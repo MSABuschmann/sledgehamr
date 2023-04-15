@@ -49,12 +49,6 @@ void LevelSynchronizer::FillCoarsePatch(int lev, double time,
             sim->geom[lev-1], bcs, gpu_bndry_func);
     amrex::PhysBCFunct<amrex::GpuBndryFuncFab<NullFill> > fphysbc(
             sim->geom[lev  ], bcs, gpu_bndry_func);
-
-    // Interpolate lev from lev-1.
-    amrex::InterpFromCoarseLevel(mf, time, *cmf[0], 0, 0, mf.nComp(),
-                                 sim->geom[lev-1], sim->geom[lev],
-                                 cphysbc, 0, fphysbc, 0,
-                                 sim->refRatio(lev-1), mapper, bcs, 0);
 #else
     // Boundary conditions.
     amrex::CpuBndryFuncFab bndry_func(nullptr);
@@ -62,13 +56,13 @@ void LevelSynchronizer::FillCoarsePatch(int lev, double time,
                                                        bndry_func);
     amrex::PhysBCFunct<amrex::CpuBndryFuncFab> fphysbc(sim->geom[lev  ], bcs,
                                                        bndry_func);
+#endif
 
     // Interpolate lev from lev-1.
     amrex::InterpFromCoarseLevel(mf, time, *cmf[0], 0, 0, mf.nComp(),
                                  sim->geom[lev-1], sim->geom[lev],
                                  cphysbc, 0, fphysbc, 0,
                                  sim->refRatio(lev-1), mapper, bcs, 0);
-#endif
 }
 
 void LevelSynchronizer::FillPatch(int lev, double time, amrex::MultiFab& mf) {
@@ -80,29 +74,11 @@ void LevelSynchronizer::FillPatch(int lev, double time, amrex::MultiFab& mf) {
     amrex::GpuBndryFuncFab<NullFill> gpu_bndry_func(NullFill{});
     amrex::PhysBCFunct<amrex::GpuBndryFuncFab<NullFill> > fphysbc(
             sim->geom[lev], bcs, gpu_bndry_func);
-
-    if (lev == 0) {
-        // Call FillPatchSingleLevel for the coarse level.
-        amrex::FillPatchSingleLevel(mf, time, fmfs, ftime, 0, 0, mf.nComp(),
-                                    sim->geom[lev], fphysbc, 0);
-    } else {
-        // Call FillPatchTwoLevels with data from fine (lev) and coarse (lev-1)
-        // level.
-        amrex::Vector<amrex::MultiFab*> cmfs = GetLevelData(lev-1, time);
-        amrex::Vector<double> ctime = LevelData::getTimes(cmfs);
-
-        amrex::PhysBCFunct<amrex::GpuBndryFuncFab<NullFill> > cphysbc(
-                sim->geom[lev-1], bcs, gpu_bndry_func);
-
-        amrex::FillPatchTwoLevels(mf, time, cmfs, ctime, fmfs, ftime, 0, 0,
-                                  mf.nComp(), sim->geom[lev-1], sim->geom[lev],
-                                  cphysbc, 0, fphysbc, 0, sim->refRatio(lev-1),
-                                  mapper, bcs, 0);
-    }
 #else
     amrex::CpuBndryFuncFab bndry_func(nullptr);
     amrex::PhysBCFunct<amrex::CpuBndryFuncFab> fphysbc(sim->geom[lev], bcs,
                                                        bndry_func);
+#endif
 
     if (lev == 0) {
         // Call FillPatchSingleLevel for the coarse level.
@@ -114,15 +90,19 @@ void LevelSynchronizer::FillPatch(int lev, double time, amrex::MultiFab& mf) {
         amrex::Vector<amrex::MultiFab*> cmfs = GetLevelData(lev-1, time);
         amrex::Vector<double> ctime = LevelData::getTimes(cmfs);
 
+#ifdef AMREX_USE_GPU
+        amrex::PhysBCFunct<amrex::GpuBndryFuncFab<NullFill> > cphysbc(
+                sim->geom[lev-1], bcs, gpu_bndry_func);
+#else
         amrex::PhysBCFunct<amrex::CpuBndryFuncFab> cphysbc(sim->geom[lev-1],
                                                            bcs, bndry_func);
+#endif
 
         amrex::FillPatchTwoLevels(mf, time, cmfs, ctime, fmfs, ftime, 0, 0,
                                   mf.nComp(), sim->geom[lev-1], sim->geom[lev],
                                   cphysbc, 0, fphysbc, 0, sim->refRatio(lev-1),
                                   mapper, bcs, 0);
     }
-#endif
 }
 
 void LevelSynchronizer::FillIntermediatePatch(int lev, double time,
