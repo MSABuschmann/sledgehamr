@@ -57,7 +57,7 @@ void Rhs(const int i, const int j, const int k, const double time,
  * @param   Psi2_2  \Psi_2 of second point.
  * @return Sign of slope of zero-crossing. 0 if no crossing.
  */
-AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 int ZeroXing(double Psi1_1, double Psi2_1, double Psi1_2, double Psi2_2) {
     if (Psi2_1 * Psi2_2 >= 0) return 0;
     if (Psi2_1 * Psi1_2 - Psi1_1 * Psi2_2 > 0) return 1;
@@ -72,7 +72,7 @@ int ZeroXing(double Psi1_1, double Psi2_1, double Psi1_2, double Psi2_2) {
  * @param   state_fab   Data.
  * @return  Winding factor.
  */
-AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 int WindingAxis1(int i, int j, int k,
                  amrex::Array4<double const> const& state_fab) {
     return ZeroXing(state_fab(i  ,j  ,k  ,Scalar::Psi1),
@@ -93,7 +93,7 @@ int WindingAxis1(int i, int j, int k,
                     state_fab(i  ,j  ,k  ,Scalar::Psi2));
 }
 
-AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 int WindingAxis2(int i, int j, int k,
                  amrex::Array4<double const> const& state_fab) {
     return ZeroXing(state_fab(i  ,j  ,k  ,Scalar::Psi1),
@@ -114,7 +114,7 @@ int WindingAxis2(int i, int j, int k,
                     state_fab(i  ,j  ,k  ,Scalar::Psi2));
 }
 
-AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 int WindingAxis3(int i, int j, int k,
                  amrex::Array4<double const> const& state_fab) {
     return ZeroXing(state_fab(i  ,j  ,k  ,Scalar::Psi1),
