@@ -98,7 +98,8 @@ class IOModule {
      * @param   size    Size of data.
      */
     template <typename T>
-    void WriteToHDF5(hid_t file_id, std::string dset, T* data, long long size);
+    void WriteToHDF5(hid_t file_id, std::string dset, T* data,
+                     unsigned long long size);
 
     /** @brief Pointer to owner on whose data this class operates.
      */
@@ -158,7 +159,7 @@ void IOModule::ReadFromHDF5(std::string filename,
 
 template <typename T>
 void IOModule::WriteToHDF5(hid_t file_id, std::string dset, T* data,
-                           long long size) {
+                           unsigned long long size) {
     // Identify datatype.
     hid_t mem_type_id, dset_type_id;
     if (std::is_same<T, float>::value) {
