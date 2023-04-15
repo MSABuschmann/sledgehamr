@@ -115,7 +115,7 @@ int WindingAxis2(int i, int j, int k,
 }
 
 AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-int WindingAxis3(int i, int j, int k, 
+int WindingAxis3(int i, int j, int k,
                  amrex::Array4<double const> const& state_fab) {
     return ZeroXing(state_fab(i  ,j  ,k  ,Scalar::Psi1),
                     state_fab(i  ,j  ,k  ,Scalar::Psi2),
@@ -144,7 +144,7 @@ int WindingAxis3(int i, int j, int k,
  * @param   state_fab   Data.
  * @return  Boolean value as to whether cell should be refined or not.
  */
-AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 bool TagCellForRefinement(const int i, const int j, const int k,
                           const double time, const int lev,
                           amrex::Array4<double const> const& state_fab) {
