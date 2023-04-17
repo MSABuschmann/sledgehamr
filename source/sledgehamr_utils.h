@@ -1,8 +1,25 @@
 #ifndef SLEDGEHAMR_SLEDGEHAMR_UTILS_H_
 #define SLEDGEHAMR_SLEDGEHAMR_UTILS_H_
 
+#include <chrono>
+
 namespace sledgehamr{
     namespace utils{
+
+typedef std::chrono::steady_clock::time_point sctp;
+
+static sctp StartTimer() {
+    amrex::ParallelDescriptor::Barrier();
+    return std::chrono::steady_clock::now();
+}
+
+static double DurationSeconds(sctp start) {
+    amrex::ParallelDescriptor::Barrier();
+    sctp stop = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+            stop - start);
+    return static_cast<double>(duration.count())/1e3;
+}
 
 /** @brief Calculates the Laplacian at a given order. Only 0th, 1st and 2nd
  *         order are currently implemented.

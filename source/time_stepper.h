@@ -41,7 +41,7 @@ private:
      * @param   lev Level that has/will be advanced.
      */
     void PreAdvanceMessage(int lev);
-    void PostAdvanceMessage(int lev);
+    void PostAdvanceMessage(int lev, double duration);
     std::string LevelMessage(int lev, int istep);
 
     /** @brief Schedules a regrid ahead of such that we can compute truncations

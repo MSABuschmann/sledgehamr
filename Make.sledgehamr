@@ -1,12 +1,12 @@
 # sledgeHAMR
 SLEDGEHAMR_HOME_ABS = $(realpath $(SLEDGEHAMR_HOME))
-SRC = $(SLEDGEHAMR_HOME_ABS)/Source
+SRC = $(SLEDGEHAMR_HOME_ABS)/source
 VPATH_LOCATIONS   += $(SRC)
 INCLUDE_LOCATIONS += $(SRC)
 include $(SRC)/Make.package
 
 # Projects
-pdir = $(SLEDGEHAMR_HOME_ABS)/Projects
+pdir = $(SLEDGEHAMR_HOME_ABS)/projects
 PROJECTS = $(shell ls $(pdir)/)
 VPATH_LOCATIONS   += $(foreach dir, $(PROJECTS), $(pdir)/$(dir))
 INCLUDE_LOCATIONS += $(foreach dir, $(PROJECTS), $(pdir)/$(dir))

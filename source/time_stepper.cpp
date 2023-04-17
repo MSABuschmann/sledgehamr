@@ -56,9 +56,10 @@ void TimeStepper::Advance(int lev) {
     PreAdvanceMessage(lev);
 
     // Advance this level.
+    utils::sctp timer = utils::StartTimer();
     integrator->Advance(lev);
 
-    PostAdvanceMessage(lev);
+    PostAdvanceMessage(lev, utils::DurationSeconds(timer));
 
     // Advance any finer levels twice.
     if (lev != sim->finest_level) {
@@ -96,9 +97,6 @@ void TimeStepper::SynchronizeLevels(int lev) {
     }
 
     if (lev > 0 && sim->shadow_hierarchy && index != -1) {
-        amrex::Print() << "Compute truncation errors between " << lev << " "
-                       << lev-1 << std::endl;
-
         // Compute truncation errors for level lev and average down between lev
         // and lev-1.
         sim->level_synchronizer->ComputeTruncationErrors(lev);
@@ -123,12 +121,13 @@ void TimeStepper::PreAdvanceMessage(int lev) {
                    << "\% coverage)" << std::endl;
 }
 
-void TimeStepper::PostAdvanceMessage(int lev) {
+void TimeStepper::PostAdvanceMessage(int lev, double duration) {
     std::string level_message = LevelMessage(lev, sim->grid_new[lev].istep-1);
 
     amrex::Print() << std::left << std::setw(50) << level_message
                    << "Advanced to t=" << sim->grid_new[lev].t << " by "
-                   << "dt=" << sim->dt[lev] << "." << std::endl;
+                   << "dt=" << sim->dt[lev] << " in " << duration << "s."
+                   << std::endl;
 }
 
 std::string TimeStepper::LevelMessage(int lev, int istep) {
