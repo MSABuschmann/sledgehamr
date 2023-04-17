@@ -8,6 +8,84 @@ namespace axion_strings{
 
 ADD_SCALARS(Psi1, Psi2, Pi1, Pi2);
 
+template<int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error;
+}
+
+template <auto Start, auto End, auto Inc, class F>
+constexpr void constexpr_for(F&& f) {
+    if constexpr (Start < End) {
+        f(std::integral_constant<decltype(Start), Start>());
+        constexpr_for<Start + Inc, End, Inc>(f);
+    }
+}
+
+AMREX_FORCE_INLINE
+bool TruncationErrorTagCpu(const amrex::Array4<const double>& state,
+                           const amrex::Array4<const double>& te,
+                           const int i, const int j, const int k, const int lev,
+                           const double time, const double dt, const double dx,
+                           std::vector<double>& te_crit, int* ntags_trunc) {
+    // truncation errors for scalar field components saved in even indices.
+    if (i%2 != 0 || j%2 != 0 || k%2 != 0)
+        return false;
+
+    bool res = false;
+    constexpr_for<0, Scalar::NScalars, 1>([&](auto n) {
+        double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, dx,
+                                           te(i,j,k,n));
+        if (mte >= te_crit[n]) {
+            res = true;
+            ntags_trunc[n] += 8;
+        }
+    });
+
+    return res;
+};
+
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+bool TruncationErrorTagGpu(const amrex::Array4<double const>& state,
+                           const amrex::Array4<double const>& te,
+                           const int i, const int j, const int k, const int lev,
+                           const double time, const double dt, const double dx,
+                           double* te_crit) {
+    // truncation errors for scalar field components saved in even indices.
+    if (i%2 != 0 || j%2 != 0 || k%2 != 0)
+        return false;
+
+    bool res = false;
+    constexpr_for<0, Scalar::NScalars, 1>([&](auto n) {
+        double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, dx,
+                                           te(i,j,k,n));
+        if (mte >= te_crit[n]) {
+            res = true;
+        }
+    });
+
+    return res;
+};
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Scalar::Pi1>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return TruncationModifier<Scalar::Pi1>(state, i, j, k, lev, time, dt, dx,
+                                           truncation_error);
+}
+
 /** @brief Function that calculates the RHS of the EOM at a single cell.
  * @param   i           i-th cell index.
  * @param   j           j-th cell index.
@@ -19,14 +97,15 @@ ADD_SCALARS(Psi1, Psi2, Pi1, Pi2);
  * @param   state_fab   Data from which to calculate RHS.
  */
 AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-void Rhs(const int i, const int j, const int k, const double time,
-         const int lev, const double dx, amrex::Array4<double> const& rhs_fab,
-         amrex::Array4<double const> const& state_fab) {
+void Rhs(const amrex::Array4<double>& rhs,
+         const amrex::Array4<const double>& state,
+         const int i, const int j, const int k, const int lev, 
+         const double time, const double dt, const double dx) {
     // Fetch field values.
-    double Psi1 = state_fab(i, j, k, Scalar::Psi1);
-    double Psi2 = state_fab(i, j, k, Scalar::Psi2);
-    double Pi1  = state_fab(i, j, k, Scalar::Pi1);
-    double Pi2  = state_fab(i, j, k, Scalar::Pi2);
+    double Psi1 = state(i, j, k, Scalar::Psi1);
+    double Psi2 = state(i, j, k, Scalar::Psi2);
+    double Pi1  = state(i, j, k, Scalar::Pi1);
+    double Pi2  = state(i, j, k, Scalar::Pi2);
 
     double eta = time;
 
@@ -34,19 +113,17 @@ void Rhs(const int i, const int j, const int k, const double time,
     double dx2 = dx * dx;
     constexpr int order = 1;
     double LaplacianPsi1 = sledgehamr::utils::Laplacian<order>(
-            state_fab, i, j, k, Scalar::Psi1, dx2);
+            state, i, j, k, Scalar::Psi1, dx2);
     double LaplacianPsi2 = sledgehamr::utils::Laplacian<order>(
-            state_fab, i, j, k, Scalar::Psi2, dx2);
+            state, i, j, k, Scalar::Psi2, dx2);
 
     // Compute EOM.
     double cross_term = eta*eta*( Psi1*Psi1 + Psi2*Psi2 - 1. ) + 0.56233;
 
-    rhs_fab(i, j, k, Scalar::Psi1) =  Pi1;
-    rhs_fab(i, j, k, Scalar::Psi2) =  Pi2;
-    rhs_fab(i, j, k, Scalar::Pi1)  = -Pi1*2./eta + LaplacianPsi1
-                                    - Psi1 * cross_term;
-    rhs_fab(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + LaplacianPsi2
-                                    - Psi2 * cross_term;
+    rhs(i, j, k, Scalar::Psi1) =  Pi1;
+    rhs(i, j, k, Scalar::Psi2) =  Pi2;
+    rhs(i, j, k, Scalar::Pi1)  = -Pi1*2./eta + LaplacianPsi1 - Psi1*cross_term;
+    rhs(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + LaplacianPsi2 - Psi2*cross_term;
 }
 
 /** @brief Checks for zero-crossings between two points in the complex scalar
@@ -73,66 +150,66 @@ int ZeroXing(double Psi1_1, double Psi2_1, double Psi1_2, double Psi2_2) {
  * @return  Winding factor.
  */
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-int WindingAxis1(int i, int j, int k,
-                 amrex::Array4<double const> const& state_fab) {
-    return ZeroXing(state_fab(i  ,j  ,k  ,Scalar::Psi1),
-                    state_fab(i  ,j  ,k  ,Scalar::Psi2),
-                    state_fab(i+1,j  ,k  ,Scalar::Psi1),
-                    state_fab(i+1,j  ,k  ,Scalar::Psi2))
-         + ZeroXing(state_fab(i+1,j  ,k  ,Scalar::Psi1),
-                    state_fab(i+1,j  ,k  ,Scalar::Psi2),
-                    state_fab(i+1,j+1,k  ,Scalar::Psi1),
-                    state_fab(i+1,j+1,k  ,Scalar::Psi2))
-         + ZeroXing(state_fab(i+1,j+1,k  ,Scalar::Psi1),
-                    state_fab(i+1,j+1,k  ,Scalar::Psi2),
-                    state_fab(i  ,j+1,k  ,Scalar::Psi1),
-                    state_fab(i  ,j+1,k  ,Scalar::Psi2))
-         + ZeroXing(state_fab(i  ,j+1,k  ,Scalar::Psi1),
-                    state_fab(i  ,j+1,k  ,Scalar::Psi2),
-                    state_fab(i  ,j  ,k  ,Scalar::Psi1),
-                    state_fab(i  ,j  ,k  ,Scalar::Psi2));
+int WindingAxis1(const amrex::Array4<const double>& state,
+                 const int i, const int j, const int k) {
+    return ZeroXing(state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2),
+                    state(i+1,j  ,k  ,Scalar::Psi1),
+                    state(i+1,j  ,k  ,Scalar::Psi2))
+         + ZeroXing(state(i+1,j  ,k  ,Scalar::Psi1),
+                    state(i+1,j  ,k  ,Scalar::Psi2),
+                    state(i+1,j+1,k  ,Scalar::Psi1),
+                    state(i+1,j+1,k  ,Scalar::Psi2))
+         + ZeroXing(state(i+1,j+1,k  ,Scalar::Psi1),
+                    state(i+1,j+1,k  ,Scalar::Psi2),
+                    state(i  ,j+1,k  ,Scalar::Psi1),
+                    state(i  ,j+1,k  ,Scalar::Psi2))
+         + ZeroXing(state(i  ,j+1,k  ,Scalar::Psi1),
+                    state(i  ,j+1,k  ,Scalar::Psi2),
+                    state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2));
 }
 
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-int WindingAxis2(int i, int j, int k,
-                 amrex::Array4<double const> const& state_fab) {
-    return ZeroXing(state_fab(i  ,j  ,k  ,Scalar::Psi1),
-                    state_fab(i  ,j  ,k  ,Scalar::Psi2),
-                    state_fab(i+1,j  ,k  ,Scalar::Psi1),
-                    state_fab(i+1,j  ,k  ,Scalar::Psi2))
-         + ZeroXing(state_fab(i+1,j  ,k  ,Scalar::Psi1),
-                    state_fab(i+1,j  ,k  ,Scalar::Psi2),
-                    state_fab(i+1,j  ,k+1,Scalar::Psi1),
-                    state_fab(i+1,j  ,k+1,Scalar::Psi2))
-         + ZeroXing(state_fab(i+1,j  ,k+1,Scalar::Psi1),
-                    state_fab(i+1,j  ,k+1,Scalar::Psi2),
-                    state_fab(i  ,j  ,k+1,Scalar::Psi1),
-                    state_fab(i  ,j  ,k+1,Scalar::Psi2))
-         + ZeroXing(state_fab(i  ,j  ,k+1,Scalar::Psi1),
-                    state_fab(i  ,j  ,k+1,Scalar::Psi2),
-                    state_fab(i  ,j  ,k  ,Scalar::Psi1),
-                    state_fab(i  ,j  ,k  ,Scalar::Psi2));
+int WindingAxis2(const amrex::Array4<const double>& state,
+                 const int i, const int j, const int k) {
+    return ZeroXing(state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2),
+                    state(i+1,j  ,k  ,Scalar::Psi1),
+                    state(i+1,j  ,k  ,Scalar::Psi2))
+         + ZeroXing(state(i+1,j  ,k  ,Scalar::Psi1),
+                    state(i+1,j  ,k  ,Scalar::Psi2),
+                    state(i+1,j  ,k+1,Scalar::Psi1),
+                    state(i+1,j  ,k+1,Scalar::Psi2))
+         + ZeroXing(state(i+1,j  ,k+1,Scalar::Psi1),
+                    state(i+1,j  ,k+1,Scalar::Psi2),
+                    state(i  ,j  ,k+1,Scalar::Psi1),
+                    state(i  ,j  ,k+1,Scalar::Psi2))
+         + ZeroXing(state(i  ,j  ,k+1,Scalar::Psi1),
+                    state(i  ,j  ,k+1,Scalar::Psi2),
+                    state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2));
 }
 
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-int WindingAxis3(int i, int j, int k,
-                 amrex::Array4<double const> const& state_fab) {
-    return ZeroXing(state_fab(i  ,j  ,k  ,Scalar::Psi1),
-                    state_fab(i  ,j  ,k  ,Scalar::Psi2),
-                    state_fab(i  ,j+1,k  ,Scalar::Psi1),
-                    state_fab(i  ,j+1,k  ,Scalar::Psi2))
-         + ZeroXing(state_fab(i  ,j+1,k  ,Scalar::Psi1),
-                    state_fab(i  ,j+1,k  ,Scalar::Psi2),
-                    state_fab(i  ,j+1,k+1,Scalar::Psi1),
-                    state_fab(i  ,j+1,k+1,Scalar::Psi2))
-         + ZeroXing(state_fab(i  ,j+1,k+1,Scalar::Psi1),
-                    state_fab(i  ,j+1,k+1,Scalar::Psi2),
-                    state_fab(i  ,j  ,k+1,Scalar::Psi1),
-                    state_fab(i  ,j  ,k+1,Scalar::Psi2))
-         + ZeroXing(state_fab(i  ,j  ,k+1,Scalar::Psi1),
-                    state_fab(i  ,j  ,k+1,Scalar::Psi2),
-                    state_fab(i  ,j  ,k  ,Scalar::Psi1),
-                    state_fab(i  ,j  ,k  ,Scalar::Psi2));
+int WindingAxis3(const amrex::Array4<const double>& state,
+                 const int i, const int j, const int k) {
+    return ZeroXing(state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2),
+                    state(i  ,j+1,k  ,Scalar::Psi1),
+                    state(i  ,j+1,k  ,Scalar::Psi2))
+         + ZeroXing(state(i  ,j+1,k  ,Scalar::Psi1),
+                    state(i  ,j+1,k  ,Scalar::Psi2),
+                    state(i  ,j+1,k+1,Scalar::Psi1),
+                    state(i  ,j+1,k+1,Scalar::Psi2))
+         + ZeroXing(state(i  ,j+1,k+1,Scalar::Psi1),
+                    state(i  ,j+1,k+1,Scalar::Psi2),
+                    state(i  ,j  ,k+1,Scalar::Psi1),
+                    state(i  ,j  ,k+1,Scalar::Psi2))
+         + ZeroXing(state(i  ,j  ,k+1,Scalar::Psi1),
+                    state(i  ,j  ,k+1,Scalar::Psi2),
+                    state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2));
 }
 
 /** @brief Function that tags individual cells for refinement.
@@ -145,16 +222,17 @@ int WindingAxis3(int i, int j, int k,
  * @return  Boolean value as to whether cell should be refined or not.
  */
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-bool TagCellForRefinement(const int i, const int j, const int k,
-                          const double time, const int lev,
-                          amrex::Array4<double const> const& state_fab) {
+bool TagCellForRefinement(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx) {
     // Check all three plaquettes (in positive index direction) for string
     // piercings.
-    if (WindingAxis1(i, j, k, state_fab) != 0) return true;
-    if (WindingAxis2(i, j, k, state_fab) != 0) return true;
-    if (WindingAxis3(i, j, k, state_fab) != 0) return true;
+    if (WindingAxis1(state, i, j, k) != 0) return true;
+    if (WindingAxis2(state, i, j, k) != 0) return true;
+    if (WindingAxis3(state, i, j, k) != 0) return true;
     return false;
 }
+
 
 /** @brief Class to simulate axion strings.
  */

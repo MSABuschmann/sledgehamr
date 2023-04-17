@@ -111,15 +111,15 @@ class Sledgehamr : public amrex::AmrCore {
      * @param   ntags_user      Counts number of user-defined tags.
      */
     virtual void TagWithTruncationCpu(
-            const amrex::Array4<double const>& state_fab,
-            const amrex::Array4<double const>& state_fab_te,
+            const amrex::Array4<const double>& state_fab,
+            const amrex::Array4<const double>& state_fab_te,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
             double time, int lev, int* ntags_total, int* ntags_user,
             int* ntags_trunc) = 0;
 
     virtual void TagWithTruncationGpu(
-            const amrex::Array4<double const>& state_fab,
-            const amrex::Array4<double const>& state_fab_te,
+            const amrex::Array4<const double>& state_fab,
+            const amrex::Array4<const double>& state_fab_te,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
             double time, int lev) = 0;
 
@@ -127,12 +127,12 @@ class Sledgehamr : public amrex::AmrCore {
      *         truncation error tags.
      */
     virtual void TagWithoutTruncationCpu(
-            const amrex::Array4<double const>& state_fab,
+            const amrex::Array4<const double>& state_fab,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
             double time, int lev, int* ntags_total) = 0;
 
     virtual void TagWithoutTruncationGpu(
-            const amrex::Array4<double const>& state_fab,
+            const amrex::Array4<const double>& state_fab,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
             double time, int lev) = 0;
 

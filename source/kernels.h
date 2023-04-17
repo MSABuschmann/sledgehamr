@@ -53,7 +53,7 @@ void AverageDownWithTruncationError(int i, int j, int k, const int ncomp,
  * @param   ntags_trunc Counts number of tags.
  * @return  If truncation error threshold has been exceeded.
  */
-AMREX_FORCE_INLINE
+/*AMREX_FORCE_INLINE
 bool TruncationErrorTagCpu(int i, int j, int k, double time, int lev,
                            const amrex::Array4<double const>& te,
                            std::vector<double>& te_crit, int* ntags_trunc) {
@@ -70,9 +70,9 @@ bool TruncationErrorTagCpu(int i, int j, int k, double time, int lev,
     }
 
     return res;
-};
+};*/
 
-/** @brief Identifies cells that violate the truncation error threshold.
+/* @brief Identifies cells that violate the truncation error threshold.
  * @param   i       i-th cell index.
  * @param   j       j-th cell index.
  * @param   k       k-th cell index.
@@ -81,7 +81,7 @@ bool TruncationErrorTagCpu(int i, int j, int k, double time, int lev,
  * @param   te      Truncation errors.
  * @return  If truncation error threshold has been exceeded.
  */
-AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+/*AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 bool TruncationErrorTagGpu(int i, int j, int k, double time, int lev,
                            const amrex::Array4<double const>& te,
                            double* te_crit) {
@@ -97,7 +97,7 @@ bool TruncationErrorTagGpu(int i, int j, int k, double time, int lev,
     }
 
     return res;
-};
+};*/
 
 }; // namespace kernels
 }; // namespace sledgehamr
