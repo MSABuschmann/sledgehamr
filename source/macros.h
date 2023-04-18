@@ -35,6 +35,27 @@ namespace sledgehamr {
                 NScalars\
     };
 
+/* brief TODO
+ */
+#define TRUNCATION_MODIFIER template<int> \
+    AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
+    double TruncationModifier(const amrex::Array4<const double>& state, \
+                              const int i, const int j, const int k, \
+                              const int lev, const double time, \
+                              const double dt, const double dx, \
+                              const double truncation_error) { \
+        return truncation_error; \
+    };
+
+#define TAG_CELL_FOR_REFINEMENT template<bool> \
+    AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
+    bool TagCellForRefinement(const amrex::Array4<const double>& state, \
+                              const int i, const int j, const int k, \
+                              const int lev, const double time, \
+                              const double dt, const double dx) { \
+        return false; \
+    };
+
 /** @brief Macro to add multiple scalar fields to project class. All added
  *         fields will be simulated.
  */
@@ -42,7 +63,60 @@ namespace sledgehamr {
     static std::vector<sledgehamr::ScalarField*> l_scalar_fields;\
     BOOST_PP_SEQ_FOR_EACH(EXPAND_SCALARS, _,\
                           BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__))\
-    SCALAR_ENUM(Scalar, __VA_ARGS__)
+    SCALAR_ENUM(Scalar, __VA_ARGS__) \
+    TRUNCATION_MODIFIER \
+    TAG_CELL_FOR_REFINEMENT
+
+/** @brief TODO
+ */
+#define TRUNCATION_ERROR_TAG_CPU AMREX_FORCE_INLINE \
+    bool TruncationErrorTagCpu(const amrex::Array4<const double>& state, \
+                               const amrex::Array4<const double>& te, \
+                               const int i, const int j, const int k, \
+                               const int lev, const double time, \
+                               const double dt, const double dx, \
+                               std::vector<double>& te_crit, \
+                               int* ntags_trunc) { \
+        if (i%2 != 0 || j%2 != 0 || k%2 != 0) \
+            return false; \
+        bool res = false; \
+        sledgehamr::utils::constexpr_for<0, Scalar::NScalars, 1>([&](auto n) { \
+            double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, \
+                                               dx, te(i,j,k,n)); \
+            if (mte >= te_crit[n]) { \
+                res = true; \
+                ntags_trunc[n] += 8; \
+            } \
+        }); \
+        return res; \
+    };
+
+/** @brief TODO
+ */
+#define TRUNCATION_ERROR_TAG_GPU AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
+    bool TruncationErrorTagGpu(const amrex::Array4<double const>& state, \
+                               const amrex::Array4<double const>& te, \
+                               const int i, const int j, const int k, \
+                               const int lev, const double time, \
+                               const double dt, const double dx, \
+                               double* te_crit) { \
+        if (i%2 != 0 || j%2 != 0 || k%2 != 0) \
+            return false; \
+        bool res = false; \
+        sledgehamr::utils::constexpr_for<0, Scalar::NScalars, 1>([&](auto n) { \
+            double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, \
+                                               dx, te(i,j,k,n)); \
+            if (mte >= te_crit[n]) { \
+                res = true; \
+            } \
+        }); \
+        return res; \
+    };
+
+/** @brief TODO
+ */
+#define FINISH_SLEDGEHAMR_SETUP TRUNCATION_ERROR_TAG_CPU \
+    TRUNCATION_ERROR_TAG_GPU
 
 /** @brief TODO
  */
@@ -96,8 +170,8 @@ namespace sledgehamr {
                 for (int i = lo.x; i <= hi.x; ++i) {\
                     tagarr(i,j,k) = amrex::TagBox::CLEAR;\
                     bool res = false;\
-                    res = TagCellForRefinement(state_fab, i, j, k, lev, time,\
-                                               dt[lev], dx[lev]);\
+                    res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
+                                                     time, dt[lev], dx[lev]); \
                     if( res ){\
                         tagarr(i,j,k) = amrex::TagBox::SET;\
                         (*ntags_user)++;\
@@ -137,8 +211,8 @@ namespace sledgehamr {
         amrex::ParallelFor(tilebox,\
         [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {\
             tagarr(i,j,k) = amrex::TagBox::CLEAR;\
-            bool res = TagCellForRefinement(state_fab, i, j, k, lev, time,\
-                                            l_dt, l_dx);\
+            bool res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
+                                                  time, l_dt, l_dx); \
             if (res) {\
                 tagarr(i,j,k) = amrex::TagBox::SET;\
             }\
@@ -171,8 +245,8 @@ namespace sledgehamr {
         AMREX_PRAGMA_SIMD\
         for (int i = lo.x; i <= hi.x; ++i) {\
             tagarr(i,j,k) = amrex::TagBox::CLEAR;\
-            bool res = TagCellForRefinement(state_fab, i, j, k, lev, time,\
-                                            dt[lev], dx[lev]);\
+            bool res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
+                                                  time, dt[lev], dx[lev]); \
             if (res) {\
                 tagarr(i,j,k) = amrex::TagBox::SET;\
                 (*ntags_total)++;\
@@ -191,8 +265,8 @@ namespace sledgehamr {
         amrex::ParallelFor(tilebox,\
         [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {\
             tagarr(i,j,k) = amrex::TagBox::CLEAR;\
-            bool res = TagCellForRefinement(state_fab, i, j, k, lev, time,\
-                                            l_dt, l_dx);\
+            bool res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
+                                                  time, l_dt, l_dx); \
             if (res) {\
                 tagarr(i,j,k) = amrex::TagBox::SET;\
             }\

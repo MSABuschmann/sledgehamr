@@ -6,85 +6,7 @@
 
 namespace axion_strings{
 
-ADD_SCALARS(Psi1, Psi2, Pi1, Pi2);
-
-template<int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
-    return truncation_error;
-}
-
-template <auto Start, auto End, auto Inc, class F>
-constexpr void constexpr_for(F&& f) {
-    if constexpr (Start < End) {
-        f(std::integral_constant<decltype(Start), Start>());
-        constexpr_for<Start + Inc, End, Inc>(f);
-    }
-}
-
-AMREX_FORCE_INLINE
-bool TruncationErrorTagCpu(const amrex::Array4<const double>& state,
-                           const amrex::Array4<const double>& te,
-                           const int i, const int j, const int k, const int lev,
-                           const double time, const double dt, const double dx,
-                           std::vector<double>& te_crit, int* ntags_trunc) {
-    // truncation errors for scalar field components saved in even indices.
-    if (i%2 != 0 || j%2 != 0 || k%2 != 0)
-        return false;
-
-    bool res = false;
-    constexpr_for<0, Scalar::NScalars, 1>([&](auto n) {
-        double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, dx,
-                                           te(i,j,k,n));
-        if (mte >= te_crit[n]) {
-            res = true;
-            ntags_trunc[n] += 8;
-        }
-    });
-
-    return res;
-};
-
-AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-bool TruncationErrorTagGpu(const amrex::Array4<double const>& state,
-                           const amrex::Array4<double const>& te,
-                           const int i, const int j, const int k, const int lev,
-                           const double time, const double dt, const double dx,
-                           double* te_crit) {
-    // truncation errors for scalar field components saved in even indices.
-    if (i%2 != 0 || j%2 != 0 || k%2 != 0)
-        return false;
-
-    bool res = false;
-    constexpr_for<0, Scalar::NScalars, 1>([&](auto n) {
-        double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, dx,
-                                           te(i,j,k,n));
-        if (mte >= te_crit[n]) {
-            res = true;
-        }
-    });
-
-    return res;
-};
-
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Scalar::Pi1>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
-    return truncation_error * dt;
-}
-
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
-    return TruncationModifier<Scalar::Pi1>(state, i, j, k, lev, time, dt, dx,
-                                           truncation_error);
-}
+ADD_SCALARS(Psi1, Psi2, Pi1, Pi2)
 
 /** @brief Function that calculates the RHS of the EOM at a single cell.
  * @param   i           i-th cell index.
@@ -99,7 +21,7 @@ double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
 AMREX_GPU_DEVICE AMREX_FORCE_INLINE
 void Rhs(const amrex::Array4<double>& rhs,
          const amrex::Array4<const double>& state,
-         const int i, const int j, const int k, const int lev, 
+         const int i, const int j, const int k, const int lev,
          const double time, const double dt, const double dx) {
     // Fetch field values.
     double Psi1 = state(i, j, k, Scalar::Psi1);
@@ -221,10 +143,11 @@ int WindingAxis3(const amrex::Array4<const double>& state,
  * @param   state_fab   Data.
  * @return  Boolean value as to whether cell should be refined or not.
  */
-AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-bool TagCellForRefinement(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx) {
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+bool TagCellForRefinement<true>(const amrex::Array4<const double>& state,
+                                const int i, const int j, const int k,
+                                const int lev, const double time,
+                                const double dt, const double dx) {
     // Check all three plaquettes (in positive index direction) for string
     // piercings.
     if (WindingAxis1(state, i, j, k) != 0) return true;
@@ -233,6 +156,26 @@ bool TagCellForRefinement(const amrex::Array4<const double>& state,
     return false;
 }
 
+/** @brief TODO
+ */
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Scalar::Pi1>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return TruncationModifier<Scalar::Pi1>(state, i, j, k, lev, time, dt, dx,
+                                           truncation_error);
+}
+
+FINISH_SLEDGEHAMR_SETUP
 
 /** @brief Class to simulate axion strings.
  */

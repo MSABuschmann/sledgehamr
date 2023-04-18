@@ -6,13 +6,27 @@
 namespace sledgehamr{
     namespace utils{
 
+/* brief TODO
+ */
+template <auto Start, auto End, auto Inc, class F>
+constexpr void constexpr_for(F&& f) {
+    if constexpr (Start < End) {
+        f(std::integral_constant<decltype(Start), Start>());
+        constexpr_for<Start + Inc, End, Inc>(f);
+    }
+}
+
 typedef std::chrono::steady_clock::time_point sctp;
 
+/* brief TODO
+ */
 static sctp StartTimer() {
     amrex::ParallelDescriptor::Barrier();
     return std::chrono::steady_clock::now();
 }
 
+/* brief TODO
+ */
 static double DurationSeconds(sctp start) {
     amrex::ParallelDescriptor::Barrier();
     sctp stop = std::chrono::steady_clock::now();
