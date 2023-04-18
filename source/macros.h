@@ -78,6 +78,8 @@ namespace sledgehamr {
         }\
     };
 
+
+
 /** @brief TODO
  */
 #define PRJ_TAGWITHTRUNCATIONCPU virtual void TagWithTruncationCpu(\
@@ -190,7 +192,7 @@ namespace sledgehamr {
         [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {\
             tagarr(i,j,k) = amrex::TagBox::CLEAR;\
             bool res = TagCellForRefinement(state_fab, i, j, k, lev, time,\
-                                            dt[lev], dx[lev]);\
+                                            l_dt, l_dx);\
             if (res) {\
                 tagarr(i,j,k) = amrex::TagBox::SET;\
             }\
