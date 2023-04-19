@@ -30,7 +30,7 @@ class Sledgehamr;
  */
 class LevelSynchronizer {
   public:
-    LevelSynchronizer (Sledgehamr* owner);
+    LevelSynchronizer(Sledgehamr* owner);
 
     /** @brief Fills LevelData with information from a coarse level. This is
      *         used e.g. when a new level of refinement is added.

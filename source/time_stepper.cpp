@@ -5,6 +5,7 @@ namespace sledgehamr {
 
 TimeStepper::TimeStepper(Sledgehamr* owner) {
     sim = owner;
+    local_regrid = new LocalRegrid(sim);
 
     // Initialize the correct integrator.
     amrex::ParmParse pp_inte("integration");
@@ -38,6 +39,7 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
 
 TimeStepper::~TimeStepper() {
     delete integrator;
+    delete local_regrid;
 }
 
 void TimeStepper::Advance(int lev) {
@@ -258,7 +260,9 @@ void TimeStepper::DoRegrid(int lev, double time) {
 
     // TODO Implement local regrid
     if (true) {
-        // successfull = local_regrid();
+        amrex::Print() << std::endl << "Attempting local regrid  at level "
+                       << lev << std::endl;
+        successfull = local_regrid->AttemptRegrid(lev);
     } else {
         amrex::Print() << "Skip local regrid." << std::endl;
     }

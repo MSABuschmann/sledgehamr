@@ -9,6 +9,9 @@ CEXE_sources += sledgehamr_init.cpp
 CEXE_headers += level_synchronizer.h
 CEXE_sources += level_synchronizer.cpp
 
+CEXE_headers += local_regrid.h
+CEXE_sources += local_regrid.cpp
+
 CEXE_headers += io_module.h
 CEXE_sources += io_module.cpp
 

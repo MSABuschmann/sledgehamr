@@ -6,6 +6,7 @@
 #include "macros.h"
 #include "level_data.h"
 #include "level_synchronizer.h"
+#include "local_regrid.h"
 #include "time_stepper.h"
 #include "integrator.h"
 #include "io_module.h"
@@ -15,6 +16,7 @@
 namespace sledgehamr {
 
 class LevelSynchronizer;
+class LocalRegrid;
 class TimeStepper;
 class Integrator;
 class IOModule;
@@ -25,6 +27,7 @@ class IOModule;
 class Sledgehamr : public amrex::AmrCore {
     // Give submodules access to data.
     friend class LevelSynchronizer;
+    friend class LocalRegrid;
     friend class TimeStepper;
     friend class Integrator;
     friend class IOModule;
@@ -163,18 +166,10 @@ class Sledgehamr : public amrex::AmrCore {
         return true;
     };
 
-    /** @brief Instance to perform operations between two levels.
+    /** @brief Pointer to sub-modules.
      */
     LevelSynchronizer* level_synchronizer;
-
-    /** @brief Instance to perform the sub-cycling in time and that handles
-     *         regrid calls.
-     */
     TimeStepper* time_stepper;
-
-    /** @brief Module that handles all IO operations (with the exception of
-     *         parsing the inputs file.
-     */
     IOModule* io_module;
 
     /** @brief Holds the actual simulation data for all levels at two different

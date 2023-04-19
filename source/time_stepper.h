@@ -3,11 +3,13 @@
 
 #include "sledgehamr.h"
 #include "integrator.h"
+#include "local_regrid.h"
 
 namespace sledgehamr {
 
 class SledgeHAMR;
 class Integrator;
+class LocalRegrid;
 
 /** @brief Class that takes care of the sub-cycling in time algorithm as well as
  *         the scheduling regrids.
@@ -96,9 +98,10 @@ private:
      */
     std::vector<int> regrid_level;
 
-    /** @brief Pointer to module that performs the actual time integration.
+    /** @brief Pointer to sub-modules.
      */
     Integrator* integrator;
+    LocalRegrid* local_regrid;
 
     /** @brief Pointer to owner on whose data this class operates.
      */
