@@ -6,7 +6,7 @@
 namespace sledgehamr{
     namespace utils{
 
-/* brief TODO
+/* @brief for constexpr approximation.
  */
 template <auto Start, auto End, auto Inc, class F>
 constexpr void constexpr_for(F&& f) {
@@ -18,14 +18,17 @@ constexpr void constexpr_for(F&& f) {
 
 typedef std::chrono::steady_clock::time_point sctp;
 
-/* brief TODO
+/* @brief Starts a timer.
+ * @return Timer.
  */
 static sctp StartTimer() {
     amrex::ParallelDescriptor::Barrier();
     return std::chrono::steady_clock::now();
 }
 
-/* brief TODO
+/* @brief Computes elapsed time since start of a timer in seconds.
+ * @param   start   Timer.
+ * @return Elapsed time.
  */
 static double DurationSeconds(sctp start) {
     amrex::ParallelDescriptor::Barrier();

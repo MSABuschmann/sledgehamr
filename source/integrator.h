@@ -7,9 +7,9 @@ namespace sledgehamr {
 
 class Sledgehamr;
 
-/** @brief Pure virtual base class that handles the time integration for a
+/** @brief Abstract base class that handles the time integration for a
  *         single level.
- *         TODO: Currently not pure virtual, needs to be expanded for other
+ *         TODO: Currently not actually abstract, needs to be expanded for other
  *               integrators.
  */
 class Integrator {

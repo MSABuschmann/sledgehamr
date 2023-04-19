@@ -9,14 +9,15 @@ namespace axion_strings{
 ADD_SCALARS(Psi1, Psi2, Pi1, Pi2)
 
 /** @brief Function that calculates the RHS of the EOM at a single cell.
- * @param   i           i-th cell index.
- * @param   j           j-th cell index.
- * @param   k           k-th cell index.
- * @param   time        Current time.
- * @param   lev         Current level.
- * @param   dx          Grid spacing.
- * @param   rhs_fab     Container to be filled with RHS.
- * @param   state_fab   Data from which to calculate RHS.
+ * @param   rhs     Container to be filled with RHS.
+ * @param   state   Data from which to calculate RHS.
+ * @param   i       i-th cell index.
+ * @param   j       j-th cell index.
+ * @param   k       k-th cell index.
+ * @param   lev     Current level.
+ * @param   time    Current time.
+ * @param   dt      Time step size.
+ * @param   dx      Grid spacing.
  */
 AMREX_GPU_DEVICE AMREX_FORCE_INLINE
 void Rhs(const amrex::Array4<double>& rhs,
@@ -65,10 +66,10 @@ int ZeroXing(double Psi1_1, double Psi2_1, double Psi1_2, double Psi2_2) {
 
 /** @brief Computes the winding factor along a given axis. Will be non-zero if
  *         plaquette is pierced by a string.
- * @param   i           i-th cell index.
- * @param   j           j-th cell index.
- * @param   k           k-th cell index.
- * @param   state_fab   Data.
+ * @param   state   Data.
+ * @param   i       i-th cell index.
+ * @param   j       j-th cell index.
+ * @param   k       k-th cell index.
  * @return  Winding factor.
  */
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
@@ -135,12 +136,14 @@ int WindingAxis3(const amrex::Array4<const double>& state,
 }
 
 /** @brief Function that tags individual cells for refinement.
- * @param   i           i-th cell index.
- * @param   j           j-th cell index.
- * @param   k           k-th cell index.
- * @param   time        Current time.
- * @param   lev         Current level.
- * @param   state_fab   Data.
+ * @param   state   Data.
+ * @param   i       i-th cell index.
+ * @param   j       j-th cell index.
+ * @param   k       k-th cell index.
+ * @param   lev     Current level.
+ * @param   time    Current time.
+ * @param   dt      Time step size.
+ * @param   dx      Grid spacing.
  * @return  Boolean value as to whether cell should be refined or not.
  */
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
@@ -156,7 +159,18 @@ bool TagCellForRefinement<true>(const amrex::Array4<const double>& state,
     return false;
 }
 
-/** @brief TODO
+/** @brief Modifies the truncation error criteria for Pi1 and Pi2 from its
+ *         default \tau > \tau_{crit} to \tau * \Delta t_{\ell} > \tau_{crit}.
+ * @param   state   Data.
+ * @param   i                   i-th cell index.
+ * @param   j                   j-th cell index.
+ * @param   k                   k-th cell index.
+ * @param   lev                 Current level.
+ * @param   time                Current time.
+ * @param   dt                  Time step size.
+ * @param   dx                  Grid spacing.
+ * @param   truncation_error    \tau
+ * @return f(\tau) for criteria f(\tau) > \tau_{crit}.
  */
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Scalar::Pi1>(const amrex::Array4<const double>& state,

@@ -26,8 +26,6 @@ void AverageDownWithTruncationError(int i, int j, int k, const int ncomp,
     const int jj = j*ratio;
     const int kk = k*ratio;
 
-    // TODO: Do custom functions
-
     for (int n = 0; n < ncomp; ++n ) {
         double c = fine(ii, jj, kk, n);
         c += fine(ii+1, jj  , kk  , n);
@@ -42,62 +40,6 @@ void AverageDownWithTruncationError(int i, int j, int k, const int ncomp,
         crse(i,j,k,n) = volfrac * c;
     }
 }
-
-/** @brief Identifies cells that violate the truncation error threshold.
- * @param   i           i-th cell index.
- * @param   j           j-th cell index.
- * @param   k           k-th cell index.
- * @param   time        Current time.
- * @param   lev         Current level.
- * @param   te          Truncation errors.
- * @param   ntags_trunc Counts number of tags.
- * @return  If truncation error threshold has been exceeded.
- */
-/*AMREX_FORCE_INLINE
-bool TruncationErrorTagCpu(int i, int j, int k, double time, int lev,
-                           const amrex::Array4<double const>& te,
-                           std::vector<double>& te_crit, int* ntags_trunc) {
-    // truncation errors for scalar field components saved in even indices.
-    if (i%2 != 0 || j%2 != 0 || k%2 != 0)
-        return false;
-
-    bool res = false;
-    for (int n=0; n<te.nComp(); ++n) {
-        if (te(i,j,k,n) >= te_crit[n] ){
-            res = true;
-            ntags_trunc[n] += 8;
-        }
-    }
-
-    return res;
-};*/
-
-/* @brief Identifies cells that violate the truncation error threshold.
- * @param   i       i-th cell index.
- * @param   j       j-th cell index.
- * @param   k       k-th cell index.
- * @param   time    Current time.
- * @param   lev     Current level.
- * @param   te      Truncation errors.
- * @return  If truncation error threshold has been exceeded.
- */
-/*AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-bool TruncationErrorTagGpu(int i, int j, int k, double time, int lev,
-                           const amrex::Array4<double const>& te,
-                           double* te_crit) {
-    // truncation errors for scalar field components saved in even indices.
-    if (i%2 != 0 || j%2 != 0 || k%2 != 0)
-        return false;
-
-    bool res = false;
-    for (int n=0; n<te.nComp(); ++n) {
-        if (te(i,j,k,n) >= te_crit[n]) {
-            res = true;
-        }
-    }
-
-    return res;
-};*/
 
 }; // namespace kernels
 }; // namespace sledgehamr
