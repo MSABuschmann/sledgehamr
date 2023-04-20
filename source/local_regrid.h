@@ -2,6 +2,7 @@
 #define SLEDGEHAMR_LOCAL_REGRID_H_
 
 #include "sledgehamr.h"
+#include "unique_layout.h"
 
 namespace sledgehamr {
 
@@ -21,7 +22,7 @@ class LocalRegrid {
     std::vector<long long> numPts;
     //std::vector< std::vector< std::unique_ptr<UniqueLayout> > > layout;
 
-    Sledgehamr* sim; 
+    Sledgehamr* sim;
 };
 
 }; // namespace sledgehamr
