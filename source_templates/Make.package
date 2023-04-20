@@ -1,0 +1,29 @@
+CEXE_sources += main.cpp
+
+CEXE_headers += sledgehamr.h
+CEXE_sources += sledgehamr.cpp
+
+CEXE_headers += sledgehamr_init.h
+CEXE_sources += sledgehamr_init.cpp
+
+CEXE_headers += level_synchronizer.h
+CEXE_sources += level_synchronizer.cpp
+
+CEXE_headers += io_module.h
+CEXE_sources += io_module.cpp
+
+CEXE_headers += output_module.h
+CEXE_sources += output_module.cpp
+
+CEXE_headers += time_stepper.h
+CEXE_sources += time_stepper.cpp
+
+CEXE_headers += integrator.h
+CEXE_sources += integrator.cpp
+
+CEXE_headers += sledgehamr_utils.h
+CEXE_headers += level_data.h
+CEXE_headers += scalars.h
+CEXE_headers += projects.h
+CEXE_headers += macros.h
+CEXE_headers += kernels.h
