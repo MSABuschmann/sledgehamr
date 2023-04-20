@@ -7,6 +7,7 @@
 namespace sledgehamr {
 
 class Sledgehamr;
+class UniqueLayout;
 
 class LocalRegrid {
   public:
@@ -14,13 +15,17 @@ class LocalRegrid {
 
     bool AttemptRegrid(const int lev);
 
+    std::vector< std::vector<int> > comm_matrix;
+
   private:
+    void CreateCommMatrix();
+
     double volume_threshold_strong = 1.1;
     double volume_threshold_weak = 1.05;
     int veto_level = -1;
     bool force_global_regrid_at_restart = 0;
     std::vector<long long> numPts;
-    //std::vector< std::vector< std::unique_ptr<UniqueLayout> > > layout;
+    std::vector< std::vector< std::unique_ptr<UniqueLayout> > > layout;
 
     Sledgehamr* sim;
 };

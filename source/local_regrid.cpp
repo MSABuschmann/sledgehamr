@@ -4,6 +4,7 @@ namespace sledgehamr {
 
 LocalRegrid::LocalRegrid(Sledgehamr* owner) {
     sim = owner;
+    CreateCommMatrix();
 }
 
 bool LocalRegrid::AttemptRegrid(const int lev) {
@@ -35,6 +36,23 @@ bool LocalRegrid::AttemptRegrid(const int lev) {
     }
 
     return true;
+}
+
+void LocalRegrid::CreateCommMatrix() {
+    int N = amrex::ParallelDescriptor::NProcs();
+    comm_matrix.resize(N, std::vector<int>(N, 0));
+
+    int max = std::log2(N);
+    for (int i = 0; i < max; ++i) {
+        int s = pow(2, i);
+        for(int j = 0; j < s; ++j) {
+            for(int k = 0; k < s; ++k) {
+                comm_matrix[j+s][k  ] = comm_matrix[j][k] + s;
+                comm_matrix[j  ][k+s] = comm_matrix[j][k] + s;
+                comm_matrix[j+s][k+s] = comm_matrix[j][k];
+            }
+        }
+    }
 }
 
 }; // namespace sledgehamr
