@@ -32,7 +32,14 @@ bool LocalRegrid::AttemptRegrid(const int lev) {
 
     // Now that we are sure we really want to attempt a local regrid initialize
     // data structures.
+    layouts.resize(sim->finest_level - sim->shadow_hierarchy);
     for (int l=sim->shadow_hierarchy+1; l<=sim->finest_level; ++l) {
+        for (int f=0; f<omp_get_max_threads(); ++f) {
+            int Np = sim->dimN[l] / sim->blocking_factor[l][0];
+            std::unique_ptr<UniqueLayout> ptr =
+                    std::make_unique<UniqueLayout>(this, Np);
+            layouts[l].push_back( std::move(ptr) );
+        }
     }
 
     return true;

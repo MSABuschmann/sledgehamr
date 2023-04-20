@@ -25,7 +25,7 @@ class LocalRegrid {
     int veto_level = -1;
     bool force_global_regrid_at_restart = 0;
     std::vector<long long> numPts;
-    std::vector< std::vector< std::unique_ptr<UniqueLayout> > > layout;
+    std::vector< std::vector< std::unique_ptr<UniqueLayout> > > layouts;
 
     Sledgehamr* sim;
 };
