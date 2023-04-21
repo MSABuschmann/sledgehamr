@@ -17,7 +17,7 @@ class UniqueLayout {
     ~UniqueLayout();
 
     void Add(const uit i, const uit j, const uit l) const;
-    void Merge(std::vector<UniqueLayout*> uls);
+    void Merge(std::vector<std::unique_ptr<UniqueLayout> >& uls);
     void Distribute();
     void Clear();
 

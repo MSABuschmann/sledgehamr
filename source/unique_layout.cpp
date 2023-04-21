@@ -33,7 +33,7 @@ void UniqueLayout::Add(const uit i, const uit j, const uit k) const {
     p[i][j].insert(k);
 }
 
-void UniqueLayout::Merge(std::vector<UniqueLayout*> uls) {
+void UniqueLayout::Merge(std::vector<std::unique_ptr<UniqueLayout> >& uls) {
     // Merge all planes. Inner loop parallelized to maintain thread-safety.
     for (int l=1; l<uls.size(); ++l) {
 #pragma omp parallel for

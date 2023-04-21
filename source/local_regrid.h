@@ -21,6 +21,7 @@ class LocalRegrid {
     bool DoAttemptRegrid(const int lev);
     void ParseInput();
     void CreateCommMatrix();
+    void WrapIndices(const int lev);
     int DetermineNewBoxArray(const int lev);
 
     double volume_threshold_strong = 1.1;
@@ -31,6 +32,7 @@ class LocalRegrid {
 
     std::vector<long long> numPts;
     std::vector<bool> no_local_regrid;
+    std::vector< std::vector<int> > wrapped_index;
 
     std::vector< std::vector< std::unique_ptr<UniqueLayout> > > layouts;
 

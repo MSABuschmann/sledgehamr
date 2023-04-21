@@ -160,8 +160,8 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     std::vector<int> ntags_trunc(scalar_fields.size(), 0);
 
     // Loop over boxes and cells.
-    #pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user)\
-                         reduction(vec_int_plus : ntags_trunc)
+#pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user) \
+                     reduction(vec_int_plus : ntags_trunc)
     for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
         const amrex::Box& tilebox  = mfi.tilebox();
         const amrex::Array4<double const>& state_fab    = state.array(mfi);
@@ -169,6 +169,7 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
         const amrex::Array4<char>& tag_arr = tags.array(mfi);
 
         // Tag with or without truncation errors.
+        // TODO Double check we actually have computed truncation errors.
         if (shadow_hierarchy) {
             TagWithTruncationCpu(state_fab, state_fab_te, tag_arr, tilebox,
                                  time, lev, &ntags_total, &ntags_user,
@@ -215,7 +216,7 @@ void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
     const amrex::MultiFab& state_te = grid_old[lev];
 
     // Loop over boxes and cells.
-    #pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
+#pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
     for (amrex::MFIter mfi(state, amrex::TilingIfNotGPU()); mfi.isValid();
          ++mfi) {
         const amrex::Box& tilebox  = mfi.tilebox();
