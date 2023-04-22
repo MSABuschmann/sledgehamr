@@ -265,7 +265,7 @@ int LocalRegrid::DetermineNewBoxArray(const int lev) {
     int global_min_distance2 = INT_MAX;
     int global_min_i = -1, global_min_j = -1, global_min_k = -1;
     for (int f=0; f<omp_get_max_threads(); f++) {
-        if (global_min_distance > min_distance2[f]) {
+        if (global_min_distance2 > min_distance2[f]) {
             global_min_distance2 = min_distance2[f];
             global_min_i = min_i[f];
             global_min_j = min_j[f];
@@ -273,7 +273,36 @@ int LocalRegrid::DetermineNewBoxArray(const int lev) {
         }
     }
 
-    // TODO Gather and print stats.
+    const int nprocs = amrex::ParallelDescriptor::NProcs();
+    const int ioproc = amrex::ParallelDescriptor::IOProcessorNumber();
+    std::vector<int> all_min_distance2(nprocs);
+    std::vector<int> all_min_i(nprocs);
+    std::vector<int> all_min_j(nprocs);
+    std::vector<int> all_min_k(nprocs);
+    amrex::ParallelDescriptor::Gather(&global_min_distance2, 1,
+                                      &all_min_distance2[0], 1, ioproc);
+    amrex::ParallelDescriptor::Gather(&global_min_i, 1, &all_min_i[0], 1,
+                                      ioproc);
+    amrex::ParallelDescriptor::Gather(&global_min_j, 1, &all_min_j[0], 1,
+                                      ioproc);
+    amrex::ParallelDescriptor::Gather(&global_min_k, 1, &all_min_k[0], 1,
+                                      ioproc);
+
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        for (int n=0; n<nprocs; ++n) {
+            if (global_min_distance2 > all_min_distance2[n]) {
+                global_min_distance2 = all_min_distance2[n];
+                global_min_i = all_min_i[n];
+                global_min_j = all_min_j[n];
+                global_min_k = all_min_k[n];
+            }
+        }
+
+        amrex::Print() << "Shortest distance to C/F boundary: "
+                       << sqrt(global_min_distance2) << " grid sites @ ("
+                       << global_min_i << "," << global_min_j << ","
+                       << global_min_k << ")" << std::endl;
+    }
 
     return 0;
 }

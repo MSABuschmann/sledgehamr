@@ -26,8 +26,7 @@ UniqueLayout::~UniqueLayout() {
 }
 
 void UniqueLayout::Add(const uit i, const uit j, const uit k) const {
-    // Insert k, create new set first if needed.
-    if (!p[i].count(j)) 
+    if (!p[i].count(j))
         p[i][j] = std::set<uit>();
 
     p[i][j].insert(k);
@@ -38,14 +37,13 @@ void UniqueLayout::Merge(std::vector<std::unique_ptr<UniqueLayout> >& uls) {
     for (int l=1; l<uls.size(); ++l) {
 #pragma omp parallel for
         for (uit cp=0; cp<Np; ++cp) {
-            MergePlane(cp, &(uls[l]->p[cp]));    
+            MergePlane(cp, &(uls[l]->p[cp]));
         }
     }
 }
 
 void UniqueLayout::Distribute() {
-    // Send/receive relevant planes according to communication matrix. 
-    // Incorporate all received data.
+    // Send/receive relevant planes according to communication matrix.
     for (int c=1; c<mpi_n; ++c) {
         int op = lr->comm_matrix[mpi_mp][c];
 
@@ -69,7 +67,7 @@ void UniqueLayout::Distribute() {
 }
 
 void UniqueLayout::Clear() {
-    for (uit cp=0; cp<Np; ++cp) { 
+    for (uit cp=0; cp<Np; ++cp) {
         p[cp].clear();
     }
 }
@@ -86,7 +84,7 @@ int UniqueLayout::Size() {
 
     for (uit cp=0; cp<Np_this; ++cp) {
         int i = owner_of[mpi_mp][cp];
-        for (const std::pair<const uit,row>& n : p[i]) { 
+        for (const std::pair<const uit,row>& n : p[i]) {
             size += n.second.size();
         }
     }
@@ -98,7 +96,7 @@ int UniqueLayout::SizeAll() {
     int size = 0;
 
     for (uit cp=0;cp<Np;++cp) {
-        for (const std::pair<const uit,row>& n : p[cp]) { 
+        for (const std::pair<const uit,row>& n : p[cp]) {
             size += n.second.size();
         }
     }
@@ -123,7 +121,7 @@ inline int UniqueLayout::Wrap(const int i) {
 }
 
 bool UniqueLayout::Owns(const uit cp) {
-    return (std::find(owner_of[mpi_mp].begin(), owner_of[mpi_mp].end(), cp) != 
+    return (std::find(owner_of[mpi_mp].begin(), owner_of[mpi_mp].end(), cp) !=
             owner_of[mpi_mp].end());
 }
 
@@ -134,7 +132,7 @@ void UniqueLayout::SendDistribution(const int op) {
         // For each plane determine number of rows and their length.
         std::vector<uit> r, length;
         uit total_length = 0;
-        for (const std::pair<const uit,row>& n : p[cp]) { 
+        for (const std::pair<const uit,row>& n : p[cp]) {
             r.push_back( n.first );
             length.push_back( n.second.size() );
             total_length += n.second.size();
@@ -143,7 +141,7 @@ void UniqueLayout::SendDistribution(const int op) {
         // Collapse all data.
         std::vector<uit> buf;
         buf.reserve(total_length);
-        for (const std::pair<const uit,row>& n : p[cp]) { 
+        for (const std::pair<const uit,row>& n : p[cp]) {
             buf.insert(buf.end(), std::make_move_iterator(n.second.begin()),
                        std::make_move_iterator(n.second.end()));
         }
@@ -154,14 +152,14 @@ void UniqueLayout::SendDistribution(const int op) {
     }
 }
 
-void UniqueLayout::RecvDistribution(const int op) {  
+void UniqueLayout::RecvDistribution(const int op) {
     nps.clear();
 
     for (uit cpo=0; cpo<Np_this; ++cpo) {
         std::vector<uit> r = RecvVector(op);
         std::vector<uit> length = RecvVector(op);
         std::vector<uit> buf = RecvVector(op);
-    
+
         // Unravel data according to metadata
         plane np;
         uit offset = 0;
