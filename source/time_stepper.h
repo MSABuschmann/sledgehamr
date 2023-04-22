@@ -25,6 +25,10 @@ class TimeStepper {
      */
     void Advance(int lev);
 
+    /** @brief Vector of regridding intervals at each level.
+     */
+    std::vector<double> regrid_dt;
+
 private:
     /** @brief Synchronizes two levels by averaging down. Computes truncation
      *         errors if regrid is scheduled.
@@ -78,10 +82,6 @@ private:
      * @param   time    Current time.
      */
     void DoRegrid(int lev, double time);
-
-    /** @brief Vector of regridding intervals at each level.
-     */
-    std::vector<double> regrid_dt;
 
     /** @brief Vector of times at which a given level has been regridded last.
      */

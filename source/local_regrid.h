@@ -22,8 +22,8 @@ class LocalRegrid {
     void ParseInput();
     void CreateCommMatrix();
     void WrapIndices(const int lev);
-    int DetermineNewBoxArray(const int lev);
-    void FixNesting(const int lev, std::vector<amrex::BoxList>& box_list);
+    double DetermineNewBoxArray(const int lev);
+    void FixNesting(const int lev);
     amrex::BoxArray WrapBoxArray(amrex::BoxArray& ba, int N);
 
     double volume_threshold_strong = 1.1;
@@ -32,7 +32,7 @@ class LocalRegrid {
     bool force_global_regrid_at_restart = 0;
     int n_error_buf = 0;
 
-    std::vector<long long> numPts;
+    std::vector<long long> last_numPts;
     std::vector<bool> no_local_regrid;
     std::vector< std::vector<int> > wrapped_index;
 

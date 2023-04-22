@@ -28,7 +28,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     veto_level = -1;
 
     // New level doesn't exist yet so we need to force global regrid.
-    if (lev==sim->finest_level) {
+    if (lev == sim->finest_level) {
         amrex::Print() << "Skip local regrid as the level to be regridded does "
                        << "not yet exist." << std::endl;
         return false;
@@ -36,9 +36,9 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
 
     // Check if we have new levels. At the (re)start all levels will be
     // considered new.
-    while( numPts.size() < sim->finest_level ) {
-        int l = numPts.size();
-        numPts.push_back(sim->grid_new[l].boxArray().numPts());
+    while( last_numPts.size() < sim->finest_level ) {
+        int l = last_numPts.size();
+        last_numPts.push_back(sim->grid_new[l].boxArray().numPts());
         no_local_regrid.push_back(false);
         WrapIndices(l);
     }
@@ -55,9 +55,9 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     // Now that we are sure we really want to attempt a local regrid initialize
     // data structures.
     layouts.resize(sim->finest_level - sim->shadow_hierarchy);
-    for (int l=sim->shadow_hierarchy+1; l<=sim->finest_level; ++l) {
+    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
         int Np = sim->dimN[l] / sim->blocking_factor[l][0];
-        for (int f=0; f<omp_get_max_threads(); ++f) {
+        for (int f = 0; f < omp_get_max_threads(); ++f) {
             layouts[l].emplace_back( std::make_unique<UniqueLayout>(this, Np) );
         }
     }
@@ -65,15 +65,76 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     // Get the new required box array for each level. Might still violate
     // nesting.
     std::vector<double> min_distance(sim->finest_level, -1.);
-    for (int l=lev; l<sim->finest_level && !no_local_regrid[l]; ++l) {
+    for (int l = lev; l < sim->finest_level && !no_local_regrid[l]; ++l) {
         min_distance[l+1] = DetermineNewBoxArray(l);
     }
 
     // Make sure we do not violate nesting requirements.
-    std::vector<amrex::BoxList> box_list(sim->finest_level+1);
-    for (int l=sim->finest_level; l>sim->shadow_hierarchy+1; --l) {
-        FixNesting(l, box_list);
+    for (int l = sim->finest_level; l > sim->shadow_hierarchy+1; --l) {
+        FixNesting(l);
     }
+
+    // Join all boxes across MPI ranks.
+    std::vector<amrex::BoxArray> box_arrays(sim->finest_level+1);
+    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l)
+    {
+        amrex::BoxList bl = layouts[l][0]->BoxList(sim->blocking_factor[l][0]);
+        bl.simplify(true);
+        amrex::Vector<amrex::Box> bv = std::move(bl.data());
+        amrex::AllGatherBoxes(bv);
+        bl = amrex::BoxList(std::move(bv));
+        bl.simplify(false);
+        box_arrays[l] = amrex::BoxArray(std::move(bl));
+    }
+
+    bool veto = false;
+    std::vector<double> latest_possible_regrid_time(sim->finest_level+1, -1.);
+
+    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
+        double Nb = box_arrays[l].numPts();
+        double Nc = sim->grid_new[l].boxArray().numPts();
+        double Nr = last_numPts[l];
+
+        if (Nr == 0)
+            Nr = Nc;
+
+        double dV = Nb / Nc;
+        double fV = (Nb+Nc) / Nr;
+
+        if (fV > volume_threshold_strong)
+            veto = true;
+
+        if( fV > volume_threshold_weak && veto_level == -1 )
+            veto_level = l - 1;
+
+        if (l > lev) {
+            // TODO Use custom function
+            double dx_c = n_error_buf;
+            double regrid_dt = sim->time_stepper->regrid_dt[l];
+            double dt_delay = min_distance[l+1] / dx_c * regrid_dt;
+
+            latest_possible_regrid_time[l] = sim->grid_new[l].t + dt_delay;
+        }
+
+        amrex::Print() << "    Additional boxes on level " << l << " required: "
+                       << box_arrays[l].size() << std::endl
+                       << "       Instantanous volume increase: " << dV
+                       << std::endl
+                       << "       Volume increase since last global regrid: "
+                       << fV << ". Threshold: " << volume_threshold_strong
+                       << std::endl;
+
+        if( l>lev ) {
+            if (latest_possible_regrid_time[l] > sim->grid_new[l].t ) {
+                amrex::Print() << "        Could delay regrid until: "
+                               << latest_possible_regrid_time[l] << std::endl;
+            } else {
+                amrex::Print() << "        Cannot delay this regrid."
+                               << std::endl;
+            }
+        }
+    }
+
 
     return true;
 }
@@ -116,7 +177,7 @@ void LocalRegrid::WrapIndices(const int lev) {
     wrapped_index.push_back( indices );
 }
 
-int LocalRegrid::DetermineNewBoxArray(const int lev) {
+double LocalRegrid::DetermineNewBoxArray(const int lev) {
     // TODO: Create custom function.
     const double threshold = n_error_buf * n_error_buf;
 
@@ -301,19 +362,18 @@ int LocalRegrid::DetermineNewBoxArray(const int lev) {
         }
 
         amrex::Print() << "Shortest distance to C/F boundary: "
-                       << sqrt(global_min_distance2) << " grid sites @ ("
-                       << global_min_i << "," << global_min_j << ","
-                       << global_min_k << ")" << std::endl;
+                       << sqrt(static_cast<double>(global_min_distance2))
+                       << " grid sites @ (" << global_min_i << ","
+                       << global_min_j << "," << global_min_k << ")"
+                       << std::endl;
     }
 
-    return 0;
+    return sqrt(static_cast<double>(global_min_distance2));
 }
 
-void LocalRegrid::FixNesting(const int lev,
-                             std::vector<amrex::BoxList>& box_list) {
-    box_list[lev] = layouts[lev][0]->BoxList(sim->blocking_factor[lev][0]);
-
-    amrex::BoxArray nest_ba = amrex::BoxArray(box_list[lev]);
+void LocalRegrid::FixNesting(const int lev) {
+    amrex::BoxArray nest_ba = layouts[lev][0]->BoxArray(
+                                    sim->blocking_factor[lev][0]);
     nest_ba.growcoarsen(sim->nghost+4, amrex::IntVect(2,2,2));
     nest_ba = WrapBoxArray(nest_ba, sim->dimN[lev-1]);
     amrex::BoxArray bak = sim->grid_new[lev-1].boxArray();
