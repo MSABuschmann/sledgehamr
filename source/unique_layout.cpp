@@ -95,13 +95,57 @@ int UniqueLayout::Size() {
 int UniqueLayout::SizeAll() {
     int size = 0;
 
-    for (uit cp=0;cp<Np;++cp) {
+    for (uit cp = 0; cp < Np; ++cp) {
         for (const std::pair<const uit,row>& n : p[cp]) {
             size += n.second.size();
         }
     }
 
     return size;
+}
+
+amrex::BoxList UniqueLayout::BoxList(const int blocking_factor) {
+    amrex::BoxList bl;
+    uint i,j,k0,km;
+
+    for (uit cp=0; cp<Np_this; ++cp) {
+        i = owner_of[mpi_mp][cp];
+        for (const std::pair<const uit, row>& n : p[i]) { 
+            j = n.first;
+
+            k0=-1;
+            for (const int &k : n.second) {
+                if (k0 == -1) {
+                    k0 = k;
+                    km = k;
+                } else {
+                    if (k == km + 1) {
+                        km = k;
+                    } else {
+                        amrex::IntVect sm(i,   j,   k0);
+                        amrex::IntVect bg(i+1, j+1, km+1);
+                        bl.push_back(amrex::Box(sm*blocking_factor,
+                                                bg*blocking_factor-1));
+                        k0 = k;
+                        km = k;
+                    }
+                }
+            }
+            
+            if (k0 != -1) {
+                amrex::IntVect sm(i,   j,   k0);
+                amrex::IntVect bg(i+1, j+1, km+1);
+                bl.push_back(amrex::Box(sm*blocking_factor,
+                                        bg*blocking_factor-1));
+            }
+        }
+    }
+
+    return bl;
+}
+
+amrex::BoxArray UniqueLayout::BoxArray(const int blocking_factor) {
+    return amrex::BoxArray(BoxList(blocking_factor));
 }
 
 void UniqueLayout::MergePlane(const uit cp, plane* pm) {

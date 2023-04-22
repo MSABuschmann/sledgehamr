@@ -24,6 +24,8 @@ class UniqueLayout {
     bool Contains(const uit i, const uit j, const uit k) const;
     int Size();
     int SizeAll();
+    amrex::BoxList BoxList(const int blocking_factor);
+    amrex::BoxArray BoxArray(const int blocking_factor);
 
   private:
     void MergePlane(const uit cp, plane* pm);

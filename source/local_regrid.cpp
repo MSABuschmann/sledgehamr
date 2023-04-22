@@ -69,6 +69,12 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
         min_distance[l+1] = DetermineNewBoxArray(l);
     }
 
+    // Make sure we do not violate nesting requirements.
+    std::vector<amrex::BoxList> box_list(sim->finest_level+1);
+    for (int l=sim->finest_level; l>sim->shadow_hierarchy+1; --l) {
+        FixNesting(l, box_list);
+    }
+
     return true;
 }
 
@@ -201,10 +207,6 @@ int LocalRegrid::DetermineNewBoxArray(const int lev) {
                     for (int kk=-1; kk<=1; ++kk) {
                         for (int jj=-1; jj<=1; ++jj) {
                             for (int ii=-1; ii<=1; ++ii) {
-                                // You want to know what exactly we are
-                                // calculating here? So do I! I wrote this
-                                // almost a year ago and now I can't remember.
-                                // It works though ...
                                 const int refx = cx - cx0 + ii + 1;
                                 const int refy = cy - cy0 + jj + 1;
                                 const int refz = cz - cz0 + kk + 1;
@@ -305,6 +307,80 @@ int LocalRegrid::DetermineNewBoxArray(const int lev) {
     }
 
     return 0;
+}
+
+void LocalRegrid::FixNesting(const int lev,
+                             std::vector<amrex::BoxList>& box_list) {
+    box_list[lev] = layouts[lev][0]->BoxList(sim->blocking_factor[lev][0]);
+
+    amrex::BoxArray nest_ba = amrex::BoxArray(box_list[lev]);
+    nest_ba.growcoarsen(sim->nghost+4, amrex::IntVect(2,2,2));
+    nest_ba = WrapBoxArray(nest_ba, sim->dimN[lev-1]);
+    amrex::BoxArray bak = sim->grid_new[lev-1].boxArray();
+    const double bfc = static_cast<double>(sim->blocking_factor[lev-1][0]);
+
+#pragma omp parallel for
+    for (int b = 0; b < nest_ba.size(); ++b) {
+        amrex::Box box = nest_ba.boxList().data()[b];
+        const int cxl = static_cast<double>(box.smallEnd(0))/bfc + 1.;
+        const int cyl = static_cast<double>(box.smallEnd(1))/bfc + 1.;
+        const int czl = static_cast<double>(box.smallEnd(2))/bfc + 1.;
+        const int cxh = static_cast<double>(box.bigEnd(0))/bfc + 2.;
+        const int cyh = static_cast<double>(box.bigEnd(1))/bfc + 2.;
+        const int czh = static_cast<double>(box.bigEnd(2))/bfc + 2.;
+
+
+        for (int cxi = cxl; cxi <= cxh; ++cxi) {
+            for (int cyi = cyl; cyi <= cyh; ++cyi) {
+                for (int czi = czl; czi <= czh; ++czi) {
+                    amrex::IntVect sm(wrapped_index[lev-1][cxi] - bfc/2,
+                                      wrapped_index[lev-1][cyi] - bfc/2,
+                                      wrapped_index[lev-1][czi] - bfc/2);
+                    amrex::IntVect bg(wrapped_index[lev-1][cxi] + bfc/2 - 1,
+                                      wrapped_index[lev-1][cyi] + bfc/2 - 1,
+                                      wrapped_index[lev-1][czi] + bfc/2 - 1);
+                    amrex::IntVect ct(wrapped_index[lev-1][cxi],
+                                      wrapped_index[lev-1][cyi],
+                                      wrapped_index[lev-1][czi]);
+
+                    if (!bak.contains(ct)) {
+                        layouts[lev-1][omp_get_thread_num()]->Add(
+                            static_cast<double>(wrapped_index[lev-1][cxi])/bfc
+                                    - 0.5,
+                            static_cast<double>(wrapped_index[lev-1][cyi])/bfc
+                                    - 0.5,
+                            static_cast<double>(wrapped_index[lev-1][czi])/bfc
+                                    - 0.5);
+                    }
+                }
+            }
+        }
+    }
+
+    layouts[lev-1][0]->Merge(layouts[lev-1]);
+    layouts[lev-1][0]->Distribute();
+}
+
+amrex::BoxArray LocalRegrid::WrapBoxArray(amrex::BoxArray& ba, int N) {
+    amrex::BoxList new_bl;
+
+    for (int i = -1; i <= 1; ++i) {
+        for (int j =-1 ; j <= 1; ++j) {
+            for (int k = -1; k <= 1; ++k) {
+                amrex::Box bO(amrex::IntVect(i*N, j*N, k*N),
+                              amrex::IntVect((i+1)*N-1, (j+1)*N-1, (k+1)*N-1));
+                amrex::BoxList bl2w = ba.boxList().intersect(bO);
+                if (bl2w.isNotEmpty()) {
+                    bl2w.shift(0, -i*N);
+                    bl2w.shift(1, -j*N);
+                    bl2w.shift(2, -k*N);
+                    new_bl.join(bl2w);
+                }
+            }
+        }
+    }
+
+    return amrex::BoxArray(new_bl);
 }
 
 }; // namespace sledgehamr

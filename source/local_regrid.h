@@ -23,6 +23,8 @@ class LocalRegrid {
     void CreateCommMatrix();
     void WrapIndices(const int lev);
     int DetermineNewBoxArray(const int lev);
+    void FixNesting(const int lev, std::vector<amrex::BoxList>& box_list);
+    amrex::BoxArray WrapBoxArray(amrex::BoxArray& ba, int N);
 
     double volume_threshold_strong = 1.1;
     double volume_threshold_weak = 1.05;
