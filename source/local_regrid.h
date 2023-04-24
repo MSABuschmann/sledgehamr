@@ -25,6 +25,7 @@ class LocalRegrid {
     double DetermineNewBoxArray(const int lev);
     void FixNesting(const int lev);
     amrex::BoxArray WrapBoxArray(amrex::BoxArray& ba, int N);
+    void AddBoxes(const int lev, amrex::BoxArray& ba);
 
     double volume_threshold_strong = 1.1;
     double volume_threshold_weak = 1.05;

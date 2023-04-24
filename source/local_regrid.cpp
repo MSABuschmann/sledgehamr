@@ -34,16 +34,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
         return false;
     }
 
-    // Check if we have new levels. At the (re)start all levels will be
-    // considered new.
-    while( last_numPts.size() < sim->finest_level ) {
-        int l = last_numPts.size();
-        last_numPts.push_back(sim->grid_new[l].boxArray().numPts());
-        no_local_regrid.push_back(false);
-        WrapIndices(l);
-    }
-
-    // Skip regrid after a restart. TODO: Read force_global_regrid_at_restart.
+    // Skip regrid after a restart.
     if (force_global_regrid_at_restart) {
         amrex::Print() << "Skipping local regrid after a restart." << std::endl;
 
@@ -52,9 +43,18 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
         return false;
     }
 
+    // Check if we have new levels. At the (re)start all levels will be
+    // considered new.
+    while (last_numPts.size() <= sim->finest_level) {
+        int l = last_numPts.size();
+        last_numPts.push_back(sim->grid_new[l].boxArray().numPts());
+        no_local_regrid.push_back(false);
+        WrapIndices(l);
+    }
+
     // Now that we are sure we really want to attempt a local regrid initialize
     // data structures.
-    layouts.resize(sim->finest_level - sim->shadow_hierarchy);
+    layouts.resize(sim->finest_level + 1);
     for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
         int Np = sim->dimN[l] / sim->blocking_factor[l][0];
         for (int f = 0; f < omp_get_max_threads(); ++f) {
@@ -87,9 +87,9 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
         box_arrays[l] = amrex::BoxArray(std::move(bl));
     }
 
+    // Check if we want to go ahead and add those boxes.
     bool veto = false;
     std::vector<double> latest_possible_regrid_time(sim->finest_level+1, -1.);
-
     for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
         double Nb = box_arrays[l].numPts();
         double Nc = sim->grid_new[l].boxArray().numPts();
@@ -135,6 +135,53 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
         }
     }
 
+    // Check what to do if we veto local regrid.
+    if (veto) {
+        amrex::Print() << "Local regrid has been vetoed. "
+                       << "Global regrid on level " << veto_level
+                       << "(adjusting level" << veto_level+1<<")"
+                       << "deemed optimal." << std::endl;
+
+        if (veto_level >= lev)
+            return false;
+
+/* // TODO figure out new logic here in case we do not have truncation errors.
+		do_global_regrid[veto_level] = true;
+		double Nsteps = 2;
+		if( istep[veto_level]%2 == 0 )
+			Nsteps = 1;
+
+		double regrid_target_time = t_new[veto_level] + Nsteps * dt[veto_level];
+
+		bool possible = true;	
+		for(int l=lev+1;l<=finest_level;l++)
+		{
+			if( latest_possible_regrid[l] < regrid_target_time )
+			{
+				amrex::Print() << "Regrid cannot wait until " << regrid_target_time << " so will perform local regrid followed by global." << std::endl;
+				possible = false;
+				break;
+			}
+
+		}
+
+		if( possible )
+		{
+			amrex::Print() << "Possible to delay regrid until " << regrid_target_time << std::endl;
+			for(int l=lev;l<=finest_level;l++)
+				no_local_regrid[l] = true;
+			
+			return true;	
+		}
+*/
+	}
+
+    // Finally add new boxes to each grid.
+    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
+        if (box_arrays[l].size() > 0 ) {
+            AddBoxes(l, box_arrays[l]);
+        }
+    }
 
     return true;
 }
@@ -171,6 +218,7 @@ void LocalRegrid::WrapIndices(const int lev) {
     std::vector<int> indices(N+2);
     indices[0] = dimN - bf/2;
     indices[N+1] = bf/2;
+#pragma omp parallel for
     for (int i=1; i<=N; ++i)
         indices[i] = (static_cast<double>(i)-0.5) * static_cast<double>(bf);
 
@@ -264,7 +312,6 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
                             static_cast<double>(k0)/bff) + 1;
 
                     // Check each possible border.
-                    double smallest2 = 1e99;
                     for (int kk=-1; kk<=1; ++kk) {
                         for (int jj=-1; jj<=1; ++jj) {
                             for (int ii=-1; ii<=1; ++ii) {
@@ -441,6 +488,59 @@ amrex::BoxArray LocalRegrid::WrapBoxArray(amrex::BoxArray& ba, int N) {
     }
 
     return amrex::BoxArray(new_bl);
+}
+
+void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
+    // Create temporary distribution mapping, box array and multifab with only
+    // the new boxes.
+    amrex::DistributionMapping dm(ba, amrex::ParallelDescriptor::NProcs());
+    amrex::MultiFab mf_new_tmp(ba, dm, sim->scalar_fields.size(), sim->nghost);
+    amrex::MultiFab mf_old_tmp(ba, dm, sim->scalar_fields.size(), sim->nghost);
+
+    // Fill temporary mf with data.
+    sim->level_synchronizer->FillPatch(lev, sim->grid_new[lev].t, mf_new_tmp);
+    sim->level_synchronizer->FillPatch(lev, sim->grid_old[lev].t, mf_old_tmp);
+
+    // Create new joint box array.
+    amrex::BoxList new_bl = sim->grid_new[lev].boxArray().boxList();
+    new_bl.join(ba.boxList());
+    amrex::BoxArray new_ba(std::move(new_bl));
+
+    // Create new joint distribution mapping.
+    amrex::Vector<int> new_pmap = sim->dmap[lev].ProcessorMap();
+    amrex::Vector<int> pmap = dm.ProcessorMap();
+    std::move(pmap.begin(), pmap.end(), std::back_inserter(new_pmap));
+    amrex::DistributionMapping new_dm(new_pmap);
+
+    // Create new MultiFab and fill it with data.
+    LevelData new_mf(new_ba, new_dm, sim->scalar_fields.size(), sim->nghost,
+                     amrex::MFInfo().SetAlloc(false));
+    LevelData old_mf(new_ba, new_dm, sim->scalar_fields.size(), sim->nghost,
+                     amrex::MFInfo().SetAlloc(false));
+
+    const int offset = new_ba.size() - ba.size();
+    for (amrex::MFIter mfi(new_mf); mfi.isValid(); ++mfi) {
+        if (mfi.index() < offset) {
+            amrex::FArrayBox& new_old_fab = sim->grid_new[lev][mfi.index()] ;
+            new_mf.setFab(mfi, std::move(new_old_fab));
+
+            amrex::FArrayBox& old_old_fab = sim->grid_old[lev][mfi.index()] ;
+            old_mf.setFab(mfi, std::move(old_old_fab));
+        } else {
+            amrex::FArrayBox& new_old_fab = mf_new_tmp[mfi.index() - offset] ;
+            new_mf.setFab(mfi, std::move(new_old_fab));
+
+            amrex::FArrayBox& old_old_fab = mf_old_tmp[mfi.index() - offset] ;
+            old_mf.setFab(mfi, std::move(old_old_fab));
+        }
+    }
+
+    // Swap old MulftiFab with new one
+    std::swap(sim->grid_new[lev], new_mf);
+    std::swap(sim->grid_old[lev], old_mf);
+    sim->SetBoxArray(lev, new_ba);
+    sim->SetDistributionMap(lev, new_dm);
+    sim->grid_old[lev].contains_truncation_errors = false;
 }
 
 }; // namespace sledgehamr

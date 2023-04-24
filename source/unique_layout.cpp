@@ -2,7 +2,7 @@
 
 namespace sledgehamr {
 
-UniqueLayout::UniqueLayout(LocalRegrid* local_regrid, const int N) 
+UniqueLayout::UniqueLayout(LocalRegrid* local_regrid, const int N)
     : Np(N), lr(local_regrid), mpi_n(amrex::ParallelDescriptor::NProcs()),
       mpi_mp(amrex::ParallelDescriptor::MyProc()) {
     p = new plane[Np];
@@ -106,11 +106,11 @@ int UniqueLayout::SizeAll() {
 
 amrex::BoxList UniqueLayout::BoxList(const int blocking_factor) {
     amrex::BoxList bl;
-    uint i,j,k0,km;
+    int i,j,k0,km;
 
     for (uit cp=0; cp<Np_this; ++cp) {
         i = owner_of[mpi_mp][cp];
-        for (const std::pair<const uit, row>& n : p[i]) { 
+        for (const std::pair<const uit, row>& n : p[i]) {
             j = n.first;
 
             k0=-1;
@@ -118,7 +118,7 @@ amrex::BoxList UniqueLayout::BoxList(const int blocking_factor) {
                 if (k0 == -1) {
                     k0 = k;
                     km = k;
-                } else {
+                } else { //TODO: Make if else
                     if (k == km + 1) {
                         km = k;
                     } else {
@@ -131,7 +131,7 @@ amrex::BoxList UniqueLayout::BoxList(const int blocking_factor) {
                     }
                 }
             }
-            
+
             if (k0 != -1) {
                 amrex::IntVect sm(i,   j,   k0);
                 amrex::IntVect bg(i+1, j+1, km+1);
