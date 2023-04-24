@@ -14,7 +14,9 @@ class LocalRegrid {
     LocalRegrid(Sledgehamr* owner);
 
     bool AttemptRegrid(const int lev);
+    void DidGlobalRegrid(const int lev);
 
+    std::vector<bool> do_global_regrid;
     std::vector< std::vector<int> > comm_matrix;
 
   private:
@@ -35,8 +37,8 @@ class LocalRegrid {
 
     std::vector<long long> last_numPts;
     std::vector<bool> no_local_regrid;
-    std::vector< std::vector<int> > wrapped_index;
 
+    std::vector< std::vector<int> > wrapped_index;
     std::vector< std::vector< std::unique_ptr<UniqueLayout> > > layouts;
 
     Sledgehamr* sim;

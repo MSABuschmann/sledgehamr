@@ -65,6 +65,7 @@ void LevelSynchronizer::FillCoarsePatch(int lev, double time,
                                  sim->refRatio(lev-1), mapper, bcs, 0);
 }
 
+// TODO Allow to restrict to specific components.
 void LevelSynchronizer::FillPatch(int lev, double time, amrex::MultiFab& mf) {
     // Get data and boundary conditions for level lev.
     amrex::Vector<amrex::MultiFab*> fmfs = GetLevelData(lev, time);

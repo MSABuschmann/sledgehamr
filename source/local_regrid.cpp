@@ -8,6 +8,9 @@ LocalRegrid::LocalRegrid(Sledgehamr* owner) {
     sim = owner;
     ParseInput();
     CreateCommMatrix();
+
+    no_local_regrid.resize(sim->max_level+1,false);
+    do_global_regrid.resize(sim->max_level+1, false);
 }
 
 bool LocalRegrid::AttemptRegrid(const int lev) {
@@ -27,6 +30,10 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     // Reset veto level.
     veto_level = -1;
 
+    if (do_global_regrid[lev]) {
+        return false;
+    }
+
     // New level doesn't exist yet so we need to force global regrid.
     if (lev == sim->finest_level) {
         amrex::Print() << "Skip local regrid as the level to be regridded does "
@@ -42,13 +49,15 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
             force_global_regrid_at_restart = false;
         return false;
     }
-
+    
+    amrex::Print() << std::endl << "Attempting local regrid  at level " << lev
+                   << std::endl;
+ 
     // Check if we have new levels. At the (re)start all levels will be
     // considered new.
     while (last_numPts.size() <= sim->finest_level) {
         int l = last_numPts.size();
         last_numPts.push_back(sim->grid_new[l].boxArray().numPts());
-        no_local_regrid.push_back(false);
         WrapIndices(l);
     }
 
@@ -101,9 +110,12 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
         double dV = Nb / Nc;
         double fV = (Nb+Nc) / Nr;
 
+        // This level exceeds strong threshold so we veto.
         if (fV > volume_threshold_strong)
             veto = true;
 
+        // In case any level vetos the local regrid, this is the level on which
+        // we want to perform the global regrid.
         if( fV > volume_threshold_weak && veto_level == -1 )
             veto_level = l - 1;
 
@@ -142,48 +154,69 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
                        << "(adjusting level" << veto_level+1<<")"
                        << "deemed optimal." << std::endl;
 
+        // We can do a globl regrid right away.
         if (veto_level >= lev)
             return false;
 
-/* // TODO figure out new logic here in case we do not have truncation errors.
-		do_global_regrid[veto_level] = true;
-		double Nsteps = 2;
-		if( istep[veto_level]%2 == 0 )
-			Nsteps = 1;
+        // Request a global regrid. This flag will be checked by the time
+        // stepper module.
+        do_global_regrid[veto_level] = true;
 
-		double regrid_target_time = t_new[veto_level] + Nsteps * dt[veto_level];
+        // Figure out when is the next possible time we can do a global regrid
+        // at the requested level. For a sim with shadow hierarchy this is
+        // either in one or two time steps from now to allow for computation of
+        // truncation errors.
+        double Nsteps = 2;
+        if (sim->grid_new[veto_level].istep%2 == 0)
+            Nsteps = 1;
 
-		bool possible = true;	
-		for(int l=lev+1;l<=finest_level;l++)
-		{
-			if( latest_possible_regrid[l] < regrid_target_time )
-			{
-				amrex::Print() << "Regrid cannot wait until " << regrid_target_time << " so will perform local regrid followed by global." << std::endl;
-				possible = false;
-				break;
-			}
+        // For sim without shadow level we can do it once we have sync'ed with
+        // that level.
+        if (sim->shadow_hierarchy) 
+            Nsteps = 0;
 
-		}
+        double regrid_target_time = sim->grid_new[veto_level].t 
+                                    + Nsteps * sim->dt[veto_level];
 
-		if( possible )
-		{
-			amrex::Print() << "Possible to delay regrid until " << regrid_target_time << std::endl;
-			for(int l=lev;l<=finest_level;l++)
-				no_local_regrid[l] = true;
-			
-			return true;	
-		}
-*/
-	}
+        // Check if we can satisfy target time.
+        bool possible_to_wait = true;
+        for (int l = lev+1; l <= sim->finest_level; ++l) {
+            if (latest_possible_regrid_time[l] < regrid_target_time) {
+                amrex::Print() << "Regrid cannot wait until "
+                               << regrid_target_time
+                               << " so will perform local regrid followed by "
+                               << "global." << std::endl;
+                possible_to_wait = false;
+                break;
+            }
+        }
+
+        if (possible_to_wait) {
+            amrex::Print() << "Possible to delay regrid until "
+                           << regrid_target_time << std::endl;
+
+            for (int l = lev; l <= sim->finest_level; ++l)
+                no_local_regrid[l] = true;
+            
+            return true;
+        }
+    }
 
     // Finally add new boxes to each grid.
     for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
-        if (box_arrays[l].size() > 0 ) {
+        if (box_arrays[l].size() > 0) {
             AddBoxes(l, box_arrays[l]);
         }
     }
 
     return true;
+}
+
+void LocalRegrid::DidGlobalRegrid(const int lev) {
+    for (int l = 0; l < sim->finest_level; ++l) {
+        no_local_regrid[l] = false;
+        do_global_regrid[l] = false;
+    }
 }
 
 void LocalRegrid::ParseInput() {

@@ -168,9 +168,10 @@ void TimeStepper::ScheduleRegrid(int lev) {
 
     // Check if enough time since last regrid has passed. We add 3*dt[lev] since
     // we do not want to violate this criteria next time around in case we skip
-    // this regrid.
-    if (time + 3.*sim->dt[lev] <= last_regrid_time[lev] + regrid_dt[lev])
-        return;
+    // this regrid. Only relevant if local regrid module has not requested an
+    // early global regrid.
+    if (time + 3.*sim->dt[lev] <= last_regrid_time[lev] + regrid_dt[lev] &&
+        !local_regrid->do_global_regrid[lev]) return;
 
     // Passed all criteria, now schedule regrid. Make sure we schedule the
     // computation of truncation errors at this and all finer levels to be
@@ -242,8 +243,10 @@ void TimeStepper::NoShadowRegrid(int lev) {
 
     // Check if enough time since last regrid has passed. We add dt[lev] since
     // we do not want to violate this criteria next time around in case we skip
-    // this regrid.
-    if (time + sim->dt[lev] <= last_regrid_time[lev] + regrid_dt[lev]) return;
+    // this regrid. Only relevant if local regrid module has not requested an
+    // early global regrid.
+    if (time + sim->dt[lev] <= last_regrid_time[lev] + regrid_dt[lev] &&
+        !local_regrid->do_global_regrid[lev]) return;
 
     // Check user requirement if we want to invoke a new level. Pass it the
     // level to be created and the time by which the next regrid could be
@@ -256,22 +259,15 @@ void TimeStepper::NoShadowRegrid(int lev) {
 
 void TimeStepper::DoRegrid(int lev, double time) {
     // Try local regrid first.
-    bool successfull = false;
-
-    // TODO Implement local regrid
-    if (true) {
-        amrex::Print() << std::endl << "Attempting local regrid  at level "
-                       << lev << std::endl;
-        successfull = local_regrid->AttemptRegrid(lev);
-    } else {
-        amrex::Print() << "Skip local regrid." << std::endl;
-    }
+    bool successfull = local_regrid->AttemptRegrid(lev);
 
     // Do global regrid if local regrid failed.
     if (!successfull) {
         amrex::Print() << std::endl << "Perform global regrid at level " << lev
                        << std::endl;
         sim->regrid(lev, time);
+
+        local_regrid->DidGlobalRegrid(lev);
 
         // TODO: Fix possible nesting issues through local regrid.
         // if ( ... ) {
