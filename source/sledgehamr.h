@@ -224,7 +224,7 @@ class Sledgehamr : public amrex::AmrCore {
 
 private:
 
-    /* @brief TODO
+    /* @brief Do ErrorEst on either CPU or GPU.
      */
     void DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time);
     void DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time);

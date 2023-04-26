@@ -288,8 +288,7 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
     std::vector<int> min_j(omp_get_max_threads(), -1);
     std::vector<int> min_k(omp_get_max_threads(), -1);
 
-    // TODO Re-enable OMP
-//#pragma omp parallel
+#pragma omp parallel
     for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
         const amrex::Array4<double const>& state_fab = state.array(mfi);
         const amrex::Array4<char>& tag_arr = tags.array(mfi);
