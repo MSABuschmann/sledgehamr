@@ -3,6 +3,7 @@
 #include <AMReX_ParmParse.H>
 
 #include "sledgehamr.h"
+#include "sledgehamr_utils.h"
 
 namespace sledgehamr {
 
@@ -141,10 +142,15 @@ void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
     // if no truncation errors are used (TODO).
     if (time == t_start) return;
 
+    utils::sctp timer = utils::StartTimer(); 
+
     if (tagging_on_gpu)
         DoErrorEstGpu(lev, tags, time);
     else
         DoErrorEstCpu(lev, tags, time);
+
+    amrex::Print() << "  Tagging took " << utils::DurationSeconds(timer)
+                   << "s." << std::endl;
 }
 
 void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {

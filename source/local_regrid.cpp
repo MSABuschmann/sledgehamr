@@ -14,15 +14,23 @@ LocalRegrid::LocalRegrid(Sledgehamr* owner) {
 }
 
 bool LocalRegrid::AttemptRegrid(const int lev) {
+    amrex::Print() << std::endl;
     bool res = DoAttemptRegrid(lev);
-    // TODO Check this isn't causing a memory leak.
     layouts.clear();
     return res;
+}
+
+void LocalRegrid::DidGlobalRegrid(const int lev) {
+    for (int l = 0; l < sim->finest_level; ++l) {
+        no_local_regrid[l] = false;
+        do_global_regrid[l] = false;
+    }
 }
 
 bool LocalRegrid::DoAttemptRegrid(const int lev) {
     // Veto if volume threshold such that it disables local regrid.
     if (volume_threshold_strong <= 1. ) {
+        amrex::Print() << "Local regrid disabled." << std::endl;
         veto_level = lev - 1;
         return false;
     }
@@ -31,6 +39,8 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     veto_level = -1;
 
     if (do_global_regrid[lev]) {
+        amrex::Print() << "Skip local regrid in favour of global regrid."
+                       << std::endl;
         return false;
     }
 
@@ -49,10 +59,10 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
             force_global_regrid_at_restart = false;
         return false;
     }
-    
-    amrex::Print() << std::endl << "Attempting local regrid  at level " << lev
-                   << std::endl;
- 
+
+    amrex::Print() << std::endl << "Attempting local regrid at level " << lev+1
+                   << " and higher." << std::endl;
+
     // Check if we have new levels. At the (re)start all levels will be
     // considered new.
     while (last_numPts.size() <= sim->finest_level) {
@@ -73,7 +83,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
 
     // Get the new required box array for each level. Might still violate
     // nesting.
-    std::vector<double> min_distance(sim->finest_level, -1.);
+    std::vector<double> min_distance(sim->finest_level + 1, -1.);
     for (int l = lev; l < sim->finest_level && !no_local_regrid[l]; ++l) {
         min_distance[l+1] = DetermineNewBoxArray(l);
     }
@@ -85,8 +95,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
 
     // Join all boxes across MPI ranks.
     std::vector<amrex::BoxArray> box_arrays(sim->finest_level+1);
-    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l)
-    {
+    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
         amrex::BoxList bl = layouts[l][0]->BoxList(sim->blocking_factor[l][0]);
         bl.simplify(true);
         amrex::Vector<amrex::Box> bv = std::move(bl.data());
@@ -123,25 +132,25 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
             // TODO Use custom function
             double dx_c = n_error_buf;
             double regrid_dt = sim->time_stepper->regrid_dt[l];
-            double dt_delay = min_distance[l+1] / dx_c * regrid_dt;
+            double dt_delay = min_distance[l] / dx_c * regrid_dt;
 
             latest_possible_regrid_time[l] = sim->grid_new[l].t + dt_delay;
         }
 
-        amrex::Print() << "    Additional boxes on level " << l << " required: "
+        amrex::Print() << "   Additional boxes on level " << l << " required: "
                        << box_arrays[l].size() << std::endl
-                       << "       Instantanous volume increase: " << dV
+                       << "     Instantanous volume increase: " << dV
                        << std::endl
-                       << "       Volume increase since last global regrid: "
+                       << "     Volume increase since last global regrid: "
                        << fV << ". Threshold: " << volume_threshold_strong
                        << std::endl;
 
         if( l>lev ) {
             if (latest_possible_regrid_time[l] > sim->grid_new[l].t ) {
-                amrex::Print() << "        Could delay regrid until: "
+                amrex::Print() << "     Could delay regrid until: t = "
                                << latest_possible_regrid_time[l] << std::endl;
             } else {
-                amrex::Print() << "        Cannot delay this regrid."
+                amrex::Print() << "     Cannot delay this regrid."
                                << std::endl;
             }
         }
@@ -197,7 +206,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
 
             for (int l = lev; l <= sim->finest_level; ++l)
                 no_local_regrid[l] = true;
-            
+
             return true;
         }
     }
@@ -210,13 +219,6 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     }
 
     return true;
-}
-
-void LocalRegrid::DidGlobalRegrid(const int lev) {
-    for (int l = 0; l < sim->finest_level; ++l) {
-        no_local_regrid[l] = false;
-        do_global_regrid[l] = false;
-    }
 }
 
 void LocalRegrid::ParseInput() {
@@ -279,7 +281,8 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
     std::vector<int> min_j(omp_get_max_threads(), -1);
     std::vector<int> min_k(omp_get_max_threads(), -1);
 
-#pragma omp parallel
+    // TODO Re-enable OMP
+//#pragma omp parallel
     for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
         const amrex::Array4<double const>& state_fab = state.array(mfi);
         const amrex::Array4<char>& tag_arr = tags.array(mfi);
@@ -320,6 +323,9 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
                 }
             }
         }
+
+        if (remaining == 0)
+            continue;
 
         // Now find tags and determine distances.
         for (int k = lo.z; k <= hi.z && remaining > 0; ++k) {
@@ -373,6 +379,10 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
                                                  (k0-bgt[2])*(k0-bgt[2]));
 
                                 int d2 =  dx2 + dy2 + dx2;
+
+                                amrex::AllPrint() << "DEBUG min " << d2 << " " <<
+min_distance2[omp_get_thread_num()] << std::endl;
+
                                 if (d2<min_distance2[omp_get_thread_num()]) {
                                     min_distance2[omp_get_thread_num()] = d2;
                                     min_i[omp_get_thread_num()] = i;
@@ -441,11 +451,17 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
             }
         }
 
-        amrex::Print() << "Shortest distance to C/F boundary: "
-                       << sqrt(static_cast<double>(global_min_distance2))
-                       << " grid sites @ (" << global_min_i << ","
-                       << global_min_j << "," << global_min_k << ")"
-                       << std::endl;
+        if( global_min_i >= 0 ) {
+            amrex::Print() << "  Shortest distance to C/F boundary: "
+                           << sqrt(static_cast<double>(global_min_distance2))
+                           << " grid sites @ (" << global_min_i << ","
+                           << global_min_j << "," << global_min_k << ")"
+                           << std::endl;
+        } else {
+            amrex::Print() << "  Shortest distance to C/F boundary: "
+                           << "> blocking_factor (" << ibff << " cells)"
+                           << std::endl;
+        }
     }
 
     return sqrt(static_cast<double>(global_min_distance2));
