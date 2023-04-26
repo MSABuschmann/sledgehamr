@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     // Start sledgeHAMR.
     sledgehamr::SledgehamrInit init;
     sledgehamr::Sledgehamr *sledge = init.CreateInstance();
-    sledge->Init();
+    sledge->InitSledgehamr();
     sledge->Evolve();
 
     // Print runtime.

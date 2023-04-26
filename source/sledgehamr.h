@@ -41,7 +41,7 @@ class Sledgehamr : public amrex::AmrCore {
 
     /** @brief Initalizes data from scratch or from checkpoint file.
      */
-    void Init();
+    void InitSledgehamr();
 
     /** @brief Starts the evolution
      */
@@ -155,6 +155,10 @@ class Sledgehamr : public amrex::AmrCore {
                          const amrex::MultiFab& state_mf, const double time,
                          const amrex::Geometry& geom, int lev) = 0;
 
+    /** @brief Initialize project specific details.
+     */
+    virtual void Init() {};
+
     /** @brief Function to check whether a given level is allowed to be created
      *         by a given time. Can be overridden by the project class. Will
      *         always allow a level to be created by default.
@@ -162,7 +166,7 @@ class Sledgehamr : public amrex::AmrCore {
      * @param   time    Time before which the level would be created.
      * @return  If the given level is allowed to be created.
      */
-    virtual bool CreateLevelIf(int lev, double time) {
+    virtual bool CreateLevelIf(const int lev, const double time) {
         return true;
     };
 

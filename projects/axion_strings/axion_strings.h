@@ -196,6 +196,18 @@ FINISH_SLEDGEHAMR_SETUP
 class axion_strings : public sledgehamr::Sledgehamr {
   public:
     START_PROJECT(axion_strings)
+
+    void Init() override;
+    bool CreateLevelIf(const int lev, const double time) override;
+
+  private:
+    void ParseVariables();
+    void PrintRefinementTimes();
+    double StringWidth(const int lev, const double time);
+    double RefinementTime(const int lev);
+
+    double string_width_threshold;
+    const double lambda = 1;
 };
 
 }; // namespace axion_strings

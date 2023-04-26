@@ -33,7 +33,7 @@ Sledgehamr::~Sledgehamr() {
     delete io_module;
 }
 
-void Sledgehamr::Init() {
+void Sledgehamr::InitSledgehamr() {
     // Initialize here and not in the SledgeHAMR constructor such that it knows
     // about the number of scalar fields during construction. Necessary so it
     // can initialize boundary conditions.
@@ -43,6 +43,9 @@ void Sledgehamr::Init() {
 
     // TODO: Check for checkpoint file etc.
     InitFromScratch( t_start );
+
+    // Initialize project
+    Init();
 }
 
 void Sledgehamr::Evolve() {

@@ -28,6 +28,8 @@ void LocalRegrid::DidGlobalRegrid(const int lev) {
 }
 
 bool LocalRegrid::DoAttemptRegrid(const int lev) {
+    // TODO implement max time without global regrid.
+
     // Veto if volume threshold such that it disables local regrid.
     if (volume_threshold_strong <= 1. ) {
         amrex::Print() << "Local regrid disabled." << std::endl;
@@ -132,7 +134,9 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
             // TODO Use custom function
             double dx_c = n_error_buf;
             double regrid_dt = sim->time_stepper->regrid_dt[l];
-            double dt_delay = min_distance[l] / dx_c * regrid_dt;
+            double dt_delay = DBL_MAX;
+            if (min_distance[l] >= 0)
+                dt_delay = min_distance[l] / dx_c * regrid_dt;
 
             latest_possible_regrid_time[l] = sim->grid_new[l].t + dt_delay;
         }
@@ -147,8 +151,11 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
 
         if( l>lev ) {
             if (latest_possible_regrid_time[l] > sim->grid_new[l].t ) {
-                amrex::Print() << "     Could delay regrid until: t = "
-                               << latest_possible_regrid_time[l] << std::endl;
+                if (min_distance[l] >= 0)
+                    amrex::Print() << "     Could delay regridding this level "
+                                   << "until: t = "
+                                   << latest_possible_regrid_time[l]
+                                   << std::endl;
             } else {
                 amrex::Print() << "     Cannot delay this regrid."
                                << std::endl;
@@ -181,10 +188,10 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
 
         // For sim without shadow level we can do it once we have sync'ed with
         // that level.
-        if (sim->shadow_hierarchy) 
+        if (sim->shadow_hierarchy)
             Nsteps = 0;
 
-        double regrid_target_time = sim->grid_new[veto_level].t 
+        double regrid_target_time = sim->grid_new[veto_level].t
                                     + Nsteps * sim->dt[veto_level];
 
         // Check if we can satisfy target time.
@@ -464,7 +471,10 @@ min_distance2[omp_get_thread_num()] << std::endl;
         }
     }
 
-    return sqrt(static_cast<double>(global_min_distance2));
+    if (global_min_i >= 0 )
+        return sqrt(static_cast<double>(global_min_distance2));
+    else
+        return -1;
 }
 
 void LocalRegrid::FixNesting(const int lev) {
