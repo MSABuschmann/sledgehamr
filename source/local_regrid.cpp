@@ -141,23 +141,23 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
             latest_possible_regrid_time[l] = sim->grid_new[l].t + dt_delay;
         }
 
-        amrex::Print() << "   Additional boxes on level " << l << " required: "
+        amrex::Print() << "  Additional boxes on level " << l << " required: "
                        << box_arrays[l].size() << std::endl
-                       << "     Instantanous volume increase: " << dV
+                       << "    Instantanous volume increase: " << dV
                        << std::endl
-                       << "     Volume increase since last global regrid: "
+                       << "    Volume increase since last global regrid: "
                        << fV << ". Threshold: " << volume_threshold_strong
                        << std::endl;
 
         if( l>lev ) {
             if (latest_possible_regrid_time[l] > sim->grid_new[l].t ) {
                 if (min_distance[l] >= 0)
-                    amrex::Print() << "     Could delay regridding this level "
+                    amrex::Print() << "    Could delay regridding this level "
                                    << "until: t = "
                                    << latest_possible_regrid_time[l]
                                    << std::endl;
             } else {
-                amrex::Print() << "     Cannot delay this regrid."
+                amrex::Print() << "    Cannot delay this regrid."
                                << std::endl;
             }
         }
@@ -269,7 +269,7 @@ void LocalRegrid::WrapIndices(const int lev) {
 
 double LocalRegrid::DetermineNewBoxArray(const int lev) {
     // TODO: Create custom function.
-    const double threshold = n_error_buf * n_error_buf;
+    const double threshold = (n_error_buf+1) * (n_error_buf+1);
 
     const double dimNf = sim->dimN[lev+1];
     const int ibff = sim->blocking_factor[lev+1][0];
@@ -336,7 +336,6 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
         // Now find tags and determine distances.
         for (int k = lo.z; k <= hi.z && remaining > 0; ++k) {
             for (int j = lo.y; j <= hi.y && remaining > 0; ++j) {
-                // Probably no SIMD here but hey, we can try.
                 AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     if (remaining == 0)
@@ -384,10 +383,7 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
                                         std::min((k0-smt[2])*(k0-smt[2]),
                                                  (k0-bgt[2])*(k0-bgt[2]));
 
-                                int d2 =  dx2 + dy2 + dx2;
-
-                                amrex::AllPrint() << "DEBUG min " << d2 << " " <<
-min_distance2[omp_get_thread_num()] << std::endl;
+                                int d2 =  dx2 + dy2 + dz2;
 
                                 if (d2<min_distance2[omp_get_thread_num()]) {
                                     min_distance2[omp_get_thread_num()] = d2;

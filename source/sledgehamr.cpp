@@ -178,11 +178,14 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
         const amrex::Array4<char>& tag_arr = tags.array(mfi);
 
         // Tag with or without truncation errors.
-        // TODO Double check we actually have computed truncation errors.
-        if (shadow_hierarchy) {
+        if (shadow_hierarchy && grid_new[lev].contains_truncation_errors) {
             TagWithTruncationCpu(state_fab, state_fab_te, tag_arr, tilebox,
                                  time, lev, &ntags_total, &ntags_user,
                                  &(ntags_trunc[0]));
+        } else if (shadow_hierarchy) {
+            std::string msg = "Trying to tag using truncation errors but no ";
+            msg += "truncation errors are computed!";
+            amrex::Abort(msg.c_str());
         } else {
             TagWithoutTruncationCpu(state_fab, tag_arr, tilebox, time, lev,
                                     &ntags_total);

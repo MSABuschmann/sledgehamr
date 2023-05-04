@@ -37,7 +37,7 @@ LevelSynchronizer::LevelSynchronizer(Sledgehamr* owner) {
     }
 }
 
-void LevelSynchronizer::FillCoarsePatch(int lev, double time,
+void LevelSynchronizer::FillCoarsePatch(const int lev, const double time,
                                         amrex::MultiFab& mf) {
     // Get lev-1 data.
     std::vector<amrex::MultiFab*> cmf = GetLevelData(lev-1, time);
@@ -65,8 +65,12 @@ void LevelSynchronizer::FillCoarsePatch(int lev, double time,
                                  sim->refRatio(lev-1), mapper, bcs, 0);
 }
 
-// TODO Allow to restrict to specific components.
-void LevelSynchronizer::FillPatch(int lev, double time, amrex::MultiFab& mf) {
+void LevelSynchronizer::FillPatch(const int lev, const double time,
+                                  amrex::MultiFab& mf, const int scomp,
+                                  const int dcomp, int ncomp) {
+    if (ncomp == -1 )
+        ncomp = mf.nComp();
+
     // Get data and boundary conditions for level lev.
     amrex::Vector<amrex::MultiFab*> fmfs = GetLevelData(lev, time);
     amrex::Vector<double> ftime = LevelData::getTimes(fmfs);
@@ -83,7 +87,7 @@ void LevelSynchronizer::FillPatch(int lev, double time, amrex::MultiFab& mf) {
 
     if (lev == 0) {
         // Call FillPatchSingleLevel for the coarse level.
-        amrex::FillPatchSingleLevel(mf, time, fmfs, ftime, 0, 0, mf.nComp(),
+        amrex::FillPatchSingleLevel(mf, time, fmfs, ftime, scomp, dcomp, ncomp,
                                     sim->geom[lev], fphysbc, 0);
     } else {
         // Call FillPatchTwoLevels with data from fine (lev) and coarse (lev-1)
@@ -99,19 +103,20 @@ void LevelSynchronizer::FillPatch(int lev, double time, amrex::MultiFab& mf) {
                                                            bcs, bndry_func);
 #endif
 
-        amrex::FillPatchTwoLevels(mf, time, cmfs, ctime, fmfs, ftime, 0, 0,
-                                  mf.nComp(), sim->geom[lev-1], sim->geom[lev],
-                                  cphysbc, 0, fphysbc, 0, sim->refRatio(lev-1),
-                                  mapper, bcs, 0);
+        amrex::FillPatchTwoLevels(mf, time, cmfs, ctime, fmfs, ftime, scomp,
+                                  dcomp, ncomp, sim->geom[lev-1],
+                                  sim->geom[lev], cphysbc, 0, fphysbc, 0,
+                                  sim->refRatio(lev-1), mapper, bcs, 0);
     }
 }
 
-void LevelSynchronizer::FillIntermediatePatch(int lev, double time,
-                                              amrex::MultiFab& mf) {
-    FillPatch(lev, time, mf);
+void LevelSynchronizer::FillIntermediatePatch(const int lev, const double time,
+        amrex::MultiFab& mf, const int scomp, const int dcomp,
+        const int ncomp) {
+    FillPatch(lev, time, mf, scomp, dcomp, ncomp);
 }
 
-void LevelSynchronizer::AverageDownTo(int lev) {
+void LevelSynchronizer::AverageDownTo(const int lev) {
     amrex::average_down(sim->grid_new[lev+1], sim->grid_new[lev],
                         sim->geom[lev+1], sim->geom[lev], 0,
                         sim->grid_new[lev].nComp(), sim->refRatio(lev));
@@ -220,8 +225,8 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
     sim->grid_old[lev].contains_truncation_errors = true;
 }
 
-amrex::Vector<amrex::MultiFab*> LevelSynchronizer::GetLevelData(int lev,
-                                                                double time) {
+amrex::Vector<amrex::MultiFab*> LevelSynchronizer::GetLevelData(const int lev,
+        const double time) {
     amrex::Vector<amrex::MultiFab*> mfs;
     LevelData * New = &sim->grid_new[lev];
     LevelData * Old = &sim->grid_old[lev];

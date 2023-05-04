@@ -36,6 +36,14 @@ class IOModule {
     void FillLevelFromConst(int lev, const int comp, const double c);
 
   private:
+    /** @brief Copies data from array into LevelData.
+     * @param   lev Level to be filled with data.
+     * @param   comp    Component to be filled.
+     * @param   data    Data array.
+     * @param   dimN    Number of cells in each direction of level lev.
+     */
+    void FillLevelFromArray(int lev, const int comp, double* data,
+                            const long long dimN);
 
     /** @brief Fills a given level with chunked data distributed over many
      *         files.
@@ -47,15 +55,6 @@ class IOModule {
      * @param   lev Level to be filled with data.
      */
     void FillLevelFromFile_NoChunks(int lev);
-
-    /** @brief Copies data from array into LevelData.
-     * @param   lev Level to be filled with data.
-     * @param   comp    Component to be filled.
-     * @param   data    Data array.
-     * @param   dimN    Number of cells in each direction of level lev.
-     */
-    void FillLevelFromArray(int lev, const int comp, double* data,
-                            const long long dimN);
 
     /** @brief OUTPUT_FCT. Writes slices along all three directions and all
      *         scalar fields.

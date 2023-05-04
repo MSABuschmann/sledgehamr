@@ -98,6 +98,7 @@ void IOModule::FillLevelFromArray(int lev, const int comp, double* data,
 
         const amrex::Dim3 lo = amrex::lbound(bx);
         const amrex::Dim3 hi = amrex::ubound(bx);
+
         for (int k = lo.z; k <= hi.z; ++k) {
             for (int j = lo.y; j <= hi.y; ++j) {
                 AMREX_PRAGMA_SIMD
