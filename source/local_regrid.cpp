@@ -11,6 +11,7 @@ LocalRegrid::LocalRegrid(Sledgehamr* owner) {
 
     no_local_regrid.resize(sim->max_level+1,false);
     do_global_regrid.resize(sim->max_level+1, false);
+    nregrids = 0;
 }
 
 bool LocalRegrid::AttemptRegrid(const int lev) {
@@ -24,11 +25,16 @@ void LocalRegrid::DidGlobalRegrid(const int lev) {
     for (int l = 0; l < sim->finest_level; ++l) {
         no_local_regrid[l] = false;
         do_global_regrid[l] = false;
+        nregrids = 0;
     }
 }
 
 bool LocalRegrid::DoAttemptRegrid(const int lev) {
-    // TODO implement max time without global regrid.
+    if (nregrids++ > max_local_regrids) {
+        amrex::Print() << "Maximum number of local regrids reached: "
+                       << max_local_regrids << std::endl;
+        return false;
+    }
 
     // Veto if volume threshold such that it disables local regrid.
     if (volume_threshold_strong <= 1. ) {
@@ -233,6 +239,7 @@ void LocalRegrid::ParseInput() {
     pp_amr.query("force_global_regrid_at_restart",
                   force_global_regrid_at_restart);
     pp_amr.query("n_error_buf", n_error_buf);
+    pp_amr.query("max_local_regrids", max_local_regrids);
 }
 
 void LocalRegrid::CreateCommMatrix() {

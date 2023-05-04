@@ -82,6 +82,12 @@ class LocalRegrid {
      */
     bool force_global_regrid_at_restart = 0;
 
+    /** @brief How often we are allowed to do a local regrid in a row and 
+     *         corresponding counter.
+     */
+    int max_local_regrids = 10;
+    int nregrids = 0;
+
     /** @brief Size of error buffer.
      */
     int n_error_buf = 0;

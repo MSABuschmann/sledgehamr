@@ -267,20 +267,15 @@ void TimeStepper::DoRegrid(int lev, double time) {
 
     // Do global regrid if local regrid failed.
     if (!successfull) {
-        amrex::Print() << std::endl << "Perform global regrid at level " 
+        amrex::Print() << std::endl << "Perform global regrid at level "
                        << lev+1 << " and higher." << std::endl;
-    
+
         timer = utils::StartTimer();
         sim->regrid(lev, time);
         local_regrid->DidGlobalRegrid(lev);
 
-        amrex::Print() << "Global regrid took " 
+        amrex::Print() << "Global regrid took "
                        << utils::DurationSeconds(timer) << "s." << std::endl;
- 
-        // TODO: Fix possible nesting issues through local regrid.
-        // if ( ... ) {
-        //   local_regrid();
-        // }
     }
 
     // Update las regrid times for all levels that have been regridded.
