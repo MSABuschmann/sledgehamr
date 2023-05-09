@@ -137,7 +137,6 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
             veto_level = l - 1;
 
         if (l > lev) {
-            // TODO Use custom function
             double dx_c = n_error_buf;
             double regrid_dt = sim->time_stepper->regrid_dt[l];
             double dt_delay = DBL_MAX;
@@ -275,7 +274,6 @@ void LocalRegrid::WrapIndices(const int lev) {
 }
 
 double LocalRegrid::DetermineNewBoxArray(const int lev) {
-    // TODO: Create custom function.
     const double threshold = (n_error_buf+1) * (n_error_buf+1);
 
     const double dimNf = sim->dimN[lev+1];

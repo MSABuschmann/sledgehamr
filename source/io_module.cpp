@@ -12,15 +12,83 @@ IOModule::IOModule(Sledgehamr* owner) {
     amrex::UtilCreateDirectory(output_folder.c_str(), 0755);
 
     // Add various output formats.
+    // Slices.
     double interval_slices = -1;
     pp.query("interval_slices", interval_slices);
 
     if (interval_slices >= 0) {
-        OutputModule out1(output_folder + "/slices",
-                          OUTPUT_FCT(IOModule::WriteSlices),
-                          interval_slices);
-        output.push_back(out1);
+        OutputModule out(output_folder + "/slices",
+                         OUTPUT_FCT(IOModule::WriteSlices),
+                         interval_slices);
+        output.push_back(out);
     }
+/*
+    // Full coarse box.
+    double interval_coarse_box = -1;
+    pp.query("interval_coarse_box", interval_coarse_box);
+
+    if (interval_coarse_box >= 0) {
+        OutputModule out(output_folder + "/coarse_box",
+                         OUTPUT_FCT(IOModule::WriteCoarseBox),
+                         interval_coarse_box);
+        output.push_back(out);
+    }
+
+    // Entire volume.
+    double interval_full_box = -1;
+    pp.query("interval_full_box", interval_full_box);
+
+    if (interval_full_box >= 0) {
+        OutputModule out(output_folder + "/full_box",
+                         OUTPUT_FCT(IOModule::WriteFullBox),
+                         interval_full_box);
+        output.push_back(out);
+    }
+
+    // Projections.
+    double interval_projections = -1;
+    pp.query("interval_projections", interval_projections);
+
+    if (interval_projections >= 0) {
+        OutputModule out(output_folder + "/projections",
+                         OUTPUT_FCT(IOModule::WriteProjections),
+                         interval_projections);
+        output.push_back(out);
+    }
+
+    // Spectra.
+    double interval_spectra = -1;
+    pp.query("interval_spectra", interval_spectra);
+
+    if (interval_spectra >= 0) {
+        OutputModule out(output_folder + "/spectra",
+                         OUTPUT_FCT(IOModule::WriteSpectra),
+                         interval_spectra);
+        output.push_back(out);
+    }
+
+    // GW spectra.
+    double interval_gw_spectra = -1;
+    pp.query("interval_gw_spectra", interval_gw_spectra);
+
+    if (interval_gw_spectra >= 0) {
+        OutputModule out(output_folder + "/gw_spectra",
+                         OUTPUT_FCT(IOModule::WriteGwSpectra),
+                         interval_gw_spectra);
+        output.push_back(out);
+    }
+
+    // Checkpoint.
+    double interval_checkpoints = -1;
+    pp.query("interval_checkpoints", interval_checkpoints);
+
+    if (interval_checkpoints >= 0) {
+        OutputModule out(output_folder + "/checkpoints",
+                         OUTPUT_FCT(IOModule::WriteCheckpoint),
+                         interval_checkpoints);
+        output.push_back(out);
+    }
+*/
 }
 
 void IOModule::Write(bool force) {
