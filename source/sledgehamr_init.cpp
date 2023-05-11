@@ -30,27 +30,17 @@ void SledgehamrInit::DetermineProjectName() {
 }
 
 void SledgehamrInit::FinishAMReXSetup() {
-    // Determine requested grid size. Divide by two if a shadow level is
-    // requested and set `amr.n_cell` accordingly for amrex::AmrCore.
-    int grid_size = 0;
-    bool shadow_hierarchy = false;
-
+    // Determine requested grid size.
     amrex::ParmParse pp_amr("amr");
+    int grid_size = 0;
     pp_amr.get("coarse_level_grid_size", grid_size);
-    pp_amr.get("shadow_hierarchy", shadow_hierarchy);
-
-    if (shadow_hierarchy)
-        grid_size /= 2;
-
     std::vector<int> grid_vect(3,grid_size);
     pp_amr.addarr("n_cell", grid_vect);
 
     // Determine maximum number of levels.
     int max_refinement_levels = 0;
     pp_amr.get("max_refinement_levels", max_refinement_levels);
-
-    int max_level = max_refinement_levels + shadow_hierarchy;
-    pp_amr.add("max_level", max_level);
+    pp_amr.add("max_level", max_refinement_levels);
 
     // Set box dimensions.
     amrex::ParmParse pp_sim("sim");

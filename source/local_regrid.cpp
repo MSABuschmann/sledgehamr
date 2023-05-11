@@ -30,9 +30,11 @@ void LocalRegrid::DidGlobalRegrid(const int lev) {
 }
 
 bool LocalRegrid::DoAttemptRegrid(const int lev) {
-    if (nregrids++ > max_local_regrids) {
-        amrex::Print() << "Maximum number of local regrids reached: "
-                       << max_local_regrids << std::endl;
+    if (nregrids++ >= max_local_regrids) {
+        if (max_local_regrids > 0) {
+            amrex::Print() << "Maximum number of local regrids reached: "
+                           << max_local_regrids << std::endl;
+        }
         return false;
     }
 
@@ -63,7 +65,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     if (force_global_regrid_at_restart) {
         amrex::Print() << "Skipping local regrid after a restart." << std::endl;
 
-        if (lev==sim->shadow_hierarchy)
+        if (lev == 0)
             force_global_regrid_at_restart = false;
         return false;
     }
@@ -82,7 +84,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     // Now that we are sure we really want to attempt a local regrid initialize
     // data structures.
     layouts.resize(sim->finest_level + 1);
-    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
+    for (int l = 1; l <= sim->finest_level; ++l) {
         int Np = sim->dimN[l] / sim->blocking_factor[l][0];
         for (int f = 0; f < omp_get_max_threads(); ++f) {
             layouts[l].emplace_back( std::make_unique<UniqueLayout>(this, Np) );
@@ -97,13 +99,13 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     }
 
     // Make sure we do not violate nesting requirements.
-    for (int l = sim->finest_level; l > sim->shadow_hierarchy+1; --l) {
+    for (int l = sim->finest_level; l > 1; --l) {
         FixNesting(l);
     }
 
     // Join all boxes across MPI ranks.
     std::vector<amrex::BoxArray> box_arrays(sim->finest_level+1);
-    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
+    for (int l = 1; l <= sim->finest_level; ++l) {
         amrex::BoxList bl = layouts[l][0]->BoxList(sim->blocking_factor[l][0]);
         bl.simplify(true);
         amrex::Vector<amrex::Box> bv = std::move(bl.data());
@@ -116,7 +118,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     // Check if we want to go ahead and add those boxes.
     bool veto = false;
     std::vector<double> latest_possible_regrid_time(sim->finest_level+1, -1.);
-    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
+    for (int l = 1; l <= sim->finest_level; ++l) {
         double Nb = box_arrays[l].numPts();
         double Nc = sim->grid_new[l].boxArray().numPts();
         double Nr = last_numPts[l];
@@ -172,7 +174,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     if (veto) {
         amrex::Print() << "Local regrid has been vetoed. "
                        << "Global regrid on level " << veto_level
-                       << "(adjusting level" << veto_level+1<<")"
+                       << " (adjusting level " << veto_level+1<<") "
                        << "deemed optimal." << std::endl;
 
         // We can do a globl regrid right away.
@@ -224,7 +226,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     }
 
     // Finally add new boxes to each grid.
-    for (int l = sim->shadow_hierarchy+1; l <= sim->finest_level; ++l) {
+    for (int l = 1; l <= sim->finest_level; ++l) {
         if (box_arrays[l].size() > 0) {
             AddBoxes(l, box_arrays[l]);
         }
@@ -495,16 +497,9 @@ void LocalRegrid::FixNesting(const int lev) {
         const int cyh = static_cast<double>(box.bigEnd(1))/bfc + 2.;
         const int czh = static_cast<double>(box.bigEnd(2))/bfc + 2.;
 
-
         for (int cxi = cxl; cxi <= cxh; ++cxi) {
             for (int cyi = cyl; cyi <= cyh; ++cyi) {
                 for (int czi = czl; czi <= czh; ++czi) {
-                    amrex::IntVect sm(wrapped_index[lev-1][cxi] - bfc/2,
-                                      wrapped_index[lev-1][cyi] - bfc/2,
-                                      wrapped_index[lev-1][czi] - bfc/2);
-                    amrex::IntVect bg(wrapped_index[lev-1][cxi] + bfc/2 - 1,
-                                      wrapped_index[lev-1][cyi] + bfc/2 - 1,
-                                      wrapped_index[lev-1][czi] + bfc/2 - 1);
                     amrex::IntVect ct(wrapped_index[lev-1][cxi],
                                       wrapped_index[lev-1][cyi],
                                       wrapped_index[lev-1][czi]);
@@ -595,6 +590,8 @@ void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
     }
 
     // Swap old MulftiFab with new one
+    new_mf.t = sim->grid_new[lev].t;
+    old_mf.t = sim->grid_old[lev].t;
     std::swap(sim->grid_new[lev], new_mf);
     std::swap(sim->grid_old[lev], old_mf);
     sim->SetBoxArray(lev, new_ba);

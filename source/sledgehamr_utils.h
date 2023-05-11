@@ -95,16 +95,11 @@ static std::string OrdinalNumberSuffix(int num) {
  * @param   lev             Level.
  * @param   shadow_hierachy Whether a shadow hierarchy has been used.
  */
-static std::string LevelName(int lev, bool shadow_hierarchy) {
-    if (lev==0 && shadow_hierarchy)
-        return "shadow level";
-
-    if ((lev==0 && !shadow_hierarchy) ||
-        (lev==1 &&  shadow_hierarchy))
+static std::string LevelName(int lev) {
+    if (lev == 0)
         return "coarse level";
 
-    int refnum = lev - shadow_hierarchy;
-    return std::to_string(refnum) + OrdinalNumberSuffix(refnum) + " refinement";
+    return std::to_string(lev) + OrdinalNumberSuffix(lev) + " refinement";
 };
 
 }; // namespace utils

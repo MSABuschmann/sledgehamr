@@ -47,6 +47,27 @@ class Sledgehamr : public amrex::AmrCore {
      */
     void Evolve();
 
+    /** @brief Virtual function that loops over a state to fill the RHS. Has to
+     *         be defined by derived project class, though this will be hidden
+     *         from the user. Reason for this is so that the RHS function,
+     *         declared also by the project class, can be inlined within this
+     *         function, which it otherwise couldn't as it is not clear at
+     *         compile time which project will be run.
+     * @param   rhs_mf      Empty MultiFab to be filled with RHS.
+     * @param   state_mf    State from which the RHS is to be computed.
+     * @param   time        Current time.
+     * @param   lev         Currently level.
+     * @param   dt          Time step size.
+     * @param   dx          Grid spacing.
+     */
+    virtual void FillRhs(amrex::MultiFab& rhs_mf,
+                         const amrex::MultiFab& state_mf, const double time,
+                         const int lev, const double dt, const double dx) = 0;
+
+    /** @brief Pointer to synchronization module.
+     */
+    LevelSynchronizer* level_synchronizer;
+ 
   protected:
     /** @brief Make a new level from scratch using provided BoxArray and
      *         DistributionMapping. Only used during initialization. Overrides
@@ -139,22 +160,6 @@ class Sledgehamr : public amrex::AmrCore {
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
             double time, int lev) = 0;
 
-    /** @brief Virtual function that loops over a state to fill the RHS. Has to
-     *         be defined by derived project class, though this will be hidden
-     *         from the user. Reason for this is so that the RHS function,
-     *         declared also by the project class, can be inlined within this
-     *         function, which it otherwise couldn't as it is not clear at
-     *         compile time which project will be run.
-     * @param   rhs_mf      Empty MultiFab to be filled with RHS.
-     * @param   state_mf    State from which the RHS is to be computed.
-     * @param   time        Current time.
-     * @param   geom        Geometry of the current level.
-     * @param   lev         Currently level.
-     */
-    virtual void FillRhs(amrex::MultiFab& rhs_mf,
-                         const amrex::MultiFab& state_mf, const double time,
-                         const amrex::Geometry& geom, int lev) = 0;
-
     /** @brief Initialize project specific details.
      */
     virtual void Init() {};
@@ -170,9 +175,13 @@ class Sledgehamr : public amrex::AmrCore {
         return true;
     };
 
+    /** @brief Creates a shadow level and evolves it by one time step. Needed
+     *         to compute truncation errors on the coarse level.
+     */
+    void CreateShadowLevel();
+
     /** @brief Pointer to sub-modules.
      */
-    LevelSynchronizer* level_synchronizer;
     TimeStepper* time_stepper;
     IOModule* io_module;
 
@@ -181,10 +190,11 @@ class Sledgehamr : public amrex::AmrCore {
      */
     std::vector<LevelData> grid_old, grid_new;
 
-    /** @brief Flag whether simulation should use a shadow hierarchy. To be set
-     *         in inputs file.
+    /** @brief Shadow level in case we need it.
      */
     bool shadow_hierarchy = false;
+    LevelData shadow_level, shadow_level_tmp;
+    amrex::Geometry shadow_level_geom;
 
     /** @brief Holds pointers to all simulated scalar fields.
      */

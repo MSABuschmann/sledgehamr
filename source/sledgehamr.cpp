@@ -1,6 +1,7 @@
 #include <type_traits>
 
 #include <AMReX_ParmParse.H>
+#include <AMReX_MultiFabUtil.H>
 
 #include "sledgehamr.h"
 #include "sledgehamr_utils.h"
@@ -21,7 +22,7 @@ Sledgehamr::Sledgehamr () {
     grid_old.resize(max_level+1);
 
     for (int lev=0; lev<=max_level; ++lev) {
-        dimN.push_back( coarse_level_grid_size * pow(2,lev-shadow_hierarchy) );
+        dimN.push_back( coarse_level_grid_size * pow(2,lev) );
         dx.push_back( L/(double)dimN[lev] );
         dt.push_back( dx[lev] * cfl );
     }
@@ -77,30 +78,8 @@ void Sledgehamr::MakeNewLevelFromScratch(int lev, amrex::Real time,
     SetBoxArray(lev, ba);
     SetDistributionMap(lev, dm);
 
-    // If shadow hierarchy is used, above level is the shadow level. We now need
-    // to also make the coarse level.
-    if (shadow_hierarchy && lev == 0) {
-        ++lev;
-        ++finest_level;
-
-        // Create local copy of ba since ba is const.
-        amrex::BoxArray rba = ba;
-        rba.refine(2);
-
-        grid_new[lev].define(rba, dm, ncomp, nghost, time);
-        grid_old[lev].define(rba, dm, ncomp, nghost);
-
-        // These are already set for shadow level.
-        SetBoxArray(lev, rba);
-        SetDistributionMap(lev, dm);
-    }
-
     // Fill current level lev with initial state data.
     io_module->FillLevelFromFile(lev);
-
-    // Fill shadow level with data from coarse level.
-    if (shadow_hierarchy)
-        level_synchronizer->AverageDownTo(0);
 }
 
 void Sledgehamr::MakeNewLevelFromCoarse(int lev, amrex::Real time,
@@ -145,7 +124,7 @@ void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
     // if no truncation errors are used (TODO).
     if (time == t_start) return;
 
-    utils::sctp timer = utils::StartTimer(); 
+    utils::sctp timer = utils::StartTimer();
 
     if (tagging_on_gpu)
         DoErrorEstGpu(lev, tags, time);
@@ -156,12 +135,34 @@ void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
                    << "s." << std::endl;
 }
 
+void Sledgehamr::CreateShadowLevel() {
+    // Create.
+    const int ncomp = scalar_fields.size();
+    const double time = grid_old[0].t;
+    amrex::BoxArray ba = grid_old[0].boxArray();
+    ba.coarsen(2);
+    amrex::DistributionMapping dm = grid_old[0].DistributionMap();
+
+    shadow_level.define(ba, dm, ncomp, nghost);
+    shadow_level_tmp.define(ba, dm, ncomp, nghost, time);
+
+    shadow_level_geom = geom[0];
+    shadow_level_geom.coarsen(amrex::IntVect(2,2,2));
+
+    // Fill with data.
+    amrex::average_down(grid_new[0], shadow_level_tmp, geom[0],
+                        shadow_level_geom, 0, ncomp, refRatio(0));
+
+    // Advance one time step.
+    time_stepper->integrator->Advance(-1);
+}
+
 void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     // Current state.
     const amrex::MultiFab& state = grid_new[lev];
 
     // State containing truncation errors if they have been calculated.
-    const amrex::MultiFab& state_te = grid_old[lev];
+    const LevelData& state_te = grid_old[lev];
 
     // Initialize tag counters.
     int ntags_total = 0;
@@ -178,7 +179,7 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
         const amrex::Array4<char>& tag_arr = tags.array(mfi);
 
         // Tag with or without truncation errors.
-        if (shadow_hierarchy && grid_new[lev].contains_truncation_errors) {
+        if (shadow_hierarchy && state_te.contains_truncation_errors) {
             TagWithTruncationCpu(state_fab, state_fab_te, tag_arr, tilebox,
                                  time, lev, &ntags_total, &ntags_user,
                                  &(ntags_trunc[0]));
@@ -251,7 +252,6 @@ void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
 void Sledgehamr::ParseInput() {
     amrex::ParmParse pp_amr("amr");
     pp_amr.query("nghost", nghost);
-    pp_amr.query("shadow_hierarchy", shadow_hierarchy);
     pp_amr.query("coarse_level_grid_size", coarse_level_grid_size);
     pp_amr.query("tagging_on_gpu", tagging_on_gpu);
 
@@ -264,14 +264,19 @@ void Sledgehamr::ParseInput() {
 
 void Sledgehamr::ParseInputScalars() {
     te_crit.resize( scalar_fields.size() );
-    double te_crit_default = 1e99;
+    double te_crit_default = DBL_MAX;
 
     amrex::ParmParse pp("amr");
     pp.query("te_crit", te_crit_default);
+
+    shadow_hierarchy = false;
     for (int n=0; n<scalar_fields.size(); ++n) {
         te_crit[n] = te_crit_default;
         std::string ident = "te_crit_" + scalar_fields[n]->name;
         pp.query(ident.c_str(), te_crit[n]);
+
+        if (te_crit[n] != DBL_MAX)
+            shadow_hierarchy = true;
     }
 }
 

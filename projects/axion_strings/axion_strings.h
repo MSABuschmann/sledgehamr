@@ -144,6 +144,7 @@ bool TagCellForRefinement<true>(const amrex::Array4<const double>& state,
     if (WindingAxis1(state, i, j, k) != 0) return true;
     if (WindingAxis2(state, i, j, k) != 0) return true;
     if (WindingAxis3(state, i, j, k) != 0) return true;
+
     return false;
 }
 

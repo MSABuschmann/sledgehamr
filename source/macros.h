@@ -154,14 +154,13 @@ namespace sledgehamr {
  * @param   rhs_mf      Container to fill the Rhs with.
  * @param   state_mf    Current grid.
  * @param   time        Current time.
- * @param   geom        Grid geometry.
  * @param   lev         Current level.
+ * @param   dt          Time step size.
+ * @param   dx          Grid spacing.
  */
 #define PRJ_FILL_RHS virtual void FillRhs(amrex::MultiFab& rhs_mf, \
                 const amrex::MultiFab& state_mf, const double time, \
-                const amrex::Geometry& geom, int lev) override { \
-        double l_dt = dt[lev]; \
-        double l_dx = dx[lev]; \
+                const int lev, const double dt, const double dx) override { \
         DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
@@ -172,7 +171,7 @@ namespace sledgehamr {
             amrex::ParallelFor(bx, \
             [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
             { \
-                Rhs(rhs_fab, state_fab, i, j, k, lev, time, l_dt, l_dx); \
+                Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
             }); \
         } \
     };

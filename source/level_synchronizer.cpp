@@ -74,21 +74,21 @@ void LevelSynchronizer::FillPatch(const int lev, const double time,
     // Get data and boundary conditions for level lev.
     amrex::Vector<amrex::MultiFab*> fmfs = GetLevelData(lev, time);
     amrex::Vector<double> ftime = LevelData::getTimes(fmfs);
+    amrex::Geometry& geom = lev < 0 ? sim->shadow_level_geom : sim->geom[lev];
 
 #ifdef AMREX_USE_GPU
     amrex::GpuBndryFuncFab<NullFill> gpu_bndry_func(NullFill{});
     amrex::PhysBCFunct<amrex::GpuBndryFuncFab<NullFill> > fphysbc(
-            sim->geom[lev], bcs, gpu_bndry_func);
+            geom, bcs, gpu_bndry_func);
 #else
     amrex::CpuBndryFuncFab bndry_func(nullptr);
-    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> fphysbc(sim->geom[lev], bcs,
-                                                       bndry_func);
+    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> fphysbc(geom, bcs, bndry_func);
 #endif
 
-    if (lev == 0) {
+    if (lev <= 0) {
         // Call FillPatchSingleLevel for the coarse level.
         amrex::FillPatchSingleLevel(mf, time, fmfs, ftime, scomp, dcomp, ncomp,
-                                    sim->geom[lev], fphysbc, 0);
+                                    geom, fphysbc, 0);
     } else {
         // Call FillPatchTwoLevels with data from fine (lev) and coarse (lev-1)
         // level.
@@ -105,15 +105,59 @@ void LevelSynchronizer::FillPatch(const int lev, const double time,
 
         amrex::FillPatchTwoLevels(mf, time, cmfs, ctime, fmfs, ftime, scomp,
                                   dcomp, ncomp, sim->geom[lev-1],
-                                  sim->geom[lev], cphysbc, 0, fphysbc, 0,
+                                  geom, cphysbc, 0, fphysbc, 0,
                                   sim->refRatio(lev-1), mapper, bcs, 0);
     }
 }
 
 void LevelSynchronizer::FillIntermediatePatch(const int lev, const double time,
-        amrex::MultiFab& mf, const int scomp, const int dcomp,
-        const int ncomp) {
-    FillPatch(lev, time, mf, scomp, dcomp, ncomp);
+        amrex::MultiFab& mf, const int scomp, const int dcomp, int ncomp) {
+    if (ncomp == -1 )
+        ncomp = mf.nComp();
+
+    // Get data and boundary conditions for level lev.
+    amrex::Vector<amrex::MultiFab*> fmfs{&mf};
+    amrex::Vector<double> ftime{time};
+    amrex::Geometry& geom = lev < 0 ? sim->shadow_level_geom : sim->geom[lev];
+
+#ifdef AMREX_USE_GPU
+    amrex::GpuBndryFuncFab<NullFill> gpu_bndry_func(NullFill{});
+    amrex::PhysBCFunct<amrex::GpuBndryFuncFab<NullFill> > fphysbc(
+            geom, bcs, gpu_bndry_func);
+#else
+    amrex::CpuBndryFuncFab bndry_func(nullptr);
+    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> fphysbc(geom, bcs, bndry_func);
+#endif
+
+    if (lev <= 0) {
+        // Call FillPatchSingleLevel for the coarse level.
+        amrex::FillPatchSingleLevel(mf, time, fmfs, ftime, scomp, dcomp, ncomp,
+                                    geom, fphysbc, 0);
+    } else {
+        // Call FillPatchTwoLevels with data from fine (lev) and coarse (lev-1)
+        // level.
+        amrex::Vector<amrex::MultiFab*> cmfs = GetLevelData(lev-1, time);
+        amrex::Vector<double> ctime = LevelData::getTimes(cmfs);
+
+        // TODO check if copy is really needed.
+        amrex::MultiFab mf_tmp(mf.boxArray(), mf.DistributionMap(), mf.nComp(),
+                         sim->nghost);
+
+#ifdef AMREX_USE_GPU
+        amrex::PhysBCFunct<amrex::GpuBndryFuncFab<NullFill> > cphysbc(
+                sim->geom[lev-1], bcs, gpu_bndry_func);
+#else
+        amrex::PhysBCFunct<amrex::CpuBndryFuncFab> cphysbc(sim->geom[lev-1],
+                                                           bcs, bndry_func);
+#endif
+
+        amrex::FillPatchTwoLevels(mf_tmp, time, cmfs, ctime, fmfs, ftime, scomp,
+                                  dcomp, ncomp, sim->geom[lev-1],
+                                  geom, cphysbc, 0, fphysbc, 0,
+                                  sim->refRatio(lev-1), mapper, bcs, 0);
+
+        std::swap(mf, mf_tmp);
+    }
 }
 
 void LevelSynchronizer::AverageDownTo(const int lev) {
@@ -127,10 +171,22 @@ void LevelSynchronizer::AverageDownTo(const int lev) {
 }
 
 void LevelSynchronizer::ComputeTruncationErrors(int lev) {
-    amrex::MultiFab& S_crse = sim->grid_new[lev-1];
+    // Sanity check shadow level was created at the right time and is properly
+    // sync'd with the coarse level.
+    if (lev == 0 && sim->shadow_level.t != sim->grid_new[lev].t) {
+        std::string msg = "Shadow level not sync'd with coarse level! "
+                        + std::to_string(sim->shadow_level.t) + " (shadow) vs "
+                        + std::to_string(sim->grid_new[lev].t) + " (coarse)";
+        amrex::Abort(msg);
+    }
+
+    amrex::MultiFab& S_crse = lev == 0 ? sim->shadow_level
+                                       : sim->grid_new[lev-1];
     amrex::MultiFab& S_fine = sim->grid_new[lev];
     amrex::MultiFab& S_te   = sim->grid_old[lev];
     const int ncomp = sim->scalar_fields.size();
+
+    amrex::Print() << lev << " l cnan: " << S_crse.contains_nan() << std::endl;
 
     // Coarsen() the fine stuff on processors owning the fine data.
     amrex::BoxArray crse_S_fine_BA = S_fine.boxArray();
@@ -223,13 +279,16 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
 
     // We now have saved truncation errors.
     sim->grid_old[lev].contains_truncation_errors = true;
+
+    if (lev == 0)
+        sim->shadow_level.clear();
 }
 
 amrex::Vector<amrex::MultiFab*> LevelSynchronizer::GetLevelData(const int lev,
         const double time) {
     amrex::Vector<amrex::MultiFab*> mfs;
-    LevelData * New = &sim->grid_new[lev];
-    LevelData * Old = &sim->grid_old[lev];
+    LevelData * New = lev < 0 ? &sim->shadow_level     : &sim->grid_new[lev];
+    LevelData * Old = lev < 0 ? &sim->shadow_level_tmp : &sim->grid_old[lev];
 
     double teps = fabs(New->t - Old->t)*1.e-3;
 

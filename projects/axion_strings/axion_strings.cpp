@@ -17,9 +17,9 @@ void axion_strings::ParseVariables() {
 }
 
 void axion_strings::PrintRefinementTimes() {
-    for (int lev = shadow_hierarchy+1; lev <= max_level; ++lev) {
+    for (int lev = 1; lev <= max_level; ++lev) {
         amrex::Print() << "Level " << lev << " ("
-                       << sledgehamr::utils::LevelName(lev, shadow_hierarchy)
+                       << sledgehamr::utils::LevelName(lev)
                        << ") will be introduced at eta = "
                        << RefinementTime(lev) << std::endl;
     }

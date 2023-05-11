@@ -29,6 +29,10 @@ class TimeStepper {
      */
     std::vector<double> regrid_dt;
 
+    /** @brief Pointer to integration module.
+     */
+    Integrator* integrator;
+ 
 private:
     /** @brief Synchronizes two levels by averaging down. Computes truncation
      *         errors if regrid is scheduled.
@@ -98,13 +102,9 @@ private:
      */
     std::vector<int> regrid_level;
 
-    /** @brief Pointer to sub-modules.
+    /** @brief Pointer to other modules.
      */
-    Integrator* integrator;
     LocalRegrid* local_regrid;
-
-    /** @brief Pointer to owner on whose data this class operates.
-     */
     Sledgehamr* sim;
 };
 

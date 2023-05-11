@@ -1,5 +1,6 @@
 #include "time_stepper.h"
 #include "sledgehamr_utils.h"
+#include "integrator_amrex.h"
 
 namespace sledgehamr {
 
@@ -14,7 +15,7 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
     pp_inte.get("type", inte_type);
 
     if (inte_type == 1) {
-        integrator = new Integrator(sim);
+        integrator = new IntegratorAMReX(sim);
     } else if (inte_type == 5) {
         // TODO: low-storage SSPRK3
         amrex::Abort("#error: Integration type not yet implemented");
@@ -30,7 +31,7 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
     pp_amr.query("regrid_dt", reg_dt);
 
     for (int lev=0; lev<=sim->max_level; ++lev) {
-        regrid_dt.push_back( reg_dt / pow(2, lev - sim->shadow_hierarchy) );
+        regrid_dt.push_back( reg_dt / pow(2, lev) );
         last_regrid_time.push_back( sim->t_start );
     }
 
@@ -98,7 +99,7 @@ void TimeStepper::SynchronizeLevels(int lev) {
         }
     }
 
-    if (lev > 0 && sim->shadow_hierarchy && index != -1) {
+    if (lev >= 1 - sim->shadow_hierarchy && index != -1) {
         // Compute truncation errors for level lev and average down between lev
         // and lev-1.
         sim->level_synchronizer->ComputeTruncationErrors(lev);
@@ -133,8 +134,7 @@ void TimeStepper::PostAdvanceMessage(int lev, double duration) {
 }
 
 std::string TimeStepper::LevelMessage(int lev, int istep) {
-    std::string level_name = sledgehamr::utils::LevelName(lev,
-            sim->shadow_hierarchy);
+    std::string level_name = sledgehamr::utils::LevelName(lev);
     std::string out = "  ";
     for (int i=1;i<=lev;++i)
         out += "| ";
@@ -153,9 +153,6 @@ void TimeStepper::ScheduleRegrid(int lev) {
 
     // Regrid changes level "lev+1" so we don't regrid on max_level.
     if (lev >= sim->max_level) return;
-
-    // Do not regrid the coarse level.
-    if (lev == 0) return;
 
     // Do not regrid at the end of even time steps as we cannot compute
     // truncation errors otherwise.
@@ -181,8 +178,12 @@ void TimeStepper::ScheduleRegrid(int lev) {
         scheduled_regrids[k].push_back(sim->grid_new[k].istep + pow(2,k-lev));
     }
 
-    // Tell the coarser level as well we need truncation error estimates.
-    scheduled_regrids[lev-1].push_back( sim->grid_new[lev-1].istep );
+    if (lev == 0) {
+        sim->CreateShadowLevel();
+    } else {
+        // Tell the coarser level as well we need truncation error estimates.
+        scheduled_regrids[lev-1].push_back( sim->grid_new[lev-1].istep );
+    }
 
     // Mark this as the coarsest level to be regridded.
     regrid_level.push_back(lev);
@@ -210,7 +211,9 @@ void TimeStepper::DoRegridIfScheduled(int lev) {
     for (int k = lev; k <= sim->finest_level; ++k)
         scheduled_regrids[k].erase(scheduled_regrids[k].begin() + index);
 
-    scheduled_regrids[lev-1].erase(scheduled_regrids[lev-1].begin() + index);
+    if (lev > 0) {
+        scheduled_regrids[lev-1].erase(scheduled_regrids[lev-1].begin()+index);
+    }
     regrid_level.erase(regrid_level.begin() + index);
 
     // Actually do the regrid if we made it this far.
@@ -282,6 +285,8 @@ void TimeStepper::DoRegrid(int lev, double time) {
     for (int l=lev; l <= sim->finest_level; ++l) {
         last_regrid_time[l] = time;
     }
+
+    amrex::Print() << std::endl;
 }
 
 }; // namespace sledgehamr

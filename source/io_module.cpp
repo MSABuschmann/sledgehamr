@@ -200,10 +200,9 @@ void IOModule::FillLevelFromConst(int lev, const int comp, const double c) {
 void IOModule::WriteSlices(double time, std::string prefix) {
     amrex::Print() << "Write slices: " << prefix << std::endl;
 
-    for (int lev = sim->shadow_hierarchy; lev <= sim->finest_level; ++lev) {
+    for (int lev = 0; lev <= sim->finest_level; ++lev) {
         // Create folder and file.
-        std::string folder = prefix + "/Level_"
-                            + std::to_string( lev - sim->shadow_hierarchy );
+        std::string folder = prefix + "/Level_" + std::to_string(lev);
         amrex::UtilCreateDirectory(folder.c_str(), 0755);
 
         std::string filename = folder + "/"
@@ -281,7 +280,7 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
     // Write header information for this slice.
     double header_data[5] = {time,
                 (double)amrex::ParallelDescriptor::NProcs(),
-                (double)(sim->finest_level - sim->shadow_hierarchy),
+                (double)(sim->finest_level),
                 (double)sim->dimN[lev],
                 (double)le1.size()};
     WriteToHDF5(file_id, "Header_"+ident, header_data, 5);

@@ -19,9 +19,13 @@ class Integrator {
     /** @brief Advances a single level.
      * @param   lev Level to be advanced.
      */
-    virtual void Advance(int lev);
+    virtual void Advance(const int lev);
 
-  private:
+  protected:
+    /** @brief TODO
+     */
+    virtual void Integrate(LevelData& mf_old, LevelData& mf_new, const int lev,
+                           const double dt, const double dx) = 0;
 
     /** @brief Pointer to owner on whose data this class operates.
      */
