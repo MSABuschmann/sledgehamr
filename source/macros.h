@@ -1,6 +1,8 @@
 #ifndef SLEDGEHAMR_MACROS_H_
 #define SLEDGEHAMR_MACROS_H_
 
+#include "integrator.h"
+
 namespace sledgehamr {
 
 // Force boost to define variadics.
@@ -176,7 +178,34 @@ namespace sledgehamr {
         } \
     };
 
-
+/** @brief TODO
+ */
+#define PRJ_FILL_ADD_RHS virtual void FillAddRhs(amrex::MultiFab& rhs_mf, \
+                const amrex::MultiFab& state_mf, const double time, \
+                const int lev, const double dt, const double dx, \
+                const double weight) override { \
+        const int ncomp = rhs_mf.nComp(); \
+        DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
+        for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
+             mfi.isValid(); ++mfi) { \
+            const amrex::Box& bx = mfi.tilebox(); \
+            const amrex::Array4<double>& rhs_fab = rhs_mf.array(mfi); \
+            const amrex::Array4<double const>& state_fab = \
+                    state_mf.array(mfi); \
+            amrex::ParallelFor(bx, \
+            [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
+            { \
+                std::vector<double> tmp_rhs(ncomp); \
+                for (int n = 0; n < ncomp; ++n) { \
+                    tmp_rhs[n] = rhs_fab(i, j, k, n); \
+                } \
+                Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                for (int n = 0; n < ncomp; ++n) { \
+                    rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
+                } \
+            }); \
+        } \
+    };
 
 /** @brief Overrides function in project class.
  */
@@ -304,6 +333,7 @@ namespace sledgehamr {
 #define START_PROJECT(prj) \
     PRJ_CONSTRUCTOR(prj) \
     PRJ_FILL_RHS \
+    PRJ_FILL_ADD_RHS \
     PRJ_TAG_WITH_TRUNCATION_CPU \
     PRJ_TAG_WITH_TRUNCATION_GPU \
     PRJ_TAG_WITHOUT_TRUNCATION_CPU \

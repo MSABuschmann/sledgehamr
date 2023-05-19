@@ -64,10 +64,29 @@ class Sledgehamr : public amrex::AmrCore {
                          const amrex::MultiFab& state_mf, const double time,
                          const int lev, const double dt, const double dx) = 0;
 
+    /** @brief Like FillRhs but the result will be added to rhs_mf rather than
+     *         set.
+     * @param   rhs_mf      Empty MultiFab to be filled with RHS.
+     * @param   state_mf    State from which the RHS is to be computed.
+     * @param   time        Current time.
+     * @param   lev         Currently level.
+     * @param   dt          Time step size.
+     * @param   dx          Grid spacing.
+     * @param   weight      rhs = weight*rhs + ...
+     */
+    virtual void FillAddRhs(amrex::MultiFab& rhs_mf,
+                            const amrex::MultiFab& state_mf, const double time,
+                            const int lev, const double dt, const double dx,
+                            const double weight) = 0;
+
     /** @brief Pointer to synchronization module.
      */
     LevelSynchronizer* level_synchronizer;
- 
+
+    /** @brief Number of ghost cells.
+     */
+    int nghost = 0;
+
   protected:
     /** @brief Make a new level from scratch using provided BoxArray and
      *         DistributionMapping. Only used during initialization. Overrides
@@ -199,10 +218,6 @@ class Sledgehamr : public amrex::AmrCore {
     /** @brief Holds pointers to all simulated scalar fields.
      */
     std::vector<ScalarField*> scalar_fields;
-
-    /** @brief Number of ghost cells.
-     */
-    int nghost = 0;
 
     /** @brief Start and end times of the simulation.
      */

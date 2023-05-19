@@ -1,6 +1,7 @@
 #include "time_stepper.h"
 #include "sledgehamr_utils.h"
 #include "integrator_amrex.h"
+#include "integrator_lsssprk3.h"
 
 namespace sledgehamr {
 
@@ -9,19 +10,33 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
     local_regrid = new LocalRegrid(sim);
 
     // Initialize the correct integrator.
-    amrex::ParmParse pp_inte("integration");
-
+    amrex::ParmParse pp_inte("integrator");
     int inte_type;
     pp_inte.get("type", inte_type);
 
-    if (inte_type == 1) {
-        integrator = new IntegratorAMReX(sim);
-    } else if (inte_type == 5) {
-        // TODO: low-storage SSPRK3
-        amrex::Abort("#error: Integration type not yet implemented");
-    } else {
-        amrex::Abort("#error: Unknown integration type: "
-                     + std::to_string(inte_type));
+    amrex::Print() << "Integrator type: "
+                   << Integrator::Name(static_cast<IntegratorType>(inte_type))
+                   << std::endl;
+
+    switch (inte_type) {
+        case AmrexRkButcherTableau:
+            //[[fallthrough]];
+        case AmrexForwardEuler:
+            //[[fallthough]];
+        case AmrexTrapezoid:
+            //[[fallthrough]];
+        case AmrexSsprk3:
+            //[[fallthrough]];
+        case AmrexRk4:
+            integrator = new IntegratorAMReX(sim);
+            break;
+        case Lsssprk3:
+            integrator = new IntegratorLSSSPRK3(sim);
+            break;
+        default:
+            amrex::Abort("#error: Unknown integration type: "
+                        + std::to_string(inte_type));
+            break;
     }
 
     // Set regridding intervals.

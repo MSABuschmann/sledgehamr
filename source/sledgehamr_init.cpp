@@ -57,13 +57,14 @@ void SledgehamrInit::FinishAMReXSetup() {
     pp_geo.addarr("is_periodic", periodic);
 
     // Set Integrator type.
-    amrex::ParmParse pp_inte("integration");
+    amrex::ParmParse pp_inte("integrator");
     int inte_type;
     pp_inte.get("type", inte_type);
 
+    amrex::ParmParse pp_intn("integration");
     if (inte_type >= 0 && inte_type <= 4) {
-        pp_inte.add("type", 1);
-        pp_inte.add("rk.type", inte_type);
+        pp_intn.add("type", 1);
+        pp_intn.add("rk.type", inte_type);
     }
 }
 

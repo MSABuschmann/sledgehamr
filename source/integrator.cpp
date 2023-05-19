@@ -28,4 +28,47 @@ void Integrator::Advance(const int lev) {
     }
 }
 
+std::string Integrator::Name(IntegratorType type) {
+    switch (type) {
+        case AmrexRkButcherTableau:
+            return "User-defined RK Butcher Tableau.";
+        case AmrexForwardEuler:
+            return "Forward Euler.";
+        case AmrexTrapezoid:
+            return "Trapezoid Method.";
+        case AmrexSsprk3:
+            return "SSPRK3 (AMReX implementation).";
+        case AmrexRk4:
+            return "RK4.";
+        case Lsssprk3:
+            return "SSPRK3 (Low-storage sledgehamr implementation).";
+        default:
+            return "Unkown!";
+    }
+}
+
+void Integrator::DebugMessage(amrex::MultiFab& mf, std::string msg) {
+#pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
+    for (amrex::MFIter mfi(mf, amrex::TilingIfNotGPU()); mfi.isValid();
+            ++mfi) {
+        const amrex::Box& bx = mfi.tilebox();
+        const auto& state = mf.array(mfi);
+
+        amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k)
+            noexcept {
+            if (i==0 && j==0 && k==0 ) {
+                double Psi1 = state(i, j, k, 0);
+                double Psi2 = state(i, j, k, 1);
+                double Pi1  = state(i, j, k, 2);
+                double Pi2  = state(i, j, k, 3);
+
+                amrex::AllPrint() << msg << ": Psi1" << " " << Psi1 << " " << Psi2 << " "
+                                  << Pi1 << " " << Pi2 << " | "
+                                  << state(i-1, j-1, k-1, 0) << " "
+                                  << std::endl;
+            }
+        });
+    }
+}
+
 };  // namespace sledgehamr

@@ -186,8 +186,6 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
     amrex::MultiFab& S_te   = sim->grid_old[lev];
     const int ncomp = sim->scalar_fields.size();
 
-    amrex::Print() << lev << " l cnan: " << S_crse.contains_nan() << std::endl;
-
     // Coarsen() the fine stuff on processors owning the fine data.
     amrex::BoxArray crse_S_fine_BA = S_fine.boxArray();
     crse_S_fine_BA.coarsen(2);
