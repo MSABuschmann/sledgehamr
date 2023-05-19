@@ -195,7 +195,7 @@ namespace sledgehamr {
             amrex::ParallelFor(bx, \
             [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
             { \
-                std::vector<double> tmp_rhs(ncomp); \
+                double tmp_rhs[Scalar::NScalars]; \
                 for (int n = 0; n < ncomp; ++n) { \
                     tmp_rhs[n] = rhs_fab(i, j, k, n); \
                 } \

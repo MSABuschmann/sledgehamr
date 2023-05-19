@@ -48,6 +48,7 @@ std::string Integrator::Name(IntegratorType type) {
 }
 
 void Integrator::DebugMessage(amrex::MultiFab& mf, std::string msg) {
+#ifndef AMREX_USE_GPU
 #pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
     for (amrex::MFIter mfi(mf, amrex::TilingIfNotGPU()); mfi.isValid();
             ++mfi) {
@@ -69,6 +70,7 @@ void Integrator::DebugMessage(amrex::MultiFab& mf, std::string msg) {
             }
         });
     }
+#endif
 }
 
 };  // namespace sledgehamr
