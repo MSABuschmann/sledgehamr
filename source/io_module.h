@@ -86,7 +86,7 @@ class IOModule {
      * @param   state                   Pointer to full grid from which the
      *                                  slice shall be taken.
      * @param   file_id                 ID of HDF5 file.
-     * @param   ident                   Direction string, e.g. 'x'.
+     * @param   ident                   String identifier, e.g. 'x'.
      * @param   d1                      Axis along which the slice shall be
      *                                  taken.
      * @param   d2                      First orthogonal direction.
@@ -98,21 +98,43 @@ class IOModule {
                           hid_t file_id, std::string ident, int d1, int d2,
                           int d3, bool is_truncation_errors);
 
-    /** @brief OUTPUT_FCT. Writes the coarse level, possibly downsampled.
+    /** @brief OUTPUT_FCT. Wrapper to write the coarse level.
      * @param   time   Current time.
      * @param   prefix Output path.
      */
     void WriteCoarseBox(double time, std::string prefix);
 
+    /** @brief OUTPUT_FCT. Wrapper to write the coarse level with truncation
+     *         errors.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteCoarseBoxTruncationError(double time, std::string prefix);
+
+    /** @brief OUTPUT_FCT. Writes the coarse level possibly with truncation
+     *         errors.
+     * @param   time                    Current time.
+     * @param   prefix                  Output path.
+     * @param   downsample_factor       Downsampling factor.
+     * @param   with_truncation_errors  Whether truncation errors shall be
+     *                                  written.
+     */
+    void DoWriteCoarseBox(double time, std::string prefix, int downsamp,
+                          bool with_truncation_errors);
+
     /** @brief Writes an entire level to file.
-     * @param   time                Current time.
-     * @param   state               Pointer to full grid from which the slice 
-     *                              shall be taken.
-     * @param   file_id             ID of HDF5 file.
-     * @param   downsample_factor   Downsample level by this factor.
+     * @param   time                    Current time.
+     * @param   state                   Pointer to full grid from which the
+     *                                  slice shall be taken.
+     * @param   ident                   String identifier, e.g. "data" or "te".
+     * @param   file_id                 ID of HDF5 file.
+     * @param   downsample_factor       Downsample level by this factor.
+     * @param   is_truncation_errors    Whether the data contains truncation
+     *                                  errors.
      */
     void WriteLevel(double time, const LevelData* state, int lev,
-                    hid_t file_id, int downsample_factor);
+                    hid_t file_id, std::string ident, int downsample_factor,
+                    bool is_truncation_errors);
 
     /** @brief OUTPUT_FCT. Writes all levels, possibly downsampled.
      * @param   time   Current time.
@@ -146,6 +168,7 @@ class IOModule {
      */
     int coarse_box_downsample_factor = 1;
     int full_box_downsample_factor = 1;
+    int truncation_error_coarse_box_downsample_factor = 1;
 
     /** @brief Pointer to owner on whose data this class operates.
      */

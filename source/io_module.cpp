@@ -39,7 +39,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     // Entire volume.
     double interval_full_box = -1;
     pp.query("interval_full_box", interval_full_box);
-   // TODO Check that power of 2 and <= blocking_factor.
+    // TODO Check that power of 2 and <= blocking_factor.
     pp.query("full_box_downsample_factor", full_box_downsample_factor);
 
     if (interval_full_box >= 0) {
@@ -60,11 +60,14 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_slices_truncation_error);
         output.push_back(out);
     }
-/*
+
     // Full coarse box of truncation errors.
     double interval_coarse_box_truncation_error = -1;
     pp.query("interval_coarse_box_truncation_error",
              interval_coarse_box_truncation_error);
+    // TODO Check that power of 2 and <= blocking_factor.
+    pp.query("truncation_error_coarse_box_downsample_factor",
+             truncation_error_coarse_box_downsample_factor);
 
     if (interval_coarse_box_truncation_error >= 0) {
         OutputModule out(output_folder + "/coarse_box_truncation_error",
@@ -73,6 +76,7 @@ IOModule::IOModule(Sledgehamr* owner) {
         output.push_back(out);
     }
 
+/*
     // Entire volume of truncation errors.
     double interval_full_box_truncation_error = -1;
     pp.query("interval_full_box_truncation_error",
@@ -261,17 +265,17 @@ void IOModule::FillLevelFromConst(int lev, const int comp, const double c) {
 }
 
 void IOModule::WriteSlices(double time, std::string prefix) {
+    amrex::Print() << "Write slices: " << prefix << std::endl;
     DoWriteSlices(time, prefix, false);
 }
 
 void IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
+    amrex::Print() << "Write truncation error slices: " << prefix << std::endl;
     DoWriteSlices(time, prefix, false);
 }
 
 void IOModule::DoWriteSlices(double time, std::string prefix,
                              bool with_truncation_errors) {
-    amrex::Print() << "Write slices: " << prefix << std::endl;
-
     for (int lev = 0; lev <= sim->finest_level; ++lev) {
         // Create folder and file.
         std::string folder = prefix + "/Level_" + std::to_string(lev);
@@ -305,7 +309,7 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
                                 hid_t file_id, std::string ident, int d1,
                                 int d2, int d3, bool is_truncation_errors) {
     std::vector<int> le1, he1, le2, he2;
-    const int downsamp = is_truncation_errors ? 2 : 1;
+    const int ndist = is_truncation_errors ? 2 : 1;
 
     // Not performance critical. Do not use OpenMP because not thread-safe.
     for (amrex::MFIter mfi(*state, false); mfi.isValid(); ++mfi){
@@ -325,8 +329,8 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
             he1.push_back(h1);
             he2.push_back(h2);
 
-            int dim1 = (h1-l1)/downsamp;
-            int dim2 = (h2-l2)/downsamp;
+            int dim1 = (h1-l1)/ndist;
+            int dim2 = (h2-l2)/ndist;
 
             // Copy data into flattened array for each scalar field.
             long len = dim1 * dim2;
@@ -338,7 +342,7 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
                         if (is_truncation_errors && (i%2 != 0 || j%2 != 0))
                             continue;
 
-                        int ind = (i-l1)/downsamp*dim2 + (j-l2)/downsamp;
+                        int ind = (i-l1)/ndist*dim2 + (j-l2)/ndist;
 
                         if (d1 == 0) {
                             output_arr[ind] = state_arr(0,i,j,f);
@@ -351,8 +355,8 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
                 }
 
                 std::string dset_name = sim->scalar_fields[f]->name
-                            + "_" + ident
-                            + "_" + std::to_string(le1.size());
+                                      + "_" + ident
+                                      + "_" + std::to_string(le1.size());
                 WriteToHDF5(file_id, dset_name, output_arr, len);
             }
 
@@ -380,6 +384,19 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
 
 void IOModule::WriteCoarseBox(double time, std::string prefix) {
     amrex::Print() << "Write coarse level box: " << prefix << std::endl;
+    DoWriteCoarseBox(time, prefix, coarse_box_downsample_factor, false);
+}
+
+void IOModule::WriteCoarseBoxTruncationError(double time, std::string prefix) {
+    amrex::Print() << "Write truncation errors on coarse level box: "
+                   << prefix << std::endl;
+    DoWriteCoarseBox(time, prefix,
+                     truncation_error_coarse_box_downsample_factor, true);
+}
+
+void IOModule::DoWriteCoarseBox(double time, std::string prefix,
+                                int downsample_factor,
+                                bool with_truncation_errors) {
     const int lev = 0;
 
     // Create folder and file.
@@ -389,15 +406,23 @@ void IOModule::WriteCoarseBox(double time, std::string prefix) {
     hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
                               H5P_DEFAULT);
 
+    // Write fields.
     const LevelData* state = &sim->grid_new[lev];
+    WriteLevel(time, state, lev, file_id, "data", downsample_factor, false);
 
-    // Write output to file.
-    WriteLevel(time, state, lev, file_id, coarse_box_downsample_factor);
+    if (with_truncation_errors) {
+        const LevelData* state = &sim->grid_old[lev];
+        WriteLevel(time, state, lev, file_id, "te", downsample_factor, true);
+    }
+
     H5Fclose(file_id);
 }
 
 void IOModule::WriteLevel(double time, const LevelData* state, int lev,
-                                hid_t file_id, int downsample_factor) {
+                          hid_t file_id, std::string ident, 
+                          int downsample_factor, bool is_truncation_errors) {
+    const int ndist = is_truncation_errors ? 2 : 1;
+    
     std::vector<int> lex, hex, ley, hey, lez, hez;
 
     // Not performance critical. Do not use OpenMP because not thread-safe.
@@ -419,9 +444,9 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
         hey.push_back(hy);
         hez.push_back(hz);
 
-        int dimx = (hx-lx) / downsample_factor;
-        int dimy = (hy-ly) / downsample_factor;
-        int dimz = (hz-lz) / downsample_factor;
+        int dimx = (hx-lx) / downsample_factor / ndist;
+        int dimy = (hy-ly) / downsample_factor / ndist;
+        int dimz = (hz-lz) / downsample_factor / ndist;
         double volfac = 1./std::pow(downsample_factor, 3);
 
         // Copy data into flattened array for each scalar field.
@@ -432,14 +457,25 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
             for (int k=lz; k<hz; ++k) {
                 for (int j=ly; j<hy; ++j) {
                     for (int i=lx; i<hx; ++i) {
-                        int ind = (i-lx)*dimy*dimz + (j-ly)*dimz + (k-lz);
-                        output_arr[ind] = state_arr(i,j,k,f) * volfac;
+                        if (is_truncation_errors 
+                            && (i%2 != 0 || j%2 != 0 || k%2 != 0))
+                            continue;
+
+                        int ind = (i-lx)/ndist*dimy*dimz + (j-ly)/ndist*dimz
+                                + (k-lz)/ndist;
+
+                        if (is_truncation_errors)
+                            output_arr[ind] = std::max(
+                                    static_cast<float>(state_arr(i,j,k,f)),
+                                    output_arr[ind]);
+                        else
+                            output_arr[ind] += state_arr(i,j,k,f) * volfac;
                     }
                 }
             }
 
-            std::string dset_name = sim->scalar_fields[f]->name
-                        + "_" + std::to_string(lex.size());
+            std::string dset_name = sim->scalar_fields[f]->name + "_" + ident
+                                  + "_" + std::to_string(lex.size());
             WriteToHDF5(file_id, dset_name, output_arr, len);
         }
 
@@ -454,16 +490,16 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
                 (double)sim->dimN[lev],
                 (double)downsample_factor,
                 (double)lex.size()};
-    WriteToHDF5(file_id, "Header", header_data, nparams);
+    WriteToHDF5(file_id, "Header_" + ident, header_data, nparams);
 
     // Write box dimensions so we can reassemble slice.
     if (lex.size() > 0) {
-        WriteToHDF5(file_id, "lex", (int*)&(lex[0]), lex.size());
-        WriteToHDF5(file_id, "ley", (int*)&(ley[0]), ley.size());
-        WriteToHDF5(file_id, "lez", (int*)&(lez[0]), lez.size());
-        WriteToHDF5(file_id, "hex", (int*)&(hex[0]), hex.size());
-        WriteToHDF5(file_id, "hey", (int*)&(hey[0]), hey.size());
-        WriteToHDF5(file_id, "hez", (int*)&(hez[0]), hez.size());
+        WriteToHDF5(file_id, "lex_"+ident, (int*)&(lex[0]), lex.size());
+        WriteToHDF5(file_id, "ley_"+ident, (int*)&(ley[0]), ley.size());
+        WriteToHDF5(file_id, "lez_"+ident, (int*)&(lez[0]), lez.size());
+        WriteToHDF5(file_id, "hex_"+ident, (int*)&(hex[0]), hex.size());
+        WriteToHDF5(file_id, "hey_"+ident, (int*)&(hey[0]), hey.size());
+        WriteToHDF5(file_id, "hez_"+ident, (int*)&(hez[0]), hez.size());
     }
 }
 
@@ -484,7 +520,8 @@ void IOModule::WriteFullBox(double time, std::string prefix) {
         const LevelData* state = &sim->grid_new[lev];
 
         // Write output to file.
-        WriteLevel(time, state, lev, file_id, full_box_downsample_factor);
+        WriteLevel(time, state, lev, file_id, "data", 
+                   full_box_downsample_factor, false);
         H5Fclose(file_id);
     }
 }
