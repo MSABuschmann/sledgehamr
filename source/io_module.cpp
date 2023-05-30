@@ -35,10 +35,12 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_coarse_box);
         output.push_back(out);
     }
-/*
+
     // Entire volume.
     double interval_full_box = -1;
     pp.query("interval_full_box", interval_full_box);
+   // TODO Check that power of 2 and <= blocking_factor.
+    pp.query("full_box_downsample_factor", full_box_downsample_factor);
 
     if (interval_full_box >= 0) {
         OutputModule out(output_folder + "/full_box",
@@ -46,7 +48,7 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_full_box);
         output.push_back(out);
     }
-
+/*
     // Slices of truncation errors.
     double interval_slices_truncation_error = -1;
     pp.query("interval_slices_truncation_error",
@@ -340,12 +342,13 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
     }
 
     // Write header information for this slice.
-    double header_data[5] = {time,
+    const int nparams = 5;
+    double header_data[nparams] = {time,
                 (double)amrex::ParallelDescriptor::NProcs(),
                 (double)(sim->finest_level),
                 (double)sim->dimN[lev],
                 (double)le1.size()};
-    WriteToHDF5(file_id, "Header_"+ident, header_data, 5);
+    WriteToHDF5(file_id, "Header_"+ident, header_data, nparams);
 
     // Write box dimensions so we can reassemble slice.
     if (le1.size() > 0) {
@@ -367,17 +370,15 @@ void IOModule::WriteCoarseBox(double time, std::string prefix) {
     hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
                               H5P_DEFAULT);
 
-    // TODO: Allow for writing of truncation errors .
     const LevelData* state = &sim->grid_new[lev];
 
     // Write output to file.
-    WriteLevel(time, state, lev, file_id);
-
+    WriteLevel(time, state, lev, file_id, coarse_box_downsample_factor);
     H5Fclose(file_id);
 }
 
 void IOModule::WriteLevel(double time, const LevelData* state, int lev,
-                                hid_t file_id) {
+                                hid_t file_id, int downsample_factor) {
     std::vector<int> lex, hex, ley, hey, lez, hez;
 
     // Not performance critical. Do not use OpenMP because not thread-safe.
@@ -399,10 +400,10 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
         hey.push_back(hy);
         hez.push_back(hz);
 
-        int dimx = (hx-lx) / coarse_box_downsample_factor;
-        int dimy = (hy-ly) / coarse_box_downsample_factor;
-        int dimz = (hz-lz) / coarse_box_downsample_factor;
-        double volfac = 1./std::pow(coarse_box_downsample_factor, 3);
+        int dimx = (hx-lx) / downsample_factor;
+        int dimy = (hy-ly) / downsample_factor;
+        int dimz = (hz-lz) / downsample_factor;
+        double volfac = 1./std::pow(downsample_factor, 3);
 
         // Copy data into flattened array for each scalar field.
         long len = dimx * dimy * dimz;
@@ -427,12 +428,14 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
     }
 
     // Write header information for this slice.
-    double header_data[5] = {time,
+    const int nparams = 6;
+    double header_data[nparams] = {time,
                 (double)amrex::ParallelDescriptor::NProcs(),
-                (double)coarse_box_downsample_factor,
+                (double)sim->finest_level,
                 (double)sim->dimN[lev],
+                (double)downsample_factor,
                 (double)lex.size()};
-    WriteToHDF5(file_id, "Header", header_data, 5);
+    WriteToHDF5(file_id, "Header", header_data, nparams);
 
     // Write box dimensions so we can reassemble slice.
     if (lex.size() > 0) {
@@ -442,6 +445,28 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
         WriteToHDF5(file_id, "hex", (int*)&(hex[0]), hex.size());
         WriteToHDF5(file_id, "hey", (int*)&(hey[0]), hey.size());
         WriteToHDF5(file_id, "hez", (int*)&(hez[0]), hez.size());
+    }
+}
+
+void IOModule::WriteFullBox(double time, std::string prefix) {
+    amrex::Print() << "Write full box at all levels: " << prefix << std::endl;
+
+    for (int lev = 0; lev <= sim->finest_level; ++lev) {
+        // Create folder and file.
+        std::string folder = prefix + "/Level_" + std::to_string(lev);
+        amrex::UtilCreateDirectory(folder.c_str(), 0755);
+
+        std::string filename = folder + "/"
+                        + std::to_string(amrex::ParallelDescriptor::MyProc())
+                        + ".hdf5";
+        hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                                  H5P_DEFAULT);
+
+        const LevelData* state = &sim->grid_new[lev];
+
+        // Write output to file.
+        WriteLevel(time, state, lev, file_id, full_box_downsample_factor);
+        H5Fclose(file_id);
     }
 }
 
