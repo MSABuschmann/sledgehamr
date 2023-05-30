@@ -111,16 +111,15 @@ class IOModule {
      */
     void WriteCoarseBoxTruncationError(double time, std::string prefix);
 
-    /** @brief OUTPUT_FCT. Writes the coarse level possibly with truncation
-     *         errors.
+    /** @brief Writes the coarse level possibly with truncation errors.
      * @param   time                    Current time.
      * @param   prefix                  Output path.
      * @param   downsample_factor       Downsampling factor.
      * @param   with_truncation_errors  Whether truncation errors shall be
      *                                  written.
      */
-    void DoWriteCoarseBox(double time, std::string prefix, int downsamp,
-                          bool with_truncation_errors);
+    void DoWriteCoarseBox(double time, std::string prefix,
+                          int downsample_factor, bool with_truncation_errors);
 
     /** @brief Writes an entire level to file.
      * @param   time                    Current time.
@@ -136,11 +135,27 @@ class IOModule {
                     hid_t file_id, std::string ident, int downsample_factor,
                     bool is_truncation_errors);
 
-    /** @brief OUTPUT_FCT. Writes all levels, possibly downsampled.
+    /** @brief OUTPUT_FCT. Wrapper to write all levels.
      * @param   time   Current time.
      * @param   prefix Output path.
      */
     void WriteFullBox(double time, std::string prefix);
+
+    /** @brief OUTPUT_FCT. Wrapper to write truncation errors on all levels.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteFullBoxTruncationError(double time, std::string prefix);
+
+    /** @brief Writes all levels possibly with truncation errors.
+     * @param   time                    Current time.
+     * @param   prefix                  Output path.
+     * @param   downsample_factor       Downsampling factor.
+     * @param   with_truncation_errors  Whether truncation errors shall be
+     *                                  written.
+     */
+    void DoWriteFullBox(double time, std::string prefix, int downsample_factor,
+                        bool with_truncation_errors);
 
     /** @brief Reads dataset from HDF5 file.
      * @param   filename    Name of HDF5 file.
@@ -164,11 +179,12 @@ class IOModule {
     void WriteToHDF5(hid_t file_id, std::string dset, T* data,
                      unsigned long long size);
 
-    /** Settings for coarse/full level output.
+    /** Downsampling factors for coarse/full level output.
      */
     int coarse_box_downsample_factor = 1;
+    int coarse_box_truncation_error_downsample_factor = 1;
     int full_box_downsample_factor = 1;
-    int truncation_error_coarse_box_downsample_factor = 1;
+    int full_box_truncation_error_downsample_factor = 1;
 
     /** @brief Pointer to owner on whose data this class operates.
      */

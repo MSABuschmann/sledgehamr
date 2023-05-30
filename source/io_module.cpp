@@ -66,8 +66,8 @@ IOModule::IOModule(Sledgehamr* owner) {
     pp.query("interval_coarse_box_truncation_error",
              interval_coarse_box_truncation_error);
     // TODO Check that power of 2 and <= blocking_factor.
-    pp.query("truncation_error_coarse_box_downsample_factor",
-             truncation_error_coarse_box_downsample_factor);
+    pp.query("coarse_box_truncation_error_downsample_factor",
+             coarse_box_truncation_error_downsample_factor);
 
     if (interval_coarse_box_truncation_error >= 0) {
         OutputModule out(output_folder + "/coarse_box_truncation_error",
@@ -76,11 +76,13 @@ IOModule::IOModule(Sledgehamr* owner) {
         output.push_back(out);
     }
 
-/*
     // Entire volume of truncation errors.
     double interval_full_box_truncation_error = -1;
     pp.query("interval_full_box_truncation_error",
              interval_full_box_truncation_error);
+    // TODO Check that power of 2 and <= blocking_factor.
+    pp.query("full_box_truncation_error_downsample_factor",
+             full_box_truncation_error_downsample_factor);
 
     if (interval_full_box_truncation_error >= 0) {
         OutputModule out(output_folder + "/full_box_truncation_error",
@@ -89,6 +91,7 @@ IOModule::IOModule(Sledgehamr* owner) {
         output.push_back(out);
     }
 
+/*
    // yt output
     double interval_yt = -1;
     pp.query("interval_yt", interval_yt);
@@ -391,7 +394,7 @@ void IOModule::WriteCoarseBoxTruncationError(double time, std::string prefix) {
     amrex::Print() << "Write truncation errors on coarse level box: "
                    << prefix << std::endl;
     DoWriteCoarseBox(time, prefix,
-                     truncation_error_coarse_box_downsample_factor, true);
+                     coarse_box_truncation_error_downsample_factor, true);
 }
 
 void IOModule::DoWriteCoarseBox(double time, std::string prefix,
@@ -505,7 +508,19 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
 
 void IOModule::WriteFullBox(double time, std::string prefix) {
     amrex::Print() << "Write full box at all levels: " << prefix << std::endl;
+    DoWriteFullBox(time, prefix, full_box_downsample_factor, false);
+}
 
+void IOModule::WriteFullBoxTruncationError(double time, std::string prefix) {
+    amrex::Print() << "Write truncation errors at all levels: "
+                   << prefix << std::endl;
+    DoWriteFullBox(time, prefix, full_box_truncation_error_downsample_factor,
+                   true);
+}
+
+void IOModule::DoWriteFullBox(double time, std::string prefix,
+                              int downsample_factor,
+                              bool is_truncation_errors) {
     for (int lev = 0; lev <= sim->finest_level; ++lev) {
         // Create folder and file.
         std::string folder = prefix + "/Level_" + std::to_string(lev);
@@ -517,11 +532,19 @@ void IOModule::WriteFullBox(double time, std::string prefix) {
         hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
                                   H5P_DEFAULT);
 
+        // Write fields.
         const LevelData* state = &sim->grid_new[lev];
-
-        // Write output to file.
         WriteLevel(time, state, lev, file_id, "data", 
-                   full_box_downsample_factor, false);
+                   downsample_factor, false);
+
+        if (is_truncation_errors) {
+            // Write truncation errors.
+            const LevelData* state = &sim->grid_old[lev];
+
+            WriteLevel(time, state, lev, file_id, "te", 
+                       downsample_factor, true);
+        }
+
         H5Fclose(file_id);
     }
 }
