@@ -7,6 +7,7 @@
 
 #include "sledgehamr.h"
 #include "output_module.h"
+#include "projection.h"
 
 namespace sledgehamr {
 
@@ -34,6 +35,8 @@ class IOModule {
      * @param   c       Constant.
      */
     void FillLevelFromConst(int lev, const int comp, const double c);
+
+    std::vector<Projection> projections;
 
   private:
     /** @brief Copies data from array into LevelData.
@@ -156,6 +159,22 @@ class IOModule {
      */
     void DoWriteFullBox(double time, std::string prefix, int downsample_factor,
                         bool with_truncation_errors);
+
+    /** @brief OUTPUT_FCT. Write projections.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteProjections(double time, std::string prefix);
+
+    /** @brief TODO
+     */
+    void MakeProjection(const int p, Projection& proj, hid_t file_id);
+
+    /** @brief TODO
+     */
+    void AddToProjection(const int i, const int j, const int k,
+                         double* projection, int* n_projection, const int ratio,
+                         const int dimN, const double val, const int mode);
 
     /** @brief Reads dataset from HDF5 file.
      * @param   filename    Name of HDF5 file.
