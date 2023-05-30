@@ -78,6 +78,21 @@ class IOModule {
                           hid_t file_id, std::string ident, int d1, int d2,
                           int d3);
 
+    /** @brief OUTPUT_FCT. Writes the coarse level, possibly downsampled.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteCoarseBox(double time, std::string prefix);
+
+    /** @brief Writes an entire level to file.
+     * @param   time    Current time.
+     * @param   state   Pointer to full grid from which the slice shall be
+     *                  taken.
+     * @param   file_id ID of HDF5 file.
+     */
+    void WriteLevel(double time, const LevelData* state, int lev,
+                    hid_t file_id);
+
     /** @brief Reads dataset from HDF5 file.
      * @param   filename    Name of HDF5 file.
      * @param   dnames      Vector of datasets to be tried. First dataset to be
@@ -99,6 +114,10 @@ class IOModule {
     template <typename T>
     void WriteToHDF5(hid_t file_id, std::string dset, T* data,
                      unsigned long long size);
+
+    /** Settings for coarse level output.
+     */
+    int coarse_box_downsample_factor = 1;
 
     /** @brief Pointer to owner on whose data this class operates.
      */

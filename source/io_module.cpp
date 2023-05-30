@@ -22,10 +22,12 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_slices);
         output.push_back(out);
     }
-/*
+
     // Full coarse box.
     double interval_coarse_box = -1;
     pp.query("interval_coarse_box", interval_coarse_box);
+    // TODO Check that power of 2 and <= blocking_factor.
+    pp.query("coarse_box_downsample_factor", coarse_box_downsample_factor);
 
     if (interval_coarse_box >= 0) {
         OutputModule out(output_folder + "/coarse_box",
@@ -33,7 +35,7 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_coarse_box);
         output.push_back(out);
     }
-
+/*
     // Entire volume.
     double interval_full_box = -1;
     pp.query("interval_full_box", interval_full_box);
@@ -45,6 +47,53 @@ IOModule::IOModule(Sledgehamr* owner) {
         output.push_back(out);
     }
 
+    // Slices of truncation errors.
+    double interval_slices_truncation_error = -1;
+    pp.query("interval_slices_truncation_error",
+             interval_slices_truncation_error);
+
+    if (interval_slices_truncation_error >= 0) {
+        OutputModule out(output_folder + "/slices_truncation_error",
+                         OUTPUT_FCT(IOModule::WriteSlicesTruncationError),
+                         interval_slices_truncation_error);
+        output.push_back(out);
+    }
+
+    // Full coarse box of truncation errors.
+    double interval_coarse_box_truncation_error = -1;
+    pp.query("interval_coarse_box_truncation_error",
+             interval_coarse_box_truncation_error);
+
+    if (interval_coarse_box_truncation_error >= 0) {
+        OutputModule out(output_folder + "/coarse_box_truncation_error",
+                         OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError),
+                         interval_coarse_box_truncation_error);
+        output.push_back(out);
+    }
+
+    // Entire volume of truncation errors.
+    double interval_full_box_truncation_error = -1;
+    pp.query("interval_full_box_truncation_error",
+             interval_full_box_truncation_error);
+
+    if (interval_full_box_truncation_error >= 0) {
+        OutputModule out(output_folder + "/full_box_truncation_error",
+                         OUTPUT_FCT(IOModule::WriteFullBoxTruncationError),
+                         interval_full_box_truncation_error);
+        output.push_back(out);
+    }
+
+   // yt output
+    double interval_yt = -1;
+    pp.query("interval_yt", interval_yt);
+
+    if (interval_yt >= 0) {
+        OutputModule out(output_folder + "/yt",
+                         OUTPUT_FCT(IOModule::WriteYt),
+                         interval_yt);
+        output.push_back(out);
+    }
+
     // Projections.
     double interval_projections = -1;
     pp.query("interval_projections", interval_projections);
@@ -53,6 +102,18 @@ IOModule::IOModule(Sledgehamr* owner) {
         OutputModule out(output_folder + "/projections",
                          OUTPUT_FCT(IOModule::WriteProjections),
                          interval_projections);
+        output.push_back(out);
+    }
+
+     // Projections of truncation errors.
+    double interval_projections_truncation_error = -1;
+    pp.query("interval_projections_truncation_error",
+             interval_projections_truncation_error);
+
+    if (interval_projections_truncation_error >= 0) {
+        OutputModule out(output_folder + "/projections_truncation_error",
+                         OUTPUT_FCT(IOModule::WriteProjectionsTruncationError),
+                         interval_projections_truncation_error);
         output.push_back(out);
     }
 
@@ -250,8 +311,9 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
             int dim2 = h2-l2;
 
             // Copy data into flattened array for each scalar field.
-            long Len = dim1 * dim2;
-            float *output_arr = new float[Len]();
+            long len = dim1 * dim2;
+            // TODO Adjust output type.
+            float *output_arr = new float[len]();
             for (int f=0; f<sim->scalar_fields.size(); ++f) {
                 for (int i=l1; i<h1; ++i) {
                     for (int j=l2; j<h2; ++j) {
@@ -270,7 +332,7 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
                 std::string dset_name = sim->scalar_fields[f]->name
                             + "_" + ident
                             + "_" + std::to_string(le1.size());
-                WriteToHDF5(file_id, dset_name, output_arr, Len);
+                WriteToHDF5(file_id, dset_name, output_arr, len);
             }
 
             delete[] output_arr;
@@ -291,6 +353,95 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
         WriteToHDF5(file_id, "le2_"+ident, (int*)&(le2[0]), le2.size());
         WriteToHDF5(file_id, "he1_"+ident, (int*)&(he1[0]), he1.size());
         WriteToHDF5(file_id, "he2_"+ident, (int*)&(he2[0]), he2.size());
+    }
+}
+
+void IOModule::WriteCoarseBox(double time, std::string prefix) {
+    amrex::Print() << "Write coarse level box: " << prefix << std::endl;
+    const int lev = 0;
+
+    // Create folder and file.
+    std::string filename = prefix + "/"
+                    + std::to_string(amrex::ParallelDescriptor::MyProc())
+                    + ".hdf5";
+    hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                              H5P_DEFAULT);
+
+    // TODO: Allow for writing of truncation errors .
+    const LevelData* state = &sim->grid_new[lev];
+
+    // Write output to file.
+    WriteLevel(time, state, lev, file_id);
+
+    H5Fclose(file_id);
+}
+
+void IOModule::WriteLevel(double time, const LevelData* state, int lev,
+                                hid_t file_id) {
+    std::vector<int> lex, hex, ley, hey, lez, hez;
+
+    // Not performance critical. Do not use OpenMP because not thread-safe.
+    for (amrex::MFIter mfi(*state, false); mfi.isValid(); ++mfi){
+        const amrex::Box& bx = mfi.tilebox();
+        const auto& state_arr = state->array(mfi);
+
+        // Get box dimensions
+        int lx = bx.smallEnd(0);
+        int ly = bx.smallEnd(1);
+        int lz = bx.smallEnd(2);
+        int hx = bx.bigEnd(0)+1;
+        int hy = bx.bigEnd(1)+1;
+        int hz = bx.bigEnd(2)+1;
+        lex.push_back(lx);
+        ley.push_back(ly);
+        lez.push_back(lz);
+        hex.push_back(hx);
+        hey.push_back(hy);
+        hez.push_back(hz);
+
+        int dimx = (hx-lx) / coarse_box_downsample_factor;
+        int dimy = (hy-ly) / coarse_box_downsample_factor;
+        int dimz = (hz-lz) / coarse_box_downsample_factor;
+        double volfac = 1./std::pow(coarse_box_downsample_factor, 3);
+
+        // Copy data into flattened array for each scalar field.
+        long len = dimx * dimy * dimz;
+        // TODO Adjust output type.
+        float *output_arr = new float[len]();
+        for (int f=0; f<sim->scalar_fields.size(); ++f) {
+            for (int k=lz; k<hz; ++k) {
+                for (int j=ly; j<hy; ++j) {
+                    for (int i=lx; i<hx; ++i) {
+                        int ind = (i-lx)*dimy*dimz + (j-ly)*dimz + (k-lz);
+                        output_arr[ind] = state_arr(i,j,k,f) * volfac;
+                    }
+                }
+            }
+
+            std::string dset_name = sim->scalar_fields[f]->name
+                        + "_" + std::to_string(lex.size());
+            WriteToHDF5(file_id, dset_name, output_arr, len);
+        }
+
+        delete[] output_arr;
+    }
+
+    // Write header information for this slice.
+    double header_data[5] = {time,
+                (double)amrex::ParallelDescriptor::NProcs(),
+                (double)coarse_box_downsample_factor,
+                (double)sim->dimN[lev],
+                (double)lex.size()};
+    WriteToHDF5(file_id, "Header", header_data, 5);
+
+    // Write box dimensions so we can reassemble slice.
+    if (lex.size() > 0) {
+        WriteToHDF5(file_id, "lex", (int*)&(lex[0]), lex.size());
+        WriteToHDF5(file_id, "ley", (int*)&(ley[0]), ley.size());
+        WriteToHDF5(file_id, "lez", (int*)&(lez[0]), lez.size());
+        WriteToHDF5(file_id, "hex", (int*)&(hex[0]), hex.size());
+        WriteToHDF5(file_id, "hey", (int*)&(hey[0]), hey.size());
+        WriteToHDF5(file_id, "hez", (int*)&(hez[0]), hez.size());
     }
 }
 
