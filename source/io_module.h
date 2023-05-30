@@ -56,27 +56,47 @@ class IOModule {
      */
     void FillLevelFromFile_NoChunks(int lev);
 
-    /** @brief OUTPUT_FCT. Writes slices along all three directions and all
-     *         scalar fields.
+    /** @brief OUTPUT_FCT. Wrapper to write slices along all three directions
+     *         and all scalar fields.
      * @param   time   Current time.
      * @param   prefix Output path.
      */
     void WriteSlices(double time, std::string prefix);
 
+    /** @brief OUTPUT_FCT. Wrapper to write slices of truncation errors and
+     *         corresponding fields.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteSlicesTruncationError(double time, std::string prefix);
+
+    /** @brief Writes slices along all three directions and all scalar fields
+               with or without truncation errors.
+     * @param   time                    Current time.
+     * @param   prefix                  Output path.
+     * @param   with_truncation_errors  Whether truncation errors shall be
+     *                                  written.
+     */
+    void DoWriteSlices(double time, std::string prefix,
+                       bool with_truncation_errors);
+
     /** @brief Writes an individual slice along one direction to file for all
      *         scalar fields.
-     * @param   time    Current time.
-     * @param   state   Pointer to full grid from which the slice shall be
-     *                  taken.
-     * @param   file_id ID of HDF5 file.
-     * @param   ident   String identification for slice, e.g. 'x'.
-     * @param   d1      Axis along which the slice shall be taken.
-     * @param   d2      First orthogonal direction.
-     * @param   d3      Second. orthogonal direction.
+     * @param   time                    Current time.
+     * @param   state                   Pointer to full grid from which the
+     *                                  slice shall be taken.
+     * @param   file_id                 ID of HDF5 file.
+     * @param   ident                   Direction string, e.g. 'x'.
+     * @param   d1                      Axis along which the slice shall be
+     *                                  taken.
+     * @param   d2                      First orthogonal direction.
+     * @param   d3                      Second. orthogonal direction.
+     * @param   is_truncation_errors    Whether the data contains truncation
+     *                                  errors.
      */
     void WriteSingleSlice(double time, const LevelData* state, int lev,
                           hid_t file_id, std::string ident, int d1, int d2,
-                          int d3);
+                          int d3, bool is_truncation_errors);
 
     /** @brief OUTPUT_FCT. Writes the coarse level, possibly downsampled.
      * @param   time   Current time.

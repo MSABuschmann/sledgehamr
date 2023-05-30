@@ -48,7 +48,7 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_full_box);
         output.push_back(out);
     }
-/*
+
     // Slices of truncation errors.
     double interval_slices_truncation_error = -1;
     pp.query("interval_slices_truncation_error",
@@ -60,7 +60,7 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_slices_truncation_error);
         output.push_back(out);
     }
-
+/*
     // Full coarse box of truncation errors.
     double interval_coarse_box_truncation_error = -1;
     pp.query("interval_coarse_box_truncation_error",
@@ -261,6 +261,15 @@ void IOModule::FillLevelFromConst(int lev, const int comp, const double c) {
 }
 
 void IOModule::WriteSlices(double time, std::string prefix) {
+    DoWriteSlices(time, prefix, false);
+}
+
+void IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
+    DoWriteSlices(time, prefix, false);
+}
+
+void IOModule::DoWriteSlices(double time, std::string prefix,
+                             bool with_truncation_errors) {
     amrex::Print() << "Write slices: " << prefix << std::endl;
 
     for (int lev = 0; lev <= sim->finest_level; ++lev) {
@@ -274,13 +283,19 @@ void IOModule::WriteSlices(double time, std::string prefix) {
         hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
                                   H5P_DEFAULT);
 
-        // TODO: Allow for writing of truncation errors .
+        // Write field data.
         const LevelData* state = &sim->grid_new[lev];
+        WriteSingleSlice(time, state, lev, file_id, "x", 0, 1, 2, false);
+        WriteSingleSlice(time, state, lev, file_id, "y", 1, 0, 2, false);
+        WriteSingleSlice(time, state, lev, file_id, "z", 2, 0, 1, false);
 
-        // Write output to file.
-        WriteSingleSlice(time, state, lev, file_id, "x", 0, 1, 2);
-        WriteSingleSlice(time, state, lev, file_id, "y", 1, 0, 2);
-        WriteSingleSlice(time, state, lev, file_id, "z", 2, 0, 1);
+        if (with_truncation_errors) {
+            // Write truncation errors.
+            const LevelData* state = &sim->grid_old[lev];
+            WriteSingleSlice(time, state, lev, file_id, "te_x", 0, 1, 2, true);
+            WriteSingleSlice(time, state, lev, file_id, "te_y", 1, 0, 2, true);
+            WriteSingleSlice(time, state, lev, file_id, "te_z", 2, 0, 1, true);
+        }
 
         H5Fclose(file_id);
     }
@@ -288,8 +303,9 @@ void IOModule::WriteSlices(double time, std::string prefix) {
 
 void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
                                 hid_t file_id, std::string ident, int d1,
-                                int d2, int d3) {
+                                int d2, int d3, bool is_truncation_errors) {
     std::vector<int> le1, he1, le2, he2;
+    const int downsamp = is_truncation_errors ? 2 : 1;
 
     // Not performance critical. Do not use OpenMP because not thread-safe.
     for (amrex::MFIter mfi(*state, false); mfi.isValid(); ++mfi){
@@ -309,17 +325,20 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
             he1.push_back(h1);
             he2.push_back(h2);
 
-            int dim1 = h1-l1;
-            int dim2 = h2-l2;
+            int dim1 = (h1-l1)/downsamp;
+            int dim2 = (h2-l2)/downsamp;
 
             // Copy data into flattened array for each scalar field.
             long len = dim1 * dim2;
             // TODO Adjust output type.
             float *output_arr = new float[len]();
             for (int f=0; f<sim->scalar_fields.size(); ++f) {
-                for (int i=l1; i<h1; ++i) {
-                    for (int j=l2; j<h2; ++j) {
-                        int ind = (i-l1)*dim2 + (j-l2);
+                for (int j=l2; j<h2; ++j) {
+                    for (int i=l1; i<h1; ++i) {
+                        if (is_truncation_errors && (i%2 != 0 || j%2 != 0))
+                            continue;
+
+                        int ind = (i-l1)/downsamp*dim2 + (j-l2)/downsamp;
 
                         if (d1 == 0) {
                             output_arr[ind] = state_arr(0,i,j,f);
