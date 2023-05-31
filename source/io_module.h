@@ -7,6 +7,7 @@
 
 #include "sledgehamr.h"
 #include "output_module.h"
+#include "projection.h"
 
 namespace sledgehamr {
 
@@ -35,6 +36,8 @@ class IOModule {
      */
     void FillLevelFromConst(int lev, const int comp, const double c);
 
+    std::vector<Projection> projections;
+
   private:
     /** @brief Copies data from array into LevelData.
      * @param   lev Level to be filled with data.
@@ -56,27 +59,122 @@ class IOModule {
      */
     void FillLevelFromFile_NoChunks(int lev);
 
-    /** @brief OUTPUT_FCT. Writes slices along all three directions and all
-     *         scalar fields.
+    /** @brief OUTPUT_FCT. Wrapper to write slices along all three directions
+     *         and all scalar fields.
      * @param   time   Current time.
      * @param   prefix Output path.
      */
     void WriteSlices(double time, std::string prefix);
 
+    /** @brief OUTPUT_FCT. Wrapper to write slices of truncation errors and
+     *         corresponding fields.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteSlicesTruncationError(double time, std::string prefix);
+
+    /** @brief Writes slices along all three directions and all scalar fields
+               with or without truncation errors.
+     * @param   time                    Current time.
+     * @param   prefix                  Output path.
+     * @param   with_truncation_errors  Whether truncation errors shall be
+     *                                  written.
+     */
+    void DoWriteSlices(double time, std::string prefix,
+                       bool with_truncation_errors);
+
     /** @brief Writes an individual slice along one direction to file for all
      *         scalar fields.
-     * @param   time    Current time.
-     * @param   state   Pointer to full grid from which the slice shall be
-     *                  taken.
-     * @param   file_id ID of HDF5 file.
-     * @param   ident   String identification for slice, e.g. 'x'.
-     * @param   d1      Axis along which the slice shall be taken.
-     * @param   d2      First orthogonal direction.
-     * @param   d3      Second. orthogonal direction.
+     * @param   time                    Current time.
+     * @param   state                   Pointer to full grid from which the
+     *                                  slice shall be taken.
+     * @param   file_id                 ID of HDF5 file.
+     * @param   ident                   String identifier, e.g. 'x'.
+     * @param   d1                      Axis along which the slice shall be
+     *                                  taken.
+     * @param   d2                      First orthogonal direction.
+     * @param   d3                      Second. orthogonal direction.
+     * @param   is_truncation_errors    Whether the data contains truncation
+     *                                  errors.
      */
     void WriteSingleSlice(double time, const LevelData* state, int lev,
                           hid_t file_id, std::string ident, int d1, int d2,
-                          int d3);
+                          int d3, bool is_truncation_errors);
+
+    /** @brief OUTPUT_FCT. Wrapper to write the coarse level.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteCoarseBox(double time, std::string prefix);
+
+    /** @brief OUTPUT_FCT. Wrapper to write the coarse level with truncation
+     *         errors.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteCoarseBoxTruncationError(double time, std::string prefix);
+
+    /** @brief Writes the coarse level possibly with truncation errors.
+     * @param   time                    Current time.
+     * @param   prefix                  Output path.
+     * @param   downsample_factor       Downsampling factor.
+     * @param   with_truncation_errors  Whether truncation errors shall be
+     *                                  written.
+     */
+    void DoWriteCoarseBox(double time, std::string prefix,
+                          int downsample_factor, bool with_truncation_errors);
+
+    /** @brief Writes an entire level to file.
+     * @param   time                    Current time.
+     * @param   state                   Pointer to full grid from which the
+     *                                  slice shall be taken.
+     * @param   ident                   String identifier, e.g. "data" or "te".
+     * @param   file_id                 ID of HDF5 file.
+     * @param   downsample_factor       Downsample level by this factor.
+     * @param   is_truncation_errors    Whether the data contains truncation
+     *                                  errors.
+     */
+    void WriteLevel(double time, const LevelData* state, int lev,
+                    hid_t file_id, std::string ident, int downsample_factor,
+                    bool is_truncation_errors);
+
+    /** @brief OUTPUT_FCT. Wrapper to write all levels.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteFullBox(double time, std::string prefix);
+
+    /** @brief OUTPUT_FCT. Wrapper to write truncation errors on all levels.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteFullBoxTruncationError(double time, std::string prefix);
+
+    /** @brief Writes all levels possibly with truncation errors.
+     * @param   time                    Current time.
+     * @param   prefix                  Output path.
+     * @param   downsample_factor       Downsampling factor.
+     * @param   with_truncation_errors  Whether truncation errors shall be
+     *                                  written.
+     */
+    void DoWriteFullBox(double time, std::string prefix, int downsample_factor,
+                        bool with_truncation_errors);
+
+    /** @brief OUTPUT_FCT. Write projections.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteProjections(double time, std::string prefix);
+
+    /** @brief TODO
+     */
+    void MakeProjection(const int p, Projection& proj, hid_t file_id);
+
+    /** @brief TODO
+     */
+    void AddToProjection(const int i, const int j, const int k,
+                         double* projection, int* n_projection, const int ratio,
+                         const int dimN, const double val, const int mode);
 
     /** @brief Reads dataset from HDF5 file.
      * @param   filename    Name of HDF5 file.
@@ -99,6 +197,13 @@ class IOModule {
     template <typename T>
     void WriteToHDF5(hid_t file_id, std::string dset, T* data,
                      unsigned long long size);
+
+    /** Downsampling factors for coarse/full level output.
+     */
+    int coarse_box_downsample_factor = 1;
+    int coarse_box_truncation_error_downsample_factor = 1;
+    int full_box_downsample_factor = 1;
+    int full_box_truncation_error_downsample_factor = 1;
 
     /** @brief Pointer to owner on whose data this class operates.
      */

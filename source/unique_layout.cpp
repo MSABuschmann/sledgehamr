@@ -6,15 +6,15 @@ UniqueLayout::UniqueLayout(LocalRegrid* local_regrid, const int N)
     : Np(N), lr(local_regrid), mpi_n(amrex::ParallelDescriptor::NProcs()),
       mpi_mp(amrex::ParallelDescriptor::MyProc()) {
     p = new plane[Np];
-    uit Npn = mpi_n>Np ? 0 : Np/mpi_n;
+    uit Npn = mpi_n > Np ? 0 : Np/mpi_n;
 
     // Figure out who owns what.
     owner_of.resize(mpi_n);
-    for (uit op=0; op<mpi_n; ++op) {
+    for (uit op = 0; op < mpi_n; ++op) {
         if (Npn == 0 && op < Np) {
             owner_of[op].push_back(op);
         } else {
-            for (uit cp=0; cp<Npn; ++cp)
+            for (uit cp = 0; cp < Npn; ++cp)
                 owner_of[op].push_back(cp + Npn*op);
         }
     }
@@ -34,9 +34,9 @@ void UniqueLayout::Add(const uit i, const uit j, const uit k) const {
 
 void UniqueLayout::Merge(std::vector<std::unique_ptr<UniqueLayout> >& uls) {
     // Merge all planes. Inner loop parallelized to maintain thread-safety.
-    for (int l=1; l<uls.size(); ++l) {
+    for (int l = 1; l < uls.size(); ++l) {
 #pragma omp parallel for
-        for (uit cp=0; cp<Np; ++cp) {
+        for (uit cp = 0; cp < Np; ++cp) {
             MergePlane(cp, &(uls[l]->p[cp]));
         }
     }
@@ -44,7 +44,7 @@ void UniqueLayout::Merge(std::vector<std::unique_ptr<UniqueLayout> >& uls) {
 
 void UniqueLayout::Distribute() {
     // Send/receive relevant planes according to communication matrix.
-    for (int c=1; c<mpi_n; ++c) {
+    for (int c = 1; c < mpi_n; ++c) {
         int op = lr->comm_matrix[mpi_mp][c];
 
         if (op < mpi_mp) {
@@ -59,7 +59,7 @@ void UniqueLayout::Distribute() {
     }
 
     // Clean up.
-    for(uit cp=0;cp<Np;++cp){
+    for(uit cp = 0; cp < Np; ++cp){
         if( !Owns(cp) ){
             p[cp].clear();
         }
@@ -67,7 +67,7 @@ void UniqueLayout::Distribute() {
 }
 
 void UniqueLayout::Clear() {
-    for (uit cp=0; cp<Np; ++cp) {
+    for (uit cp = 0; cp < Np; ++cp) {
         p[cp].clear();
     }
 }
@@ -82,7 +82,7 @@ bool UniqueLayout::Contains(const uit i, const uit j, const uit k) const {
 int UniqueLayout::Size() {
     int size = 0;
 
-    for (uit cp=0; cp<Np_this; ++cp) {
+    for (uit cp = 0; cp < Np_this; ++cp) {
         int i = owner_of[mpi_mp][cp];
         for (const std::pair<const uit,row>& n : p[i]) {
             size += n.second.size();
@@ -161,7 +161,7 @@ void UniqueLayout::MergePlane(const uit cp, plane* pm) {
 }
 
 inline int UniqueLayout::Wrap(const int i) {
-    return i<0 ? i+mpi_n : i%mpi_n;
+    return i < 0 ? i+mpi_n : i%mpi_n;
 }
 
 bool UniqueLayout::Owns(const uit cp) {
@@ -170,7 +170,7 @@ bool UniqueLayout::Owns(const uit cp) {
 }
 
 void UniqueLayout::SendDistribution(const int op) {
-    for (uit cpo=0; cpo<owner_of[op].size(); ++cpo) {
+    for (uit cpo = 0; cpo < owner_of[op].size(); ++cpo) {
         uit cp = owner_of[op][cpo];
 
         // For each plane determine number of rows and their length.
@@ -207,7 +207,7 @@ void UniqueLayout::RecvDistribution(const int op) {
         // Unravel data according to metadata
         plane np;
         uit offset = 0;
-        for (int cr=0; cr<r.size(); ++cr) {
+        for (int cr = 0; cr < r.size(); ++cr) {
             std::set<uit> s{buf.begin() + offset,
                             buf.begin() + offset + length[cr]};
             np[r[cr]] = s;
@@ -247,7 +247,7 @@ inline std::vector<uit> UniqueLayout::RecvVector(const int op) {
 
 void UniqueLayout::IncorporatePlanes() {
 #pragma omp parallel for
-    for (uit cp=0; cp<Np_this; ++cp){
+    for (uit cp = 0; cp < Np_this; ++cp){
         MergePlane(owner_of[mpi_mp][cp], &(nps[cp]));
     }
 

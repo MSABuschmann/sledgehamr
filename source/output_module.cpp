@@ -13,7 +13,7 @@ OutputModule::OutputModule(std::string output_prefix, output_fct function,
 
 void OutputModule::Write(double time, bool force) {
     // Check if it is time to write output.
-    /* TODO: Allow for custom interval */
+    /* TODO: Allow for custom interval and triggers */
     if( time == last_written ) return;
     if( time - last_written < interval && (!force && forceable) ) return;
 
