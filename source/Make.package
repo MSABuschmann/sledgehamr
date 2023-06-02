@@ -24,6 +24,12 @@ CEXE_sources += output_module.cpp
 CEXE_headers += time_stepper.h
 CEXE_sources += time_stepper.cpp
 
+CEXE_headers += projection.h
+CEXE_sources += projection.cpp
+
+CEXE_headers += spectrum.h
+CEXE_sources += spectrum.cpp
+
 CEXE_headers += integrator.h
 CEXE_sources += integrator.cpp
 CEXE_headers += integrator_amrex.h
@@ -32,7 +38,6 @@ CEXE_headers += integrator_lsssprk3.h
 CEXE_sources += integrator_lsssprk3.cpp
 
 CEXE_headers += sledgehamr_utils.h
-CEXE_headers += projection.h
 CEXE_headers += level_data.h
 CEXE_headers += scalars.h
 CEXE_headers += projects.h

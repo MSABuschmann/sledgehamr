@@ -173,10 +173,9 @@ double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
 /** @brief TODO
  */
 AMREX_FORCE_INLINE
-double projection_prime_a2(amrex::Array4<amrex::Real const> const& state,
-                           const int i, const int j, const int k, const int lev,
-                           const double time, const double dt,
-                           const double dx) {
+double a_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
+                const int j, const int k, const int lev, const double time,
+                const double dt, const double dx) {
     double Psi1    = state(i, j, k, Scalar::Psi1);
     double Psi2    = state(i, j, k, Scalar::Psi2);
     double Pi1     = state(i, j, k, Scalar::Pi1);
@@ -187,10 +186,21 @@ double projection_prime_a2(amrex::Array4<amrex::Real const> const& state,
 }
 
 AMREX_FORCE_INLINE
-double projection_prime_r2(amrex::Array4<amrex::Real const> const& state,
-                           const int i, const int j, const int k, const int lev,
-                           const double time, const double dt,
-                           const double dx) {
+double a_prime2_screened(amrex::Array4<amrex::Real const> const& state,
+                         const int i, const int j, const int k, const int lev,
+                         const double time, const double dt, const double dx) {
+    double Psi1    = state(i, j, k, Scalar::Psi1);
+    double Psi2    = state(i, j, k, Scalar::Psi2);
+    double Pi1     = state(i, j, k, Scalar::Pi1);
+    double Pi2     = state(i, j, k, Scalar::Pi2);
+    double prime_a = (Psi1*Pi2 - Psi2*Pi1);
+    return prime_a*prime_a;
+}
+
+AMREX_FORCE_INLINE
+double r_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
+                const int j, const int k, const int lev, const double time,
+                const double dt, const double dx) {
     double Psi1    = state(i, j, k, Scalar::Psi1);
     double Psi2    = state(i, j, k, Scalar::Psi2);
     double Pi1     = state(i, j, k, Scalar::Pi1);

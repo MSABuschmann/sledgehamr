@@ -12,6 +12,8 @@
 #include "io_module.h"
 #include "scalars.h"
 #include "kernels.h"
+#include "projection.h"
+#include "spectrum.h"
 
 namespace sledgehamr {
 
@@ -20,6 +22,8 @@ class LocalRegrid;
 class TimeStepper;
 class Integrator;
 class IOModule;
+class Projection;
+class Spectrum;
 
 /** @brief Base class for all derived projects. Combines all the ingredients to
  *         make this code work.
@@ -31,6 +35,7 @@ class Sledgehamr : public amrex::AmrCore {
     friend class TimeStepper;
     friend class Integrator;
     friend class IOModule;
+    friend class Projection;
 
   public:
     /** @brief Creates instances of submodules and reads input parameters.

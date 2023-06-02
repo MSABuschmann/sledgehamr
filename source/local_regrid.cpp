@@ -1,4 +1,4 @@
-//#include "boost/multi_array.hpp"
+#include "boost/multi_array.hpp"
 
 #include "local_regrid.h"
 
@@ -321,7 +321,7 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
         const int zsb = zs + 2;
 
         int remaining = 0;
-/*
+
         boost::multi_array<bool, 3> border;
         border.resize(boost::extents[xsb][ysb][zsb]);
 
@@ -418,7 +418,6 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
                 }
             }
         }
-*/
     }
 
     // Combine box layouts.

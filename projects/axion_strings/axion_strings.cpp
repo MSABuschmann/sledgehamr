@@ -27,10 +27,13 @@ void axion_strings::PrintRefinementTimes() {
 }
 
 void axion_strings::SetProjections() {
-    sledgehamr::Projection proj1(projection_prime_a2, "prime_a2");
-    sledgehamr::Projection proj2(projection_prime_r2, "prime_r2");
+    sledgehamr::Projection proj1(a_prime2, "a_prime2");
+    sledgehamr::Projection proj2(r_prime2, "r_prime2");
     io_module->projections.push_back(proj1);
     io_module->projections.push_back(proj2);
+
+    sledgehamr::Spectrum spec1(a_prime2_screened, "a_prime2_screened");
+    io_module->spectra.push_back(spec1);
 }
 
 double axion_strings::StringWidth(const int lev, const double time) {

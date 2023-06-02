@@ -12,6 +12,8 @@
 namespace sledgehamr {
 
 class Sledgehamr;
+class Projection;
+class Spectrum;
 
 /** @brief Class that handles all I/O operations besides parsing the inputs
  *         file.
@@ -23,6 +25,28 @@ class IOModule {
     /** @brief Writes output if requested.
      */
     void Write(bool force=false);
+
+    /** @brief Reads dataset from HDF5 file.
+     * @param   filename    Name of HDF5 file.
+     * @param   dnames      Vector of datasets to be tried. First dataset to be
+     *                      found will be read.
+     * @param   data        Data pointer to be filled with data. Can be double,
+     *                      float or int. TODO: Add static_assert.
+     */
+    template <typename T>
+    static void ReadFromHDF5(std::string filename,
+                             std::vector<std::string> dnames, T* data);
+
+    /** @brief Write dataset to HDF5 file.
+     * @param   file_id ID of HDF5 file.
+     * @param   dset    Name of dataset.
+     * @param   data    Pointer to data. Can be double, float or int. TODO: Add
+     *                  static_assert
+     * @param   size    Size of data.
+     */
+    template <typename T>
+    static void WriteToHDF5(hid_t file_id, std::string dset, T* data,
+                     unsigned long long size);
 
     /** @brief Fills a given level with data from hdf5 file(s).
      * @param   lev Level to be filled with data.
@@ -36,7 +60,10 @@ class IOModule {
      */
     void FillLevelFromConst(int lev, const int comp, const double c);
 
+    /** @brief Vectors containing instructions for projections and spectra.
+     */
     std::vector<Projection> projections;
+    std::vector<Spectrum> spectra;
 
   private:
     /** @brief Copies data from array into LevelData.
@@ -166,37 +193,11 @@ class IOModule {
      */
     void WriteProjections(double time, std::string prefix);
 
-    /** @brief TODO
+    /** @brief OUTPUT_FCT. Write spectra.
+     * @param   time   Current time.
+     * @param   prefix Output path.
      */
-    void MakeProjection(const int p, Projection& proj, hid_t file_id);
-
-    /** @brief TODO
-     */
-    void AddToProjection(const int i, const int j, const int k,
-                         double* projection, int* n_projection, const int ratio,
-                         const int dimN, const double val, const int mode);
-
-    /** @brief Reads dataset from HDF5 file.
-     * @param   filename    Name of HDF5 file.
-     * @param   dnames      Vector of datasets to be tried. First dataset to be
-     *                      found will be read.
-     * @param   data        Data pointer to be filled with data. Can be double,
-     *                      float or int. TODO: Add static_assert.
-     */
-    template <typename T>
-    void ReadFromHDF5(std::string filename, std::vector<std::string> dnames,
-                      T* data);
-
-    /** @brief Write dataset to HDF5 file.
-     * @param   file_id ID of HDF5 file.
-     * @param   dset    Name of dataset.
-     * @param   data    Pointer to data. Can be double, float or int. TODO: Add
-     *                  static_assert
-     * @param   size    Size of data.
-     */
-    template <typename T>
-    void WriteToHDF5(hid_t file_id, std::string dset, T* data,
-                     unsigned long long size);
+    void WriteSpectra(double time, std::string prefix);
 
     /** Downsampling factors for coarse/full level output.
      */

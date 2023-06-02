@@ -126,7 +126,7 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_projections_truncation_error);
         output.push_back(out);
     }
-
+*/
     // Spectra.
     double interval_spectra = -1;
     pp.query("interval_spectra", interval_spectra);
@@ -137,7 +137,7 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_spectra);
         output.push_back(out);
     }
-
+/*
     // GW spectra.
     double interval_gw_spectra = -1;
     pp.query("interval_gw_spectra", interval_gw_spectra);
@@ -552,110 +552,36 @@ void IOModule::DoWriteFullBox(double time, std::string prefix,
 
 void IOModule::WriteProjections(double time, std::string prefix) {
     amrex::Print() << "Write projections: " << prefix << std::endl;
-   
-    hid_t file_id; 
+
+    hid_t file_id;
     if (amrex::ParallelDescriptor::IOProcessor()) {
         std::string filename = prefix + "/projections.hdf5";
         file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
                             H5P_DEFAULT);
     }
 
-    for (int p = 0; p < projections.size(); ++p) 
-        MakeProjection(p, projections[p], file_id); 
+    for (int p = 0; p < projections.size(); ++p)
+        projections[p].Compute(p, file_id, sim);
 
     if (amrex::ParallelDescriptor::IOProcessor())
         H5Fclose(file_id);
 }
 
-void IOModule::MakeProjection(const int p, Projection& proj, hid_t file_id) {
-    // Could be set to something lower to not include finer level.
-    int mlevel = sim->finest_level;
+void IOModule::WriteSpectra(double time, std::string prefix) {
+    amrex::Print() << "Compute spectra: " << prefix << std::endl;
 
-    const int dimN = sim->dimN[mlevel];
-    long long N = dimN*dimN;
-    double* d_projection = new double[N]();
-    int* n_projection = new int[N]();
-
-    for (int lev = 0; lev <= mlevel; ++lev) {
-        const int dimN_lev = sim->dimN[lev];
-        const int ratio = dimN / dimN_lev;
-        const double dx = sim->dx[lev];
-        const double dt = sim->dt[lev];
-        const double time = sim->grid_new[lev].t;
-
-        amrex::BoxArray ba;
-        if (lev != sim->finest_level)
-            ba = sim->grid_new[lev+1].boxArray();
-
-        // No OpenMP for thread-safety.
-        for (amrex::MFIter mfi(sim->grid_new[lev], false); mfi.isValid();
-             ++mfi) {
-            const amrex::Box& bx = mfi.tilebox();
-            const auto& state_fab = sim->grid_new[lev].array(mfi);
-
-            const amrex::Dim3 lo = amrex::lbound(bx);
-            const amrex::Dim3 hi = amrex::ubound(bx);
-
-            for (int k = lo.z; k <= hi.z; ++k) {
-                for (int j = lo.y; j <= hi.y; ++j) {
-                    for (int i = lo.x; i <= hi.x; ++i) {
-                        bool contd = false;
-
-                        // Only include if cell is not refined.
-                        if (lev == sim->finest_level ) {
-                            contd = true;
-                        } else {
-                            if (ba.contains(amrex::IntVect(i*2, j*2, k*2)))
-                                contd = true;
-                        }
-
-                        if (contd) {
-                            double val = proj.fct(state_fab, i, j, k, lev, time,
-                                               dt, dx);
-                            AddToProjection(i, j, k, d_projection, n_projection,
-                                            ratio, dimN, val, proj.mode);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    amrex::ParallelDescriptor::ReduceRealSum(d_projection, N,
-            amrex::ParallelDescriptor::IOProcessorNumber());
-    amrex::ParallelDescriptor::ReduceIntSum(n_projection, N,
-            amrex::ParallelDescriptor::IOProcessorNumber());
-
+    hid_t file_id;
     if (amrex::ParallelDescriptor::IOProcessor()) {
-        if (p == 0) {
-            const int nparams = 2;
-            hsize_t dims[1] = {nparams};
-            double header_data[nparams] = {sim->grid_new[0].t, (double)dimN};
-            WriteToHDF5(file_id, "Header", header_data, nparams);
-        }
-
-        WriteToHDF5(file_id, proj.ident + "_data", d_projection, N);
-        WriteToHDF5(file_id, proj.ident + "_n", n_projection, N);
+        std::string filename = prefix + "/spectra.hdf5";
+        file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                            H5P_DEFAULT);
     }
-}
 
-inline void IOModule::AddToProjection(const int i, const int j, const int k,
-        double* projection, int* n_projection, const int ratio, const int dimN,
-        const double val, const int mode) {
-    // TODO different axis.
-    int ii = i*ratio;
-    int jj = j*ratio;
-    for (int ia = 0; ia < ratio; ++ia) {
-        for (int ja = 0; ja < ratio; ++ja) {
-            long long ind = (ii + ia)*dimN + (jj+ja);
-            if (mode == 0) {
-                projection[ind] += ratio*val;
-            } else if (mode == 1) {
-                projection[ind] = std::max(projection[ind], val);
-            }
-            n_projection[ind] += 1;
-        }
-    }
+    for (int p = 0; p < spectra.size(); ++p)
+        spectra[p].Compute(p, file_id, sim);
+
+    if (amrex::ParallelDescriptor::IOProcessor())
+        H5Fclose(file_id);
 }
 
 }; // namespace sledgehamr
