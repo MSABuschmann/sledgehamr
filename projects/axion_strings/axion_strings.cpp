@@ -5,6 +5,7 @@ namespace axion_strings{
 void axion_strings::Init() {
     ParseVariables();
     PrintRefinementTimes();
+    SetProjections();
 }
 
 bool axion_strings::CreateLevelIf(const int lev, const double time) {
@@ -23,6 +24,13 @@ void axion_strings::PrintRefinementTimes() {
                        << ") will be introduced at eta = "
                        << RefinementTime(lev) << std::endl;
     }
+}
+
+void axion_strings::SetProjections() {
+    sledgehamr::Projection proj1(projection_prime_a2, "prime_a2");
+    sledgehamr::Projection proj2(projection_prime_r2, "prime_r2");
+    io_module->projections.push_back(proj1);
+    io_module->projections.push_back(proj2);
 }
 
 double axion_strings::StringWidth(const int lev, const double time) {
