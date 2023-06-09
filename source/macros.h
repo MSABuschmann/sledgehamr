@@ -35,6 +35,11 @@ namespace sledgehamr {
             BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NScalars \
     };
 
+#define GW_ENUM enum Gw { u_xx = Scalar::NScalars, u_yy, u_zz, u_xy, u_xz \
+                          u_yz, du_xx, du_yy, du_zz, du_xy, du_xz, du_yz, \
+                          NGwScalars \
+    };
+
 /* brief Default implementation for f(\tau) > \tau_{crit} criteria:
  *       f(\tau) = \tau. This template can be specialized for each scalar field
  *       component by the project.
@@ -70,11 +75,12 @@ namespace sledgehamr {
     BOOST_PP_SEQ_FOR_EACH(EXPAND_SCALARS, _, \
                           BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
     SCALAR_ENUM(Scalar, __VA_ARGS__) \
+    GW_ENUM \
     TRUNCATION_MODIFIER \
     TAG_CELL_FOR_REFINEMENT
 
 /** @brief Identifies cells that violate the truncation error threshold. To be
- *         run on CPU code.
+ *         run on CPU code. TODO : Allow for GWs.
  * @param   state       Current grid.
  * @param   te          Grid containing truncation errors.
  * @param   i           i-th cell index.
@@ -176,7 +182,7 @@ namespace sledgehamr {
         } \
     };
 
-/** @brief TODO
+/** @brief TODO Allow for GWs.
  */
 #define PRJ_FILL_ADD_RHS virtual void FillAddRhs(amrex::MultiFab& rhs_mf, \
                 const amrex::MultiFab& state_mf, const double time, \
