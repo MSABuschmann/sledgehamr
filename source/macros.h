@@ -35,7 +35,7 @@ namespace sledgehamr {
             BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NScalars \
     };
 
-#define GW_ENUM enum Gw { u_xx = Scalar::NScalars, u_yy, u_zz, u_xy, u_xz \
+#define GW_ENUM enum Gw { u_xx = Scalar::NScalars, u_yy, u_zz, u_xy, u_xz, \
                           u_yz, du_xx, du_yy, du_zz, du_xy, du_xz, du_yz, \
                           NGwScalars \
     };

@@ -35,6 +35,9 @@ Sledgehamr::~Sledgehamr() {
 }
 
 void Sledgehamr::InitSledgehamr() {
+    if (with_gravitiational_waves)
+        gravitational_waves = new GravitationalWaves(this);
+
     // Initialize here and not in the SledgeHAMR constructor such that it knows
     // about the number of scalar fields during construction. Necessary so it
     // can initialize boundary conditions.
@@ -260,6 +263,7 @@ void Sledgehamr::ParseInput() {
     pp_sim.get("t_end", t_end);
     pp_sim.get("L", L);
     pp_sim.get("cfl", cfl);
+    pp_sim.query("gravitational_waves", with_gravitational_waves);
 }
 
 void Sledgehamr::ParseInputScalars() {

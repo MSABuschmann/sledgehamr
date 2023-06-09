@@ -13,6 +13,7 @@
 #include "kernels.h"
 #include "projection.h"
 #include "spectrum.h"
+#include "gravitational_waves.h"
 
 namespace sledgehamr {
 
@@ -23,6 +24,7 @@ class Integrator;
 class IOModule;
 class Projection;
 class Spectrum;
+class GravitationalWaves;
 
 /** @brief Base class for all derived projects. Combines all the ingredients to
  *         make this code work.
@@ -36,6 +38,7 @@ class Sledgehamr : public amrex::AmrCore {
     friend class IOModule;
     friend class Projection;
     friend class Spectrum;
+    friend class GravitationalWaves;
 
   public:
     /** @brief Creates instances of submodules and reads input parameters.
@@ -208,6 +211,7 @@ class Sledgehamr : public amrex::AmrCore {
      */
     TimeStepper* time_stepper;
     IOModule* io_module;
+    GravitationalWaves gravitational_waves;
 
     /** @brief Holds the actual simulation data for all levels at two different
      *         states in time.
@@ -274,6 +278,8 @@ private:
     /* @brief Whether tagging should be performed on gpu if possible.
      */
     bool tagging_on_gpu = false;
+
+    bool with_gravitational_waves = false;
 };
 
 }; // namespace sledgehamr
