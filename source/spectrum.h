@@ -18,12 +18,16 @@ typedef std::function<double(amrex::Array4<amrex::Real const> const&, const int,
 class Spectrum {
   public:
     Spectrum(spectrum_fct function, std::string identification)
-        : fct{function}, ident{identification} {};
+        : fct{function}, ident{identification} { };
 
     void Compute(const int id, const hid_t file_id, Sledgehamr* sim);
 
     spectrum_fct fct;
     std::string ident = "None";
+
+  private:
+    void Readks(int dimN);
+    std::vector<int> ks;
 };
 
 }; // namespace sledgehamr

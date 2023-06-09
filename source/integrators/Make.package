@@ -1,0 +1,9 @@
+CEXE_headers += integrator.h
+CEXE_sources += integrator.cpp
+
+CEXE_headers += amrex_integrators.h
+CEXE_sources += amrex_integrators.cpp
+
+CEXE_headers += lsssprk3.h
+CEXE_sources += lsssprk3.cpp
+

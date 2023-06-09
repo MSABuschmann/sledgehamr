@@ -8,7 +8,6 @@
 #include "level_synchronizer.h"
 #include "local_regrid.h"
 #include "time_stepper.h"
-#include "integrator.h"
 #include "io_module.h"
 #include "scalars.h"
 #include "kernels.h"
@@ -36,6 +35,7 @@ class Sledgehamr : public amrex::AmrCore {
     friend class Integrator;
     friend class IOModule;
     friend class Projection;
+    friend class Spectrum;
 
   public:
     /** @brief Creates instances of submodules and reads input parameters.

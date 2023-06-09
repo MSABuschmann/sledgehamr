@@ -1,8 +1,6 @@
 #ifndef SLEDGEHAMR_MACROS_H_
 #define SLEDGEHAMR_MACROS_H_
 
-#include "integrator.h"
-
 namespace sledgehamr {
 
 // Force boost to define variadics.

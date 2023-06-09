@@ -1,7 +1,8 @@
 #include "time_stepper.h"
 #include "sledgehamr_utils.h"
-#include "integrator_amrex.h"
-#include "integrator_lsssprk3.h"
+
+#include "integrators/amrex_integrators.h"
+#include "integrators/lsssprk3.h"
 
 namespace sledgehamr {
 

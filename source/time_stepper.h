@@ -2,8 +2,8 @@
 #define SLEDGEHAMR_TIMESTEPPER_H_
 
 #include "sledgehamr.h"
-#include "integrator.h"
 #include "local_regrid.h"
+#include "integrators/integrator.h"
 
 namespace sledgehamr {
 

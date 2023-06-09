@@ -1,6 +1,6 @@
 #include <AMReX_TimeIntegrator.H>
 
-#include "integrator_amrex.h"
+#include "amrex_integrators.h"
 
 namespace sledgehamr {
 
