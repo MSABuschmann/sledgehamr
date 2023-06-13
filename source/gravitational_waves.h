@@ -12,6 +12,10 @@ class GravitationalWaves {
     void ComputeSpectrum(hid_t file_id);
 
   private:
+    double IndexToK(int a, int N);
+    double GetProjection(int i, int j, int abc[3], int N);
+    double GetLambda(int i, int j, int l, int m, int abc[3], int N);
+
     Sledgehamr* sim;
 };
 
