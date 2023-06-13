@@ -20,7 +20,117 @@ GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
 }
 
 void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
+    const int lev = 0;
+    int dimN = sim->dimN[lev];
 
+    const amrex::LevelData& ld = sim->grid_new[lev];
+    const amrex::BoxArray& ba = ld.boxArray();
+    const amrex::DistributionMapping& dm = ld.DistributionMap();
+
+    amrex::MultiFab du_real[6], du_imag[6];
+    const int mat[3][3] = {{0, 1, 2}, {1, 3, 4}, {2, 4, 5}};
+    const int comps[6] = {Gw::du_xx, Gw::du_xy, Gw::du_xz,
+                          Gw::du_yy, Ge::du_yz, Gw::du_zz};
+
+    for (int i = 0; i < 6; ++i) {
+        du_real[i].define(ba, dm, 1, 0);
+        du_imag[i].define(ba, dm, 1, 0);
+        Spectrum::Fft(ld, comps[i], du_real[i], du_imag[i], sim->geom[lev],
+                      false);
+    }
+
+    double dk = 2.*M_PI / sim->L;
+    double dimN6 = pow(dimN, 6);
+
+    std::vector<int>& ks = sim->spectrum_ks;
+    const int kmax = ks.size();
+    constexpr int NTHREADS = 16;
+    const unsigned long SpecLen = kmax*NTHREADS;
+    double* gw_spectrum = new double [SpecLen] ();
+
+    // Non-trivial load-balancing here. Not sure what wins.
+#pragma omp parallel num_threads(NTHREADS)
+    for (amrex::MFIter mfi(du_real[0], true); mfi.isValid(); ++mfi) {
+        const amrex::Box& bx = mfi.tilebox();
+        // Ugly work around since arrays of references are not allowed.
+        amrex::Array4<double> const& dr0 = du_real[0].array(mfi);
+        amrex::Array4<double> const& dr1 = du_real[1].array(mfi);
+        amrex::Array4<double> const& dr2 = du_real[2].array(mfi);
+        amrex::Array4<double> const& dr3 = du_real[3].array(mfi);
+        amrex::Array4<double> const& dr4 = du_real[4].array(mfi);
+        amrex::Array4<double> const& dr5 = du_real[5].array(mfi);
+        amrex::Array4<double> const& di0 = du_imag[0].array(mfi);
+        amrex::Array4<double> const& di1 = du_imag[1].array(mfi);
+        amrex::Array4<double> const& di2 = du_imag[2].array(mfi);
+        amrex::Array4<double> const& di3 = du_imag[3].array(mfi);
+        amrex::Array4<double> const& di4 = du_imag[4].array(mfi);
+        amrex::Array4<double> const& di5 = du_imag[5].array(mfi);
+        const amrex::Array4<double>* du_real_arr[6] = {&dr0, &dr1, &dr2,
+                                                       &dr3, &dr4, &dr5};
+        const amrex::Array4<double>* du_imag_arr[6] = {&di0, &di1, &di2,
+                                                       &di3, &di4, &di5};
+
+        const amrex::Dim3 lo = amrex::lbound(bx);
+        const amrex::Dim3 hi = amrex::ubound(bx);
+
+        for (int c = lo.z; c <= hi.z; ++c) {
+            for (int b = lo.y; b <= hi.y; ++b) {
+                AMREX_PRAGMA_SIMD
+                for (int a = lo.x; a <= hi.x; ++a) {
+                    int abc[3] = {a, b, c};
+                    double running_sum = 0;
+
+                    for(int i = 0; i < 3; ++i) {
+                        for(int j = 0; j < 3; ++j) {
+                            for(int l = 0; l < 3; ++l) {
+                                for(int m = 0; m < 3; ++m) {
+                                    running_sum +=
+                                        get_lambda(i, j, l, m, abc, dimN)
+                                        * ( (*du_real_arr)[mat[i][j]](a, b, c)
+                                          * (*du_real_arr)[mat[l][m]](a, b, c)
+                                          + (*du_imag_arr)[mat[i][j]](a ,b, c)
+                                          * (*du_imag_arr)[mat[l][m]](a, b, c));
+                                }
+                            }
+                        }
+                    }
+
+                    int li = a >= dimN/2 ? a-dimN : a;
+                    int lj = b >= dimN/2 ? b-dimN : b;
+                    int lk = c >= dimN/2 ? c-dimN : c;
+                    unsigned int sq= li*li + lj*lj + lk*lk;
+                    unsigned long index =
+                            std::lower_bound(ks.begin(), ks.end(), sq) -
+                            ks.begin() + omp_get_thread_num() * kmax;
+                    gw_spectrum[index] += running_sum;
+                }
+            }
+        }
+    }
+
+    for (int a = 1; a < NTHREADS; ++a) {
+        for (int c = 0; c < kmax; ++c) {
+            gw_spectrum[c] += gw_spectrum[a*kmax + c];
+        }
+    }
+
+    amrex::ParallelDescriptor::ReduceRealSum(spectrum, kmax,
+            amrex::ParallelDescriptor::IOProcessorNumber());
+
+#pragma omp parallel for
+    for (int c = 0; c < kmax; ++c) {
+        gw_spectrum[c] /= dimN6;
+    }
+
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        const int nparams = 3;
+        double header_data[nparams] = {ld.t, (double)dimN, (double)kmax};
+        IOModule::WriteToHDF5(file_id, "Header", header_data, nparams);
+        IOModule::WriteToHDF5(file_id, "k", &(ks[0]), kmax);
+        IOModule::WriteToHDF5(file_id, ident, gw_spectrum, kmax);
+    }
+
+    delete[] gw_spectrum;
 }
 
 inline double GravitationalWaves::IndexToK(int a, int N) {

@@ -6,7 +6,6 @@
 
 namespace sledgehamr {
 
-#define ALIGN 16
 void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     amrex::Print() << "Compute Spectrum: " << ident << std::endl;
 
