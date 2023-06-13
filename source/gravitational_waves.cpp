@@ -19,4 +19,8 @@ GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
     ScalarField du_yz("du_yz", sim->scalar_fields);
 }
 
+void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
+
+}
+
 }; // namespace sledgehamr

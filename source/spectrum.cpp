@@ -19,9 +19,6 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     const LevelData& state = sim->grid_new[lev];
     const amrex::BoxArray& ba = state.boxArray();
 
-    if (ks.size() == 0)
-        Readks(dimN);
-
     amrex::MultiFab field, field_fft;
     field.define(ba, sim->dmap[lev], 1, 0);
     field_fft.define(ba, sim->dmap[lev], 1, 0);
@@ -117,6 +114,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     double dk = 2.*M_PI / sim->L;
     double pre = fac*state.t/dk;
 
+    std::vector<int>& ks = sim->spectrum_ks;
     const int kmax = ks.size();
     constexpr int NTHREADS = 16;
     const unsigned long SpecLen = kmax*NTHREADS;
@@ -175,16 +173,5 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
 
     delete[] spectrum;
 }
-
-void Spectrum::Readks(int dimN) {
-    std::string filename = "spectra_ks.hdf5";
-    std::string sdimN = std::to_string(dimN);
-
-    std::vector<int> kmax(1);
-    IOModule::ReadFromHDF5(filename, {sdimN+"_kmax"}, &(kmax[0]));
-
-    ks.resize(kmax[0]);
-    IOModule::ReadFromHDF5(filename, {sdimN}, &(ks[0]));
-};
 
 }; // namespace sledgehamr

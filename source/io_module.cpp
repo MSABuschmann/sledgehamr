@@ -137,18 +137,18 @@ IOModule::IOModule(Sledgehamr* owner) {
                          interval_spectra);
         output.push_back(out);
     }
-/*
+
     // GW spectra.
     double interval_gw_spectra = -1;
     pp.query("interval_gw_spectra", interval_gw_spectra);
 
     if (interval_gw_spectra >= 0) {
         OutputModule out(output_folder + "/gw_spectra",
-                         OUTPUT_FCT(IOModule::WriteGwSpectra),
+                         OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum),
                          interval_gw_spectra);
         output.push_back(out);
     }
-
+/*
     // Checkpoint.
     double interval_checkpoints = -1;
     pp.query("interval_checkpoints", interval_checkpoints);
@@ -570,6 +570,8 @@ void IOModule::WriteProjections(double time, std::string prefix) {
 void IOModule::WriteSpectra(double time, std::string prefix) {
     amrex::Print() << "Compute spectra: " << prefix << std::endl;
 
+    sim->ReadSpectrumKs();
+
     hid_t file_id;
     if (amrex::ParallelDescriptor::IOProcessor()) {
         std::string filename = prefix + "/spectra.hdf5";
@@ -579,6 +581,25 @@ void IOModule::WriteSpectra(double time, std::string prefix) {
 
     for (int p = 0; p < spectra.size(); ++p)
         spectra[p].Compute(p, file_id, sim);
+
+    if (amrex::ParallelDescriptor::IOProcessor())
+        H5Fclose(file_id);
+}
+
+void IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
+    amrex::Print() << "Compute gravitational wave spectrum: " << prefix
+                   << std::endl;
+
+    sim->ReadSpectrumKs();
+
+    hid_t file_id;
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        std::string filename = prefix + "/spectra.hdf5";
+        file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                            H5P_DEFAULT);
+    }
+
+    sim->gravitational_waves->ComputeSpectrum(file_id);
 
     if (amrex::ParallelDescriptor::IOProcessor())
         H5Fclose(file_id);

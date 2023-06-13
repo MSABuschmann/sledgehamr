@@ -5,9 +5,11 @@
 
 namespace sledgehamr {
 
-class GravitationalWaves  {
+class GravitationalWaves {
   public:
     GravitationalWaves(Sledgehamr* owner);
+
+    void ComputeSpectrum(hid_t file_id);
 
   private:
     Sledgehamr* sim;

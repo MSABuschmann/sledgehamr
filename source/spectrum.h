@@ -24,10 +24,6 @@ class Spectrum {
 
     spectrum_fct fct;
     std::string ident = "None";
-
-  private:
-    void Readks(int dimN);
-    std::vector<int> ks;
 };
 
 }; // namespace sledgehamr

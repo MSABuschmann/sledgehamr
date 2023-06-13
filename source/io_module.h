@@ -199,6 +199,13 @@ class IOModule {
      */
     void WriteSpectra(double time, std::string prefix);
 
+    /** @brief OUTPUT_FCT. Write gravitational wave spectrum.
+     * @param   time   Current time.
+     * @param   prefix Output path.
+     */
+    void WriteGravitationalWaveSpectrum(double time, std::string prefix);
+
+
     /** Downsampling factors for coarse/full level output.
      */
     int coarse_box_downsample_factor = 1;

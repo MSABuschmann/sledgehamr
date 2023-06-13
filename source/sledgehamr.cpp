@@ -35,7 +35,7 @@ Sledgehamr::~Sledgehamr() {
 }
 
 void Sledgehamr::InitSledgehamr() {
-    if (with_gravitiational_waves)
+    if (with_gravitational_waves)
         gravitational_waves = new GravitationalWaves(this);
 
     // Initialize here and not in the SledgeHAMR constructor such that it knows
@@ -282,6 +282,21 @@ void Sledgehamr::ParseInputScalars() {
         if (te_crit[n] != DBL_MAX)
             shadow_hierarchy = true;
     }
+}
+
+void Sledgehamr::ReadSpectrumKs() {
+    if (!spectrum_ks.empty())
+        return;
+
+    // TODO Get proper file location.
+    std::string filename = "spectra_ks.hdf5";
+    std::string sdimN = std::to_string(dimN[0]);
+
+    std::vector<int> kmax(1);
+    IOModule::ReadFromHDF5(filename, {sdimN+"_kmax"}, &(kmax[0]));
+
+    spectrum_ks.resize(kmax[0]);
+    IOModule::ReadFromHDF5(filename, {sdimN}, &(spectrum_ks[0]));
 }
 
 }; // namespace sledgehamr

@@ -211,7 +211,7 @@ class Sledgehamr : public amrex::AmrCore {
      */
     TimeStepper* time_stepper;
     IOModule* io_module;
-    GravitationalWaves gravitational_waves;
+    GravitationalWaves* gravitational_waves;
 
     /** @brief Holds the actual simulation data for all levels at two different
      *         states in time.
@@ -256,6 +256,10 @@ class Sledgehamr : public amrex::AmrCore {
      */
     std::vector<double> te_crit;
 
+    /** @brief TODO
+     */
+    std::vector<int> spectrum_ks;
+
 private:
 
     /* @brief Do ErrorEst on either CPU or GPU.
@@ -274,6 +278,10 @@ private:
      *         instead.
      */
     void ParseInputScalars();
+
+    /** @brief TODO
+     */
+    void ReadSpectrumKs();
 
     /* @brief Whether tagging should be performed on gpu if possible.
      */
