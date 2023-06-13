@@ -22,6 +22,11 @@ class Spectrum {
 
     void Compute(const int id, const hid_t file_id, Sledgehamr* sim);
 
+    static void Fft(const amrex::MultiFab& field, const int comp,
+                    amrex::MultiFab& field_fft_real_or_abs,
+                    amrex::MultiFab& field_fft_imag,
+                    const amrex::Geometry& geom, bool abs);
+
     spectrum_fct fct;
     std::string ident = "None";
 };
