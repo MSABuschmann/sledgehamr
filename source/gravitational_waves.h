@@ -17,6 +17,13 @@ class GravitationalWaves {
     double GetLambda(int i, int j, int l, int m, int abc[3], int N);
 
     Sledgehamr* sim;
+
+    int idx_offset;
+
+    enum Gw { 
+        u_xx = 0, u_yy, u_zz, u_xy, u_xz, u_yz, du_xx, du_yy, du_zz, du_xy,
+        du_xz, du_yz, NGwScalars
+    };
 };
 
 }; // namespace sledgehamr
