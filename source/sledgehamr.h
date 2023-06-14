@@ -260,6 +260,8 @@ class Sledgehamr : public amrex::AmrCore {
      */
     std::vector<int> spectrum_ks;
 
+    bool with_gravitational_waves = false;
+
 private:
 
     /* @brief Do ErrorEst on either CPU or GPU.
@@ -286,8 +288,6 @@ private:
     /* @brief Whether tagging should be performed on gpu if possible.
      */
     bool tagging_on_gpu = false;
-
-    bool with_gravitational_waves = false;
 };
 
 }; // namespace sledgehamr

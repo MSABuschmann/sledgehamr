@@ -185,15 +185,25 @@ namespace sledgehamr {
             const amrex::Array4<double>& rhs_fab = rhs_mf.array(mfi); \
             const amrex::Array4<double const>& state_fab = \
                     state_mf.array(mfi); \
-            amrex::ParallelFor(bx, \
-            [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
-            { \
-                Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
-            }); \
+            if (with_gravitational_waves) { \
+                amrex::ParallelFor(bx, \
+                [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
+                { \
+                    Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                }); \
+            } else { \
+                amrex::ParallelFor(bx, \
+                [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
+                { \
+                    Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                    GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
+                                                lev, time, dt, dx); \
+                }); \
+            } \
         } \
     };
 
-/** @brief TODO Allow for GWs.
+/** @brief
  */
 #define PRJ_FILL_ADD_RHS virtual void FillAddRhs(amrex::MultiFab& rhs_mf, \
                 const amrex::MultiFab& state_mf, const double time, \
@@ -207,18 +217,35 @@ namespace sledgehamr {
             const amrex::Array4<double>& rhs_fab = rhs_mf.array(mfi); \
             const amrex::Array4<double const>& state_fab = \
                     state_mf.array(mfi); \
-            amrex::ParallelFor(bx, \
-            [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
-            { \
-                double tmp_rhs[Scalar::NScalars]; \
-                for (int n = 0; n < ncomp; ++n) { \
-                    tmp_rhs[n] = rhs_fab(i, j, k, n); \
-                } \
-                Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
-                for (int n = 0; n < ncomp; ++n) { \
-                    rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
-                } \
-            }); \
+            if (with_gravitational_waves) { \
+                amrex::ParallelFor(bx, \
+                [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
+                { \
+                    double tmp_rhs[Gw::NGwScalars]; \
+                    for (int n = 0; n < ncomp; ++n) { \
+                        tmp_rhs[n] = rhs_fab(i, j, k, n); \
+                    } \
+                    Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                    GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
+                                                lev, time, dt, dx); \
+                    for (int n = 0; n < ncomp; ++n) { \
+                        rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
+                    } \
+                }); \
+            } else { \
+                amrex::ParallelFor(bx, \
+                [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
+                { \
+                    double tmp_rhs[Scalar::NScalars]; \
+                    for (int n = 0; n < ncomp; ++n) { \
+                        tmp_rhs[n] = rhs_fab(i, j, k, n); \
+                    } \
+                    Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                    for (int n = 0; n < ncomp; ++n) { \
+                        rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
+                    } \
+                }); \
+            } \
         } \
     };
 

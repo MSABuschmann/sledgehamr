@@ -19,6 +19,7 @@ class GravitationalWaves {
     Sledgehamr* sim;
 
     int idx_offset;
+    static constexpr int NScalars = 12;
 
     enum Gw { 
         u_xx = 0, u_yy, u_zz, u_xy, u_xz, u_yz, du_xx, du_yy, du_zz, du_xy,
