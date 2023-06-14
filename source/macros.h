@@ -67,6 +67,16 @@ namespace sledgehamr {
         return false; \
     };
 
+/* brief TODO
+ */
+#define GRAVITATIONAL_WAVES_RHS template<bool> \
+    AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
+    void GravitationalWavesRhs(const amrex::Array4<double>& rhs, \
+         const amrex::Array4<const double>& state, \
+         const int i, const int j, const int k, const int lev, \
+         const double time, const double dt, const double dx) { \
+    };
+
 /** @brief Macro to add multiple scalar fields and default template functions to
  *         the project namespace.
  */
@@ -77,7 +87,8 @@ namespace sledgehamr {
     SCALAR_ENUM(Scalar, __VA_ARGS__) \
     GW_ENUM \
     TRUNCATION_MODIFIER \
-    TAG_CELL_FOR_REFINEMENT
+    TAG_CELL_FOR_REFINEMENT \
+    GRAVITATIONAL_WAVES_RHS
 
 /** @brief Identifies cells that violate the truncation error threshold. To be
  *         run on CPU code. TODO : Allow for GWs.
