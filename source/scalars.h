@@ -15,7 +15,8 @@ class ScalarField{
      * @param   str Name of scalar field.
      * @param   sfv Vector of scalar fields to which this field will be added.
      */
-    ScalarField(std::string str, std::vector<ScalarField*>& sfv)
+    ScalarField(std::string str, std::vector<ScalarField*>& sfv,
+                bool is_momentum)
         : name(str), id(sfv.size()) {
         sfv.push_back(this);
     };
@@ -34,6 +35,8 @@ class ScalarField{
     /** @brief Internal id. Corresponds to component in amrex::Multifab.
      */
     const int id;
+
+    bool is_conjugate_momentum;
 };
 
 }; // namespace sledgehamr

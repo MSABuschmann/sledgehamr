@@ -22,19 +22,36 @@ namespace sledgehamr {
  *         namespace.
  */
 #define ADD_SCALAR(field) \
-        static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
-        {#field, l_scalar_fields};
+    static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
+            {#field, l_scalar_fields, false}; \
+    namespace Scalar { \
+        constexpr int field = _Scalar::field; \
+    };
 
 #define EXPAND_SCALARS(r, data, field) ADD_SCALAR(field)
+
+#define ADD_MOMENTUM(field) \
+    static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
+            {#field, l_scalar_fields, true}; \
+    namespace Scalar { \
+        constexpr int field = _Momentum::field + _Scalar::NScalarFields; \
+    };
+
+#define EXPAND_MOMENTA(r, data, field) ADD_MOMENTUM(field)
 
 /** @brief Macros to create enum of fields for fast and convinient component
  *         access within the project namespace.
  */
 #define SCALAR_ENUM_VALUE(r, data, elem) elem,
 
-#define SCALAR_ENUM(name, ...) \
-    enum name { BOOST_PP_SEQ_FOR_EACH(SCALAR_ENUM_VALUE, _, \
-            BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NScalars \
+#define SCALAR_ENUM(...) \
+    enum _Scalar { BOOST_PP_SEQ_FOR_EACH(SCALAR_ENUM_VALUE, _, \
+            BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NScalarFields \
+    };
+
+#define MOMENTUM_ENUM(...) \
+    enum _Momentum { BOOST_PP_SEQ_FOR_EACH(SCALAR_ENUM_VALUE, _, \
+            BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NMomentumFields \
     };
 
 #define GW_ENUM enum Gw { u_xx = Scalar::NScalars, u_yy, u_zz, u_xy, u_xz, \
@@ -83,14 +100,24 @@ namespace sledgehamr {
  *         the project namespace.
  */
 #define ADD_SCALARS(...) \
+    SCALAR_ENUM(__VA_ARGS__) \
     static std::vector<sledgehamr::ScalarField*> l_scalar_fields; \
     BOOST_PP_SEQ_FOR_EACH(EXPAND_SCALARS, _, \
+                          BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__))
+
+#define ADD_CONJUGATE_MOMENTA(...) \
+    MOMENTUM_ENUM(__VA_ARGS__) \
+    BOOST_PP_SEQ_FOR_EACH(EXPAND_MOMENTA, _, \
                           BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
-    SCALAR_ENUM(Scalar, __VA_ARGS__) \
+    namespace Scalar { \
+        constexpr int NScalars = _Scalar::NScalarFields \
+                               + _Momentum::NMomentumFields; \
+    }; \
     GW_ENUM \
     TRUNCATION_MODIFIER \
     TAG_CELL_FOR_REFINEMENT \
     GRAVITATIONAL_WAVES_RHS
+
 
 /** @brief Identifies cells that violate the truncation error threshold. To be
  *         run on CPU code.

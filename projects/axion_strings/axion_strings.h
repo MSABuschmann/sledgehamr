@@ -6,7 +6,8 @@
 
 namespace axion_strings{
 
-ADD_SCALARS(Psi1, Psi2, Pi1, Pi2)
+ADD_SCALARS(Psi1, Psi2)
+ADD_CONJUGATE_MOMENTA(Pi1, Pi2)
 
 /** @brief Function that calculates the RHS of the EOM at a single cell.
  * @param   rhs     Container to be filled with RHS.
