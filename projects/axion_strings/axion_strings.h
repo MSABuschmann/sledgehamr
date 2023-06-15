@@ -246,8 +246,55 @@ double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
                           const int i, const int j, const int k, const int lev,
                           const double time, const double dt, const double dx,
                           const double truncation_error) {
-    return TruncationModifier<Scalar::Pi1>(state, i, j, k, lev, time, dt, dx,
-                                           truncation_error);
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_xx>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_yy>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_zz>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_xy>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_xz>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_yz>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
 }
 
 /** @brief TODO
