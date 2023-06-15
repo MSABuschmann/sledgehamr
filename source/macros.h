@@ -1,6 +1,8 @@
 #ifndef SLEDGEHAMR_MACROS_H_
 #define SLEDGEHAMR_MACROS_H_
 
+#include "kernels.h"
+
 namespace sledgehamr {
 
 // Force boost to define variadics.
@@ -180,6 +182,8 @@ namespace sledgehamr {
 #define PRJ_FILL_RHS virtual void FillRhs(amrex::MultiFab& rhs_mf, \
                 const amrex::MultiFab& state_mf, const double time, \
                 const int lev, const double dt, const double dx) override { \
+        double* l_dissipation_strength = dissipation_strength.data(); \
+        const int l_dissipation_order = dissipation_order; \
         DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
@@ -192,15 +196,55 @@ namespace sledgehamr {
                 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
                 { \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                    GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
+                                                lev, time, dt, dx); \
+                    switch (with_dissipation * dissipation_order) { \
+                        case 2: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Gw::NGwScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                        case 3: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Gw::NGwScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                    } \
                 }); \
             } else { \
                 amrex::ParallelFor(bx, \
                 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
                 { \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
-                    GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
-                                                lev, time, dt, dx); \
-                }); \
+                    switch (with_dissipation * dissipation_order) { \
+                        case 2: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Scalar::NScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                        case 3: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Scalar::NScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                    } \
+               }); \
             } \
         } \
     };
@@ -212,6 +256,8 @@ namespace sledgehamr {
                 const int lev, const double dt, const double dx, \
                 const double weight) override { \
         const int ncomp = rhs_mf.nComp(); \
+        double* l_dissipation_strength = dissipation_strength.data(); \
+        const int l_dissipation_order = dissipation_order; \
         DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
@@ -224,28 +270,72 @@ namespace sledgehamr {
                 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
                 { \
                     double tmp_rhs[Gw::NGwScalars]; \
-                    for (int n = 0; n < ncomp; ++n) { \
+                    sledgehamr::utils::constexpr_for<0, Gw::NGwScalars, 1> \
+                            ([&](auto n) { \
                         tmp_rhs[n] = rhs_fab(i, j, k, n); \
-                    } \
+                    }); \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
                     GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
                                                 lev, time, dt, dx); \
-                    for (int n = 0; n < ncomp; ++n) { \
-                        rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
+                    switch (with_dissipation * dissipation_order) { \
+                        case 2: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Gw::NGwScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                        case 3: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Gw::NGwScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
                     } \
+                    sledgehamr::utils::constexpr_for<0, Gw::NGwScalars, 1> \
+                            ([&](auto n) { \
+                        rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
+                    }); \
                 }); \
             } else { \
                 amrex::ParallelFor(bx, \
                 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
                 { \
                     double tmp_rhs[Scalar::NScalars]; \
-                    for (int n = 0; n < ncomp; ++n) { \
+                    sledgehamr::utils::constexpr_for<0, Scalar::NScalars, 1> \
+                            ([&](auto n) { \
                         tmp_rhs[n] = rhs_fab(i, j, k, n); \
-                    } \
+                    }); \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
-                    for (int n = 0; n < ncomp; ++n) { \
-                        rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
+                    switch (with_dissipation * dissipation_order) { \
+                        case 2: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Scalar::NScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                        case 3: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Scalar::NScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
                     } \
+                    sledgehamr::utils::constexpr_for<0, Scalar::NScalars, 1> \
+                            ([&](auto n) { \
+                        rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
+                    }); \
                 }); \
             } \
         } \
