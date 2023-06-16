@@ -1,2 +1,2 @@
-from pySledgeHAMR.Output import Output
-from pySledgeHAMR.AxionStrings import AxionStrings
+from pySledgehamr.Output import Output
+from pySledgehamr.AxionStrings import AxionStrings
