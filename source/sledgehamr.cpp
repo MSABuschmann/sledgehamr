@@ -267,20 +267,57 @@ void Sledgehamr::ParseInput() {
 }
 
 void Sledgehamr::ParseInputScalars() {
+    // Truncation error threshold.
     te_crit.resize( scalar_fields.size() );
     double te_crit_default = DBL_MAX;
 
-    amrex::ParmParse pp("amr");
-    pp.query("te_crit", te_crit_default);
+    amrex::ParmParse pp_amr("amr");
+    pp_amr.query("te_crit", te_crit_default);
 
     shadow_hierarchy = false;
     for (int n=0; n<scalar_fields.size(); ++n) {
         te_crit[n] = te_crit_default;
         std::string ident = "te_crit_" + scalar_fields[n]->name;
-        pp.query(ident.c_str(), te_crit[n]);
+        pp_amr.query(ident.c_str(), te_crit[n]);
 
         if (te_crit[n] != DBL_MAX)
             shadow_hierarchy = true;
+    }
+
+    // Dissipation order and strength.
+    dissipation_strength.resize( scalar_fields.size() );
+    double dissipation_default = 0;
+
+    amrex::ParmParse pp_sim("sim");
+    pp_sim.query("dissipation_strength", dissipation_default);
+    with_dissipation = false;
+    for (int n=0; n<scalar_fields.size(); ++n) {
+        dissipation_strength[n] = dissipation_default;
+        std::string ident = "dissipation_strength_" + scalar_fields[n]->name;
+        pp_sim.query(ident.c_str(), dissipation_strength[n]);
+
+        if (te_crit[n] >= 0)
+            with_dissipation = true;
+    }
+
+    if (with_dissipation) {
+        dissipation_order = nghost;
+        pp_sim.query("dissipation_order", dissipation_order);
+
+        if (dissipation_order < 2) {
+            amrex::Print() << "#WARNING: Dissipation order "
+                           << dissipation_order
+                           << " not supported! Dissipation disabled."
+                           << std::endl;
+        }
+
+        if (dissipation_order > 3) {
+            amrex::Print() << "#WARNING: Dissipation order "
+                           << dissipation_order
+                           << " not supported! Dissipation defaults to order=3."
+                           << std::endl;
+            dissipation_order = 3;
+        }
     }
 }
 

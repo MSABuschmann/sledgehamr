@@ -3,6 +3,7 @@
 
 #include <AMReX_AmrCore.H>
 
+#include "kernels.h"
 #include "macros.h"
 #include "level_data.h"
 #include "level_synchronizer.h"
@@ -10,7 +11,6 @@
 #include "time_stepper.h"
 #include "io_module.h"
 #include "scalars.h"
-#include "kernels.h"
 #include "projection.h"
 #include "spectrum.h"
 #include "gravitational_waves.h"
@@ -260,6 +260,12 @@ class Sledgehamr : public amrex::AmrCore {
      */
     std::vector<int> spectrum_ks;
 
+    bool with_gravitational_waves = false;
+
+    std::vector<double> dissipation_strength;
+    bool with_dissipation = false;
+    int dissipation_order = 0;
+
 private:
 
     /* @brief Do ErrorEst on either CPU or GPU.
@@ -286,8 +292,6 @@ private:
     /* @brief Whether tagging should be performed on gpu if possible.
      */
     bool tagging_on_gpu = false;
-
-    bool with_gravitational_waves = false;
 };
 
 }; // namespace sledgehamr

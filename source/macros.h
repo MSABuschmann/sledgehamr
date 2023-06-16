@@ -1,6 +1,8 @@
 #ifndef SLEDGEHAMR_MACROS_H_
 #define SLEDGEHAMR_MACROS_H_
 
+#include "kernels.h"
+
 namespace sledgehamr {
 
 // Force boost to define variadics.
@@ -20,19 +22,36 @@ namespace sledgehamr {
  *         namespace.
  */
 #define ADD_SCALAR(field) \
-        static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
-        {#field, l_scalar_fields};
+    static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
+            {#field, l_scalar_fields, false}; \
+    namespace Scalar { \
+        constexpr int field = _Scalar::field; \
+    };
 
 #define EXPAND_SCALARS(r, data, field) ADD_SCALAR(field)
+
+#define ADD_MOMENTUM(field) \
+    static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
+            {#field, l_scalar_fields, true}; \
+    namespace Scalar { \
+        constexpr int field = _Momentum::field + _Scalar::NScalarFields; \
+    };
+
+#define EXPAND_MOMENTA(r, data, field) ADD_MOMENTUM(field)
 
 /** @brief Macros to create enum of fields for fast and convinient component
  *         access within the project namespace.
  */
 #define SCALAR_ENUM_VALUE(r, data, elem) elem,
 
-#define SCALAR_ENUM(name, ...) \
-    enum name { BOOST_PP_SEQ_FOR_EACH(SCALAR_ENUM_VALUE, _, \
-            BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NScalars \
+#define SCALAR_ENUM(...) \
+    enum _Scalar { BOOST_PP_SEQ_FOR_EACH(SCALAR_ENUM_VALUE, _, \
+            BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NScalarFields \
+    };
+
+#define MOMENTUM_ENUM(...) \
+    enum _Momentum { BOOST_PP_SEQ_FOR_EACH(SCALAR_ENUM_VALUE, _, \
+            BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NMomentumFields \
     };
 
 #define GW_ENUM enum Gw { u_xx = Scalar::NScalars, u_yy, u_zz, u_xy, u_xz, \
@@ -67,20 +86,41 @@ namespace sledgehamr {
         return false; \
     };
 
+/* brief TODO
+ */
+#define GRAVITATIONAL_WAVES_RHS template<bool> \
+    AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
+    void GravitationalWavesRhs(const amrex::Array4<double>& rhs, \
+         const amrex::Array4<const double>& state, \
+         const int i, const int j, const int k, const int lev, \
+         const double time, const double dt, const double dx) { \
+    };
+
 /** @brief Macro to add multiple scalar fields and default template functions to
  *         the project namespace.
  */
 #define ADD_SCALARS(...) \
+    SCALAR_ENUM(__VA_ARGS__) \
     static std::vector<sledgehamr::ScalarField*> l_scalar_fields; \
     BOOST_PP_SEQ_FOR_EACH(EXPAND_SCALARS, _, \
+                          BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__))
+
+#define ADD_CONJUGATE_MOMENTA(...) \
+    MOMENTUM_ENUM(__VA_ARGS__) \
+    BOOST_PP_SEQ_FOR_EACH(EXPAND_MOMENTA, _, \
                           BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
-    SCALAR_ENUM(Scalar, __VA_ARGS__) \
+    namespace Scalar { \
+        constexpr int NScalars = _Scalar::NScalarFields \
+                               + _Momentum::NMomentumFields; \
+    }; \
     GW_ENUM \
     TRUNCATION_MODIFIER \
-    TAG_CELL_FOR_REFINEMENT
+    TAG_CELL_FOR_REFINEMENT \
+    GRAVITATIONAL_WAVES_RHS
+
 
 /** @brief Identifies cells that violate the truncation error threshold. To be
- *         run on CPU code. TODO : Allow for GWs.
+ *         run on CPU code.
  * @param   state       Current grid.
  * @param   te          Grid containing truncation errors.
  * @param   i           i-th cell index.
@@ -94,7 +134,8 @@ namespace sledgehamr {
  * @param   ntags_trunc Counts number of tags.
  * @return  If truncation error threshold has been exceeded.
  */
-#define TRUNCATION_ERROR_TAG_CPU AMREX_FORCE_INLINE \
+#define TRUNCATION_ERROR_TAG_CPU template<int NScalars> \
+    AMREX_FORCE_INLINE \
     bool TruncationErrorTagCpu(const amrex::Array4<const double>& state, \
                                const amrex::Array4<const double>& te, \
                                const int i, const int j, const int k, \
@@ -105,7 +146,7 @@ namespace sledgehamr {
         if (i%2 != 0 || j%2 != 0 || k%2 != 0) \
             return false; \
         bool res = false; \
-        sledgehamr::utils::constexpr_for<0, Scalar::NScalars, 1>([&](auto n) { \
+        sledgehamr::utils::constexpr_for<0, NScalars, 1>([&](auto n) { \
             double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, \
                                                dx, te(i,j,k,n)); \
             if (mte >= te_crit[n]) { \
@@ -118,7 +159,8 @@ namespace sledgehamr {
 
 /** @brief Same as TRUNCATION_ERROR_TAG_CPU but to be used for GPU code.
  */
-#define TRUNCATION_ERROR_TAG_GPU AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
+#define TRUNCATION_ERROR_TAG_GPU template<int NScalars> \
+    AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
     bool TruncationErrorTagGpu(const amrex::Array4<double const>& state, \
                                const amrex::Array4<double const>& te, \
                                const int i, const int j, const int k, \
@@ -128,7 +170,7 @@ namespace sledgehamr {
         if (i%2 != 0 || j%2 != 0 || k%2 != 0) \
             return false; \
         bool res = false; \
-        sledgehamr::utils::constexpr_for<0, Scalar::NScalars, 1>([&](auto n) { \
+        sledgehamr::utils::constexpr_for<0, NScalars, 1>([&](auto n) { \
             double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, \
                                                dx, te(i,j,k,n)); \
             if (mte >= te_crit[n]) { \
@@ -167,6 +209,8 @@ namespace sledgehamr {
 #define PRJ_FILL_RHS virtual void FillRhs(amrex::MultiFab& rhs_mf, \
                 const amrex::MultiFab& state_mf, const double time, \
                 const int lev, const double dt, const double dx) override { \
+        double* l_dissipation_strength = dissipation_strength.data(); \
+        const int l_dissipation_order = dissipation_order; \
         DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
@@ -174,21 +218,73 @@ namespace sledgehamr {
             const amrex::Array4<double>& rhs_fab = rhs_mf.array(mfi); \
             const amrex::Array4<double const>& state_fab = \
                     state_mf.array(mfi); \
-            amrex::ParallelFor(bx, \
-            [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
-            { \
-                Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
-            }); \
+            if (with_gravitational_waves) { \
+                amrex::ParallelFor(bx, \
+                [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
+                { \
+                    Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                    GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
+                                                lev, time, dt, dx); \
+                    switch (with_dissipation * dissipation_order) { \
+                        case 2: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Gw::NGwScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                        case 3: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Gw::NGwScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                    } \
+                }); \
+            } else { \
+                amrex::ParallelFor(bx, \
+                [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
+                { \
+                    Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                    switch (with_dissipation * dissipation_order) { \
+                        case 2: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Scalar::NScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                        case 3: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Scalar::NScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                    } \
+               }); \
+            } \
         } \
     };
 
-/** @brief TODO Allow for GWs.
+/** @brief
  */
 #define PRJ_FILL_ADD_RHS virtual void FillAddRhs(amrex::MultiFab& rhs_mf, \
                 const amrex::MultiFab& state_mf, const double time, \
                 const int lev, const double dt, const double dx, \
                 const double weight) override { \
         const int ncomp = rhs_mf.nComp(); \
+        double* l_dissipation_strength = dissipation_strength.data(); \
+        const int l_dissipation_order = dissipation_order; \
         DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
@@ -196,18 +292,79 @@ namespace sledgehamr {
             const amrex::Array4<double>& rhs_fab = rhs_mf.array(mfi); \
             const amrex::Array4<double const>& state_fab = \
                     state_mf.array(mfi); \
-            amrex::ParallelFor(bx, \
-            [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
-            { \
-                double tmp_rhs[Scalar::NScalars]; \
-                for (int n = 0; n < ncomp; ++n) { \
-                    tmp_rhs[n] = rhs_fab(i, j, k, n); \
-                } \
-                Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
-                for (int n = 0; n < ncomp; ++n) { \
-                    rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
-                } \
-            }); \
+            if (with_gravitational_waves) { \
+                amrex::ParallelFor(bx, \
+                [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
+                { \
+                    double tmp_rhs[Gw::NGwScalars]; \
+                    sledgehamr::utils::constexpr_for<0, Gw::NGwScalars, 1> \
+                            ([&](auto n) { \
+                        tmp_rhs[n] = rhs_fab(i, j, k, n); \
+                    }); \
+                    Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                    GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
+                                                lev, time, dt, dx); \
+                    switch (with_dissipation * dissipation_order) { \
+                        case 2: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Gw::NGwScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                        case 3: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Gw::NGwScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                    } \
+                    sledgehamr::utils::constexpr_for<0, Gw::NGwScalars, 1> \
+                            ([&](auto n) { \
+                        rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
+                    }); \
+                }); \
+            } else { \
+                amrex::ParallelFor(bx, \
+                [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
+                { \
+                    double tmp_rhs[Scalar::NScalars]; \
+                    sledgehamr::utils::constexpr_for<0, Scalar::NScalars, 1> \
+                            ([&](auto n) { \
+                        tmp_rhs[n] = rhs_fab(i, j, k, n); \
+                    }); \
+                    Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
+                    switch (with_dissipation * dissipation_order) { \
+                        case 2: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Scalar::NScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                        case 3: \
+                            sledgehamr::utils::constexpr_for \
+                                    <0, Scalar::NScalars, 1> ([&](auto n) { \
+                                rhs_fab(i,j,k,n) += \
+                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                                        state_fab, i, j, j, n, dx, \
+                                        l_dissipation_strength[n]); \
+                            }); \
+                            break; \
+                    } \
+                    sledgehamr::utils::constexpr_for<0, Scalar::NScalars, 1> \
+                            ([&](auto n) { \
+                        rhs_fab(i, j, k, n) += weight * tmp_rhs[n]; \
+                    }); \
+                }); \
+            } \
         } \
     };
 
@@ -221,32 +378,67 @@ namespace sledgehamr {
             int* ntags_trunc) override { \
         const amrex::Dim3 lo = amrex::lbound(tilebox); \
         const amrex::Dim3 hi = amrex::ubound(tilebox); \
-        for (int k = lo.z; k <= hi.z; ++k) { \
-            for (int j = lo.y; j <= hi.y; ++j) { \
-                AMREX_PRAGMA_SIMD \
-                for (int i = lo.x; i <= hi.x; ++i) { \
-                    tagarr(i,j,k) = amrex::TagBox::CLEAR; \
-                    bool res = false; \
-                    res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
-                                                     time, dt[lev], dx[lev]); \
-                    if( res ){ \
-                        tagarr(i,j,k) = amrex::TagBox::SET; \
-                        (*ntags_user)++; \
-                        (*ntags_total)++; \
+        if (with_gravitational_waves) { \
+            for (int k = lo.z; k <= hi.z; ++k) { \
+                for (int j = lo.y; j <= hi.y; ++j) { \
+                    AMREX_PRAGMA_SIMD \
+                    for (int i = lo.x; i <= hi.x; ++i) { \
+                        tagarr(i,j,k) = amrex::TagBox::CLEAR; \
+                        bool res = false; \
+                        res = TagCellForRefinement<true>( \
+                                state_fab, i, j, k, lev, time, dt[lev], \
+                                dx[lev]); \
+                        if( res ){ \
+                            tagarr(i,j,k) = amrex::TagBox::SET; \
+                            (*ntags_user)++; \
+                            (*ntags_total)++; \
+                        } \
+                        bool te_res = TruncationErrorTagCpu<Gw::NGwScalars>( \
+                                state_fab, state_fab_te, i, j, k, lev, time, \
+                                dt[lev], dx[lev], te_crit, ntags_trunc); \
+                        if (te_res) { \
+                            tagarr(i  ,j  ,k  ) = amrex::TagBox::SET; \
+                            tagarr(i+1,j  ,k  ) = amrex::TagBox::SET; \
+                            tagarr(i  ,j+1,k  ) = amrex::TagBox::SET; \
+                            tagarr(i  ,j  ,k+1) = amrex::TagBox::SET; \
+                            tagarr(i+1,j+1,k  ) = amrex::TagBox::SET; \
+                            tagarr(i  ,j+1,k+1) = amrex::TagBox::SET; \
+                            tagarr(i+1,j  ,k+1) = amrex::TagBox::SET; \
+                            tagarr(i+1,j+1,k+1) = amrex::TagBox::SET; \
+                            (*ntags_total) += 8 - (int)res; \
+                        } \
                     } \
-                    bool te_res = TruncationErrorTagCpu( \
-                            state_fab, state_fab_te, i, j, k, lev, time, \
-                            dt[lev], dx[lev], te_crit, ntags_trunc); \
-                    if (te_res) { \
-                        tagarr(i  ,j  ,k  ) = amrex::TagBox::SET; \
-                        tagarr(i+1,j  ,k  ) = amrex::TagBox::SET; \
-                        tagarr(i  ,j+1,k  ) = amrex::TagBox::SET; \
-                        tagarr(i  ,j  ,k+1) = amrex::TagBox::SET; \
-                        tagarr(i+1,j+1,k  ) = amrex::TagBox::SET; \
-                        tagarr(i  ,j+1,k+1) = amrex::TagBox::SET; \
-                        tagarr(i+1,j  ,k+1) = amrex::TagBox::SET; \
-                        tagarr(i+1,j+1,k+1) = amrex::TagBox::SET; \
-                        (*ntags_total) += 8 - (int)res; \
+                } \
+            } \
+        } else { \
+            for (int k = lo.z; k <= hi.z; ++k) { \
+                for (int j = lo.y; j <= hi.y; ++j) { \
+                    AMREX_PRAGMA_SIMD \
+                    for (int i = lo.x; i <= hi.x; ++i) { \
+                        tagarr(i,j,k) = amrex::TagBox::CLEAR; \
+                        bool res = false; \
+                        res = TagCellForRefinement<true>( \
+                                state_fab, i, j, k, lev, time, dt[lev], \
+                                dx[lev]); \
+                        if( res ){ \
+                            tagarr(i,j,k) = amrex::TagBox::SET; \
+                            (*ntags_user)++; \
+                            (*ntags_total)++; \
+                        } \
+                        bool te_res = TruncationErrorTagCpu<Scalar::NScalars>( \
+                                state_fab, state_fab_te, i, j, k, lev, time, \
+                                dt[lev], dx[lev], te_crit, ntags_trunc); \
+                        if (te_res) { \
+                            tagarr(i  ,j  ,k  ) = amrex::TagBox::SET; \
+                            tagarr(i+1,j  ,k  ) = amrex::TagBox::SET; \
+                            tagarr(i  ,j+1,k  ) = amrex::TagBox::SET; \
+                            tagarr(i  ,j  ,k+1) = amrex::TagBox::SET; \
+                            tagarr(i+1,j+1,k  ) = amrex::TagBox::SET; \
+                            tagarr(i  ,j+1,k+1) = amrex::TagBox::SET; \
+                            tagarr(i+1,j  ,k+1) = amrex::TagBox::SET; \
+                            tagarr(i+1,j+1,k+1) = amrex::TagBox::SET; \
+                            (*ntags_total) += 8 - (int)res; \
+                        } \
                     } \
                 } \
             } \
@@ -265,28 +457,53 @@ namespace sledgehamr {
         double l_dt = dt[lev]; \
         double l_dx = dx[lev]; \
         double* l_te_crit = l_te_crit_arr.data(); \
-        amrex::ParallelFor(tilebox, \
-        [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept { \
-            tagarr(i,j,k) = amrex::TagBox::CLEAR; \
-            bool res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
-                                                  time, l_dt, l_dx); \
-            if (res) { \
-                tagarr(i,j,k) = amrex::TagBox::SET; \
-            } \
-            bool te_res = TruncationErrorTagGpu( \
-                    state_fab, state_fab_te, i, j, k, lev, time, \
-                    l_dt, l_dx, l_te_crit); \
-            if (te_res) { \
-                tagarr(i  ,j  ,k  ) = amrex::TagBox::SET; \
-                tagarr(i+1,j  ,k  ) = amrex::TagBox::SET; \
-                tagarr(i  ,j+1,k  ) = amrex::TagBox::SET; \
-                tagarr(i  ,j  ,k+1) = amrex::TagBox::SET; \
-                tagarr(i+1,j+1,k  ) = amrex::TagBox::SET; \
-                tagarr(i  ,j+1,k+1) = amrex::TagBox::SET; \
-                tagarr(i+1,j  ,k+1) = amrex::TagBox::SET; \
-                tagarr(i+1,j+1,k+1) = amrex::TagBox::SET; \
-            } \
-        }); \
+        if (with_gravitational_waves) { \
+            amrex::ParallelFor(tilebox, \
+            [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept { \
+                tagarr(i,j,k) = amrex::TagBox::CLEAR; \
+                bool res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
+                                                      time, l_dt, l_dx); \
+                if (res) { \
+                    tagarr(i,j,k) = amrex::TagBox::SET; \
+                } \
+                bool te_res = TruncationErrorTagGpu<Gw::NGwScalars>( \
+                        state_fab, state_fab_te, i, j, k, lev, time, l_dt, \
+                        l_dx, l_te_crit); \
+                if (te_res) { \
+                    tagarr(i  ,j  ,k  ) = amrex::TagBox::SET; \
+                    tagarr(i+1,j  ,k  ) = amrex::TagBox::SET; \
+                    tagarr(i  ,j+1,k  ) = amrex::TagBox::SET; \
+                    tagarr(i  ,j  ,k+1) = amrex::TagBox::SET; \
+                    tagarr(i+1,j+1,k  ) = amrex::TagBox::SET; \
+                    tagarr(i  ,j+1,k+1) = amrex::TagBox::SET; \
+                    tagarr(i+1,j  ,k+1) = amrex::TagBox::SET; \
+                    tagarr(i+1,j+1,k+1) = amrex::TagBox::SET; \
+                } \
+            }); \
+        } else { \
+            amrex::ParallelFor(tilebox, \
+            [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept { \
+                tagarr(i,j,k) = amrex::TagBox::CLEAR; \
+                bool res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
+                                                      time, l_dt, l_dx); \
+                if (res) { \
+                    tagarr(i,j,k) = amrex::TagBox::SET; \
+                } \
+                bool te_res = TruncationErrorTagGpu<Scalar::NScalars>( \
+                        state_fab, state_fab_te, i, j, k, lev, time, l_dt, \
+                        l_dx, l_te_crit); \
+                if (te_res) { \
+                    tagarr(i  ,j  ,k  ) = amrex::TagBox::SET; \
+                    tagarr(i+1,j  ,k  ) = amrex::TagBox::SET; \
+                    tagarr(i  ,j+1,k  ) = amrex::TagBox::SET; \
+                    tagarr(i  ,j  ,k+1) = amrex::TagBox::SET; \
+                    tagarr(i+1,j+1,k  ) = amrex::TagBox::SET; \
+                    tagarr(i  ,j+1,k+1) = amrex::TagBox::SET; \
+                    tagarr(i+1,j  ,k+1) = amrex::TagBox::SET; \
+                    tagarr(i+1,j+1,k+1) = amrex::TagBox::SET; \
+                } \
+            }); \
+        } \
     };
 
 /** @brief Overrides function in project class.

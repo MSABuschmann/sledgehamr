@@ -48,37 +48,93 @@ static double DurationSeconds(sctp start) {
  * @param   dx2         Squared grid spacing.
  */
 template<int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double Laplacian(amrex::Array4<amrex::Real const> const& state_fab, const int i,
+double Laplacian(amrex::Array4<amrex::Real const> const& state, const int i,
                  const int j, const int k, const int c, const double dx2);
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double Laplacian<0>(amrex::Array4<amrex::Real const> const& state_fab,
-                    const int i, const int j, const int k, const int c,
-                    const double dx2) {
+double Laplacian<0>(amrex::Array4<amrex::Real const> const& state, const int i,
+                    const int j, const int k, const int c, const double dx2) {
     return 0;
 };
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double Laplacian<1>(amrex::Array4<amrex::Real const> const& state_fab,
-                    const int i, const int j, const int k, const int c,
-                    const double dx2) {
-    return (state_fab(i + 1, j, k, c) + state_fab(i - 1, j, k, c) +
-            state_fab(i, j + 1, k, c) + state_fab(i, j - 1, k, c) +
-            state_fab(i, j, k + 1, c) + state_fab(i, j, k - 1, c) -
-            6.*state_fab(i,j,k,c)) / dx2;
+double Laplacian<1>(amrex::Array4<amrex::Real const> const& state, const int i,
+                    const int j, const int k, const int c, const double dx2) {
+    return (state(i+1,j,  k,  c) + state(i-1,j,  k,  c)
+          + state(i,  j+1,k,  c) + state(i,  j-1,k,  c)
+          + state(i,  j,  k+1,c) + state(i,  j,  k-1,c)
+          - 6.*state(i,j,k,c)) / dx2;
 };
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double Laplacian<2>(amrex::Array4<amrex::Real const> const& state_fab,
-                    const int i, const int j, const int k, const int c,
-                    const double dx2) {
-    return ( - (state_fab(i + 2, j, k, c) + state_fab(i - 2, j, k, c) +
-                state_fab(i, j + 2, k, c) + state_fab(i, j - 2, k, c) +
-                state_fab(i, j, k + 2, c) + state_fab(i, j, k - 2, c) )
-         + 16.*(state_fab(i + 1, j, k, c) + state_fab(i - 1, j, k, c) +
-                state_fab(i, j + 1, k, c) + state_fab(i, j - 1, k, c) +
-                state_fab(i, j, k + 1, c) + state_fab(i, j, k - 1, c) )
-         - 90.* state_fab(i,j,k,c) ) / (12.*dx2);
+double Laplacian<2>(amrex::Array4<amrex::Real const> const& state, const int i,
+                    const int j, const int k, const int c, const double dx2) {
+    return ( - (state(i+2,j,  k,  c) + state(i-2,j,  k,  c) +
+                state(i,  j+2,k,  c) + state(i,  j-2,k,  c) +
+                state(i,  j,  k+2,c) + state(i,  j,  k-2,c) )
+         + 16.*(state(i+1,j,  k,  c) + state(i-1,j,  k,  c) +
+                state(i,  j+1,k,  c) + state(i,  j-1,k,  c) +
+                state(i,  j,  k+1,c) + state(i,  j,  k-1,c) )
+         - 90.* state(i,  j,  k,  c) ) / (12.*dx2);
+};
+
+/** @brief TODO
+ */
+template<int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double Gradient(amrex::Array4<amrex::Real const> const& state, const int i,
+                const int j, const int k, const int c, const double dx,
+                const char axis);
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double Gradient<0>(amrex::Array4<amrex::Real const> const& state, const int i,
+                   const int j, const int k, const int c, const double dx,
+                   const char axis) {
+    return 0;
+};
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double Gradient<1>(amrex::Array4<amrex::Real const> const& state, const int i,
+                   const int j, const int k, const int c, const double dx,
+                   const char axis) {
+    double result = 0;
+
+    switch (axis) {
+        case 'x': 
+            result = (state(i+1,j,  k,  c) - state(i-1,j,  k,  c)) / (2.*dx);
+            break;
+        case 'y': 
+            result = (state(i,  j+1,k,  c) - state(i,  j-1,k,  c)) / (2.*dx);
+            break;
+        case 'z': 
+            result = (state(i,  j,  k+1,c) - state(i,  j,  k-1,c)) / (2.*dx);
+            break;
+    }
+
+    return result;
+};
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double Gradient<2>(amrex::Array4<amrex::Real const> const& state, const int i,
+                   const int j, const int k, const int c, const double dx,
+                   const char axis) {
+    double result = 0;
+
+    switch (axis) {
+        case 'x': 
+            result = (-state(i+2,j,  k,  c) + 8.*state(i+1,j,  k,  c) 
+                      +state(i-2,j,  k,  c) - 8.*state(i-1,j,  k,  c))/(12.*dx);
+            break;
+        case 'y': 
+            result = (-state(i,  j+2,k,  c) + 8.*state(i,  j+1,k,  c) 
+                      +state(i,  j-2,k,  c) - 8.*state(i,  j-1,k,  c))/(12.*dx);
+            break;
+        case 'z': 
+            result = (-state(i,  j,  k+2,c) + 8.*state(i,  j,  k+1,c) 
+                      +state(i,  j,  k-2,c) - 8.*state(i,  j,  k-1,c))/(12.*dx);
+            break;
+    }
+
+    return result;
 };
 
 /** @brief Returns string of ordinal number suffix for small positive numbers.

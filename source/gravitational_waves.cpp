@@ -4,39 +4,40 @@ namespace sledgehamr {
 
 GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
     sim = owner;
+    idx_offset = sim->scalar_fields.size();
 
-    ScalarField u_xx("u_xx", sim->scalar_fields);
-    ScalarField u_yy("u_yy", sim->scalar_fields);
-    ScalarField u_zz("u_zz", sim->scalar_fields);
-    ScalarField u_xy("u_xy", sim->scalar_fields);
-    ScalarField u_xz("u_xz", sim->scalar_fields);
-    ScalarField u_yz("u_yz", sim->scalar_fields);
-    ScalarField du_xx("du_xx", sim->scalar_fields);
-    ScalarField du_yy("du_yy", sim->scalar_fields);
-    ScalarField du_zz("du_zz", sim->scalar_fields);
-    ScalarField du_xy("du_xy", sim->scalar_fields);
-    ScalarField du_xz("du_xz", sim->scalar_fields);
-    ScalarField du_yz("du_yz", sim->scalar_fields);
+    ScalarField u_xx("u_xx", sim->scalar_fields, false);
+    ScalarField u_yy("u_yy", sim->scalar_fields, false);
+    ScalarField u_zz("u_zz", sim->scalar_fields, false);
+    ScalarField u_xy("u_xy", sim->scalar_fields, false);
+    ScalarField u_xz("u_xz", sim->scalar_fields, false);
+    ScalarField u_yz("u_yz", sim->scalar_fields, false);
+    ScalarField du_xx("du_xx", sim->scalar_fields, true);
+    ScalarField du_yy("du_yy", sim->scalar_fields, true);
+    ScalarField du_zz("du_zz", sim->scalar_fields, true);
+    ScalarField du_xy("du_xy", sim->scalar_fields, true);
+    ScalarField du_xz("du_xz", sim->scalar_fields, true);
+    ScalarField du_yz("du_yz", sim->scalar_fields, true);
 }
 
 void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
     const int lev = 0;
     int dimN = sim->dimN[lev];
 
-    const amrex::LevelData& ld = sim->grid_new[lev];
+    const LevelData& ld = sim->grid_new[lev];
     const amrex::BoxArray& ba = ld.boxArray();
     const amrex::DistributionMapping& dm = ld.DistributionMap();
 
     amrex::MultiFab du_real[6], du_imag[6];
     const int mat[3][3] = {{0, 1, 2}, {1, 3, 4}, {2, 4, 5}};
     const int comps[6] = {Gw::du_xx, Gw::du_xy, Gw::du_xz,
-                          Gw::du_yy, Ge::du_yz, Gw::du_zz};
+                          Gw::du_yy, Gw::du_yz, Gw::du_zz};
 
     for (int i = 0; i < 6; ++i) {
         du_real[i].define(ba, dm, 1, 0);
         du_imag[i].define(ba, dm, 1, 0);
-        Spectrum::Fft(ld, comps[i], du_real[i], du_imag[i], sim->geom[lev],
-                      false);
+        Spectrum::Fft(ld, comps[i] + idx_offset, du_real[i], du_imag[i],
+                      sim->geom[lev], false);
     }
 
     double dk = 2.*M_PI / sim->L;
@@ -85,7 +86,7 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
                             for(int l = 0; l < 3; ++l) {
                                 for(int m = 0; m < 3; ++m) {
                                     running_sum +=
-                                        get_lambda(i, j, l, m, abc, dimN)
+                                        GetLambda(i, j, l, m, abc, dimN)
                                         * ( (*du_real_arr)[mat[i][j]](a, b, c)
                                           * (*du_real_arr)[mat[l][m]](a, b, c)
                                           + (*du_imag_arr)[mat[i][j]](a ,b, c)
@@ -114,7 +115,7 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
         }
     }
 
-    amrex::ParallelDescriptor::ReduceRealSum(spectrum, kmax,
+    amrex::ParallelDescriptor::ReduceRealSum(gw_spectrum, kmax,
             amrex::ParallelDescriptor::IOProcessorNumber());
 
 #pragma omp parallel for
@@ -127,7 +128,7 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
         double header_data[nparams] = {ld.t, (double)dimN, (double)kmax};
         IOModule::WriteToHDF5(file_id, "Header", header_data, nparams);
         IOModule::WriteToHDF5(file_id, "k", &(ks[0]), kmax);
-        IOModule::WriteToHDF5(file_id, ident, gw_spectrum, kmax);
+        IOModule::WriteToHDF5(file_id, "Spectrum", gw_spectrum, kmax);
     }
 
     delete[] gw_spectrum;

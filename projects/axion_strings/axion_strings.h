@@ -6,7 +6,8 @@
 
 namespace axion_strings{
 
-ADD_SCALARS(Psi1, Psi2, Pi1, Pi2)
+ADD_SCALARS(Psi1, Psi2)
+ADD_CONJUGATE_MOMENTA(Pi1, Pi2)
 
 /** @brief Function that calculates the RHS of the EOM at a single cell.
  * @param   rhs     Container to be filled with RHS.
@@ -35,9 +36,9 @@ void Rhs(const amrex::Array4<double>& rhs,
     // Compute Laplacians.
     double dx2 = dx * dx;
     constexpr int order = 1;
-    double LaplacianPsi1 = sledgehamr::utils::Laplacian<order>(
+    double laplacian_Psi1 = sledgehamr::utils::Laplacian<order>(
             state, i, j, k, Scalar::Psi1, dx2);
-    double LaplacianPsi2 = sledgehamr::utils::Laplacian<order>(
+    double laplacian_Psi2 = sledgehamr::utils::Laplacian<order>(
             state, i, j, k, Scalar::Psi2, dx2);
 
     // Compute EOM.
@@ -45,10 +46,90 @@ void Rhs(const amrex::Array4<double>& rhs,
 
     rhs(i, j, k, Scalar::Psi1) =  Pi1;
     rhs(i, j, k, Scalar::Psi2) =  Pi2;
-    rhs(i, j, k, Scalar::Pi1)  = -Pi1*2./eta + LaplacianPsi1 - Psi1*cross_term;
-    rhs(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + LaplacianPsi2 - Psi2*cross_term;
+    rhs(i, j, k, Scalar::Pi1)  = -Pi1*2./eta + laplacian_Psi1 - Psi1*cross_term;
+    rhs(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + laplacian_Psi2 - Psi2*cross_term;
 }
 
+template<> AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+void GravitationalWavesRhs<true>(const amrex::Array4<double>& rhs,
+         const amrex::Array4<const double>& state,
+         const int i, const int j, const int k, const int lev,
+         const double time, const double dt, const double dx) {
+    // Fetch field values.
+    double u_xx = state(i, j, k, Gw::u_xx);
+    double u_yy = state(i, j, k, Gw::u_yy);
+    double u_zz = state(i, j, k, Gw::u_zz);
+    double u_xy = state(i, j, k, Gw::u_xy);
+    double u_xz = state(i, j, k, Gw::u_xz);
+    double u_yz = state(i, j, k, Gw::u_yz);
+    double du_xx = state(i, j, k, Gw::du_xx);
+    double du_yy = state(i, j, k, Gw::du_yy);
+    double du_zz = state(i, j, k, Gw::du_zz);
+    double du_xy = state(i, j, k, Gw::du_xy);
+    double du_xz = state(i, j, k, Gw::du_xz);
+    double du_yz = state(i, j, k, Gw::du_yz);
+
+    double eta = time;
+
+    // Compute Laplacians.
+    double dx2 = dx * dx;
+    constexpr int order = 1;
+    double laplacian_u_xx = sledgehamr::utils::Laplacian<order>(
+            state, i, j, k, Gw::u_xx, dx2);
+    double laplacian_u_yy = sledgehamr::utils::Laplacian<order>(
+            state, i, j, k, Gw::u_yy, dx2);
+    double laplacian_u_zz = sledgehamr::utils::Laplacian<order>(
+            state, i, j, k, Gw::u_zz, dx2);
+    double laplacian_u_xy = sledgehamr::utils::Laplacian<order>(
+            state, i, j, k, Gw::u_xy, dx2);
+    double laplacian_u_xz = sledgehamr::utils::Laplacian<order>(
+            state, i, j, k, Gw::u_xz, dx2);
+    double laplacian_u_yz = sledgehamr::utils::Laplacian<order>(
+            state, i, j, k, Gw::u_yz, dx2);
+
+    // Compute gradients.
+    double grad_x_Psi1 = sledgehamr::utils::Gradient<order>(
+            state, i, j, k, Scalar::Psi1, dx, 'x');
+    double grad_y_Psi1 = sledgehamr::utils::Gradient<order>(
+            state, i, j, k, Scalar::Psi1, dx, 'y');
+    double grad_z_Psi1 = sledgehamr::utils::Gradient<order>(
+            state, i, j, k, Scalar::Psi1, dx, 'z');
+
+    double grad_x_Psi2 = sledgehamr::utils::Gradient<order>(
+            state, i, j, k, Scalar::Psi2, dx, 'x');
+    double grad_y_Psi2 = sledgehamr::utils::Gradient<order>(
+            state, i, j, k, Scalar::Psi2, dx, 'y');
+    double grad_z_Psi2 = sledgehamr::utils::Gradient<order>(
+            state, i, j, k, Scalar::Psi2, dx, 'z');
+
+    // Compute EOM.
+    rhs(i, j, k, Gw::u_xx) = du_xx;
+    rhs(i, j, k, Gw::u_yy) = du_yy;
+    rhs(i, j, k, Gw::u_zz) = du_zz;
+    rhs(i, j, k, Gw::u_xy) = du_xy;
+    rhs(i, j, k, Gw::u_xz) = du_xz;
+    rhs(i, j, k, Gw::u_yz) = du_yz;
+
+    rhs(i, j, k, Gw::u_xx)  = - du_xx*2./eta + laplacian_u_xx 
+                              + grad_x_Psi1*grad_x_Psi1 
+                              + grad_x_Psi2*grad_x_Psi2;
+    rhs(i, j, k, Gw::u_yy)  = - du_yy*2./eta + laplacian_u_yy 
+                              + grad_y_Psi1*grad_y_Psi1 
+                              + grad_y_Psi2*grad_y_Psi2;
+    rhs(i, j, k, Gw::u_zz)  = - du_zz*2./eta + laplacian_u_zz 
+                              + grad_z_Psi1*grad_z_Psi1 
+                              + grad_z_Psi2*grad_z_Psi2;
+    rhs(i, j, k, Gw::u_xy)  = - du_xy*2./eta + laplacian_u_xy 
+                              + grad_x_Psi1*grad_y_Psi1 
+                              + grad_x_Psi2*grad_y_Psi2;
+    rhs(i, j, k, Gw::u_xz)  = - du_xz*2./eta + laplacian_u_xz 
+                              + grad_x_Psi1*grad_z_Psi1 
+                              + grad_x_Psi2*grad_z_Psi2;
+    rhs(i, j, k, Gw::u_yz)  = - du_yz*2./eta + laplacian_u_yz 
+                              + grad_y_Psi1*grad_z_Psi1 
+                              + grad_y_Psi2*grad_z_Psi2;
+}
+ 
 /** @brief Checks for zero-crossings between two points in the complex scalar
  *         field.
  * @param   Psi1_1  \Psi_1 of first point.
@@ -166,8 +247,55 @@ double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
                           const int i, const int j, const int k, const int lev,
                           const double time, const double dt, const double dx,
                           const double truncation_error) {
-    return TruncationModifier<Scalar::Pi1>(state, i, j, k, lev, time, dt, dx,
-                                           truncation_error);
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_xx>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_yy>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_zz>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_xy>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_xz>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
+}
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double TruncationModifier<Gw::du_yz>(const amrex::Array4<const double>& state,
+                          const int i, const int j, const int k, const int lev,
+                          const double time, const double dt, const double dx,
+                          const double truncation_error) {
+    return truncation_error * dt;
 }
 
 /** @brief TODO
