@@ -1,48 +1,40 @@
 # -------------------------------------------------- Select project
 project.name = axion_strings
+project.string_width_threshold = 8
 
 # -------------------------------------------------- Simulation parameters
 sim.t_start = 0.1
-sim.t_end = 1.5
-sim.L = 23
+sim.t_end = 2.5
+sim.L = 15
 sim.cfl = 0.3
 
 # -------------------------------------------------- AMR parameters
-amr.shadow_hierarchy = 1
 amr.max_refinement_levels = 2
 amr.nghost = 1
 amr.coarse_level_grid_size = 128
 
 amr.max_grid_size = 1024
-amr.blocking_factor = 4
+amr.blocking_factor = 8
 
-amr.n_error_buf = 4
+amr.tagging_on_gpu = 0
+amr.n_error_buf = 5
 amr.regrid_dt = 0.3
+amr.max_local_regrids = 8
 
 amr.te_crit = 1e-3
 
 # -------------------------------------------------- Input parameters
-input.initial_state = initial_state.hdf5
+input.initial_state = initial_state_small.hdf5
 
 # -------------------------------------------------- Output settings
 output.output_folder = output
 output.interval_slices = 0.5
 
 # -------------------------------------------------- Integrator
-### 0 = User-specified Butcher Tableau
-### 1 = Forward Euler
-### 2 = Trapezoid Method
-### 3 = SSPRK3 Method
-### 4 = RK4 Method
-### 5 = Low-Storage SSPRK3 Method
-integration.type = 3
-
-## If using a user-specified Butcher Tableau, then
-## set nodes, weights, and table entries here:
-#
-## The Butcher Tableau is read as a flattened,
-## lower triangular matrix (but including the diagonal)
-## in row major format.
-integration.rk.weights = 1
-integration.rk.nodes = 0
-integration.rk.tableau = 0.0
+### 0 = AMReX - User-specified Butcher Tableau
+### 1 = AMReX - Forward Euler
+### 2 = AMReX - Trapezoid Method
+### 3 = AMReX - SSPRK3 Method
+### 4 = AMReX - RK4 Method
+### 10 = Low-storage SSPRK3 Method
+integrator.type = 3
