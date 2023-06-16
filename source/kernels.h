@@ -42,13 +42,13 @@ void AverageDownWithTruncationError(int i, int j, int k, const int ncomp,
 }
 
 template<int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double KreisOligerDissipation(const amrex::Array4<double const>& state,
+double KreissOligerDissipation(const amrex::Array4<double const>& state,
                               const int i, const int j, const int k,
                               const int c, const double dx,
                               const double dissipation_strength);
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double KreisOligerDissipation<2>(const amrex::Array4<double const>& state,
+double KreissOligerDissipation<2>(const amrex::Array4<double const>& state,
                                  const int i, const int j, const int k,
                                  const int c, const double dx,
                                  const double dissipation_strength) {
@@ -68,7 +68,7 @@ double KreisOligerDissipation<2>(const amrex::Array4<double const>& state,
 }
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double KreisOligerDissipation<3>(const amrex::Array4<double const>& state,
+double KreissOligerDissipation<3>(const amrex::Array4<double const>& state,
                                  const int i, const int j, const int k,
                                  const int c, const double dx,
                                  const double dissipation_strength) {

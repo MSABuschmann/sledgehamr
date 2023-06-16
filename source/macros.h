@@ -3,6 +3,11 @@
 
 #include "kernels.h"
 
+/** Yes, I know this file is disgusting. This is what we get for not 
+ *  wanting everyone to write a bunch of complicated boilerplate every single
+ *  time but also want to avoid all this function overhead for performance ...
+ */
+
 namespace sledgehamr {
 
 // Force boost to define variadics.
@@ -91,9 +96,9 @@ namespace sledgehamr {
 #define GRAVITATIONAL_WAVES_RHS template<bool> \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
     void GravitationalWavesRhs(const amrex::Array4<double>& rhs, \
-         const amrex::Array4<const double>& state, \
-         const int i, const int j, const int k, const int lev, \
-         const double time, const double dt, const double dx) { \
+            const amrex::Array4<const double>& state, \
+            const int i, const int j, const int k, const int lev, \
+            const double time, const double dt, const double dx) { \
     };
 
 /** @brief Macro to add multiple scalar fields and default template functions to
@@ -230,7 +235,7 @@ namespace sledgehamr {
                             sledgehamr::utils::constexpr_for \
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
-                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                            sledgehamr::kernels::KreissOligerDissipation<2>( \
                                         state_fab, i, j, j, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
@@ -239,7 +244,7 @@ namespace sledgehamr {
                             sledgehamr::utils::constexpr_for \
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
-                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                            sledgehamr::kernels::KreissOligerDissipation<3>( \
                                         state_fab, i, j, j, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
@@ -256,7 +261,7 @@ namespace sledgehamr {
                             sledgehamr::utils::constexpr_for \
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
-                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                            sledgehamr::kernels::KreissOligerDissipation<2>( \
                                         state_fab, i, j, j, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
@@ -265,7 +270,7 @@ namespace sledgehamr {
                             sledgehamr::utils::constexpr_for \
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
-                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                            sledgehamr::kernels::KreissOligerDissipation<3>( \
                                         state_fab, i, j, j, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
@@ -309,7 +314,7 @@ namespace sledgehamr {
                             sledgehamr::utils::constexpr_for \
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
-                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                            sledgehamr::kernels::KreissOligerDissipation<2>( \
                                         state_fab, i, j, j, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
@@ -318,7 +323,7 @@ namespace sledgehamr {
                             sledgehamr::utils::constexpr_for \
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
-                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                            sledgehamr::kernels::KreissOligerDissipation<3>( \
                                         state_fab, i, j, j, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
@@ -344,7 +349,7 @@ namespace sledgehamr {
                             sledgehamr::utils::constexpr_for \
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
-                            sledgehamr::kernels::KreisOligerDissipation<2>( \
+                            sledgehamr::kernels::KreissOligerDissipation<2>( \
                                         state_fab, i, j, j, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
@@ -353,7 +358,7 @@ namespace sledgehamr {
                             sledgehamr::utils::constexpr_for \
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
-                            sledgehamr::kernels::KreisOligerDissipation<3>( \
+                            sledgehamr::kernels::KreissOligerDissipation<3>( \
                                         state_fab, i, j, j, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
