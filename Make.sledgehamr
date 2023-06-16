@@ -1,9 +1,14 @@
 # sledgeHAMR
 SLEDGEHAMR_HOME_ABS = $(realpath $(SLEDGEHAMR_HOME))
 SRC = $(SLEDGEHAMR_HOME_ABS)/source
+
 VPATH_LOCATIONS   += $(SRC)
 INCLUDE_LOCATIONS += $(SRC)
 include $(SRC)/Make.package
+
+VPATH_LOCATIONS   += $(SRC)/integrators
+INCLUDE_LOCATIONS += $(SRC)/integrators
+include $(SRC)/integrators/Make.package
 
 # Projects
 pdir = $(SLEDGEHAMR_HOME_ABS)/projects
@@ -16,10 +21,10 @@ CEXE_headers += $(shell ls $(pdir)/*/*.h | xargs -n 1 basename)
 include $(SLEDGEHAMR_HOME_ABS)/Make.projects
 
 # SWFFT
-#include $(AMREX_HOME)/Src/Extern/SWFFT/Make.package
-#INCLUDE_LOCATIONS += $(AMREX_HOME)/Src/Extern/SWFFT
-#VPATH_LOCATIONS   += $(AMREX_HOME)/Src/Extern/SWFFT
-#LIBRARIES += -L$(FFTW_DIR) -lfftw3_mpi -lfftw3_omp -lfftw3
+include $(AMREX_HOME)/Src/Extern/SWFFT/Make.package
+INCLUDE_LOCATIONS += $(AMREX_HOME)/Src/Extern/SWFFT
+VPATH_LOCATIONS   += $(AMREX_HOME)/Src/Extern/SWFFT
+LIBRARIES += -L$(FFTW_DIR) -lfftw3_mpi -lfftw3_omp -lfftw3
 
 # Boost
 LIBRARIES += -lboost_system -lboost_filesystem
