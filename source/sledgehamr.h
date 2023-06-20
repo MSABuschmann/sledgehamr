@@ -95,6 +95,8 @@ class Sledgehamr : public amrex::AmrCore {
      */
     int nghost = 0;
 
+    bool with_gravitational_waves = false;
+
   protected:
     /** @brief Make a new level from scratch using provided BoxArray and
      *         DistributionMapping. Only used during initialization. Overrides
@@ -259,8 +261,6 @@ class Sledgehamr : public amrex::AmrCore {
     /** @brief TODO
      */
     std::vector<int> spectrum_ks;
-
-    bool with_gravitational_waves = false;
 
     std::vector<double> dissipation_strength;
     bool with_dissipation = false;
