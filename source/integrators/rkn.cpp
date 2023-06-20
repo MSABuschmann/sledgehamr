@@ -33,7 +33,7 @@ void IntegratorRkn::Integrate(LevelData& mf_old, LevelData& mf_new,
         std::vector<std::unique_ptr<amrex::MultiFab> > F_nodes;
         for (int i = 0; i < number_nodes; ++i) {
             F_nodes.emplace_back( std::make_unique<amrex::MultiFab>(
-                    mf_old.boxArray(), mf.DistributionMap(), N, nghost) );
+                    mf_old.boxArray(), mf_old.DistributionMap(), N, nghost) );
         }
 
         for (int i = 0; i < number_nodes; ++i) {
@@ -142,17 +142,18 @@ void IntegratorRkn::ReadUserDefinedButcherTableau() {
     amrex::Vector<amrex::Real> btable; // flattened into row major format
     pp.getarr("tableau", btable);
 
-    if (weights_bar_b.size() != nodes.size() || 
+    if (weights_bar_b.size() != nodes.size() ||
         weights_b.size() != nodes.size()) {
-        amrex::Error("integrator.weights should be the same length as " +
-                     "integrator.nodes");
+        std::string msg = "integrator.weights should be the same length as ";
+        msg += "integrator.nodes";
+        amrex::Error(msg);
     } else {
         number_nodes = weights_b.size();
         const int nTableau = (number_nodes * (number_nodes + 1)) / 2;
-        if (btable.size() != nTableau)
-        {
-            amrex::Error("integrator.tableau incorrect length - " + 
-                         "should include the Butcher Tableau diagonal.");
+        if (btable.size() != nTableau) {
+            std::string msg = "integrator.tableau incorrect length - ";
+            msg += "should include the Butcher Tableau diagonal.";
+            amrex::Error(msg);
         }
     }
 
@@ -160,8 +161,7 @@ void IntegratorRkn::ReadUserDefinedButcherTableau() {
     int k = 0;
     for (int i = 0; i < number_nodes; ++i) {
         std::vector<double> stage_row;
-        for (int j = 0; j <= i; ++j)
-        {
+        for (int j = 0; j <= i; ++j) {
             stage_row.push_back(btable[k]);
             ++k;
         }
@@ -172,8 +172,9 @@ void IntegratorRkn::ReadUserDefinedButcherTableau() {
     // Check that this is an explicit method.
     for (const auto& astage : tableau) {
         if (astage.back() != 0.0) {
-            amrex::Error("RKN integrator currently only supports explicit " + 
-                         "Butcher tableaus.");
+            std::string msg = "RKN integrator currently only supports ";
+            msg += "explicit Butcher tableaus.";
+            amrex::Error(msg);
         }
     }
 }

@@ -3,6 +3,7 @@
 
 #include "integrators/amrex_integrators.h"
 #include "integrators/lsssprk3.h"
+#include "integrators/rkn.h"
 
 namespace sledgehamr {
 
@@ -14,9 +15,10 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
     amrex::ParmParse pp_inte("integrator");
     int inte_type;
     pp_inte.get("type", inte_type);
+    IntegratorType integrator_type = static_cast<IntegratorType>(inte_type);
 
     amrex::Print() << "Integrator type: "
-                   << Integrator::Name(static_cast<IntegratorType>(inte_type))
+                   << Integrator::Name(integrator_type)
                    << std::endl;
 
     switch (inte_type) {
@@ -32,14 +34,14 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
             integrator = new IntegratorAMReX(sim);
             break;
         case Lsssprk3:
-            integrator = new IntegratorLssprk3(sim);
+            integrator = new IntegratorLsssprk3(sim);
             break;
         case RknButcherTableau:
             //[[fallthrough]]; 
         case Rkn4:
             //[[fallthrough]];
         case Rkn5:
-            integrator = new IntegratorRkn(sim, inte_type);
+            integrator = new IntegratorRkn(sim, integrator_type);
             break;
         default:
             amrex::Abort("#error: Unknown integration type: "

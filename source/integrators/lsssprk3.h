@@ -5,7 +5,7 @@
 
 namespace sledgehamr {
 
-class IntegratorLssprk3 : public Integrator {
+class IntegratorLsssprk3 : public Integrator {
     using Integrator::Integrator;
 
   protected:
