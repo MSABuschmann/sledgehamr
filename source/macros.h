@@ -216,6 +216,7 @@ namespace sledgehamr {
                 const int lev, const double dt, const double dx) override { \
         double* l_dissipation_strength = dissipation_strength.data(); \
         const int l_dissipation_order = dissipation_order; \
+        const bool l_with_dissipation = with_dissipation; \
         DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
@@ -230,7 +231,7 @@ namespace sledgehamr {
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
                     GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
                                                 lev, time, dt, dx); \
-                    switch (with_dissipation * dissipation_order) { \
+                    switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
@@ -256,7 +257,7 @@ namespace sledgehamr {
                 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
                 { \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
-                    switch (with_dissipation * dissipation_order) { \
+                    switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
@@ -290,6 +291,7 @@ namespace sledgehamr {
         const int ncomp = rhs_mf.nComp(); \
         double* l_dissipation_strength = dissipation_strength.data(); \
         const int l_dissipation_order = dissipation_order; \
+        const bool l_with_dissipation = with_dissipation; \
         DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
@@ -309,7 +311,7 @@ namespace sledgehamr {
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
                     GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
                                                 lev, time, dt, dx); \
-                    switch (with_dissipation * dissipation_order) { \
+                    switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
@@ -344,7 +346,7 @@ namespace sledgehamr {
                         tmp_rhs[n] = rhs_fab(i, j, k, n); \
                     }); \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx); \
-                    switch (with_dissipation * dissipation_order) { \
+                    switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
