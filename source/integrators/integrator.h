@@ -15,7 +15,10 @@ enum IntegratorType {
     AmrexSsprk3 = 3,
     AmrexRk4 = 4,
     // TODO: Add other AMReX non-RK types.
-    Lsssprk3 = 10
+    Lsssprk3 = 10,
+    RknButcherTableau = 20,
+    Rkn4 = 21,
+    Rkn5 = 22
 };
 
 class Sledgehamr;

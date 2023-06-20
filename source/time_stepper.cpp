@@ -32,7 +32,14 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
             integrator = new IntegratorAMReX(sim);
             break;
         case Lsssprk3:
-            integrator = new IntegratorLSSSPRK3(sim);
+            integrator = new IntegratorLssprk3(sim);
+            break;
+        case RknButcherTableau:
+            //[[fallthrough]]; 
+        case Rkn4:
+            //[[fallthrough]];
+        case Rkn5:
+            integrator = new IntegratorRkn(sim, inte_type);
             break;
         default:
             amrex::Abort("#error: Unknown integration type: "

@@ -1,10 +1,8 @@
-#include <AMReX_TimeIntegrator.H>
-
 #include "lsssprk3.h"
 
 namespace sledgehamr {
 
-void IntegratorLSSSPRK3::Integrate(LevelData& mf_old, LevelData& mf_new,
+void IntegratorLsssprk3::Integrate(LevelData& mf_old, LevelData& mf_new,
         const int lev, const double dt, const double dx) {
     const int ncomp = mf_old.nComp();
     const double t0 = mf_old.t;

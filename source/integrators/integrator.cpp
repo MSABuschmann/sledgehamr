@@ -31,17 +31,23 @@ void Integrator::Advance(const int lev) {
 std::string Integrator::Name(IntegratorType type) {
     switch (type) {
         case AmrexRkButcherTableau:
-            return "User-defined RK Butcher Tableau.";
+            return "User-defined RK Butcher Tableau";
         case AmrexForwardEuler:
-            return "Forward Euler.";
+            return "Forward Euler";
         case AmrexTrapezoid:
-            return "Trapezoid Method.";
+            return "Trapezoid Method";
         case AmrexSsprk3:
-            return "SSPRK3 (AMReX implementation).";
+            return "SSPRK3 (AMReX implementation)";
         case AmrexRk4:
-            return "RK4.";
+            return "RK4";
         case Lsssprk3:
-            return "SSPRK3 (Low-storage sledgehamr implementation).";
+            return "SSPRK3 (Low-storage sledgehamr implementation)";
+        case RknButcherTableau:
+            return "User-defined RKN Butcher Tableau";
+        case Rkn4:
+            return "4th order RKN";
+        case Rkn5:
+            return "5th order RKN";
         default:
             return "Unkown!";
     }
