@@ -63,19 +63,21 @@ void IntegratorRkn::Integrate(LevelData& mf_old, LevelData& mf_new,
                             gN1, gN0 , gN, nghost);
                 }
 
-                sim->level_synchronizer->FillIntermediatePatch(
-                        lev, stage_time, mf_new);
             }
 
+            sim->level_synchronizer->FillIntermediatePatch(
+                    lev, stage_time, mf_new);
             sim->FillRhs(*F_nodes[i], mf_new, stage_time, lev, dt, dx);
         }
 
         // Fill new State, starting with S_new = S_old.
         // Then Saxpy S_new += h * Wi * Fi for integration weights Wi
         amrex::MultiFab::Copy(mf_new, mf_old, 0, 0, N, 0);
+        amrex::MultiFab::Saxpy(mf_new, dt, mf_new, uN1, uN0, uN, nghost);
+        if( Ngrav > 0 )
+             amrex::MultiFab::Saxpy(mf_new, dt, mf_new, gN1, gN0, gN, nghost);
+
         for (int i = 0; i < number_nodes; ++i) {
-            amrex::MultiFab::Saxpy(mf_new, dt, mf_new,
-                                   uN1, uN0, uN, nghost);
             amrex::MultiFab::Saxpy(mf_new, dt * dt * weights_bar_b[i],
                                    *F_nodes[i],
                                    uN1, uN0, uN, nghost);
@@ -84,8 +86,6 @@ void IntegratorRkn::Integrate(LevelData& mf_old, LevelData& mf_new,
 
             if (Ngrav == 0) continue;
 
-            amrex::MultiFab::Saxpy(mf_new, dt, mf_new,
-                                   gN1, gN0, gN, nghost);
             amrex::MultiFab::Saxpy(mf_new, dt * dt * weights_bar_b[i],
                                    *F_nodes[i],
                                    gN1, gN0, gN, nghost);
