@@ -326,13 +326,14 @@ void Sledgehamr::ReadSpectrumKs() {
         return;
 
     // TODO Get proper file location.
-    std::string filename = "spectra_ks.hdf5";
+    std::string filename = SLEDGEHAMR_DATA_PATH;
+    filename += "spectra_ks.hdf5";
     std::string sdimN = std::to_string(dimN[0]);
 
-    std::vector<int> kmax(1);
-    IOModule::ReadFromHDF5(filename, {sdimN+"_kmax"}, &(kmax[0]));
+    std::vector<int> nks(1);
+    IOModule::ReadFromHDF5(filename, {sdimN+"_nks"}, &(nks[0]));
 
-    spectrum_ks.resize(kmax[0]);
+    spectrum_ks.resize(nks[0]);
     IOModule::ReadFromHDF5(filename, {sdimN}, &(spectrum_ks[0]));
 }
 
