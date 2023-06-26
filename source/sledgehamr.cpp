@@ -296,7 +296,7 @@ void Sledgehamr::ParseInputScalars() {
         std::string ident = "dissipation_strength_" + scalar_fields[n]->name;
         pp_sim.query(ident.c_str(), dissipation_strength[n]);
 
-        if (te_crit[n] >= 0)
+        if (dissipation_strength[n] >= 0)
             with_dissipation = true;
     }
 
