@@ -238,7 +238,7 @@ void IOModule::ReadFromHDF5(std::string filename,
     // Try and open HDF5 file.
     hid_t file_id = H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
     if (file_id == H5I_INVALID_HID) {
-        amrex::Abort("#error: Could not open initial state file: " + filename);
+        amrex::Abort("#error: Could not open file: " + filename);
     }
 
     // Try and find dataset. Iterate over vector, use first to be found.
@@ -258,7 +258,7 @@ void IOModule::ReadFromHDF5(std::string filename,
     if (dname_found  == "") {
         H5Fclose(file_id);
         amrex::Abort(
-                "#error: Could not find correct dataset in initial state file: "
+                "#error: Could not find correct dataset in file: "
                 + filename + dname_conc);
     }
 
