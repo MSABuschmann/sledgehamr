@@ -23,17 +23,24 @@ LevelSynchronizer::LevelSynchronizer(Sledgehamr* owner) {
 
     // Set interpolation type between levels
     amrex::ParmParse pp("amr");
-    int interpolation_type = InterpType::CellConservativeQuartic;
+    int interpolation_type = InterpType::PCInterp;
     pp.query("interpolation_type", interpolation_type);
 
-    if (interpolation_type == InterpType::CellConservativeLinear) {
-        mapper = &amrex::cell_cons_interp;
-    } else if (interpolation_type == InterpType::CellConservativeQuartic) {
-        mapper = &amrex::quartic_interp;
-    } else if (interpolation_type == InterpType::PCInterp) {
-        mapper = &amrex::pc_interp;
-    } else {
-        amrex::Error("Unsupported interpolation type");
+    switch (interpolation_type) {
+        case InterpType::PCInterp:
+            mapper = &amrex::pc_interp;
+            break;
+        case InterpType::CellConservativeLinear:
+            mapper = &amrex::cell_cons_interp;
+            break;
+        case InterpType::CellQuadratic:
+            mapper = &amrex::quadratic_interp;
+            break;
+        case InterpType::CellConservativeQuartic:
+            mapper = &amrex::quartic_interp;
+            break;
+        default:
+            amrex::Error("Unsupported interpolation type");
     }
 }
 

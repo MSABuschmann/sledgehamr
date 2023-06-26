@@ -107,12 +107,9 @@ class LevelSynchronizer {
      */
     enum InterpType {
             PCInterp = 0,
-            NodeBilinear,
-            CellConservativeLinear,
-            CellBilinear,
-            CellQuadratic,
-            CellConservativeProtected,
-            CellConservativeQuartic
+            CellConservativeLinear = 1,
+            CellQuadratic = 2,
+            CellConservativeQuartic = 4,
     };
 };
 
