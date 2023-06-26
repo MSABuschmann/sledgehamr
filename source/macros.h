@@ -237,7 +237,7 @@ namespace sledgehamr {
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
                             sledgehamr::kernels::KreissOligerDissipation<2>( \
-                                        state_fab, i, j, j, n, dx, \
+                                        state_fab, i, j, k, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
                             break; \
@@ -246,7 +246,7 @@ namespace sledgehamr {
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
                             sledgehamr::kernels::KreissOligerDissipation<3>( \
-                                        state_fab, i, j, j, n, dx, \
+                                        state_fab, i, j, k, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
                             break; \
@@ -263,7 +263,7 @@ namespace sledgehamr {
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
                             sledgehamr::kernels::KreissOligerDissipation<2>( \
-                                        state_fab, i, j, j, n, dx, \
+                                        state_fab, i, j, k, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
                             break; \
@@ -272,7 +272,7 @@ namespace sledgehamr {
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
                             sledgehamr::kernels::KreissOligerDissipation<3>( \
-                                        state_fab, i, j, j, n, dx, \
+                                        state_fab, i, j, k, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
                             break; \
@@ -317,7 +317,7 @@ namespace sledgehamr {
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
                             sledgehamr::kernels::KreissOligerDissipation<2>( \
-                                        state_fab, i, j, j, n, dx, \
+                                        state_fab, i, j, k, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
                             break; \
@@ -326,7 +326,7 @@ namespace sledgehamr {
                                     <0, Gw::NGwScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
                             sledgehamr::kernels::KreissOligerDissipation<3>( \
-                                        state_fab, i, j, j, n, dx, \
+                                        state_fab, i, j, k, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
                             break; \
@@ -352,7 +352,7 @@ namespace sledgehamr {
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
                             sledgehamr::kernels::KreissOligerDissipation<2>( \
-                                        state_fab, i, j, j, n, dx, \
+                                        state_fab, i, j, k, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
                             break; \
@@ -361,7 +361,7 @@ namespace sledgehamr {
                                     <0, Scalar::NScalars, 1> ([&](auto n) { \
                                 rhs_fab(i,j,k,n) += \
                             sledgehamr::kernels::KreissOligerDissipation<3>( \
-                                        state_fab, i, j, j, n, dx, \
+                                        state_fab, i, j, k, n, dx, \
                                         l_dissipation_strength[n]); \
                             }); \
                             break; \
