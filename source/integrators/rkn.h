@@ -9,7 +9,7 @@ namespace sledgehamr {
 
 class IntegratorRkn : public Integrator {
   public:
-    IntegratorRkn::IntegratorRkn(Sledgehamr* owner, const IntegratorType id);
+    IntegratorRkn(Sledgehamr* owner, const IntegratorType id);
 
   protected:
     virtual void Integrate(LevelData& mf_old, LevelData& mf_new, const int lev,
