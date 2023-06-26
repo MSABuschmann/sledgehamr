@@ -426,7 +426,8 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
                           hid_t file_id, std::string ident, 
                           int downsample_factor, bool is_truncation_errors) {
     const int ndist = is_truncation_errors ? 2 : 1;
-    
+    const int grid_density = downsample_factor * ndist;
+
     std::vector<int> lex, hex, ley, hey, lez, hez;
 
     // Not performance critical. Do not use OpenMP because not thread-safe.
@@ -448,25 +449,28 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
         hey.push_back(hy);
         hez.push_back(hz);
 
-        int dimx = (hx-lx) / downsample_factor / ndist;
-        int dimy = (hy-ly) / downsample_factor / ndist;
-        int dimz = (hz-lz) / downsample_factor / ndist;
+
+        int dimx = (hx-lx) / grid_density;
+        int dimy = (hy-ly) / grid_density;
+        int dimz = (hz-lz) / grid_density;
         double volfac = 1./std::pow(downsample_factor, 3);
 
         // Copy data into flattened array for each scalar field.
         long len = dimx * dimy * dimz;
+
         // TODO Adjust output type.
         float *output_arr = new float[len]();
         for (int f=0; f<sim->scalar_fields.size(); ++f) {
             for (int k=lz; k<hz; ++k) {
                 for (int j=ly; j<hy; ++j) {
                     for (int i=lx; i<hx; ++i) {
-                        if (is_truncation_errors 
+                        if (is_truncation_errors
                             && (i%2 != 0 || j%2 != 0 || k%2 != 0))
                             continue;
 
-                        int ind = (i-lx)/ndist*dimy*dimz + (j-ly)/ndist*dimz
-                                + (k-lz)/ndist;
+                        int ind = (i-lx)/grid_density*dimy*dimz
+                                + (j-ly)/grid_density*dimz
+                                + (k-lz)/grid_density;
 
                         if (is_truncation_errors)
                             output_arr[ind] = std::max(
