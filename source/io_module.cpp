@@ -591,6 +591,9 @@ void IOModule::WriteSpectra(double time, std::string prefix) {
 }
 
 void IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
+    if (!sim->with_gravitational_waves)
+        return;
+
     amrex::Print() << "Compute gravitational wave spectrum: " << prefix
                    << std::endl;
 
