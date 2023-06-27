@@ -39,35 +39,14 @@ class Output:
         dim0 = int(self._slice_headers[i,3])
 
         dim = dim0 * 2**level
-        folder = self._prefix + '/slices/'
+        folder = self._prefix + '/slices/' + str(i) + '/Level_'+str(level)
 
         # Start dictionary
         d = dict();
         d['t'] = t
 
-        # Loop over fields, files, and boxes to reassemble data
         for s in fields:
-            field = np.ones((dim,dim), dtype=np.float32) * np.nan
-            for f in range(ranks):
-                file = folder + str(i) + '/Level_'+str(level)\
-                     + '/' + str(f) + '.hdf5'
-
-                fin = h5py.File(file,'r')
-                if 'le1_'+direction in fin.keys():
-                    le1 = np.array(fin['le1_'+direction], dtype='int')
-                    le2 = np.array(fin['le2_'+direction], dtype='int')
-                    he1 = np.array(fin['he1_'+direction], dtype='int')
-                    he2 = np.array(fin['he2_'+direction], dtype='int')
-
-                    for b in range(len(le1)):
-                        dset = s+'_'+direction+'_'+str(b+1)
-                        field[le1[b]:he1[b],le2[b]:he2[b]] =\
-                                (fin[dset][:]).reshape(\
-                                        (he1[b]-le1[b], he2[b]-le2[b]))
-                fin.close()
-
-            # Add result to dict.
-            d[s] = field
+            d[s] = self.__Read2dField(folder, dim, direction, ranks, s, 1)
 
         return d
 
@@ -117,6 +96,26 @@ class Output:
             d[s] = self.__Read3dField(folder, dim, ranks, s, downsample)
 
         return d
+
+    def __Read2dField(self, folder, dim, direction, ranks, ident, downsample):
+        field = np.ones((dim,dim), dtype=np.float32) * np.nan
+        for f in range(ranks):
+            file = folder + '/' + str(f) + '.hdf5'
+
+            fin = h5py.File(file,'r')
+            if 'le1_'+direction in fin.keys():
+                le1 = np.array(fin['le1_'+direction], dtype='int')
+                le2 = np.array(fin['le2_'+direction], dtype='int')
+                he1 = np.array(fin['he1_'+direction], dtype='int')
+                he2 = np.array(fin['he2_'+direction], dtype='int')
+
+                for b in range(len(le1)):
+                    dset = ident+'_'+direction+'_'+str(b+1)
+                    field[le1[b]:he1[b],le2[b]:he2[b]] =\
+                            (fin[dset][:]).reshape(\
+                                    (he1[b]-le1[b], he2[b]-le2[b]))
+            fin.close()
+        return field
 
     def __Read3dField(self, folder, dim, ranks, ident, downsample):
         field = np.ones((dim, dim, dim), dtype=np.float32) * np.nan
