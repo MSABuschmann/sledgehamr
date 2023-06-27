@@ -275,7 +275,7 @@ void IOModule::WriteSlices(double time, std::string prefix) {
 
 void IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
     amrex::Print() << "Write truncation error slices: " << prefix << std::endl;
-    DoWriteSlices(time, prefix, false);
+    DoWriteSlices(time, prefix, true);
 }
 
 void IOModule::DoWriteSlices(double time, std::string prefix,
