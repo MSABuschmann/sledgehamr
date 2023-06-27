@@ -21,10 +21,11 @@ void OutputModule::Write(double time, bool force) {
     std::string folder = prefix + "/" + std::to_string(next_id) + "/";
     amrex::UtilCreateDirectory(folder.c_str(), 0755);
 
-    // Write.
-    fct(time, folder);
-    next_id++;
-    last_written = time;
+    // Attempt to write.
+    if (fct(time, folder)) {
+        next_id++;
+        last_written = time;
+    }
 }
 
 }; // namespace sledgehamr

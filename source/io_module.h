@@ -91,14 +91,14 @@ class IOModule {
      * @param   time   Current time.
      * @param   prefix Output path.
      */
-    void WriteSlices(double time, std::string prefix);
+    bool WriteSlices(double time, std::string prefix);
 
     /** @brief OUTPUT_FCT. Wrapper to write slices of truncation errors and
      *         corresponding fields.
      * @param   time   Current time.
      * @param   prefix Output path.
      */
-    void WriteSlicesTruncationError(double time, std::string prefix);
+    bool WriteSlicesTruncationError(double time, std::string prefix);
 
     /** @brief Writes slices along all three directions and all scalar fields
                with or without truncation errors.
@@ -132,14 +132,14 @@ class IOModule {
      * @param   time   Current time.
      * @param   prefix Output path.
      */
-    void WriteCoarseBox(double time, std::string prefix);
+    bool WriteCoarseBox(double time, std::string prefix);
 
     /** @brief OUTPUT_FCT. Wrapper to write the coarse level with truncation
      *         errors.
      * @param   time   Current time.
      * @param   prefix Output path.
      */
-    void WriteCoarseBoxTruncationError(double time, std::string prefix);
+    bool WriteCoarseBoxTruncationError(double time, std::string prefix);
 
     /** @brief Writes the coarse level possibly with truncation errors.
      * @param   time                    Current time.
@@ -169,13 +169,13 @@ class IOModule {
      * @param   time   Current time.
      * @param   prefix Output path.
      */
-    void WriteFullBox(double time, std::string prefix);
+    bool WriteFullBox(double time, std::string prefix);
 
     /** @brief OUTPUT_FCT. Wrapper to write truncation errors on all levels.
      * @param   time   Current time.
      * @param   prefix Output path.
      */
-    void WriteFullBoxTruncationError(double time, std::string prefix);
+    bool WriteFullBoxTruncationError(double time, std::string prefix);
 
     /** @brief Writes all levels possibly with truncation errors.
      * @param   time                    Current time.
@@ -191,20 +191,19 @@ class IOModule {
      * @param   time   Current time.
      * @param   prefix Output path.
      */
-    void WriteProjections(double time, std::string prefix);
+    bool WriteProjections(double time, std::string prefix);
 
     /** @brief OUTPUT_FCT. Write spectra.
      * @param   time   Current time.
      * @param   prefix Output path.
      */
-    void WriteSpectra(double time, std::string prefix);
+    bool WriteSpectra(double time, std::string prefix);
 
     /** @brief OUTPUT_FCT. Write gravitational wave spectrum.
      * @param   time   Current time.
      * @param   prefix Output path.
      */
-    void WriteGravitationalWaveSpectrum(double time, std::string prefix);
-
+    bool WriteGravitationalWaveSpectrum(double time, std::string prefix);
 
     /** Downsampling factors for coarse/full level output.
      */

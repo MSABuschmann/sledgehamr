@@ -268,14 +268,16 @@ void IOModule::FillLevelFromConst(int lev, const int comp, const double c) {
     }
 }
 
-void IOModule::WriteSlices(double time, std::string prefix) {
+bool IOModule::WriteSlices(double time, std::string prefix) {
     amrex::Print() << "Write slices: " << prefix << std::endl;
     DoWriteSlices(time, prefix, false);
+    return true;
 }
 
-void IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
+bool IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
     amrex::Print() << "Write truncation error slices: " << prefix << std::endl;
     DoWriteSlices(time, prefix, true);
+    return true;
 }
 
 void IOModule::DoWriteSlices(double time, std::string prefix,
@@ -386,16 +388,18 @@ void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
     }
 }
 
-void IOModule::WriteCoarseBox(double time, std::string prefix) {
+bool IOModule::WriteCoarseBox(double time, std::string prefix) {
     amrex::Print() << "Write coarse level box: " << prefix << std::endl;
     DoWriteCoarseBox(time, prefix, coarse_box_downsample_factor, false);
+    return true;
 }
 
-void IOModule::WriteCoarseBoxTruncationError(double time, std::string prefix) {
+bool IOModule::WriteCoarseBoxTruncationError(double time, std::string prefix) {
     amrex::Print() << "Write truncation errors on coarse level box: "
                    << prefix << std::endl;
     DoWriteCoarseBox(time, prefix,
                      coarse_box_truncation_error_downsample_factor, true);
+    return true;
 }
 
 void IOModule::DoWriteCoarseBox(double time, std::string prefix,
@@ -511,16 +515,18 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
     }
 }
 
-void IOModule::WriteFullBox(double time, std::string prefix) {
+bool IOModule::WriteFullBox(double time, std::string prefix) {
     amrex::Print() << "Write full box at all levels: " << prefix << std::endl;
     DoWriteFullBox(time, prefix, full_box_downsample_factor, false);
+    return true;
 }
 
-void IOModule::WriteFullBoxTruncationError(double time, std::string prefix) {
+bool IOModule::WriteFullBoxTruncationError(double time, std::string prefix) {
     amrex::Print() << "Write truncation errors at all levels: "
                    << prefix << std::endl;
     DoWriteFullBox(time, prefix, full_box_truncation_error_downsample_factor,
                    true);
+    return true;
 }
 
 void IOModule::DoWriteFullBox(double time, std::string prefix,
@@ -554,7 +560,7 @@ void IOModule::DoWriteFullBox(double time, std::string prefix,
     }
 }
 
-void IOModule::WriteProjections(double time, std::string prefix) {
+bool IOModule::WriteProjections(double time, std::string prefix) {
     amrex::Print() << "Write projections: " << prefix << std::endl;
 
     hid_t file_id;
@@ -569,9 +575,11 @@ void IOModule::WriteProjections(double time, std::string prefix) {
 
     if (amrex::ParallelDescriptor::IOProcessor())
         H5Fclose(file_id);
+
+    return true;
 }
 
-void IOModule::WriteSpectra(double time, std::string prefix) {
+bool IOModule::WriteSpectra(double time, std::string prefix) {
     amrex::Print() << "Compute spectra: " << prefix << std::endl;
 
     sim->ReadSpectrumKs();
@@ -588,11 +596,13 @@ void IOModule::WriteSpectra(double time, std::string prefix) {
 
     if (amrex::ParallelDescriptor::IOProcessor())
         H5Fclose(file_id);
+
+    return true;
 }
 
-void IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
+bool IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
     if (!sim->with_gravitational_waves)
-        return;
+        return false;
 
     amrex::Print() << "Compute gravitational wave spectrum: " << prefix
                    << std::endl;
@@ -610,6 +620,8 @@ void IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
 
     if (amrex::ParallelDescriptor::IOProcessor())
         H5Fclose(file_id);
+
+    return true;
 }
 
 }; // namespace sledgehamr

@@ -15,7 +15,7 @@ namespace sledgehamr {
  */
 #define OUTPUT_FCT(fct) std::bind(&fct, this, std::placeholders::_1,\
                                   std::placeholders::_2)
-typedef std::function<void(double, std::string)> output_fct;
+typedef std::function<bool(double, std::string)> output_fct;
 
 /** @brief This class handles the writing of an individual output format
  *         provided through a function pointer. It keeps track of timings to
