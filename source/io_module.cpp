@@ -275,6 +275,9 @@ bool IOModule::WriteSlices(double time, std::string prefix) {
 }
 
 bool IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
+    if (!sim->grid_old[0].contains_truncation_errors)
+        return false;
+
     amrex::Print() << "Write truncation error slices: " << prefix << std::endl;
     DoWriteSlices(time, prefix, true);
     return true;
@@ -395,6 +398,9 @@ bool IOModule::WriteCoarseBox(double time, std::string prefix) {
 }
 
 bool IOModule::WriteCoarseBoxTruncationError(double time, std::string prefix) {
+    if (!sim->grid_old[0].contains_truncation_errors)
+        return false;
+
     amrex::Print() << "Write truncation errors on coarse level box: "
                    << prefix << std::endl;
     DoWriteCoarseBox(time, prefix,
@@ -522,6 +528,9 @@ bool IOModule::WriteFullBox(double time, std::string prefix) {
 }
 
 bool IOModule::WriteFullBoxTruncationError(double time, std::string prefix) {
+    if (!sim->grid_old[0].contains_truncation_errors)
+        return false;
+
     amrex::Print() << "Write truncation errors at all levels: "
                    << prefix << std::endl;
     DoWriteFullBox(time, prefix, full_box_truncation_error_downsample_factor,

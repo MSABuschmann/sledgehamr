@@ -7,15 +7,21 @@ class Output:
     ## Crawls the output and loads headers.
     def __init__(self, output_folder):
         self._prefix = output_folder
+
         self._slice_headers = []
         self._coarse_box_headers = []
         self._full_box_headers = []
+        self._slice_truncation_error_headers = []
 
         self.__ParseFolderStructure()
 
     ## Returns array of times at which slices have been written.
     def GetTimesOfSlices(self):
         return self._slice_headers[:,0]
+
+    ## Returns array of times at which slices have been written.
+    def GetTimesOfSlicesTruncationError(self):
+        return self._slice_truncation_error_headers[:,0]
 
     ## Returns array of times at which coarse boxes have been written.
     def GetTimesOfCoarseBoxes(self):
@@ -47,6 +53,34 @@ class Output:
 
         for s in fields:
             d[s] = self.__Read2dField(folder, dim, direction, ranks, s, 1)
+
+        return d
+
+    ## Returns a slice of truncation errors.
+    # @param    i           Number of slice to be read.
+    # @param    direction   Direction of slice, e.g. 'x'.
+    # @param    level       Which level should be returned.
+    # @param    fields      List of scalar field names.
+    # @return   d           Dictionary containing the time and slices.
+    def GetSliceTruncationError(self, i, direction, level, fields):
+        # Get relevant parameters from header
+        t = self._slice_truncation_error_headers[i,0]
+        ranks = int(self._slice_truncation_error_headers[i,1])
+        nlevels = int(self._slice_truncation_error_headers[i,2])
+        dim0 = int(self._slice_truncation_error_headers[i,3])
+
+        dim = dim0 * 2**level // 2
+        folder = self._prefix + '/slices_truncation_error/' + str(i)\
+               + '/Level_'+str(level)
+
+        # Start dictionary
+        d = dict();
+        d['t'] = t
+
+        for s in fields:
+            d[s+'_truncation_error'] =\
+                   self.__Read2dField(folder, dim, 'te_'+direction, ranks, s, 2)
+            d[s] = self.__Read2dField(folder, dim*2, direction, ranks, s, 1)
 
         return d
 
@@ -104,10 +138,10 @@ class Output:
 
             fin = h5py.File(file,'r')
             if 'le1_'+direction in fin.keys():
-                le1 = np.array(fin['le1_'+direction], dtype='int')
-                le2 = np.array(fin['le2_'+direction], dtype='int')
-                he1 = np.array(fin['he1_'+direction], dtype='int')
-                he2 = np.array(fin['he2_'+direction], dtype='int')
+                le1 = np.array(fin['le1_'+direction], dtype='int') // downsample
+                le2 = np.array(fin['le2_'+direction], dtype='int') // downsample
+                he1 = np.array(fin['he1_'+direction], dtype='int') // downsample
+                he2 = np.array(fin['he2_'+direction], dtype='int') // downsample
 
                 for b in range(len(le1)):
                     dset = ident+'_'+direction+'_'+str(b+1)
@@ -144,6 +178,7 @@ class Output:
         self.__ParseSlices()
         self.__ParseCoarseBoxes()
         self.__ParseFullBoxes()
+        self.__ParseSlicesTruncationError()
 
     ## Determines how many slices have been written and when.
     ## Reads header files.
@@ -163,6 +198,28 @@ class Output:
         self._slice_headers = np.array( self._slice_headers )
 
         print('Number of slices found:', len(self._slice_headers))
+
+    ## Determines how many slices of truncation errors have been written and
+    ## when. Reads header files.
+    def __ParseSlicesTruncationError(self):
+        folder = self._prefix + '/slices_truncation_error/'
+        i = 0
+
+        # iterate over batches and read header of first files
+        while True:
+            file = folder + str(i) + '/Level_0/0.hdf5'
+            if not path.exists( file ):
+                break
+            fin = h5py.File(file,'r')
+            self._slice_truncation_error_headers.append( fin['Header_te_x'][:] )
+            i = i + 1
+
+        self._slice_truncation_error_headers =\
+                np.array( self._slice_truncation_error_headers )
+
+        print('Number of slices of truncation errors found:',\
+                len(self._slice_truncation_error_headers))
+
 
     ## Determines how many coarse level boxes have been written and when.
     ## Reads header files.
@@ -209,3 +266,4 @@ class Output:
     _slice_headers = []
     _coarse_box_headers = []
     _full_box_headers = []
+    _slice_truncation_error_headers = []
