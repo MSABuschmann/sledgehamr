@@ -47,7 +47,7 @@ class Output:
 
         # Loop over fields, files, and boxes to reassemble data
         for s in fields:
-            field = np.zeros((dim,dim), dtype=np.float32)
+            field = np.ones((dim,dim), dtype=np.float32) * np.nan
             for f in range(ranks):
                 file = folder + str(i) + '/Level_'+str(level)\
                      + '/' + str(f) + '.hdf5'
@@ -119,7 +119,7 @@ class Output:
         return d
 
     def __Read3dField(self, folder, dim, ranks, ident, downsample):
-        field = np.zeros((dim, dim, dim), dtype=np.float32)
+        field = np.ones((dim, dim, dim), dtype=np.float32) * np.nan
         for f in range(ranks):
             file = folder + '/' + str(f) + '.hdf5'
 
