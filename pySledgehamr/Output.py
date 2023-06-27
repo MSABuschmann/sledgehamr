@@ -9,6 +9,7 @@ class Output:
         self._prefix = output_folder
         self._slice_headers = []
         self._coarse_box_headers = []
+        self._full_box_headers = []
 
         self.__ParseFolderStructure()
 
@@ -16,9 +17,13 @@ class Output:
     def GetTimesOfSlices(self):
         return self._slice_headers[:,0]
 
-    ## Returns array of times at which slices have been written.
+    ## Returns array of times at which coarse boxes have been written.
     def GetTimesOfCoarseBoxes(self):
         return self._coarse_box_headers[:,0]
+
+    ## Returns array of times at which full boxes have been written.
+    def GetTimesOfFullBoxes(self):
+        return self._full_box_headers[:,0]
 
     ## Returns a slice.
     # @param    i           Number of slice to be read.
@@ -59,6 +64,7 @@ class Output:
                         field[le1[b]:he1[b],le2[b]:he2[b]] =\
                                 (fin[dset][:]).reshape(\
                                         (he1[b]-le1[b], he2[b]-le2[b]))
+                fin.close()
 
             # Add result to dict.
             d[s] = field
@@ -73,47 +79,72 @@ class Output:
         # Get relevant parameters from header
         t = self._coarse_box_headers[i,0]
         ranks = int(self._coarse_box_headers[i,1])
-        dim0 = int(self._slice_headers[i,3])
-        downsample = int(self._slice_headers[i,4])
+        dim0 = int(self._coarse_box_headers[i,3])
+        downsample = int(self._coarse_box_headers[i,4])
 
         dim = int(dim0 / downsample)
-        folder = self._prefix + '/coarse_box/'
+        folder = self._prefix + '/coarse_box/' + str(i)
 
         # Start dictionary
         d = dict();
         d['t'] = t
 
-        # Loop over fields, files, and boxes to reassemble data
         for s in fields:
-            field = np.zeros((dim,dim,dim), dtype=np.float32)
-            for f in range(ranks):
-                file = folder + str(i) + '/' + str(f) + '.hdf5'
-
-                fin = h5py.File(file,'r')
-                if 'lex_data' in fin.keys():
-                    lx = np.array(fin['lex_data'], dtype='int')
-                    ly = np.array(fin['ley_data'], dtype='int')
-                    lz = np.array(fin['lez_data'], dtype='int')
-                    hx = np.array(fin['hex_data'], dtype='int')
-                    hy = np.array(fin['hey_data'], dtype='int')
-                    hz = np.array(fin['hez_data'], dtype='int')
-
-                    for b in range(len(lx)):
-                        dset = s+'_data_'+str(b+1)
-                        field[lx[b]:hx[b], ly[b]:hy[b], lz[b]:hz[b]] = \
-                                (fin[dset][:]).reshape(\
-                                        (hx[b]-lx[b], hy[b]-ly[b], hz[b]-lz[b]))
-
-            # Add result to dict.
-            d[s] = field
+            d[s] = self.__Read3dField(folder, dim, ranks, s, downsample)
 
         return d
 
+    ## Returns a full box.
+    # @param    i           Number of slice to be read.
+    # @param    level       Level.
+    # @param    fields      List of scalar field names.
+    # @return   d           Dictionary containing the time and slices.
+    def GetFullBox(self, i, level, fields):
+        # Get relevant parameters from header
+        t = self._full_box_headers[i,0]
+        ranks = int(self._full_box_headers[i,1])
+        dim0 = int(self._full_box_headers[i,3])
+        downsample = int(self._full_box_headers[i,4])
+
+        dim = int(dim0 * 2**level / downsample)
+        folder = self._prefix + '/full_box/'+str(i)+'/Level_' + str(level) + '/'
+
+        # Start dictionary
+        d = dict();
+        d['t'] = t
+
+        for s in fields:
+            d[s] = self.__Read3dField(folder, dim, ranks, s, downsample)
+
+        return d
+
+    def __Read3dField(self, folder, dim, ranks, ident, downsample):
+        field = np.zeros((dim, dim, dim), dtype=np.float32)
+        for f in range(ranks):
+            file = folder + '/' + str(f) + '.hdf5'
+
+            fin = h5py.File(file,'r')
+            if 'lex_data' in fin.keys():
+                lx = np.array(fin['lex_data'], dtype='int') // downsample
+                ly = np.array(fin['ley_data'], dtype='int') // downsample
+                lz = np.array(fin['lez_data'], dtype='int') // downsample
+                hx = np.array(fin['hex_data'], dtype='int') // downsample
+                hy = np.array(fin['hey_data'], dtype='int') // downsample
+                hz = np.array(fin['hez_data'], dtype='int') // downsample
+
+                for b in range(len(lx)):
+                    dset = ident+'_data_'+str(b+1)
+                    field[lx[b]:hx[b], ly[b]:hy[b], lz[b]:hz[b]] = \
+                            (fin[dset][:]).reshape(\
+                                    (hx[b]-lx[b], hy[b]-ly[b], hz[b]-lz[b]))
+            fin.close()
+        return field
 
     ## Determines what output exists.
     def __ParseFolderStructure(self):
         self.__ParseSlices()
-        self.__ParseCoarseLevelBoxes()
+        self.__ParseCoarseBoxes()
+        self.__ParseFullBoxes()
 
     ## Determines how many slices have been written and when.
     ## Reads header files.
@@ -132,11 +163,11 @@ class Output:
 
         self._slice_headers = np.array( self._slice_headers )
 
-        print('Number of slices found: ', len(self._slice_headers))
+        print('Number of slices found:', len(self._slice_headers))
 
     ## Determines how many coarse level boxes have been written and when.
     ## Reads header files.
-    def __ParseCoarseLevelBoxes(self):
+    def __ParseCoarseBoxes(self):
         folder = self._prefix + '/coarse_box/'
         i = 0
 
@@ -151,8 +182,26 @@ class Output:
 
         self._coarse_box_headers = np.array( self._coarse_box_headers )
 
-        print('Number of coarse boxes found: ', len(self._coarse_box_headers))
+        print('Number of coarse boxes found:', len(self._coarse_box_headers))
 
+    ## Determines how many full boxes have been written and when.
+    ## Reads header files.
+    def __ParseFullBoxes(self):
+        folder = self._prefix + '/full_box/'
+        i = 0
+
+        # iterate over batches and read header of first files
+        while True:
+            file = folder + str(i) + '/Level_0/0.hdf5'
+            if not path.exists( file ):
+                break
+            fin = h5py.File(file,'r')
+            self._full_box_headers.append( fin['Header_data'][:] )
+            i = i + 1
+
+        self._full_box_headers = np.array( self._full_box_headers )
+
+        print('Number of full boxes found:', len(self._full_box_headers))
 
     ## Path of output folder
     _prefix = "."
@@ -160,3 +209,4 @@ class Output:
     ## List of headers files from slices
     _slice_headers = []
     _coarse_box_headers = []
+    _full_box_headers = []
