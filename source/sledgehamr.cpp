@@ -153,7 +153,7 @@ void Sledgehamr::CreateShadowLevel() {
     shadow_level_geom.coarsen(amrex::IntVect(2,2,2));
 
     // Fill with data.
-    amrex::average_down(grid_new[0], shadow_level_tmp, geom[0],
+    amrex::average_down(grid_old[0], shadow_level_tmp, geom[0],
                         shadow_level_geom, 0, ncomp, refRatio(0));
 
     // Advance one time step.

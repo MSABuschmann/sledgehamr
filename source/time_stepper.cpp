@@ -203,7 +203,17 @@ void TimeStepper::ScheduleRegrid(int lev) {
         scheduled_regrids[k].push_back(sim->grid_new[k].istep + pow(2,k-lev));
     }
 
+    // Print message.
+    std::string level_message = LevelMessage(lev, istep);
+    amrex::Print() << std::left << std::setw(50) << level_message
+                   << "Regrid scheduled for after time step #"
+                   << scheduled_regrids[lev].back()-1 << std::endl;
+
     if (lev == 0) {
+        std::string level_message = LevelMessage(-1, 0);
+        amrex::Print() << std::left << std::setw(50) << level_message
+                       << "Advancing shadow level." << std::endl;
+
         sim->CreateShadowLevel();
     } else {
         // Tell the coarser level as well we need truncation error estimates.
@@ -212,12 +222,6 @@ void TimeStepper::ScheduleRegrid(int lev) {
 
     // Mark this as the coarsest level to be regridded.
     regrid_level.push_back(lev);
-
-    // Print message.
-    std::string level_message = LevelMessage(lev, istep);
-    amrex::Print() << std::left << std::setw(50) << level_message
-                   << "Regrid scheduled for after time step #"
-                   << scheduled_regrids[lev].back()-1 << std::endl;
 }
 
 void TimeStepper::DoRegridIfScheduled(int lev) {
