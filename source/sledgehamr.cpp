@@ -124,8 +124,8 @@ void Sledgehamr::ClearLevel(int lev) {
 void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
                           int ngrow) {
     // Skip regrid right at the beginning of the sim. Allowed to be overridden
-    // if no truncation errors are used (TODO).
-    if (time == t_start) return;
+    // if no truncation errors are used.
+    if (time == t_start && shadow_hierarchy) return;
 
     utils::sctp timer = utils::StartTimer();
 
