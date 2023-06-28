@@ -14,6 +14,7 @@ class Output:
         self._slice_truncation_error_headers = []
         self._coarse_box_truncation_error_headers = []
         self._full_box_truncation_error_headers = []
+        self._projection_headers = []
 
         self.__ParseFolderStructure()
 
@@ -43,6 +44,10 @@ class Output:
     #  written.
     def GetTimesOfFullBoxesTruncationError(self):
         return self._full_box_truncation_error_headers[:,0]
+
+    ## Returns array of times at which projections have been written.
+    def GetTimesOfProjections(self):
+        return self._projection_headers[:,0]
 
     ## Returns a slice.
     # @param    i           Number of slice to be read.
@@ -198,6 +203,47 @@ class Output:
 
         return d
 
+    ## Returns a projection.
+    # @param    i           Number of projection to be read.
+    # @para     names       List of projection names
+    # @return   d           Dictionary containing the time and projection.
+    def GetProjection(self, i, names):
+        # Get relevant parameters from header
+        t = self._projection_headers[i,0]
+        dim = int(self._projection_headers[i,1])
+        file = self._prefix + '/projections/'+str(i)+'/projections.hdf5'
+
+        # Start dictionary
+        d = dict();
+        d['t'] = t
+
+        fin = h5py.File(file,'r')
+        for s in names:
+            d[s] = fin[s+'_data'][:].reshape((dim, dim))
+        fin.close()
+        return d
+
+    ## Returns a projection.
+    # @param    i           Number of projection to be read.
+    # @para     names       List of projection names
+    # @return   d           Dictionary containing the time and projection.
+    def GetProjectionN(self, i, names):
+        # Get relevant parameters from header
+        t = self._projection_headers[i,0]
+        dim = int(self._projection_headers[i,1])
+        file = self._prefix + '/projections/'+str(i)+'/projections.hdf5'
+
+        # Start dictionary
+        d = dict();
+        d['t'] = t
+
+        fin = h5py.File(file,'r')
+        for s in names:
+            d[s] = fin[s+'_n'][:].reshape((dim, dim))
+        fin.close()
+        return d
+
+
     def __Read2dField(self, folder, dim, direction, ranks, ident, downsample):
         field = np.ones((dim,dim), dtype=np.float32) * np.nan
         for f in range(ranks):
@@ -245,6 +291,7 @@ class Output:
         self.__ParseSlices()
         self.__ParseCoarseBoxes()
         self.__ParseFullBoxes()
+        self.__ParseProjections()
         self.__ParseSlicesTruncationError()
         self.__ParseCoarseBoxesTruncationError()
         self.__ParseFullBoxesTruncationError()
@@ -371,6 +418,28 @@ class Output:
         print('Number of full boxes of truncation errors found:',\
               len(self._full_box_truncation_error_headers))
 
+    ## Determines how many projections have been written and parses their header
+    ## files.
+    def __ParseProjections(self):
+        folder = self._prefix + '/projections/'
+        i = 0
+
+        # iterate over batches and read header of first files
+        while True:
+            file = folder + str(i) + '/projections.hdf5'
+            if not path.exists( file ):
+                break
+            fin = h5py.File(file,'r')
+            self._projection_headers.append(fin['Header'][:])
+            i = i + 1
+
+        self._projection_headers =\
+                np.array( self._projection_headers )
+
+        print('Number of projections found:',\
+              len(self._projection_headers))
+
+
     ## Path of output folder
     _prefix = "."
 
@@ -381,3 +450,4 @@ class Output:
     _slice_truncation_error_headers = []
     _coarse_box_truncation_error_headers = []
     _full_box_truncation_error_headers = []
+    _projection_headers = []
