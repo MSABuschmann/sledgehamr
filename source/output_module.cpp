@@ -13,9 +13,10 @@ OutputModule::OutputModule(std::string output_prefix, output_fct function,
 
 void OutputModule::Write(double time, bool force) {
     // Check if it is time to write output.
-    /* TODO: Allow for custom interval and triggers */
-    if( time == last_written ) return;
-    if( time - last_written < interval && (!force && forceable) ) return;
+    double t_now  = time_modifier(time);
+    double t_last = time_modifier(last_written);
+    if( t_now == t_last ) return;
+    if( t_now - t_last < interval && (!force && forceable) ) return;
 
     // Create output folder.
     std::string folder = prefix + "/" + std::to_string(next_id) + "/";

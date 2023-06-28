@@ -17,6 +17,9 @@ namespace sledgehamr {
                                   std::placeholders::_2)
 typedef std::function<bool(double, std::string)> output_fct;
 
+#define TIME_FCT(fct) std::bind(&fct, this, std::placeholders::_1)
+typedef std::function<double(double)> time_fct;
+
 /** @brief This class handles the writing of an individual output format
  *         provided through a function pointer. It keeps track of timings to
  *         check if this particular format should be written at the current time
@@ -44,10 +47,20 @@ class OutputModule {
      */
     void Write(double time, bool force=false);
 
+    void SetTimeIntervalFunction(time_fct mod) {
+        time_modifier = mod;
+    };
+
+    double DefaultInterval(double time) {
+        return time;
+    };
+
 private:
     /** @brief Function pointer to function that does the actual writing.
      */
     output_fct fct;
+
+    time_fct time_modifier = TIME_FCT(OutputModule::DefaultInterval);
 
     /** @brief Next output index. Will be iterated +1 after each writing.
      */
