@@ -118,17 +118,15 @@ amrex::BoxList UniqueLayout::BoxList(const int blocking_factor) {
                 if (k0 == -1) {
                     k0 = k;
                     km = k;
-                } else { //TODO: Make if else
-                    if (k == km + 1) {
-                        km = k;
-                    } else {
-                        amrex::IntVect sm(i,   j,   k0);
-                        amrex::IntVect bg(i+1, j+1, km+1);
-                        bl.push_back(amrex::Box(sm*blocking_factor,
-                                                bg*blocking_factor-1));
-                        k0 = k;
-                        km = k;
-                    }
+                } else if (k == km + 1) {
+                     km = k;
+                } else {
+                    amrex::IntVect sm(i,   j,   k0);
+                    amrex::IntVect bg(i+1, j+1, km+1);
+                    bl.push_back(amrex::Box(sm*blocking_factor,
+                                            bg*blocking_factor-1));
+                    k0 = k;
+                    km = k;
                 }
             }
 
