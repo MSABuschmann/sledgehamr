@@ -353,10 +353,39 @@ class axion_strings : public sledgehamr::Sledgehamr {
     void ParseVariables();
     void PrintRefinementTimes();
     void SetProjections();
-    double StringWidth(const int lev, const double time);
-    double RefinementTime(const int lev);
+
+    double Mr(const double eta) {
+        return std::sqrt(2. * lambda) * eta; 
+    }
+
+    double H(const double eta) {
+        return 1./eta;
+    }
+
+    double StringWidth(const int lev, const double eta) {
+        return 1./(Mr(eta) * dx[lev]); 
+    }
+
+    double RefinementTime(const int lev) {
+        return dimN[lev] / (sqrt(2.*lambda) * string_width_threshold * L);
+    }
+
+    double Log(double eta) {
+        if (eta <= 0)
+            return -DBL_MAX;
+        return std::log( Mr(eta) / H(eta) );
+    }
+
+    double LogTruncated(const double eta) {
+        double log = Log(eta);
+        if (log < spectra_log_min) 
+            return 0;
+        else
+            return log;
+    }
 
     double string_width_threshold;
+    double spectra_log_min = 5;
     const double lambda = 1;
 };
 

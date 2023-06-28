@@ -15,6 +15,7 @@ void OutputModule::Write(double time, bool force) {
     // Check if it is time to write output.
     double t_now  = time_modifier(time);
     double t_last = time_modifier(last_written);
+
     if( t_now == t_last ) return;
     if( t_now - t_last < interval && (!force && forceable) ) return;
 

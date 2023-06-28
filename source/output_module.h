@@ -47,12 +47,16 @@ class OutputModule {
      */
     void Write(double time, bool force=false);
 
-    void SetTimeIntervalFunction(time_fct mod) {
+    void SetTimeFunction(time_fct mod) {
         time_modifier = mod;
     };
 
     double DefaultInterval(double time) {
         return time;
+    };
+
+    void SetInterval(double new_interval) {
+        interval = new_interval;
     };
 
 private:

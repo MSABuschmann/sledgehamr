@@ -67,15 +67,19 @@ class IOModule {
 
     /** @brief Easy access pointers for user-modifications.
      */
-    OutputModule* output_slices;
-    OutputModule* output_coarse_boxes;
-    OutputModule* output_full_boxes;
-    OutputModule* output_slices_truncation_errors;
-    OutputModule* output_coarse_boxes_truncation_errors;
-    OutputModule* output_full_boxes_truncation_errors;
-    OutputModule* output_projections;
-    OutputModule* output_spectra;
-    OutputModule* output_gw_spectra;
+    int idx_slices = -1;
+    int idx_coarse_box = -1;
+    int idx_full_box = -1;
+    int idx_slices_truncation_error = -1;
+    int idx_coarse_box_truncation_error = -1;
+    int idx_full_box_truncation_error = -1;
+    int idx_projections = -1;
+    int idx_spectra = -1;
+    int idx_gw_spectra = -1;
+
+    /** @brief Vector of output modules
+     */
+    std::vector<OutputModule> output;
 
   private:
     /** @brief Copies data from array into LevelData.
@@ -229,10 +233,6 @@ class IOModule {
     /** @brief Pointer to owner on whose data this class operates.
      */
     Sledgehamr* sim;
-
-    /** @brief Vector of output modules
-     */
-    std::vector<OutputModule> output;
 };
 
 template <typename T>
