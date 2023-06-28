@@ -18,10 +18,10 @@ IOModule::IOModule(Sledgehamr* owner) {
     pp.query("interval_slices", interval_slices);
 
     if (interval_slices >= 0) {
-        OutputModule out(output_folder + "/slices",
-                         OUTPUT_FCT(IOModule::WriteSlices),
-                         interval_slices);
-        output.push_back(out);
+        output.emplace_back(output_folder + "/slices",
+                            OUTPUT_FCT(IOModule::WriteSlices),
+                            interval_slices);
+        output_slices = &output.back();
     }
 
     // Full coarse box.
@@ -32,10 +32,10 @@ IOModule::IOModule(Sledgehamr* owner) {
                          "coarse_box_downsample_factor", 0);
 
     if (interval_coarse_box >= 0) {
-        OutputModule out(output_folder + "/coarse_box",
-                         OUTPUT_FCT(IOModule::WriteCoarseBox),
-                         interval_coarse_box);
-        output.push_back(out);
+        output.emplace_back(output_folder + "/coarse_box",
+                            OUTPUT_FCT(IOModule::WriteCoarseBox),
+                            interval_coarse_box);
+        output_coarse_boxes = &output.back();
     }
 
     // Entire volume.
@@ -46,10 +46,10 @@ IOModule::IOModule(Sledgehamr* owner) {
                          "full_box_downsample_factor", sim->max_level);
 
     if (interval_full_box >= 0) {
-        OutputModule out(output_folder + "/full_box",
-                         OUTPUT_FCT(IOModule::WriteFullBox),
-                         interval_full_box);
-        output.push_back(out);
+        output.emplace_back(output_folder + "/full_box",
+                            OUTPUT_FCT(IOModule::WriteFullBox),
+                            interval_full_box);
+        output_full_boxes = &output.back();
     }
 
     // Slices of truncation errors.
@@ -58,10 +58,10 @@ IOModule::IOModule(Sledgehamr* owner) {
              interval_slices_truncation_error);
 
     if (interval_slices_truncation_error >= 0) {
-        OutputModule out(output_folder + "/slices_truncation_error",
-                         OUTPUT_FCT(IOModule::WriteSlicesTruncationError),
-                         interval_slices_truncation_error);
-        output.push_back(out);
+        output.emplace_back(output_folder + "/slices_truncation_error",
+                            OUTPUT_FCT(IOModule::WriteSlicesTruncationError),
+                            interval_slices_truncation_error);
+        output_slices_truncation_errors = &output.back();
     }
 
     // Full coarse box of truncation errors.
@@ -74,10 +74,10 @@ IOModule::IOModule(Sledgehamr* owner) {
                          "coarse_box_truncation_error_downsample_factor", 0);
 
     if (interval_coarse_box_truncation_error >= 0) {
-        OutputModule out(output_folder + "/coarse_box_truncation_error",
-                         OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError),
-                         interval_coarse_box_truncation_error);
-        output.push_back(out);
+        output.emplace_back(output_folder + "/coarse_box_truncation_error",
+                            OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError),
+                            interval_coarse_box_truncation_error);
+        output_coarse_boxes_truncation_errors = &output.back();
     }
 
     // Entire volume of truncation errors.
@@ -91,10 +91,10 @@ IOModule::IOModule(Sledgehamr* owner) {
                           sim->max_level);
 
     if (interval_full_box_truncation_error >= 0) {
-        OutputModule out(output_folder + "/full_box_truncation_error",
-                         OUTPUT_FCT(IOModule::WriteFullBoxTruncationError),
-                         interval_full_box_truncation_error);
-        output.push_back(out);
+        output.emplace_back(output_folder + "/full_box_truncation_error",
+                            OUTPUT_FCT(IOModule::WriteFullBoxTruncationError),
+                            interval_full_box_truncation_error);
+        output_full_boxes_truncation_errors = &output.back();
     }
 
 /*
@@ -114,10 +114,10 @@ IOModule::IOModule(Sledgehamr* owner) {
     pp.query("interval_projections", interval_projections);
 
     if (interval_projections >= 0) {
-        OutputModule out(output_folder + "/projections",
-                         OUTPUT_FCT(IOModule::WriteProjections),
-                         interval_projections);
-        output.push_back(out);
+        output.emplace_back(output_folder + "/projections",
+                            OUTPUT_FCT(IOModule::WriteProjections),
+                            interval_projections);
+        output_projections = &output.back();
     }
 
 /*
@@ -138,10 +138,10 @@ IOModule::IOModule(Sledgehamr* owner) {
     pp.query("interval_spectra", interval_spectra);
 
     if (interval_spectra >= 0) {
-        OutputModule out(output_folder + "/spectra",
-                         OUTPUT_FCT(IOModule::WriteSpectra),
-                         interval_spectra);
-        output.push_back(out);
+        output.emplace_back(output_folder + "/spectra",
+                            OUTPUT_FCT(IOModule::WriteSpectra),
+                            interval_spectra);
+        output_spectra = &output.back();
     }
 
     // GW spectra.
@@ -149,10 +149,10 @@ IOModule::IOModule(Sledgehamr* owner) {
     pp.query("interval_gw_spectra", interval_gw_spectra);
 
     if (interval_gw_spectra >= 0) {
-        OutputModule out(output_folder + "/gw_spectra",
-                         OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum),
-                         interval_gw_spectra);
-        output.push_back(out);
+        output.emplace_back(output_folder + "/gw_spectra",
+                OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum),
+                interval_gw_spectra);
+        output_gw_spectra = &output.back();
     }
 /*
     // Checkpoint.

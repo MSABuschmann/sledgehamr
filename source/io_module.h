@@ -65,6 +65,18 @@ class IOModule {
     std::vector<Projection> projections;
     std::vector<Spectrum> spectra;
 
+    /** @brief Easy access pointers for user-modifications.
+     */
+    OutputModule* output_slices;
+    OutputModule* output_coarse_boxes;
+    OutputModule* output_full_boxes;
+    OutputModule* output_slices_truncation_errors;
+    OutputModule* output_coarse_boxes_truncation_errors;
+    OutputModule* output_full_boxes_truncation_errors;
+    OutputModule* output_projections;
+    OutputModule* output_spectra;
+    OutputModule* output_gw_spectra;
+
   private:
     /** @brief Copies data from array into LevelData.
      * @param   lev Level to be filled with data.
