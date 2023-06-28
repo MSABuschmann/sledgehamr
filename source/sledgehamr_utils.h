@@ -161,7 +161,11 @@ static std::string LevelName(int lev) {
             return std::to_string(lev) + OrdinalNumberSuffix(lev)
                     + " refinement";
     }
-};
+}
+
+static bool IsPowerOfTwo(int val) {
+    return (val > 0) && ((val & (val - 1)) == 0);
+}
 
 }; // namespace utils
 }; // namespace sledgehamr

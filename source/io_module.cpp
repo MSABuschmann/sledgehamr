@@ -1,4 +1,5 @@
 #include "io_module.h"
+#include "sledgehamr_utils.h"
 
 namespace sledgehamr {
 
@@ -26,8 +27,9 @@ IOModule::IOModule(Sledgehamr* owner) {
     // Full coarse box.
     double interval_coarse_box = -1;
     pp.query("interval_coarse_box", interval_coarse_box);
-    // TODO Check that power of 2 and <= blocking_factor.
     pp.query("coarse_box_downsample_factor", coarse_box_downsample_factor);
+    CheckDownsampleFactor(coarse_box_downsample_factor,
+                         "coarse_box_downsample_factor", 0);
 
     if (interval_coarse_box >= 0) {
         OutputModule out(output_folder + "/coarse_box",
@@ -39,8 +41,9 @@ IOModule::IOModule(Sledgehamr* owner) {
     // Entire volume.
     double interval_full_box = -1;
     pp.query("interval_full_box", interval_full_box);
-    // TODO Check that power of 2 and <= blocking_factor.
     pp.query("full_box_downsample_factor", full_box_downsample_factor);
+    CheckDownsampleFactor(full_box_downsample_factor,
+                         "full_box_downsample_factor", sim->max_level);
 
     if (interval_full_box >= 0) {
         OutputModule out(output_folder + "/full_box",
@@ -65,9 +68,10 @@ IOModule::IOModule(Sledgehamr* owner) {
     double interval_coarse_box_truncation_error = -1;
     pp.query("interval_coarse_box_truncation_error",
              interval_coarse_box_truncation_error);
-    // TODO Check that power of 2 and <= blocking_factor.
     pp.query("coarse_box_truncation_error_downsample_factor",
              coarse_box_truncation_error_downsample_factor);
+    CheckDownsampleFactor(coarse_box_truncation_error_downsample_factor,
+                         "coarse_box_truncation_error_downsample_factor", 0);
 
     if (interval_coarse_box_truncation_error >= 0) {
         OutputModule out(output_folder + "/coarse_box_truncation_error",
@@ -80,9 +84,11 @@ IOModule::IOModule(Sledgehamr* owner) {
     double interval_full_box_truncation_error = -1;
     pp.query("interval_full_box_truncation_error",
              interval_full_box_truncation_error);
-    // TODO Check that power of 2 and <= blocking_factor.
     pp.query("full_box_truncation_error_downsample_factor",
              full_box_truncation_error_downsample_factor);
+    CheckDownsampleFactor(full_box_truncation_error_downsample_factor,
+                         "full_box_truncation_error_downsample_factor",
+                          sim->max_level);
 
     if (interval_full_box_truncation_error >= 0) {
         OutputModule out(output_folder + "/full_box_truncation_error",
@@ -631,6 +637,26 @@ bool IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
         H5Fclose(file_id);
 
     return true;
+}
+
+void IOModule::CheckDownsampleFactor(int factor, std::string name,
+                                     int max_level) {
+    if (!amrex::ParallelDescriptor::IOProcessor())
+        return;
+
+    if (!utils::IsPowerOfTwo(factor)) {
+        std::string msg = "sledgehamr::IOModule: Downsample factor output."
+                        + name + " is not a power of 2";
+        amrex::Abort(msg);
+    }
+
+    for (int lev = 0; lev <= max_level; ++lev) {
+        if (factor > sim->blocking_factor[lev][0]) {
+            std::string msg = "sledgehamr::IOModule: Downsample factor output."
+                            + name + " exceeds blocking factor";
+            amrex::Abort(msg);
+        }
+    }
 }
 
 }; // namespace sledgehamr

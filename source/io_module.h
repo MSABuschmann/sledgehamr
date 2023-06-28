@@ -205,6 +205,8 @@ class IOModule {
      */
     bool WriteGravitationalWaveSpectrum(double time, std::string prefix);
 
+    void CheckDownsampleFactor(int factor, std::string name, int max_level);
+
     /** Downsampling factors for coarse/full level output.
      */
     int coarse_box_downsample_factor = 1;
