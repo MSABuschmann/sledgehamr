@@ -24,7 +24,11 @@ AMREX_GPU_DEVICE AMREX_FORCE_INLINE
 void Rhs(const amrex::Array4<double>& rhs,
          const amrex::Array4<const double>& state,
          const int i, const int j, const int k, const int lev,
-         const double time, const double dt, const double dx) {
+         const double time, const double dt, const double dx,
+         const std::vector<double>& params) {
+    double a = params[0];
+    double b = params[1];
+
     // Fetch field values.
     double Psi1 = state(i, j, k, Scalar::Psi1);
     double Psi2 = state(i, j, k, Scalar::Psi2);
@@ -348,6 +352,11 @@ class axion_strings : public sledgehamr::Sledgehamr {
 
     void Init() override;
     bool CreateLevelIf(const int lev, const double time) override;
+
+    void SetParams(std::vector<double>& params) {//override {
+        params.push_back(0.5);
+        params.push_back(0.53);
+    }
 
   private:
     void ParseVariables();
