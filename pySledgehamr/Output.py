@@ -15,6 +15,7 @@ class Output:
         self._coarse_box_truncation_error_headers = []
         self._full_box_truncation_error_headers = []
         self._projection_headers = []
+        self._spectrum_headers = []
 
         self.__ParseFolderStructure()
 
@@ -48,6 +49,10 @@ class Output:
     ## Returns array of times at which projections have been written.
     def GetTimesOfProjections(self):
         return self._projection_headers[:,0]
+
+    ## Returns array of times at which projections have been written.
+    def GetTimesOfSpectra(self):
+        return self._spectrum_headers[:,0]
 
     ## Returns a slice.
     # @param    i           Number of slice to be read.
@@ -223,7 +228,7 @@ class Output:
         fin.close()
         return d
 
-    ## Returns a projection.
+    ## Returns projections.
     # @param    i           Number of projection to be read.
     # @para     names       List of projection names
     # @return   d           Dictionary containing the time and projection.
@@ -243,6 +248,27 @@ class Output:
         fin.close()
         return d
 
+    ## Returns sprectra.
+    # @param    i           State number.
+    # @para     names       List of spectrum names.
+    # @return   d           Dictionary containing the time and spectra.
+    def GetSpectrum(self, i, names):
+        # Get relevant parameters from header
+        t = self._spectrum_headers[i,0]
+        file = self._prefix + '/spectra/'+str(i)+'/spectra.hdf5'
+
+        fin = h5py.File(file,'r')
+
+        # Start dictionary
+        d = dict();
+        d['t'] = t
+        d['k_sq'] = fin['k_sq'][:]
+
+        for s in names:
+            d[s] = fin[s][:]
+
+        fin.close()
+        return d
 
     def __Read2dField(self, folder, dim, direction, ranks, ident, downsample):
         field = np.ones((dim,dim), dtype=np.float32) * np.nan
@@ -292,6 +318,7 @@ class Output:
         self.__ParseCoarseBoxes()
         self.__ParseFullBoxes()
         self.__ParseProjections()
+        self.__ParseSpectra()
         self.__ParseSlicesTruncationError()
         self.__ParseCoarseBoxesTruncationError()
         self.__ParseFullBoxesTruncationError()
@@ -439,6 +466,26 @@ class Output:
         print('Number of projections found:',\
               len(self._projection_headers))
 
+    ## Determines how many projections have been written and parses their header
+    ## files.
+    def __ParseSpectra(self):
+        folder = self._prefix + '/spectra/'
+        i = 0
+
+        # iterate over batches and read header of first files
+        while True:
+            file = folder + str(i) + '/spectra.hdf5'
+            if not path.exists( file ):
+                break
+            fin = h5py.File(file,'r')
+            self._spectrum_headers.append(fin['Header'][:])
+            i = i + 1
+
+        self._spectrum_headers =\
+                np.array( self._spectrum_headers )
+
+        print('Number of spectra found:',\
+              len(self._spectrum_headers))
 
     ## Path of output folder
     _prefix = "."
@@ -451,3 +498,4 @@ class Output:
     _coarse_box_truncation_error_headers = []
     _full_box_truncation_error_headers = []
     _projection_headers = []
+    _spectrum_headers = []
