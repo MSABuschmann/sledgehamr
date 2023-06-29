@@ -315,7 +315,7 @@ double a_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
 }
 
 AMREX_FORCE_INLINE
-double a_prime2_screened(amrex::Array4<amrex::Real const> const& state,
+double a_prime_screened(amrex::Array4<amrex::Real const> const& state,
         const int i, const int j, const int k, const int lev, const double time,
         const double dt, const double dx,
         const std::vector<double>& params) {
@@ -324,7 +324,7 @@ double a_prime2_screened(amrex::Array4<amrex::Real const> const& state,
     double Pi1     = state(i, j, k, Scalar::Pi1);
     double Pi2     = state(i, j, k, Scalar::Pi2);
     double prime_a = (Psi1*Pi2 - Psi2*Pi1);
-    return prime_a*prime_a;
+    return prime_a;
 }
 
 AMREX_FORCE_INLINE
@@ -356,6 +356,7 @@ class axion_strings : public sledgehamr::Sledgehamr {
     void ParseVariables();
     void PrintRefinementTimes();
     void SetProjections();
+    void SetSpectra();
 
     double Mr(const double eta) {
         return std::sqrt(2. * lambda) * eta; 

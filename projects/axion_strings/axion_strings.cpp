@@ -6,6 +6,7 @@ void axion_strings::Init() {
     ParseVariables();
     PrintRefinementTimes();
     SetProjections();
+    SetSpectra();
 }
 
 bool axion_strings::CreateLevelIf(const int lev, const double time) {
@@ -35,14 +36,14 @@ void axion_strings::SetProjections() {
     sledgehamr::Projection proj2(r_prime2, "r_prime2");
     io_module->projections.push_back(proj1);
     io_module->projections.push_back(proj2);
+}
 
+void axion_strings::SetSpectra() {
     // Add spectra and change time interval to log(m_r/H).
-    sledgehamr::Spectrum spec1(a_prime2_screened, "a_prime2_screened");
+    sledgehamr::Spectrum spec1(a_prime_screened, "a_prime_screened");
     io_module->spectra.push_back(spec1);
-
-    if( io_module->idx_spectra >= 0 )
-        io_module->output[io_module->idx_spectra].SetTimeFunction(
-                TIME_FCT(axion_strings::LogTruncated));
+    io_module->output[io_module->idx_spectra].SetTimeFunction(
+            TIME_FCT(axion_strings::LogTruncated));
 }
 
 }; // namespace axion_strings
