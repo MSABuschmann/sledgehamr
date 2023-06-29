@@ -100,7 +100,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
             double header_data[nparams] = {sim->grid_new[lev].t, (double)dimN,
                                            (double)kmax};
             IOModule::WriteToHDF5(file_id, "Header", header_data, nparams);
-            IOModule::WriteToHDF5(file_id, "k", &(ks[0]), kmax);
+            IOModule::WriteToHDF5(file_id, "k_sq", &(ks[0]), kmax);
         }
 
         IOModule::WriteToHDF5(file_id, ident, spectrum, kmax);

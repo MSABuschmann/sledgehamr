@@ -76,6 +76,7 @@ class IOModule {
     int idx_projections = -1;
     int idx_spectra = -1;
     int idx_gw_spectra = -1;
+    int idx_checkpoints = -1;
 
     /** @brief Vector of output modules
      */
@@ -222,6 +223,8 @@ class IOModule {
     bool WriteGravitationalWaveSpectrum(double time, std::string prefix);
 
     void CheckDownsampleFactor(int factor, std::string name, int max_level);
+
+    bool WriteCheckpoint(double time, std::string prefix);
 
     /** Downsampling factors for coarse/full level output.
      */

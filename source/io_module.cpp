@@ -1,3 +1,6 @@
+#include <AMReX_VisMF.H>
+#include <AMReX_PlotFileUtil.H>
+
 #include "io_module.h"
 #include "sledgehamr_utils.h"
 
@@ -16,13 +19,10 @@ IOModule::IOModule(Sledgehamr* owner) {
     // Slices.
     double interval_slices = -1;
     pp.query("interval_slices", interval_slices);
-
-    if (interval_slices >= 0) {
-        idx_slices = output.size();
-        output.emplace_back(output_folder + "/slices",
-                            OUTPUT_FCT(IOModule::WriteSlices),
-                            interval_slices);
-    }
+    idx_slices = output.size();
+    output.emplace_back(output_folder + "/slices",
+                        OUTPUT_FCT(IOModule::WriteSlices),
+                        interval_slices);
 
     // Full coarse box.
     double interval_coarse_box = -1;
@@ -30,13 +30,10 @@ IOModule::IOModule(Sledgehamr* owner) {
     pp.query("coarse_box_downsample_factor", coarse_box_downsample_factor);
     CheckDownsampleFactor(coarse_box_downsample_factor,
                          "coarse_box_downsample_factor", 0);
-
-    if (interval_coarse_box >= 0) {
-        idx_coarse_box = output.size();
-        output.emplace_back(output_folder + "/coarse_box",
-                            OUTPUT_FCT(IOModule::WriteCoarseBox),
-                            interval_coarse_box);
-    }
+    idx_coarse_box = output.size();
+    output.emplace_back(output_folder + "/coarse_box",
+                        OUTPUT_FCT(IOModule::WriteCoarseBox),
+                        interval_coarse_box);
 
     // Entire volume.
     double interval_full_box = -1;
@@ -44,25 +41,19 @@ IOModule::IOModule(Sledgehamr* owner) {
     pp.query("full_box_downsample_factor", full_box_downsample_factor);
     CheckDownsampleFactor(full_box_downsample_factor,
                          "full_box_downsample_factor", sim->max_level);
-
-    if (interval_full_box >= 0) {
-        idx_full_box = output.size();
-        output.emplace_back(output_folder + "/full_box",
-                            OUTPUT_FCT(IOModule::WriteFullBox),
-                            interval_full_box);
-    }
+    idx_full_box = output.size();
+    output.emplace_back(output_folder + "/full_box",
+                        OUTPUT_FCT(IOModule::WriteFullBox),
+                        interval_full_box);
 
     // Slices of truncation errors.
     double interval_slices_truncation_error = -1;
     pp.query("interval_slices_truncation_error",
              interval_slices_truncation_error);
-
-    if (interval_slices_truncation_error >= 0) {
-        idx_slices_truncation_error = output.size();
-        output.emplace_back(output_folder + "/slices_truncation_error",
-                            OUTPUT_FCT(IOModule::WriteSlicesTruncationError),
-                            interval_slices_truncation_error);
-    }
+    idx_slices_truncation_error = output.size();
+    output.emplace_back(output_folder + "/slices_truncation_error",
+                        OUTPUT_FCT(IOModule::WriteSlicesTruncationError),
+                        interval_slices_truncation_error);
 
     // Full coarse box of truncation errors.
     double interval_coarse_box_truncation_error = -1;
@@ -72,13 +63,10 @@ IOModule::IOModule(Sledgehamr* owner) {
              coarse_box_truncation_error_downsample_factor);
     CheckDownsampleFactor(coarse_box_truncation_error_downsample_factor,
                          "coarse_box_truncation_error_downsample_factor", 0);
-
-    if (interval_coarse_box_truncation_error >= 0) {
-        idx_coarse_box_truncation_error = output.size();
-        output.emplace_back(output_folder + "/coarse_box_truncation_error",
-                            OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError),
-                            interval_coarse_box_truncation_error);
-    }
+    idx_coarse_box_truncation_error = output.size();
+    output.emplace_back(output_folder + "/coarse_box_truncation_error",
+                        OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError),
+                        interval_coarse_box_truncation_error);
 
     // Entire volume of truncation errors.
     double interval_full_box_truncation_error = -1;
@@ -89,88 +77,62 @@ IOModule::IOModule(Sledgehamr* owner) {
     CheckDownsampleFactor(full_box_truncation_error_downsample_factor,
                          "full_box_truncation_error_downsample_factor",
                           sim->max_level);
-
-    if (interval_full_box_truncation_error >= 0) {
-        idx_full_box_truncation_error = output.size();
-        output.emplace_back(output_folder + "/full_box_truncation_error",
-                            OUTPUT_FCT(IOModule::WriteFullBoxTruncationError),
-                            interval_full_box_truncation_error);
-    }
+    idx_full_box_truncation_error = output.size();
+    output.emplace_back(output_folder + "/full_box_truncation_error",
+                        OUTPUT_FCT(IOModule::WriteFullBoxTruncationError),
+                        interval_full_box_truncation_error);
 
 /*
    // yt output
     double interval_yt = -1;
     pp.query("interval_yt", interval_yt);
-
-    if (interval_yt >= 0) {
-        OutputModule out(output_folder + "/yt",
-                         OUTPUT_FCT(IOModule::WriteYt),
-                         interval_yt);
-        output.push_back(out);
-    }
+    idx_yt = output.size();
+    output.emplace_back(output_folder + "/yt",
+                        OUTPUT_FCT(IOModule::WriteYt),
+                        interval_yt);
 */
+
     // Projections.
     double interval_projections = -1;
     pp.query("interval_projections", interval_projections);
+    idx_projections = output.size();
+    output.emplace_back(output_folder + "/projections",
+                        OUTPUT_FCT(IOModule::WriteProjections),
+                        interval_projections);
 
-    if (interval_projections >= 0) {
-        idx_projections = output.size();
-        output.emplace_back(output_folder + "/projections",
-                            OUTPUT_FCT(IOModule::WriteProjections),
-                            interval_projections);
-    }
-
-/*
-     // Projections of truncation errors.
-    double interval_projections_truncation_error = -1;
-    pp.query("interval_projections_truncation_error",
-             interval_projections_truncation_error);
-
-    if (interval_projections_truncation_error >= 0) {
-        OutputModule out(output_folder + "/projections_truncation_error",
-                         OUTPUT_FCT(IOModule::WriteProjectionsTruncationError),
-                         interval_projections_truncation_error);
-        output.push_back(out);
-    }
-*/
     // Spectra.
     double interval_spectra = -1;
     pp.query("interval_spectra", interval_spectra);
-
-    if (interval_spectra >= 0) {
-        idx_spectra = output.size();
-        output.emplace_back(output_folder + "/spectra",
-                            OUTPUT_FCT(IOModule::WriteSpectra),
-                            interval_spectra);
-    }
+    idx_spectra = output.size();
+    output.emplace_back(output_folder + "/spectra",
+                        OUTPUT_FCT(IOModule::WriteSpectra),
+                        interval_spectra);
 
     // GW spectra.
     double interval_gw_spectra = -1;
     pp.query("interval_gw_spectra", interval_gw_spectra);
+    idx_gw_spectra = output.size();
+    output.emplace_back(output_folder + "/gw_spectra",
+                        OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum),
+                        interval_gw_spectra);
 
-    if (interval_gw_spectra >= 0) {
-        idx_gw_spectra = output.size();
-        output.emplace_back(output_folder + "/gw_spectra",
-                OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum),
-                interval_gw_spectra);
-    }
-/*
     // Checkpoint.
     double interval_checkpoints = -1;
     pp.query("interval_checkpoints", interval_checkpoints);
-
-    if (interval_checkpoints >= 0) {
-        OutputModule out(output_folder + "/checkpoints",
-                         OUTPUT_FCT(IOModule::WriteCheckpoint),
-                         interval_checkpoints);
-        output.push_back(out);
-    }
-*/
+    idx_checkpoints = output.size();
+    output.emplace_back(output_folder + "/checkpoints",
+                        OUTPUT_FCT(IOModule::WriteCheckpoint),
+                        interval_checkpoints);
 }
 
 void IOModule::Write(bool force) {
-    for (OutputModule& out : output)
-        out.Write(sim->grid_new[0].t, force);
+    // Make sure checkpoints are written last to ensure most up-to-date meta
+    // data.
+    for(int i = 0; i < output.size(); ++i) {
+        if (i != idx_checkpoints)
+            output[i].Write(sim->grid_new[0].t, force);
+    }
+    output[idx_checkpoints].Write(sim->grid_new[0].t, force);
 }
 
 void IOModule::FillLevelFromFile (int lev)
@@ -657,6 +619,81 @@ void IOModule::CheckDownsampleFactor(int factor, std::string name,
             amrex::Abort(msg);
         }
     }
+}
+
+bool IOModule::WriteCheckpoint(double time, std::string prefix) {
+    amrex::Print() << "Writing checkpoint " << prefix << std::endl;
+
+    const int nlevels = sim->finest_level + 1;
+    amrex::PreBuildDirectorHierarchy(prefix, "Level_", nlevels, true);
+
+    // write Header file
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        std::string HeaderFileName(prefix + "/BoxArrays");
+        amrex::VisMF::IO_Buffer io_buffer(amrex::VisMF::IO_Buffer_Size);
+        std::ofstream HeaderFile;
+        HeaderFile.rdbuf()->pubsetbuf(io_buffer.dataPtr(), io_buffer.size());
+        HeaderFile.open(HeaderFileName.c_str(), std::ofstream::out   |
+                                           std::ofstream::trunc |
+                                           std::ofstream::binary);
+        if( !HeaderFile.good()) {
+            amrex::FileOpenFailed(HeaderFileName);
+        }
+
+        for (int lev = 0; lev < nlevels; ++lev) {
+            sim->boxArray(lev).writeOn(HeaderFile);
+            HeaderFile << '\n';
+        }
+
+        std::string filename = prefix + "/Meta.hdf5";
+        hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                              H5P_DEFAULT);
+
+        const int nparams = 8;
+        double header_data[nparams] = {time,
+                (double)amrex::ParallelDescriptor::NProcs(),
+                (double)sim->finest_level,
+                (double)sim->dimN[0],
+                (double)sim->nghost,
+                (double)sim->scalar_fields.size(),
+                (double)output.size(),
+                (double)10 // pre-defined output types.
+        };
+        WriteToHDF5(file_id, "Header", header_data, nparams);
+
+        // levels: blocking_factor, istep
+        std::vector<int> bf(nlevels), istep(nlevels);
+        for (int lev = 0; lev < nlevels; ++lev) {
+            bf[lev] = sim->blocking_factor[lev][0];
+            istep[lev] = sim->grid_new[lev].istep;
+        }
+        WriteToHDF5(file_id, "blocking_factors", &(bf[0]), nlevels);
+        WriteToHDF5(file_id, "isteps", &(istep[0]), nlevels);
+
+        // outputs: last id, last time written
+        const int noutput = output.size();
+        std::vector<int> next_id(noutput);
+        std::vector<double> last_time_written(noutput);
+        for (int i = 0; i < noutput; ++i) {
+            next_id[i] = output[i].GetNextId();
+            last_time_written[i] = output[i].GetLastTimeWritten();
+        }
+        WriteToHDF5(file_id, "next_id", &(next_id[0]), noutput);
+        WriteToHDF5(file_id, "last_time_written", &(last_time_written[0]),
+                    noutput);
+
+        H5Fclose(file_id);
+    }
+
+    // Write the MultiFab data.
+    for (int lev = 0; lev < nlevels; ++lev) {
+        amrex::VisMF::Write(
+                sim->grid_new[lev],
+                amrex::MultiFabFileFullPrefix(
+                        lev, prefix, "Level_", "Cell"));
+    }
+
+    return true;
 }
 
 }; // namespace sledgehamr

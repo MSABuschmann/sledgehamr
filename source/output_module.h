@@ -59,6 +59,14 @@ class OutputModule {
         interval = new_interval;
     };
 
+    int GetNextId() const {
+        return next_id;
+    };
+
+    double GetLastTimeWritten() const {
+        return last_written;
+    };
+
 private:
     /** @brief Function pointer to function that does the actual writing.
      */
@@ -72,7 +80,7 @@ private:
 
     /** @brief Time at which this output has been written last.
      */
-    double last_written = -1e99;
+    double last_written = -DBL_MAX;
 
     /** @brief Interval at which this output shall be written.
      */
