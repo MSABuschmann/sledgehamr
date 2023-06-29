@@ -266,10 +266,6 @@ void TimeStepper::NoShadowRegrid(int lev) {
 
     // TODO: Implement semi-static case.
 
-    // Skip regrid right at the beginning of the sim. Allowed to be overwritten
-    // if no truncation errors are used (TODO).
-    if (time == sim->t_start) return;
-
     // Regrid changes level "lev+1" so we don't regrid on max_level.
     if (lev >= sim->max_level) return;
 
