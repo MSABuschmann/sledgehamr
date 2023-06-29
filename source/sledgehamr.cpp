@@ -336,7 +336,6 @@ void Sledgehamr::ReadSpectrumKs() {
     if (!spectrum_ks.empty())
         return;
 
-    // TODO Get proper file location.
     std::string filename = SLEDGEHAMR_DATA_PATH;
     filename += "spectra_ks.hdf5";
     std::string sdimN = std::to_string(dimN[0]);
