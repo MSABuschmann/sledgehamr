@@ -26,9 +26,6 @@ void Rhs(const amrex::Array4<double>& rhs,
          const int i, const int j, const int k, const int lev,
          const double time, const double dt, const double dx,
          const std::vector<double>& params) {
-    double a = params[0];
-    double b = params[1];
-
     // Fetch field values.
     double Psi1 = state(i, j, k, Scalar::Psi1);
     double Psi2 = state(i, j, k, Scalar::Psi2);
@@ -38,27 +35,26 @@ void Rhs(const amrex::Array4<double>& rhs,
     double eta = time;
 
     // Compute Laplacians.
-    double dx2 = dx * dx;
     constexpr int order = 1;
     double laplacian_Psi1 = sledgehamr::utils::Laplacian<order>(
-            state, i, j, k, Scalar::Psi1, dx2);
+            state, i, j, k, Scalar::Psi1, dx*dx);
     double laplacian_Psi2 = sledgehamr::utils::Laplacian<order>(
-            state, i, j, k, Scalar::Psi2, dx2);
+            state, i, j, k, Scalar::Psi2, dx*dx);
 
     // Compute EOM.
-    double cross_term = eta*eta*( Psi1*Psi1 + Psi2*Psi2 - 1. ) + 0.56233;
+    double potential = eta*eta*( Psi1*Psi1 + Psi2*Psi2 - 1. ) + 0.56233;
 
     rhs(i, j, k, Scalar::Psi1) =  Pi1;
     rhs(i, j, k, Scalar::Psi2) =  Pi2;
-    rhs(i, j, k, Scalar::Pi1)  = -Pi1*2./eta + laplacian_Psi1 - Psi1*cross_term;
-    rhs(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + laplacian_Psi2 - Psi2*cross_term;
+    rhs(i, j, k, Scalar::Pi1)  = -Pi1*2./eta + laplacian_Psi1 - Psi1*potential;
+    rhs(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + laplacian_Psi2 - Psi2*potential;
 }
 
 template<> AMREX_GPU_DEVICE AMREX_FORCE_INLINE
 void GravitationalWavesRhs<true>(const amrex::Array4<double>& rhs,
-         const amrex::Array4<const double>& state,
-         const int i, const int j, const int k, const int lev,
-         const double time, const double dt, const double dx) {
+        const amrex::Array4<const double>& state, const int i, const int j,
+        const int k, const int lev, const double time, const double dt,
+        const double dx, const std::vector<double>& params) {
     // Fetch field values.
     double u_xx = state(i, j, k, Gw::u_xx);
     double u_yy = state(i, j, k, Gw::u_yy);
@@ -221,9 +217,9 @@ int WindingAxis3(const amrex::Array4<const double>& state,
  */
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 bool TagCellForRefinement<true>(const amrex::Array4<const double>& state,
-                                const int i, const int j, const int k,
-                                const int lev, const double time,
-                                const double dt, const double dx) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx,
+        const std::vector<double>& params) {
     // Check all three plaquettes (in positive index direction) for string
     // piercings.
     if (WindingAxis1(state, i, j, k) != 0) return true;
@@ -240,65 +236,65 @@ bool TagCellForRefinement<true>(const amrex::Array4<const double>& state,
  */
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Scalar::Pi1>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx, const double truncation_error,
+        const std::vector<double>& params) {
     return truncation_error * dt;
 }
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx, const double truncation_error,
+        const std::vector<double>& params) {
     return truncation_error * dt;
 }
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_xx>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx, const double truncation_error,
+        const std::vector<double>& params) {
     return truncation_error * dt;
 }
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_yy>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx, const double truncation_error,
+        const std::vector<double>& params) {
     return truncation_error * dt;
 }
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_zz>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx, const double truncation_error,
+        const std::vector<double>& params) {
     return truncation_error * dt;
 }
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_xy>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx, const double truncation_error,
+        const std::vector<double>& params) {
     return truncation_error * dt;
 }
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_xz>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx, const double truncation_error,
+        const std::vector<double>& params) {
     return truncation_error * dt;
 }
 
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_yz>(const amrex::Array4<const double>& state,
-                          const int i, const int j, const int k, const int lev,
-                          const double time, const double dt, const double dx,
-                          const double truncation_error) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx, const double truncation_error,
+        const std::vector<double>& params) {
     return truncation_error * dt;
 }
 
@@ -306,8 +302,9 @@ double TruncationModifier<Gw::du_yz>(const amrex::Array4<const double>& state,
  */
 AMREX_FORCE_INLINE
 double a_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
-                const int j, const int k, const int lev, const double time,
-                const double dt, const double dx) {
+        const int j, const int k, const int lev, const double time,
+        const double dt, const double dx,
+        const std::vector<double>& params) {
     double Psi1    = state(i, j, k, Scalar::Psi1);
     double Psi2    = state(i, j, k, Scalar::Psi2);
     double Pi1     = state(i, j, k, Scalar::Pi1);
@@ -319,8 +316,9 @@ double a_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
 
 AMREX_FORCE_INLINE
 double a_prime2_screened(amrex::Array4<amrex::Real const> const& state,
-                         const int i, const int j, const int k, const int lev,
-                         const double time, const double dt, const double dx) {
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx,
+        const std::vector<double>& params) {
     double Psi1    = state(i, j, k, Scalar::Psi1);
     double Psi2    = state(i, j, k, Scalar::Psi2);
     double Pi1     = state(i, j, k, Scalar::Pi1);
@@ -331,8 +329,9 @@ double a_prime2_screened(amrex::Array4<amrex::Real const> const& state,
 
 AMREX_FORCE_INLINE
 double r_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
-                const int j, const int k, const int lev, const double time,
-                const double dt, const double dx) {
+        const int j, const int k, const int lev, const double time,
+        const double dt, const double dx,
+        const std::vector<double>& params) {
     double Psi1    = state(i, j, k, Scalar::Psi1);
     double Psi2    = state(i, j, k, Scalar::Psi2);
     double Pi1     = state(i, j, k, Scalar::Pi1);
@@ -352,11 +351,6 @@ class axion_strings : public sledgehamr::Sledgehamr {
 
     void Init() override;
     bool CreateLevelIf(const int lev, const double time) override;
-
-    void SetParams(std::vector<double>& params) {//override {
-        params.push_back(0.5);
-        params.push_back(0.53);
-    }
 
   private:
     void ParseVariables();

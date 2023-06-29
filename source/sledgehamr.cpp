@@ -172,6 +172,11 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     int ntags_user = 0;
     std::vector<int> ntags_trunc(scalar_fields.size(), 0);
 
+    std::vector<double> params_tag, params_mod;
+    SetParamsTagCellForRefinement(params_tag);
+    if (shadow_hierarchy)
+        SetParamsTruncationModifier(params_mod);
+ 
     // Loop over boxes and cells.
 #pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user) \
                      reduction(vec_int_plus : ntags_trunc)
@@ -185,14 +190,14 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
         if (shadow_hierarchy && state_te.contains_truncation_errors) {
             TagWithTruncationCpu(state_fab, state_fab_te, tag_arr, tilebox,
                                  time, lev, &ntags_total, &ntags_user,
-                                 &(ntags_trunc[0]));
+                                 &(ntags_trunc[0]), params_tag, params_mod);
         } else if (shadow_hierarchy) {
             std::string msg = "Trying to tag using truncation errors but no ";
             msg += "truncation errors are computed!";
             amrex::Abort(msg.c_str());
         } else {
             TagWithoutTruncationCpu(state_fab, tag_arr, tilebox, time, lev,
-                                    &ntags_total);
+                                    &ntags_total, params_tag);
         }
     }
 
@@ -231,6 +236,11 @@ void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
     // State containing truncation errors if they have been calculated.
     const amrex::MultiFab& state_te = grid_old[lev];
 
+    std::vector<double> params_tag, params_mod;
+    SetParamsTagCellForRefinement(params_tag);
+    if (shadow_hierarchy)
+        SetParamsTruncationModifier(params_mod);
+
     // Loop over boxes and cells.
 #pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
     for (amrex::MFIter mfi(state, amrex::TilingIfNotGPU()); mfi.isValid();
@@ -243,9 +253,10 @@ void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
         // Tag with or without truncation errors.
         if (shadow_hierarchy) {
             TagWithTruncationGpu(state_fab, state_fab_te, tag_arr, tilebox,
-                                 time, lev);
+                                 time, lev, params_tag, params_mod);
         } else {
-            TagWithoutTruncationGpu(state_fab, tag_arr, tilebox, time, lev);
+            TagWithoutTruncationGpu(state_fab, tag_arr, tilebox, time, lev,
+                                    params_tag);
         }
     }
 

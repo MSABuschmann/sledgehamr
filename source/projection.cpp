@@ -11,6 +11,9 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     double* d_projection = new double[N]();
     int* n_projection = new int[N]();
 
+    std::vector<double> params;
+    sim->SetParamsProjections(params);
+
     for (int lev = 0; lev <= mlevel; ++lev) {
         const int dimN_lev = sim->dimN[lev];
         const int ratio = dimN / dimN_lev;
@@ -46,7 +49,7 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
 
                         if (contd) {
                             double val = fct(state_fab, i, j, k, lev, time, dt,
-                                             dx);
+                                             dx, params);
                             Add(i, j, k, d_projection, n_projection, ratio,
                                 dimN, val);
                         }

@@ -21,6 +21,9 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     field.define(ba, sim->dmap[lev], 1, 0);
     field_fft.define(ba, sim->dmap[lev], 1, 0);
 
+    std::vector<double> params;
+    sim->SetParamsSpectra(params);
+
 #pragma omp parallel
     for (amrex::MFIter mfi(field, true); mfi.isValid(); ++mfi) {
         const amrex::Box& bx = mfi.tilebox();
@@ -34,7 +37,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
             for (int j = lo.y; j <= hi.y; ++j) {
                 for (int i = lo.x; i <= hi.x; ++i) {
                     field_arr(i, j, k, 0) = fct(state_arr, i, j, k, lev, time,
-                                                dt, dx);
+                                                dt, dx, params);
                 }
             }
         }

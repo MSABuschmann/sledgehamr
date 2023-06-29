@@ -10,8 +10,8 @@ namespace sledgehamr {
 class Sledgehamr;
 
 typedef std::function<double(amrex::Array4<amrex::Real const> const&, const int,
-                             const int, const int, const int, const double,
-                             const double, const double)> spectrum_fct;
+        const int, const int, const int, const double, const double,
+        const double, const std::vector<double>&)> spectrum_fct;
 
 /** @brief TODO
  */

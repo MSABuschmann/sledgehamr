@@ -168,13 +168,15 @@ class Sledgehamr : public amrex::AmrCore {
             const amrex::Array4<const double>& state_fab_te,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
             double time, int lev, int* ntags_total, int* ntags_user,
-            int* ntags_trunc) = 0;
+            int* ntags_trunc, const std::vector<double>& params_tag,
+            const std::vector<double>& params_mod) = 0;
 
     virtual void TagWithTruncationGpu(
             const amrex::Array4<const double>& state_fab,
             const amrex::Array4<const double>& state_fab_te,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
-            double time, int lev) = 0;
+            double time, int lev, const std::vector<double>& params_tag,
+            const std::vector<double>& params_mod) = 0;
 
     /** @brief Same as TagWithTruncation but does not include
      *         truncation error tags.
@@ -182,12 +184,13 @@ class Sledgehamr : public amrex::AmrCore {
     virtual void TagWithoutTruncationCpu(
             const amrex::Array4<const double>& state_fab,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
-            double time, int lev, int* ntags_total) = 0;
+            double time, int lev, int* ntags_total,
+            const std::vector<double>& params) = 0;
 
     virtual void TagWithoutTruncationGpu(
             const amrex::Array4<const double>& state_fab,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
-            double time, int lev) = 0;
+            double time, int lev, const std::vector<double>& params) = 0;
 
     /** @brief Initialize project specific details.
      */
@@ -203,6 +206,13 @@ class Sledgehamr : public amrex::AmrCore {
     virtual bool CreateLevelIf(const int lev, const double time) {
         return true;
     };
+
+    virtual void SetParamsRhs(std::vector<double>& params) {};
+    virtual void SetParamsGravitationalWaveRhs(std::vector<double>& params) {};
+    virtual void SetParamsTagCellForRefinement(std::vector<double>& params) {};
+    virtual void SetParamsTruncationModifier(std::vector<double>& params) {};
+    virtual void SetParamsSpectra(std::vector<double>& params) {};
+    virtual void SetParamsProjections(std::vector<double>& params) {};
 
     /** @brief Creates a shadow level and evolves it by one time step. Needed
      *         to compute truncation errors on the coarse level.
