@@ -1,5 +1,6 @@
 #include <AMReX_VisMF.H>
 #include <AMReX_PlotFileUtil.H>
+#include <AMReX_PlotFileDataImpl.H>
 
 #include "io_module.h"
 #include "sledgehamr_utils.h"
@@ -128,7 +129,7 @@ IOModule::IOModule(Sledgehamr* owner) {
                         OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum),
                         interval_gw_spectra);
 
-    // Checkpoint.
+    // Checkpoint. Always add checkpoints last.
     double interval_checkpoints = -1;
     pp.query("interval_checkpoints", interval_checkpoints);
     idx_checkpoints = output.size();
@@ -662,14 +663,15 @@ bool IOModule::WriteCheckpoint(double time, std::string prefix) {
                               H5P_DEFAULT);
 
         const int nparams = 8;
-        double header_data[nparams] = {time,
+        double header_data[nparams] = {
+                time,
                 (double)amrex::ParallelDescriptor::NProcs(),
                 (double)sim->finest_level,
                 (double)sim->dimN[0],
                 (double)sim->nghost,
                 (double)sim->scalar_fields.size(),
                 (double)output.size(),
-                (double)10 // pre-defined output types.
+                (double)idx_checkpoints
         };
         WriteToHDF5(file_id, "Header", header_data, nparams);
 
@@ -712,7 +714,7 @@ void IOModule::RestartSim() {
     int latest = FindLatestCheckpoint();
 
     if (latest == -1 && amrex::ParallelDescriptor::IOProcessor())
-        amrex::Abort("Sledgehamr::IOModule: No checkpoint found!");
+        amrex::Abort("Sledgehamr::IOModule::RestartSim: No checkpoint found!");
     amrex::ParallelDescriptor::Barrier(); 
 
     ReadCheckpoint(latest);
@@ -731,8 +733,84 @@ int IOModule::FindLatestCheckpoint() {
 }
 
 void IOModule::ReadCheckpoint(int id) {
-    amrex::Print() << "Trying to read checkpoint: " << id << std::endl;
-    amrex::Abort("f");
+    std::string folder = output_folder + "/checkpoints/" + std::to_string(id);
+    amrex::Print() << "Restarting from checkpoint: " << folder << std::endl;
+
+    const int nparams = 8;
+    double header[nparams];
+    std::string filename = folder + "/Meta.hdf5";
+    ReadFromHDF5(filename, {"Header"}, header);
+
+    double time = header[0];
+    int MPIranks = static_cast<int>(header[1]);
+    int finest_level = static_cast<int>(header[2]);
+    int dim0 = static_cast<int>(header[3]);
+    int nghost = static_cast<int>(header[4]);
+    int nscalars = static_cast<int>(header[5]);
+    int noutput = static_cast<int>(header[6]);
+    int npredefoutput = static_cast<int>(header[7]);
+
+    if (nscalars != sim->scalar_fields.size()) {
+        const char* msg = "Sledgehamr::IOModule::ReadCheckpoint: "
+                          "Number of scalar fields has changed!";
+        amrex::Abort(msg);
+    }
+
+    if (noutput != output.size() || npredefoutput != idx_checkpoints) {
+        const char* msg = "Sledgehamr::IOModule::ReadCheckpoint: "
+                          "Number of output types changed!";
+        amrex::Abort(msg);
+    }
+
+    std::string File(folder + "/BoxArrays");
+    amrex::VisMF::IO_Buffer io_buffer(amrex::VisMF::GetIOBufferSize());
+    amrex::Vector<char> fileCharPtr;
+    amrex::ParallelDescriptor::ReadAndBcastFile(File, fileCharPtr);
+    std::string fileCharPtrString(fileCharPtr.dataPtr());
+    std::istringstream is(fileCharPtrString, std::istringstream::in);
+
+    sim->finest_level = finest_level;
+    for (int lev = 0; lev <= finest_level; ++lev) {
+        amrex::BoxArray ba;
+        ba.readFrom(is);
+        GotoNextLine(is);
+
+        amrex::DistributionMapping dm {ba, amrex::ParallelDescriptor::NProcs()};
+        sim->SetBoxArray(lev, ba);
+        sim->SetDistributionMap(lev, dm);
+
+        // In case nghost changed, we can create grid_old already with the new
+        // value. grid_new has to be set to the old value first since ghost
+        // cells are saved in the checkpoint. We change nghost for this MultiFab
+        // later below.
+        sim->grid_old[lev].define(ba, dm, nscalars, sim->nghost, time);
+        sim->grid_new[lev].define(ba, dm, nscalars, nghost, time);
+    }
+
+    for (int lev = 0; lev <= finest_level; ++lev) {
+        amrex::VisMF::Read(
+                sim->grid_new[lev],
+                amrex::MultiFabFileFullPrefix(lev, folder, "Level_", "Cell"));
+    }
+
+    if (nghost != sim->nghost) {
+        amrex::Print() << "#warning: Number of ghost cells has changed!\n"
+                       << "checkpoint: " << nghost
+                       << " vs input file: " << sim->nghost << std::endl;
+        // TODO
+    }
+
+    if (MPIranks != amrex::ParallelDescriptor::NProcs()) {
+        amrex::Print() << "#warning: Number of MPI ranks has changed. Will "
+                       << "regrid coarse level to satisfy new constraint."
+                       << std::endl;
+        // TODO
+    }
+}
+
+void IOModule::GotoNextLine(std::istream& is) {
+    constexpr std::streamsize bl_ignore_max {100000};
+    is.ignore(bl_ignore_max, '\n');
 }
 
 }; // namespace sledgehamr

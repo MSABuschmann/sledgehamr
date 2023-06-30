@@ -231,6 +231,8 @@ class IOModule {
     int FindLatestCheckpoint();
     void ReadCheckpoint(int id);
 
+    static void GotoNextLine(std::istream& is);
+
     /** Downsampling factors for coarse/full level output.
      */
     int coarse_box_downsample_factor = 1;
