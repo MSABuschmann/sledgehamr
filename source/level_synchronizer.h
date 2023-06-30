@@ -79,6 +79,11 @@ class LevelSynchronizer {
      */
     void ComputeTruncationErrors(const int lev);
 
+    /** @brief Integer array containing the type of boundary condition at each
+     *         boundary edge. Needs to be amrex::Vector not std::vector.
+     */
+    amrex::Vector<amrex::BCRec> bcs;
+
   private:
     /** @brief Fetches level data at a given level and time. Needs to be
      *         amrex::Vector not std::vector.
@@ -89,11 +94,6 @@ class LevelSynchronizer {
      */
     amrex::Vector<amrex::MultiFab*> GetLevelData(const int lev, 
                                                  const double time);
-
-    /** @brief Integer array containing the type of boundary condition at each
-     *         boundary edge. Needs to be amrex::Vector not std::vector.
-     */
-    amrex::Vector<amrex::BCRec> bcs;
 
     /** @brief Pointer to AMReX interpolator to be used between levels.
      */

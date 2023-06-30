@@ -16,6 +16,10 @@ class Checkpoint {
 
   private:
     static void GotoNextLine(std::istream& is);
+    void ChangeNGhost(int new_nghost);
+    void RegridCoarse();
+    void UpdateLevels();
+    void UpdateOutputModules();
 
     Sledgehamr* sim;
 };
