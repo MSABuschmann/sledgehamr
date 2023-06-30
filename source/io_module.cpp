@@ -11,8 +11,20 @@ IOModule::IOModule(Sledgehamr* owner) {
 
     // Determine and create output folder.
     amrex::ParmParse pp("output");
-    std::string output_folder;
     pp.get("output_folder", output_folder);
+
+    if (amrex::FileExists(output_folder) && !sim->restart_sim &&
+        amrex::ParallelDescriptor::IOProcessor())  {
+        const char* msg = 
+                "sledgehamr::IOModule: Output folder already exists!\n"
+                "If you intended to restart the simulation from the latest "
+                "checkpoint within this folder please add 'sim.restart = 1' "
+                "to your input file.\nOtherwise please chose a different "
+                "directory.";
+        amrex::Abort(msg);
+    }
+
+    amrex::ParallelDescriptor::Barrier();
     amrex::UtilCreateDirectory(output_folder.c_str(), 0755);
 
     // Add various output formats.
@@ -694,6 +706,33 @@ bool IOModule::WriteCheckpoint(double time, std::string prefix) {
     }
 
     return true;
+}
+
+void IOModule::RestartSim() {
+    int latest = FindLatestCheckpoint();
+
+    if (latest == -1 && amrex::ParallelDescriptor::IOProcessor())
+        amrex::Abort("Sledgehamr::IOModule: No checkpoint found!");
+    amrex::ParallelDescriptor::Barrier(); 
+
+    ReadCheckpoint(latest);
+}
+
+int IOModule::FindLatestCheckpoint() {
+    int latest = 0;
+    std::string folder = output_folder + "/checkpoints/"
+                       + std::to_string(latest);
+
+    while (amrex::FileExists(folder)) {
+        ++latest;
+        folder = output_folder + "/checkpoints/" + std::to_string(latest);
+    }
+    return latest - 1;
+}
+
+void IOModule::ReadCheckpoint(int id) {
+    amrex::Print() << "Trying to read checkpoint: " << id << std::endl;
+    amrex::Abort("f");
 }
 
 }; // namespace sledgehamr

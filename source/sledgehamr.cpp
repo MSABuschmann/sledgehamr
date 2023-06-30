@@ -45,8 +45,11 @@ void Sledgehamr::InitSledgehamr() {
 
     ParseInputScalars();
 
-    // TODO: Check for checkpoint file etc.
-    InitFromScratch( t_start );
+    if (restart_sim) {
+        io_module->RestartSim();
+    } else {
+        InitFromScratch( t_start );
+    }
 
     // Initialize project
     Init();
@@ -272,6 +275,7 @@ void Sledgehamr::ParseInput() {
     amrex::ParmParse pp_sim("sim");
     pp_sim.get("t_start", t_start);
     pp_sim.get("t_end", t_end);
+    pp_sim.query("restart", restart_sim);
     pp_sim.get("L", L);
     pp_sim.get("cfl", cfl);
     pp_sim.query("gravitational_waves", with_gravitational_waves);

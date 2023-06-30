@@ -276,6 +276,8 @@ class Sledgehamr : public amrex::AmrCore {
     bool with_dissipation = false;
     int dissipation_order = 0;
 
+    bool restart_sim = false;
+
 private:
 
     /* @brief Do ErrorEst on either CPU or GPU.

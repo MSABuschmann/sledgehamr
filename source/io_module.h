@@ -60,6 +60,8 @@ class IOModule {
      */
     void FillLevelFromConst(int lev, const int comp, const double c);
 
+    void RestartSim();
+
     /** @brief Vectors containing instructions for projections and spectra.
      */
     std::vector<Projection> projections;
@@ -226,12 +228,17 @@ class IOModule {
 
     bool WriteCheckpoint(double time, std::string prefix);
 
+    int FindLatestCheckpoint();
+    void ReadCheckpoint(int id);
+
     /** Downsampling factors for coarse/full level output.
      */
     int coarse_box_downsample_factor = 1;
     int coarse_box_truncation_error_downsample_factor = 1;
     int full_box_downsample_factor = 1;
     int full_box_truncation_error_downsample_factor = 1;
+    
+    std::string output_folder;
 
     /** @brief Pointer to owner on whose data this class operates.
      */
