@@ -14,6 +14,7 @@
 #include "projection.h"
 #include "spectrum.h"
 #include "gravitational_waves.h"
+#include "checkpoint.h"
 
 namespace sledgehamr {
 
@@ -25,6 +26,7 @@ class IOModule;
 class Projection;
 class Spectrum;
 class GravitationalWaves;
+class Checkpoint;
 
 /** @brief Base class for all derived projects. Combines all the ingredients to
  *         make this code work.
@@ -39,6 +41,7 @@ class Sledgehamr : public amrex::AmrCore {
     friend class Projection;
     friend class Spectrum;
     friend class GravitationalWaves;
+    friend class Checkpoint;
 
   public:
     /** @brief Creates instances of submodules and reads input parameters.

@@ -229,9 +229,6 @@ class IOModule {
     bool WriteCheckpoint(double time, std::string prefix);
 
     int FindLatestCheckpoint();
-    void ReadCheckpoint(int id);
-
-    static void GotoNextLine(std::istream& is);
 
     /** Downsampling factors for coarse/full level output.
      */
