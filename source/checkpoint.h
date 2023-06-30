@@ -18,8 +18,8 @@ class Checkpoint {
     static void GotoNextLine(std::istream& is);
     void ChangeNGhost(int new_nghost);
     void RegridCoarse();
-    void UpdateLevels();
-    void UpdateOutputModules();
+    void UpdateLevels(std::string filename);
+    void UpdateOutputModules(std::string filename);
 
     Sledgehamr* sim;
 };

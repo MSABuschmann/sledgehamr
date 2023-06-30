@@ -63,6 +63,14 @@ class OutputModule {
         return next_id;
     };
 
+    void SetNextId(int id) {
+        next_id = id;
+    };
+
+    void SetLastTimeWritten(double time) {
+        last_written = time;
+    };
+
     double GetLastTimeWritten() const {
         return last_written;
     };

@@ -160,8 +160,8 @@ void Checkpoint::Read(std::string prefix, int id) {
         RegridCoarse();
     }
 
-    UpdateLevels();
-    UpdateOutputModules();
+    UpdateLevels(filename);
+    UpdateOutputModules(filename);
 }
 
 void Checkpoint::GotoNextLine(std::istream& is) {
@@ -230,16 +230,50 @@ void Checkpoint::RegridCoarse() {
 
     std::swap(sim->grid_new[lev], ld_new);
     sim->grid_old[lev] = LevelData(ba, dm, ncomp, sim->nghost, time);
-    sim->SetBoxArray(lev, ba); 
+    sim->SetBoxArray(lev, ba);
     sim->SetDistributionMap(lev, dm);
 }
 
-void Checkpoint::UpdateOutputModules() {
+void Checkpoint::UpdateOutputModules(std::string filename) {
+    const int noutput = sim->io_module->output.size();
+    std::vector<int> next_id(noutput);
+    std::vector<double> last_time_written(noutput);
+    IOModule::ReadFromHDF5(filename, {"next_id"}, &(next_id[0]));
+    IOModule::ReadFromHDF5(filename, {"last_time_written"},
+                           &(last_time_written[0]));
 
+    for (int i = 0; i < noutput; ++i) {
+        sim->io_module->output[i].SetNextId(next_id[i]);
+        sim->io_module->output[i].SetLastTimeWritten(last_time_written[i]);
+    }
 }
 
-void Checkpoint::UpdateLevels() {
+void Checkpoint::UpdateLevels(std::string filename) {
+    std::vector<int> blocking_factor(sim->finest_level);
+    std::vector<int> istep(sim->finest_level);
+    IOModule::ReadFromHDF5(filename, {"isteps"}, &(istep[0]));
+    IOModule::ReadFromHDF5(filename, {"blocking_factors"},
+                            &(blocking_factor[0]));
 
+    // Check if blocking factor changed and react accordingly.
+    for(int lev = 0; lev <= sim->finest_level; ++lev) {
+        if (blocking_factor[lev] != sim->blocking_factor[lev][0]) {
+            amrex::Print() << "#warning: Blocking factor on level " << lev
+                           << "changed from " << blocking_factor[lev]
+                           << " to " << sim->blocking_factor[lev][0]
+                           << std::endl;
+        }
+
+        // If blocking factor is now larger we cannot do a local regrid. Need
+        // to do a global regrid first.
+        if (blocking_factor[lev] < sim->blocking_factor[lev][0]) {
+            for(int l = 0; l <= lev; ++l) {
+                sim->time_stepper->local_regrid->do_global_regrid[l] = true;
+            }
+        }
+
+        sim->grid_new[lev].istep = istep[lev];
+    }
 }
 
 }; // namespace sledgehamr

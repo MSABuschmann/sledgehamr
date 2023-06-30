@@ -32,6 +32,7 @@ class TimeStepper {
     /** @brief Pointer to integration module.
      */
     Integrator* integrator;
+    LocalRegrid* local_regrid;
  
 private:
     /** @brief Synchronizes two levels by averaging down. Computes truncation
@@ -104,7 +105,6 @@ private:
 
     /** @brief Pointer to other modules.
      */
-    LocalRegrid* local_regrid;
     Sledgehamr* sim;
 };
 
