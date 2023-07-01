@@ -641,14 +641,36 @@ bool IOModule::WriteCheckpoint(double time, std::string prefix) {
 }
 
 void IOModule::RestartSim() {
-    int latest = FindLatestCheckpoint();
+    amrex::ParmParse pp("output");
+    int selected_chk = -1;
+    pp.query("select_checkpoint", selected_chk);
 
-    if (latest == -1 && amrex::ParallelDescriptor::IOProcessor())
-        amrex::Abort("Sledgehamr::IOModule::RestartSim: No checkpoint found!");
+    int chk_id = 0;
+    if (selected_chk < 0) {
+        int latest = FindLatestCheckpoint();
+
+        if (latest == -1 && amrex::ParallelDescriptor::IOProcessor()) {
+            const char* msg = "Sledgehamr::IOModule::RestartSim: "
+                              "No checkpoint found!";
+            amrex::Abort(msg);
+        }
+
+        chk_id = latest;
+   } else {
+        std::string folder = output_folder + "/checkpoints/"
+                           + std::to_string(selected_chk);
+        if (!amrex::FileExists(folder)) {
+            const char* msg = "Sledgehamr::IOModule::RestartSim: "
+                              "Selected checkpoint not found!";
+            amrex::Abort(msg);
+        }
+
+        chk_id = selected_chk;
+    }
+
     amrex::ParallelDescriptor::Barrier();
-
     Checkpoint chk(sim);
-    chk.Read(output_folder, latest);
+    chk.Read(output_folder, chk_id);
 }
 
 int IOModule::FindLatestCheckpoint() {
