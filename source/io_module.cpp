@@ -641,7 +641,7 @@ bool IOModule::WriteCheckpoint(double time, std::string prefix) {
 }
 
 void IOModule::RestartSim() {
-    amrex::ParmParse pp("output");
+    amrex::ParmParse pp("sim");
     int selected_chk = -1;
     pp.query("select_checkpoint", selected_chk);
 
