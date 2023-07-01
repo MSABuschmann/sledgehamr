@@ -103,14 +103,14 @@ void Checkpoint::Read(std::string prefix, int id) {
     int npredefoutput = static_cast<int>(header[7]);
 
     if (nscalars != sim->scalar_fields.size()) {
-        const char* msg = "Sledgehamr::IOModule::ReadCheckpoint: "
+        const char* msg = "Sledgehamr::Checkpoint::Read: "
                           "Number of scalar fields has changed!";
         amrex::Abort(msg);
     }
 
     if (noutput != sim->io_module->output.size() ||
         npredefoutput != sim->io_module->idx_checkpoints) {
-        const char* msg = "Sledgehamr::IOModule::ReadCheckpoint: "
+        const char* msg = "Sledgehamr::Checkpoint::Read: "
                           "Number of output types changed!";
         amrex::Abort(msg);
     }
