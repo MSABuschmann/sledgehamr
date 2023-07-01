@@ -6,8 +6,8 @@ OutputModule::OutputModule(std::string output_prefix, output_fct function,
                            double write_interval, bool is_forceable)
     : prefix(output_prefix), fct(function), interval(write_interval),
       forceable(is_forceable) {
-    /* TODO: Figure out at what index to start */
-
+    if (amrex::FileExists(prefix.c_str())) 
+        amrex::UtilRenameDirectoryToOld(prefix.c_str()); 
     amrex::UtilCreateDirectory(prefix.c_str(), 0755);
 }
 
