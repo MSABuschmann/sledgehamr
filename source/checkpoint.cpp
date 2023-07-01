@@ -68,6 +68,11 @@ void Checkpoint::Write(std::string prefix) {
             last_time_written[i] =
                     sim->io_module->output[i].GetLastTimeWritten();
         }
+
+        // correct checkpoint itself since it hasn't been updated yet.
+        next_id[sim->io_module->idx_checkpoints]++;
+        last_time_written[sim->io_module->idx_checkpoints] = sim->grid_new[0].t;
+
         IOModule::WriteToHDF5(file_id, "next_id", &(next_id[0]), noutput);
         IOModule::WriteToHDF5(file_id, "last_time_written",
                               &(last_time_written[0]), noutput);
