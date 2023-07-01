@@ -6,8 +6,6 @@ OutputModule::OutputModule(std::string output_prefix, output_fct function,
                            double write_interval, bool is_forceable)
     : prefix(output_prefix), fct(function), interval(write_interval),
       forceable(is_forceable) {
-    if (amrex::FileExists(prefix.c_str())) 
-        amrex::UtilRenameDirectoryToOld(prefix.c_str()); 
     amrex::UtilCreateDirectory(prefix.c_str(), 0755);
 }
 
@@ -23,6 +21,9 @@ void OutputModule::Write(double time, bool force) {
 
     // Create output folder.
     std::string folder = prefix + "/" + std::to_string(next_id) + "/";
+
+    if (amrex::FileExists(folder.c_str())) 
+        amrex::UtilRenameDirectoryToOld(folder.c_str()); 
     amrex::UtilCreateDirectory(folder.c_str(), 0755);
 
     // Attempt to write.
