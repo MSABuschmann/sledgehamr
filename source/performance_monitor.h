@@ -9,6 +9,12 @@ class PerformanceMonitor {
   public:
     PerformanceMonitor(Sledgehamr* owner);
 
+    void Log(hid_t file_id);
+
+    bool IsActive() const {
+        return active;
+    };
+
   private:
     double interval = 0;
     bool active = false;

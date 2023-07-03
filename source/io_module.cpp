@@ -694,6 +694,21 @@ int IOModule::FindLatestCheckpoint() {
 }
 
 bool IOModule::WritePerformanceMonitor(double time, std::string prefix) {
+    if (!sim->performance_monitor->IsActive())
+        return false;
+
+    hid_t file_id;
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        std::string filename = prefix + "/log.hdf5";
+        file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                            H5P_DEFAULT);
+    }
+
+    sim->performance_monitor->Log(file_id);
+
+    if (amrex::ParallelDescriptor::IOProcessor())
+        H5Fclose(file_id);
+
     return true;
 }
 

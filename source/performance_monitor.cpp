@@ -9,4 +9,8 @@ PerformanceMonitor::PerformanceMonitor(Sledgehamr* owner)
     active = (interval > 0);
 }
 
+void PerformanceMonitor::Log(hid_t file_id) {
+
+}
+
 }; // namespace sledgehamr
