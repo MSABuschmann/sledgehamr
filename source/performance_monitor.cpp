@@ -7,6 +7,10 @@ PerformanceMonitor::PerformanceMonitor(Sledgehamr* owner)
     amrex::ParmParse pp("output");
     pp.query("interval_performance_monitor", interval);
     active = (interval > 0);
+
+    if (active) {
+        timer_total.Start();
+    }
 }
 
 void PerformanceMonitor::Log(hid_t file_id) {
