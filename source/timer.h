@@ -22,13 +22,13 @@ class Timer {
     };
 
   private:
-    void Check();
+    void CheckClock();
 
-    std::chrono::steady_clock::time_point start, stop;
+    std::chrono::steady_clock::time_point start_time, stop_time;
     std::chrono::microseconds last_duration_micro;
     double total_micro = 0;
     const std::string name = "Unknown Timer";
-    bool running = false;
+    bool is_running = false;
 };
 
 }; // namespace sledgehamr

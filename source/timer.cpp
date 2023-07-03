@@ -3,34 +3,35 @@
 namespace sledgehamr {
 
 void Timer::Start() {
-    if (running)
+    if (is_running)
         return;
 
     amrex::ParallelDescriptor::Barrier();
-    start = std::chrono::steady_clock::now();
-    running = true;
+    start_time = std::chrono::steady_clock::now();
+    is_running = true;
 }
 
-void Timer::Check() {
+void Timer::CheckClock() {
     amrex::ParallelDescriptor::Barrier();
-    stop = std::chrono::steady_clock::now();
+    stop_time = std::chrono::steady_clock::now();
     last_duration_micro = 
-            std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                stop_time - start_time);
 }
 
 void Timer::Stop() {
-    if (!running)
+    if (!is_running)
         return;
 
-    Check();
+    CheckClock();
     total_micro +=  static_cast<double>(last_duration_micro.count());
-    running = false;
+    is_running = false;
 }
 
 double Timer::GetTotalTimeSeconds() {
     double extra_micro = 0;
-    if (running) {
-        Check();
+    if (is_running) {
+        CheckClock();
         extra_micro = static_cast<double>(last_duration_micro.count());
     }
 
@@ -38,8 +39,8 @@ double Timer::GetTotalTimeSeconds() {
 };
 
 double Timer::GetLastDurationSeconds() {
-    if (running)
-        Check();
+    if (is_running)
+        CheckClock();
 
     return static_cast<double>(last_duration_micro.count())/1e6;
 };
