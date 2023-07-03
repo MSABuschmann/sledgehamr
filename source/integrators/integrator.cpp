@@ -8,6 +8,7 @@ Integrator::Integrator(Sledgehamr* owner) {
 }
 
 void Integrator::Advance(const int lev) {
+    sim->grid_old[lev].contains_truncation_errors = false;
     if (lev >= 0) {
         std::swap(sim->grid_old[lev], sim->grid_new[lev]);
     }

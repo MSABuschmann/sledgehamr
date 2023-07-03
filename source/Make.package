@@ -24,6 +24,9 @@ CEXE_sources += output_module.cpp
 CEXE_headers += checkpoint.h
 CEXE_sources += checkpoint.cpp
 
+CEXE_headers += performance_monitor.h
+CEXE_sources += performance_monitor.cpp
+
 CEXE_headers += time_stepper.h
 CEXE_sources += time_stepper.cpp
 

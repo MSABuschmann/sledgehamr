@@ -129,6 +129,14 @@ IOModule::IOModule(Sledgehamr* owner) {
                         OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum),
                         interval_gw_spectra);
 
+    // GW spectra.
+    double interval_performance_monitor = -1;
+    pp.query("interval_performance", interval_performance_monitor);
+    idx_performance_monitor = output.size();
+    output.emplace_back(output_folder + "/performance_log",
+                        OUTPUT_FCT(IOModule::WritePerformanceMonitor),
+                        interval_performance_monitor);
+
     // Checkpoint. Always add checkpoints last.
     double interval_checkpoints = -1;
     pp.query("interval_checkpoints", interval_checkpoints);
@@ -683,6 +691,10 @@ int IOModule::FindLatestCheckpoint() {
         folder = output_folder + "/checkpoints/" + std::to_string(latest);
     }
     return latest - 1;
+}
+
+bool IOModule::WritePerformanceMonitor(double time, std::string prefix) {
+    return true;
 }
 
 }; // namespace sledgehamr

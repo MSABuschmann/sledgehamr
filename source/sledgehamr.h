@@ -15,6 +15,7 @@
 #include "spectrum.h"
 #include "gravitational_waves.h"
 #include "checkpoint.h"
+#include "performance_monitor.h"
 
 namespace sledgehamr {
 
@@ -27,6 +28,7 @@ class Projection;
 class Spectrum;
 class GravitationalWaves;
 class Checkpoint;
+class PerformanceMonitor;
 
 /** @brief Base class for all derived projects. Combines all the ingredients to
  *         make this code work.
@@ -42,6 +44,7 @@ class Sledgehamr : public amrex::AmrCore {
     friend class Spectrum;
     friend class GravitationalWaves;
     friend class Checkpoint;
+    friend class PerformanceMonitor;
 
   public:
     /** @brief Creates instances of submodules and reads input parameters.
@@ -227,6 +230,7 @@ class Sledgehamr : public amrex::AmrCore {
     TimeStepper* time_stepper;
     IOModule* io_module;
     GravitationalWaves* gravitational_waves;
+    PerformanceMonitor* performance_monitor;
 
     /** @brief Holds the actual simulation data for all levels at two different
      *         states in time.

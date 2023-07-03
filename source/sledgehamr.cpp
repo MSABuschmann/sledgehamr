@@ -42,6 +42,7 @@ void Sledgehamr::InitSledgehamr() {
     // about the number of scalar fields during construction. Necessary so it
     // can initialize boundary conditions.
     level_synchronizer = new LevelSynchronizer(this);
+    performance_monitor = new PerformanceMonitor(this);
 
     ParseInputScalars();
 

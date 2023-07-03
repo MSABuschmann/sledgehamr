@@ -78,6 +78,7 @@ class IOModule {
     int idx_projections = -1;
     int idx_spectra = -1;
     int idx_gw_spectra = -1;
+    int idx_performance_monitor = -1;
     int idx_checkpoints = -1;
 
     /** @brief Vector of output modules
@@ -229,6 +230,8 @@ class IOModule {
     bool WriteCheckpoint(double time, std::string prefix);
 
     int FindLatestCheckpoint();
+    
+    bool WritePerformanceMonitor(double time, std::string prefix);
 
     /** Downsampling factors for coarse/full level output.
      */
