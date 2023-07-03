@@ -1,3 +1,5 @@
+#include <filesystem>
+
 #include "output_module.h"
 
 namespace sledgehamr {
@@ -7,7 +9,12 @@ OutputModule::OutputModule(std::string output_prefix, std::string folder,
                            bool is_forceable)
     : prefix(output_prefix), fct(function), interval(write_interval),
       name(folder), forceable(is_forceable) {
-    amrex::UtilCreateDirectory(prefix + "/" + name, 0755);
+    std::string output_folder = prefix + "/" + name;
+    if (!amrex::UtilCreateDirectory(output_folder, 0755)) {
+        std::string msg = "sledgehamr::OutputModule::OutputModule: "
+                          "Could not create output folder " + output_folder;
+        amrex::Abort(msg);
+    }
 }
 
 void OutputModule::Write(double time, bool force) {
@@ -23,6 +30,13 @@ void OutputModule::Write(double time, bool force) {
     // Create output folder.
     std::string folder = prefix + "/" + name + "/" + std::to_string(next_id);
     amrex::UtilCreateCleanDirectory(folder, 0755);
+    /* // Function does not have an error check unfortunately ...
+    if (!amrex::UtilCreateCleanDirectory(folder, 0755)) {
+        std::string msg = "sledgehamr::OutputModule::Write: "
+                          "Could not create output folder " + folder;
+        amrex::Abort(msg);
+    }
+    */
     folder += "/";
 
     // Attempt to write.

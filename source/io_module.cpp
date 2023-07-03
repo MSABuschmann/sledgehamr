@@ -26,7 +26,11 @@ IOModule::IOModule(Sledgehamr* owner) {
     }
 
     amrex::ParallelDescriptor::Barrier();
-    amrex::UtilCreateDirectory(output_folder.c_str(), 0755);
+    if (!amrex::UtilCreateDirectory(output_folder, 0755)) {
+        std::string msg = "sledgehamr::IOModule::IOModule: "
+                          "Could not create output folder " + output_folder;
+        amrex::Abort(msg);
+    }
 
     // Add various output formats.
     // Slices.
