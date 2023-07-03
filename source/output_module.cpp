@@ -29,6 +29,8 @@ void OutputModule::Write(double time, bool force) {
     if (fct(time, folder)) {
         next_id++;
         last_written = time;
+    } else {
+        std::filesystem::remove(folder);
     }
 }
 
