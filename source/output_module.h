@@ -37,8 +37,9 @@ class OutputModule {
      *                          of the simulation independent of the time
      *                          interval.
      */
-    OutputModule(std::string output_prefix, output_fct function,
-                 double write_interval, bool is_forceable=true);
+    OutputModule(std::string output_prefix, std::string folder,
+                 output_fct function, double write_interval,
+                 bool is_forceable=true);
 
     /** @brief Does the actual writing if criteria are met.
      * @param   time    Current time.
@@ -75,6 +76,10 @@ class OutputModule {
         return last_written;
     };
 
+    std::string GetName() const {
+        return name;
+    };
+
 private:
     /** @brief Function pointer to function that does the actual writing.
      */
@@ -102,6 +107,8 @@ private:
      *         simulation. Default is forceable=true.
      */
     bool forceable;
+
+    std::string name = "Unknown";
 };
 
 }; // namespace sledgehamr

@@ -33,7 +33,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     double interval_slices = -1;
     pp.query("interval_slices", interval_slices);
     idx_slices = output.size();
-    output.emplace_back(output_folder + "/slices",
+    output.emplace_back(output_folder, "slices",
                         OUTPUT_FCT(IOModule::WriteSlices),
                         interval_slices);
 
@@ -44,7 +44,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     CheckDownsampleFactor(coarse_box_downsample_factor,
                          "coarse_box_downsample_factor", 0);
     idx_coarse_box = output.size();
-    output.emplace_back(output_folder + "/coarse_box",
+    output.emplace_back(output_folder, "coarse_box",
                         OUTPUT_FCT(IOModule::WriteCoarseBox),
                         interval_coarse_box);
 
@@ -55,7 +55,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     CheckDownsampleFactor(full_box_downsample_factor,
                          "full_box_downsample_factor", sim->max_level);
     idx_full_box = output.size();
-    output.emplace_back(output_folder + "/full_box",
+    output.emplace_back(output_folder, "full_box",
                         OUTPUT_FCT(IOModule::WriteFullBox),
                         interval_full_box);
 
@@ -64,7 +64,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     pp.query("interval_slices_truncation_error",
              interval_slices_truncation_error);
     idx_slices_truncation_error = output.size();
-    output.emplace_back(output_folder + "/slices_truncation_error",
+    output.emplace_back(output_folder, "slices_truncation_error",
                         OUTPUT_FCT(IOModule::WriteSlicesTruncationError),
                         interval_slices_truncation_error);
 
@@ -77,7 +77,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     CheckDownsampleFactor(coarse_box_truncation_error_downsample_factor,
                          "coarse_box_truncation_error_downsample_factor", 0);
     idx_coarse_box_truncation_error = output.size();
-    output.emplace_back(output_folder + "/coarse_box_truncation_error",
+    output.emplace_back(output_folder, "coarse_box_truncation_error",
                         OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError),
                         interval_coarse_box_truncation_error);
 
@@ -91,7 +91,7 @@ IOModule::IOModule(Sledgehamr* owner) {
                          "full_box_truncation_error_downsample_factor",
                           sim->max_level);
     idx_full_box_truncation_error = output.size();
-    output.emplace_back(output_folder + "/full_box_truncation_error",
+    output.emplace_back(output_folder, "full_box_truncation_error",
                         OUTPUT_FCT(IOModule::WriteFullBoxTruncationError),
                         interval_full_box_truncation_error);
 
@@ -109,7 +109,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     double interval_projections = -1;
     pp.query("interval_projections", interval_projections);
     idx_projections = output.size();
-    output.emplace_back(output_folder + "/projections",
+    output.emplace_back(output_folder, "projections",
                         OUTPUT_FCT(IOModule::WriteProjections),
                         interval_projections);
 
@@ -117,7 +117,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     double interval_spectra = -1;
     pp.query("interval_spectra", interval_spectra);
     idx_spectra = output.size();
-    output.emplace_back(output_folder + "/spectra",
+    output.emplace_back(output_folder, "spectra",
                         OUTPUT_FCT(IOModule::WriteSpectra),
                         interval_spectra);
 
@@ -125,7 +125,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     double interval_gw_spectra = -1;
     pp.query("interval_gw_spectra", interval_gw_spectra);
     idx_gw_spectra = output.size();
-    output.emplace_back(output_folder + "/gw_spectra",
+    output.emplace_back(output_folder, "gw_spectra",
                         OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum),
                         interval_gw_spectra);
 
@@ -133,7 +133,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     double interval_performance_monitor = -1;
     pp.query("interval_performance", interval_performance_monitor);
     idx_performance_monitor = output.size();
-    output.emplace_back(output_folder + "/performance_log",
+    output.emplace_back(output_folder, "performance_log",
                         OUTPUT_FCT(IOModule::WritePerformanceMonitor),
                         interval_performance_monitor);
 
@@ -141,7 +141,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     double interval_checkpoints = -1;
     pp.query("interval_checkpoints", interval_checkpoints);
     idx_checkpoints = output.size();
-    output.emplace_back(output_folder + "/checkpoints",
+    output.emplace_back(output_folder, "checkpoints",
                         OUTPUT_FCT(IOModule::WriteCheckpoint),
                         interval_checkpoints);
 }
