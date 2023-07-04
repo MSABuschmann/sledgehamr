@@ -42,7 +42,7 @@ PerformanceMonitor::PerformanceMonitor(Sledgehamr* owner)
         timer.push_back(Timer("LevelSynchronizer::AverageDownTo " + post));
     }
 
-    idx_average_down = timer.size() + 1;
+    idx_truncation_error = timer.size() + 1;
     for(int lev = -1; lev <= sim->max_level; ++lev) {
         std::string post = utils::LevelName(lev);
         timer.push_back(

@@ -309,7 +309,7 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
     if (lev == 0)
         sim->shadow_level.clear();
 
-    sim->performance_monitor->Start(
+    sim->performance_monitor->Stop(
             sim->performance_monitor->idx_truncation_error, lev);
 }
 
