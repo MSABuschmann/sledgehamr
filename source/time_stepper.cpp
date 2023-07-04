@@ -288,8 +288,13 @@ void TimeStepper::NoShadowRegrid(int lev) {
 void TimeStepper::DoRegrid(int lev, double time) {
     // Try local regrid first.
     utils::sctp timer = utils::StartTimer();
+    sim->performance_monitor->Start(
+            sim->performance_monitor->idx_local_regrid, lev);
+
     bool successfull = local_regrid->AttemptRegrid(lev);
 
+    sim->performance_monitor->Stop(
+            sim->performance_monitor->idx_local_regrid, lev);
     amrex::Print() << "Local regrid took " << utils::DurationSeconds(timer)
                    << "s." << std::endl;
 
@@ -299,7 +304,14 @@ void TimeStepper::DoRegrid(int lev, double time) {
                        << lev+1 << " and higher." << std::endl;
 
         timer = utils::StartTimer();
+        sim->performance_monitor->Start(
+                sim->performance_monitor->idx_global_regrid, lev);
+ 
         sim->regrid(lev, time);
+
+        sim->performance_monitor->Stop(
+                sim->performance_monitor->idx_global_regrid, lev);
+ 
         local_regrid->DidGlobalRegrid(lev);
 
         amrex::Print() << "Global regrid took "

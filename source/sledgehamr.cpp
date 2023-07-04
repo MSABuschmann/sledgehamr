@@ -46,11 +46,13 @@ void Sledgehamr::InitSledgehamr() {
 
     ParseInputScalars();
 
+    performance_monitor->Start(performance_monitor->idx_read_input);
     if (restart_sim) {
         io_module->RestartSim();
     } else {
         InitFromScratch( t_start );
     }
+    performance_monitor->Stop(performance_monitor->idx_read_input);
 
     // Initialize project
     Init();
@@ -131,6 +133,7 @@ void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
     // if no truncation errors are used.
     if (time == t_start && shadow_hierarchy) return;
 
+    performance_monitor->Start(performance_monitor->idx_tagging, lev);
     utils::sctp timer = utils::StartTimer();
 
     if (tagging_on_gpu)
@@ -140,6 +143,7 @@ void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
 
     amrex::Print() << "  Tagging took " << utils::DurationSeconds(timer)
                    << "s." << std::endl;
+    performance_monitor->Stop(performance_monitor->idx_tagging, lev);
 }
 
 void Sledgehamr::CreateShadowLevel() {

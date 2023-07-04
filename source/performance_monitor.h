@@ -16,33 +16,20 @@ class PerformanceMonitor {
         return active;
     };
 
-    void Start(int id, int offset);
-    double Stop(int id, int offset);
+    void Start(int id, int offset = 0);
+    double Stop(int id, int offset = 0);
 
-/*
-    // Per level.
-    std::vector<Timer> timer_rhs;
-    std::vector<Timer> timer_fill_patch;
-    std::vector<Timer> timer_fill_intermediate_patch;
-    std::vector<Timer> timer_average_down;
-    std::vector<Timer> timer_truncation_error;
-    std::vector<Timer> timer_tagging;
-    std::vector<Timer> timer_local_regrid;
-    std::vector<Timer> timer_global_regrid;
-
-    // For each output type.
-    std::vector<Timer> timer_output;
-
-    // Singular.
-    Timer timer_read_input;
-    Timer timer_total;
-*/
     int idx_total = -1;
     int idx_rhs = -1;
     int idx_fill_patch = -1;
     int idx_fill_intermediate_patch = -1;
     int idx_average_down = -1;
     int idx_truncation_error = -1;
+    int idx_tagging = -1;
+    int idx_local_regrid = -1;
+    int idx_global_regrid = -1;
+    int idx_read_input = -1;
+    int idx_output = -1;
 
   private:
     std::vector<Timer> timer;

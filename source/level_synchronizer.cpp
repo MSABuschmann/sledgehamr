@@ -75,6 +75,9 @@ void LevelSynchronizer::FillCoarsePatch(const int lev, const double time,
 void LevelSynchronizer::FillPatch(const int lev, const double time,
                                   amrex::MultiFab& mf, const int scomp,
                                   const int dcomp, int ncomp) {
+    sim->performance_monitor->Start(
+            sim->performance_monitor->idx_fill_patch, lev);
+
     if (ncomp == -1 )
         ncomp = mf.nComp();
 
@@ -115,10 +118,16 @@ void LevelSynchronizer::FillPatch(const int lev, const double time,
                                   geom, cphysbc, 0, fphysbc, 0,
                                   sim->refRatio(lev-1), mapper, bcs, 0);
     }
+
+    sim->performance_monitor->Stop(
+            sim->performance_monitor->idx_fill_patch, lev);
 }
 
 void LevelSynchronizer::FillIntermediatePatch(const int lev, const double time,
         amrex::MultiFab& mf, const int scomp, const int dcomp, int ncomp) {
+    sim->performance_monitor->Start(
+            sim->performance_monitor->idx_fill_intermediate_patch, lev);
+
     if (ncomp == -1 )
         ncomp = mf.nComp();
 
@@ -165,9 +174,15 @@ void LevelSynchronizer::FillIntermediatePatch(const int lev, const double time,
 
         std::swap(mf, mf_tmp);
     }
+
+    sim->performance_monitor->Stop(
+            sim->performance_monitor->idx_fill_intermediate_patch, lev);
 }
 
 void LevelSynchronizer::AverageDownTo(const int lev) {
+    sim->performance_monitor->Start(
+            sim->performance_monitor->idx_average_down, lev);
+
     amrex::average_down(sim->grid_new[lev+1], sim->grid_new[lev],
                         sim->geom[lev+1], sim->geom[lev], 0,
                         sim->grid_new[lev].nComp(), sim->refRatio(lev));
@@ -175,9 +190,15 @@ void LevelSynchronizer::AverageDownTo(const int lev) {
     // Since we averaged down we do not have truncation errors available at
     // lev+1.
     sim->grid_old[lev+1].contains_truncation_errors = false;
+
+    sim->performance_monitor->Stop(
+            sim->performance_monitor->idx_average_down, lev);
 }
 
 void LevelSynchronizer::ComputeTruncationErrors(int lev) {
+    sim->performance_monitor->Start(
+            sim->performance_monitor->idx_truncation_error, lev);
+
     // Sanity check shadow level was created at the right time and is properly
     // sync'd with the coarse level.
     if (lev == 0 && sim->shadow_level.t != sim->grid_new[lev].t) {
@@ -287,6 +308,9 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
 
     if (lev == 0)
         sim->shadow_level.clear();
+
+    sim->performance_monitor->Start(
+            sim->performance_monitor->idx_truncation_error, lev);
 }
 
 amrex::Vector<amrex::MultiFab*> LevelSynchronizer::GetLevelData(const int lev,

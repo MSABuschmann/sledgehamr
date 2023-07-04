@@ -154,10 +154,24 @@ void IOModule::Write(bool force) {
     // Make sure checkpoints are written last to ensure most up-to-date meta
     // data.
     for(int i = 0; i < output.size(); ++i) {
-        if (i != idx_checkpoints)
+        if (i != idx_checkpoints) {
+            sim->performance_monitor->Start(
+                    sim->performance_monitor->idx_output, i);
+
             output[i].Write(sim->grid_new[0].t, force);
+
+            sim->performance_monitor->Stop(
+                    sim->performance_monitor->idx_output, i);
+        }
     }
+
+    sim->performance_monitor->Start(
+            sim->performance_monitor->idx_output, idx_checkpoints);
+ 
     output[idx_checkpoints].Write(sim->grid_new[0].t, force);
+
+    sim->performance_monitor->Stop(
+            sim->performance_monitor->idx_output, idx_checkpoints);
 }
 
 void IOModule::FillLevelFromFile (int lev)
