@@ -13,10 +13,12 @@ IOModule::IOModule(Sledgehamr* owner) {
     // Determine and create output folder.
     amrex::ParmParse pp("output");
     pp.get("output_folder", output_folder);
+    bool rename_old = false;
+    pp.query("rename_old_output", rename_old);
 
     if (amrex::FileExists(output_folder) && !sim->restart_sim &&
-        amrex::ParallelDescriptor::IOProcessor())  {
-        const char* msg = 
+        amrex::ParallelDescriptor::IOProcessor() && !rename_old)  {
+        const char* msg =
                 "sledgehamr::IOModule: Output folder already exists!\n"
                 "If you intended to restart the simulation from the latest "
                 "checkpoint within this folder please add 'sim.restart = 1' "
@@ -26,10 +28,15 @@ IOModule::IOModule(Sledgehamr* owner) {
     }
 
     amrex::ParallelDescriptor::Barrier();
-    if (!amrex::UtilCreateDirectory(output_folder, 0755)) {
-        std::string msg = "sledgehamr::IOModule::IOModule: "
-                          "Could not create output folder " + output_folder;
-        amrex::Abort(msg);
+    if (!sim->restart_sim) {
+        amrex::UtilCreateCleanDirectory(output_folder, 0755);
+/* // No error check unfortunately.
+        if (!amrex::UtilCreateCleanDirectory(output_folder, 0755)) {
+            std::string msg = "sledgehamr::IOModule::IOModule: "
+                              "Could not create output folder " + output_folder;
+            amrex::Abort(msg);
+        }
+*/
     }
 
     // Add various output formats.
