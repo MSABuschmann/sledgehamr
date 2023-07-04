@@ -78,8 +78,9 @@ void LevelSynchronizer::FillPatch(const int lev, const double time,
     sim->performance_monitor->Start(
             sim->performance_monitor->idx_fill_patch, lev);
 
-    if (ncomp == -1 )
+    if (ncomp == -1 ) {
         ncomp = mf.nComp();
+    }
 
     // Get data and boundary conditions for level lev.
     amrex::Vector<amrex::MultiFab*> fmfs = GetLevelData(lev, time);
@@ -128,8 +129,10 @@ void LevelSynchronizer::FillIntermediatePatch(const int lev, const double time,
     sim->performance_monitor->Start(
             sim->performance_monitor->idx_fill_intermediate_patch, lev);
 
-    if (ncomp == -1 )
+    // Figure out which components to fill.
+    if (ncomp == -1 ) {
         ncomp = mf.nComp();
+    }
 
     // Get data and boundary conditions for level lev.
     amrex::Vector<amrex::MultiFab*> fmfs{&mf};

@@ -76,7 +76,7 @@ PerformanceMonitor::PerformanceMonitor(Sledgehamr* owner)
 
     idx_output = timer.size();
     for(OutputModule& out : sim->io_module->output) {
-        timer.push_back(Timer("Output " + out.GetName()));
+        timer.push_back(Timer("OutputModule::Write " + out.GetName()));
     }
 }
 
@@ -94,12 +94,28 @@ double PerformanceMonitor::Stop(int id, int offset) {
     }
 }
 
+std::vector<int> PerformanceMonitor::TimerArgsort(std::vector<Timer> timers) {
+    std::vector<int> idx(timers.size());
+    std::iota(idx.begin(), idx.end(), 0);
+
+    std::stable_sort(idx.begin(), idx.end(),
+        [&timers](int i1, int i2) {
+            return   timers[i1].GetTotalTimeSeconds()
+                   > timers[i2].GetTotalTimeSeconds();
+        });
+
+    return idx;
+}
+
 void PerformanceMonitor::Log(hid_t file_id) {
+    std::vector<int> idx = TimerArgsort(timer);
+
     amrex::Print() << " ------------ PERFORMANCE ------------\n";
-    for(Timer& t : timer) {
-        double d = t.GetTotalTimeSeconds();
+    for(int i : idx) {
+        double d = timer[i].GetTotalTimeSeconds();
         if (d != 0) {
-            amrex::Print() << t.GetName() << "\t\t" << d << " s\n";
+            amrex::Print() << std::left << std::setw(60) << timer[i].GetName()
+                           << d << "s\n";
         }
     }
     amrex::Print() << "--------------------------------------" << std::endl;

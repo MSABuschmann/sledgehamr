@@ -32,6 +32,8 @@ class PerformanceMonitor {
     int idx_output = -1;
 
   private:
+    std::vector<int> TimerArgsort(std::vector<Timer> timers);
+
     std::vector<Timer> timer;
     double interval = 0;
     bool active = false;
