@@ -212,6 +212,7 @@ namespace sledgehamr {
 #define PRJ_FILL_RHS virtual void FillRhs(amrex::MultiFab& rhs_mf, \
                 const amrex::MultiFab& state_mf, const double time, \
                 const int lev, const double dt, const double dx) override { \
+        performance_monitor->Start(performance_monitor->idx_rhs, lev); \
         double* l_dissipation_strength = dissipation_strength.data(); \
         const int l_dissipation_order = dissipation_order; \
         const bool l_with_dissipation = with_dissipation; \
@@ -284,6 +285,7 @@ namespace sledgehamr {
                }); \
             } \
         } \
+        performance_monitor->Stop(performance_monitor->idx_rhs, lev); \
     };
 
 /** @brief
@@ -292,6 +294,7 @@ namespace sledgehamr {
                 const amrex::MultiFab& state_mf, const double time, \
                 const int lev, const double dt, const double dx, \
                 const double weight) override { \
+        performance_monitor->Start(performance_monitor->idx_rhs, lev); \
         const int ncomp = rhs_mf.nComp(); \
         double* l_dissipation_strength = dissipation_strength.data(); \
         const int l_dissipation_order = dissipation_order; \
@@ -383,6 +386,7 @@ namespace sledgehamr {
                 }); \
             } \
         } \
+        performance_monitor->Stop(performance_monitor->idx_rhs, lev); \
     };
 
 /** @brief Overrides function in project class.

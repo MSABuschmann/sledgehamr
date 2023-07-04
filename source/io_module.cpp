@@ -135,7 +135,7 @@ IOModule::IOModule(Sledgehamr* owner) {
 
     // GW spectra.
     double interval_performance_monitor = -1;
-    pp.query("interval_performance", interval_performance_monitor);
+    pp.query("interval_performance_monitor", interval_performance_monitor);
     idx_performance_monitor = output.size();
     output.emplace_back(output_folder, "performance_log",
                         OUTPUT_FCT(IOModule::WritePerformanceMonitor),

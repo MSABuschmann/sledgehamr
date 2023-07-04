@@ -3,22 +3,37 @@ project.name = axion_strings
 project.string_width_threshold = 8
 
 # -------------------------------------------------- Simulation parameters
+#sim.restart = 1
+#sim.select_checkpoint = 1
+
 sim.t_start = 0.1
 sim.t_end = 2.5
 sim.L = 15
 sim.cfl = 0.3
+sim.gravitational_waves = 0
+
+sim.dissipation_strength = 0
+sim.dissipation_order = 2
 
 # -------------------------------------------------- AMR parameters
+amr.coarse_level_grid_size = 128
 amr.max_refinement_levels = 2
 amr.nghost = 1
-amr.coarse_level_grid_size = 128
+
+### 0 = Piece-wise constant interpolation
+### 1 = Linear conservative interpolation
+### 2 = Quadratic polynomial interpolation
+### 4 = Quartic polynomial conservative interpolation
+amr.interpolation_type = 4
 
 amr.max_grid_size = 1024
 amr.blocking_factor = 8
 
-amr.tagging_on_gpu = 0
 amr.n_error_buf = 5
 amr.regrid_dt = 0.3
+
+amr.force_global_regrid_at_restart = 0
+amr.tagging_on_gpu = 0
 amr.max_local_regrids = 8
 
 amr.te_crit = 1e-3
@@ -28,7 +43,24 @@ input.initial_state = initial_state_small.hdf5
 
 # -------------------------------------------------- Output settings
 output.output_folder = output
+
+output.interval_checkpoints = 1.5
 output.interval_slices = 0.5
+output.interval_coarse_box = 0.5
+output.interval_full_box = 0.5
+output.interval_slices_truncation_error = 0.5
+output.interval_coarse_box_truncation_error = 0.5
+output.interval_full_box_truncation_error = 0.5
+output.interval_projections = 0.5
+output.interval_spectra = 0.2
+output.spectra_log_min = 2
+output.interval_gw_spectra = 0.5
+output.interval_performance_monitor = 0.6
+
+output.coarse_box_downsample_factor = 1
+output.full_box_downsample_factor = 2
+output.coarse_box_truncation_error_downsample_factor = 1
+output.full_box_truncation_error_downsample_factor = 2
 
 # -------------------------------------------------- Integrator
 ### 0 = AMReX - User-specified Butcher Tableau
