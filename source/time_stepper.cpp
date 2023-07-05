@@ -210,7 +210,7 @@ void TimeStepper::ScheduleRegrid(int lev) {
     std::string level_message = LevelMessage(lev, istep);
     amrex::Print() << std::left << std::setw(50) << level_message
                    << "Regrid scheduled for after time step #"
-                   << scheduled_regrids[lev].back()-1 << std::endl;
+                   << scheduled_regrids[lev].back()-1 << "." << std::endl;
 
     if (lev == 0) {
         std::string level_message = LevelMessage(-1, 0);
