@@ -102,6 +102,18 @@ namespace sledgehamr {
             const std::vector<double>& params) { \
     };
 
+/* brief TODO
+ */
+#define GRAVITATIONAL_WAVES_BACKREACTION template<bool> \
+    AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
+    void GravitationalWavesBackreaction(const amrex::Array4<double>& rhs, \
+            const amrex::Array4<const double>& state, const int i, \
+            const int j, const int k, const int lev, const double time, \
+            const double dt, const double dx, \
+            const std::vector<double>& params_scalars, \
+            const std::vector<double>& params_gw) { \
+    };
+
 /** @brief Macro to add multiple scalar fields and default template functions to
  *         the project namespace.
  */
@@ -122,7 +134,8 @@ namespace sledgehamr {
     GW_ENUM \
     TRUNCATION_MODIFIER \
     TAG_CELL_FOR_REFINEMENT \
-    GRAVITATIONAL_WAVES_RHS
+    GRAVITATIONAL_WAVES_RHS \
+    GRAVITATIONAL_WAVES_BACKREACTION
 
 
 /** @brief Identifies cells that violate the truncation error threshold. To be
@@ -235,6 +248,9 @@ namespace sledgehamr {
                         params_rhs); \
                     GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
                             lev, time, dt, dx, params_gw_rhs); \
+                    GravitationalWavesBackreaction<true>(rhs_fab, state_fab, \
+                            i, j, k, lev, time, dt, dx, params_rhs, \
+                            params_gw_rhs); \
                     switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
@@ -323,6 +339,9 @@ namespace sledgehamr {
                         params_rhs); \
                     GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
                             lev, time, dt, dx, params_gw_rhs); \
+                    GravitationalWavesBackreaction<true>(rhs_fab, state_fab, \
+                            i, j, k, lev, time, dt, dx, params_rhs, \
+                            params_gw_rhs); \
                     switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
