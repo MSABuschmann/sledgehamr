@@ -81,12 +81,15 @@ void TimeStepper::Advance(int lev) {
         NoShadowRegrid(lev);
     }
 
-    PreAdvanceMessage(lev);
+    // For self-consistency invoke function only if we don't have a shadow
+    // level.
+    if (lev == 0 && !sim->shadow_level.isDefined())
+        sim->BeforeTimestep(sim->grid_new[lev].t);
 
     // Advance this level.
+    PreAdvanceMessage(lev);
     utils::sctp timer = utils::StartTimer();
     integrator->Advance(lev);
-
     PostAdvanceMessage(lev, utils::DurationSeconds(timer));
 
     // Advance any finer levels twice.

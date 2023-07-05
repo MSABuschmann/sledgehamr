@@ -225,6 +225,8 @@ class Sledgehamr : public amrex::AmrCore {
      */
     void CreateShadowLevel();
 
+    virtual void BeforeTimestep(const double time) {};
+
     /** @brief Pointer to sub-modules.
      */
     TimeStepper* time_stepper;
