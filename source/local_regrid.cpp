@@ -17,7 +17,7 @@ LocalRegrid::LocalRegrid(Sledgehamr* owner) {
 bool LocalRegrid::AttemptRegrid(const int lev) {
     amrex::Print() << std::endl;
     bool res = DoAttemptRegrid(lev);
-    layouts.clear();
+    ClearLayout();
     return res;
 }
 
@@ -27,6 +27,40 @@ void LocalRegrid::DidGlobalRegrid(const int lev) {
         do_global_regrid[l] = false;
         nregrids = 0;
     }
+}
+
+void LocalRegrid::InitializeLayout(const int max_lev) {
+    layouts.resize(sim->finest_level + 1);
+    for (int l = 1; l <= sim->finest_level; ++l) {
+        int Np = sim->dimN[l] / sim->blocking_factor[l][0];
+        for (int f = 0; f < omp_get_max_threads(); ++f) {
+            layouts[l].emplace_back( std::make_unique<UniqueLayout>(this, Np) );
+        }
+    }
+}
+
+void LocalRegrid::ClearLayout() {
+    layouts.clear();  
+}
+
+void LocalRegrid::JoinBoxArrays(const int lev, amrex::BoxArray& ba) {
+    amrex::BoxList bl = layouts[lev][0]->BoxList(sim->blocking_factor[lev][0]);
+    bl.simplify(true);
+    amrex::Vector<amrex::Box> bv = std::move(bl.data());
+    amrex::AllGatherBoxes(bv);
+    bl = amrex::BoxList(std::move(bv));
+    bl.simplify(false);
+    ba = amrex::BoxArray(std::move(bl));
+}
+
+void LocalRegrid::AddToLayout(const int lev, const int thread, const int i,
+                              const int j, const int k) {
+    layouts[lev][thread]->Add(i, j, k);
+}
+
+void LocalRegrid::FinalizeLayout(const int lev) {
+    layouts[lev][0]->Merge(layouts[lev]);
+    layouts[lev][0]->Distribute();
 }
 
 bool LocalRegrid::DoAttemptRegrid(const int lev) {
@@ -83,13 +117,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
 
     // Now that we are sure we really want to attempt a local regrid initialize
     // data structures.
-    layouts.resize(sim->finest_level + 1);
-    for (int l = 1; l <= sim->finest_level; ++l) {
-        int Np = sim->dimN[l] / sim->blocking_factor[l][0];
-        for (int f = 0; f < omp_get_max_threads(); ++f) {
-            layouts[l].emplace_back( std::make_unique<UniqueLayout>(this, Np) );
-        }
-    }
+    InitializeLayout(sim->finest_level);
 
     // Get the new required box array for each level. Might still violate
     // nesting.
@@ -106,13 +134,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     // Join all boxes across MPI ranks.
     std::vector<amrex::BoxArray> box_arrays(sim->finest_level+1);
     for (int l = 1; l <= sim->finest_level; ++l) {
-        amrex::BoxList bl = layouts[l][0]->BoxList(sim->blocking_factor[l][0]);
-        bl.simplify(true);
-        amrex::Vector<amrex::Box> bv = std::move(bl.data());
-        amrex::AllGatherBoxes(bv);
-        bl = amrex::BoxList(std::move(bv));
-        bl.simplify(false);
-        box_arrays[l] = amrex::BoxArray(std::move(bl));
+        JoinBoxArrays(l, box_arrays[l]);
     }
 
     // Check if we want to go ahead and add those boxes.
@@ -420,9 +442,9 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
         }
     }
 
+
     // Combine box layouts.
-    layouts[lev+1][0]->Merge(layouts[lev+1]);
-    layouts[lev+1][0]->Distribute();
+    FinalizeLayout(lev+1);
 
     // Collect global stats.
     int global_min_distance2 = INT_MAX;
@@ -519,8 +541,7 @@ void LocalRegrid::FixNesting(const int lev) {
         }
     }
 
-    layouts[lev-1][0]->Merge(layouts[lev-1]);
-    layouts[lev-1][0]->Distribute();
+    FinalizeLayout(lev-1);
 }
 
 amrex::BoxArray LocalRegrid::WrapBoxArray(amrex::BoxArray& ba, int N) {

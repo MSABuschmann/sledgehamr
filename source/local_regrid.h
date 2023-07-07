@@ -26,6 +26,25 @@ class LocalRegrid {
      */
     void DidGlobalRegrid(const int lev);
 
+    void InitializeLayout(const int max_lev);
+    void ClearLayout();
+
+    /** @brief Ensures that the new BoxArray at level lev is properly nested
+     *         with the lower levels by expanding the lower levels if needed.
+     */
+    void FixNesting(const int lev);
+
+    void JoinBoxArrays(const int lev, amrex::BoxArray& ba);
+
+    /** @brief Adds an amrex::BoxArray to the existing BoxArray at level lev.
+     *         Data will be allocated and filled.
+     */
+    void AddBoxes(const int lev, amrex::BoxArray& ba);
+
+    void AddToLayout(const int lev, const int thread, const int i, const int j,
+                     const int k);
+    void FinalizeLayout(const int lev);
+
     /** @brief Flag that will be checked the TimeStepper module to force a
      *         global regrid.
      */
@@ -54,19 +73,9 @@ class LocalRegrid {
      */
     double DetermineNewBoxArray(const int lev);
 
-    /** @brief Ensures that the new BoxArray at level lev is properly nested
-     *         with the lower levels by expanding the lower levels if needed.
-     */
-    void FixNesting(const int lev);
-
     /** @brief Wrapps an amrex::BoxArray across periodic boundary conditions.
      */
     amrex::BoxArray WrapBoxArray(amrex::BoxArray& ba, int N);
-
-    /** @brief Adds an amrex::BoxArray to the existing BoxArray at level lev.
-     *         Data will be allocated and filled.
-     */
-    void AddBoxes(const int lev, amrex::BoxArray& ba);
 
     /** @brief Strong and weak threshold that decide whether we want to do a
      *         local or global regrid.

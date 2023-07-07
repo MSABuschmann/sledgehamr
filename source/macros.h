@@ -166,6 +166,8 @@ namespace sledgehamr {
         sledgehamr::utils::constexpr_for<0, NScalars, 1>([&](auto n) { \
             double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, \
                                                dx, te(i,j,k,n), params); \
+            if (te(i,j,k,n) < 0) \
+                amrex::Print() << te(i,j,k,n) << " ? " << i << " " << j <<" " <<  k << lev << std::endl; \
             if (mte >= te_crit[n]) { \
                 res = true; \
                 ntags_trunc[n] += 8; \
