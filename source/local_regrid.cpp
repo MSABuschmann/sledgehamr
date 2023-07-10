@@ -283,6 +283,9 @@ void LocalRegrid::CreateCommMatrix() {
 }
 
 void LocalRegrid::WrapIndices(const int lev) {
+    if (wrapped_index.size() != lev)
+        return;
+
     const int dimN = sim->dimN[lev];
     const int bf = sim->blocking_factor[lev][0];
     const int N = dimN/bf;

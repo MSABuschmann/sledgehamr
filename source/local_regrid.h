@@ -55,6 +55,11 @@ class LocalRegrid {
      */
     std::vector< std::vector<int> > comm_matrix;
 
+    /** @brief Pre-computes wrapped index loop-up table for periodic boundary
+     *         conditions.
+     */
+    void WrapIndices(const int lev);
+
   private:
     bool DoAttemptRegrid(const int lev);
     void ParseInput();
@@ -62,11 +67,6 @@ class LocalRegrid {
     /** @brief Creates comm_matrix loop-up table.
      */
     void CreateCommMatrix();
-
-    /** @brief Pre-computes wrapped index loop-up table for periodic boundary
-     *         conditions.
-     */
-    void WrapIndices(const int lev);
 
     /** @brief Determines the amrex::BoxArray that will need to be added at a
      *         given level.
