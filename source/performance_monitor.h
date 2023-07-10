@@ -30,11 +30,12 @@ class PerformanceMonitor {
     int idx_global_regrid = -1;
     int idx_read_input = -1;
     int idx_output = -1;
+    
+    std::vector<Timer> timer;
 
   private:
     std::vector<int> TimerArgsort(std::vector<Timer> timers);
 
-    std::vector<Timer> timer;
     double interval = 0;
     bool active = false;
     Sledgehamr* sim;
