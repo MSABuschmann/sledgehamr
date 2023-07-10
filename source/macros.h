@@ -74,7 +74,7 @@ namespace sledgehamr {
             const int i, const int j, const int k, const int lev, \
             const double time, const double dt, const double dx, \
             const double truncation_error, \
-            const std::vector<double>& params) { \
+            const double* params) { \
         return truncation_error; \
     };
 
@@ -87,7 +87,7 @@ namespace sledgehamr {
     bool TagCellForRefinement(const amrex::Array4<const double>& state, \
             const int i, const int j, const int k, const int lev, \
             const double time, const double dt, const double dx, \
-            const std::vector<double>& params) { \
+            const double* params) { \
         return false; \
     };
 
@@ -99,7 +99,7 @@ namespace sledgehamr {
             const amrex::Array4<const double>& state, const int i, \
             const int j, const int k, const int lev, const double time, \
             const double dt, const double dx, \
-            const std::vector<double>& params) { \
+            const double* params) { \
     };
 
 /* brief TODO
@@ -110,8 +110,8 @@ namespace sledgehamr {
             const amrex::Array4<const double>& state, const int i, \
             const int j, const int k, const int lev, const double time, \
             const double dt, const double dx, \
-            const std::vector<double>& params_scalars, \
-            const std::vector<double>& params_gw) { \
+            const double* params_scalars, \
+            const double* params_gw) { \
     };
 
 /** @brief Macro to add multiple scalar fields and default template functions to
@@ -165,7 +165,7 @@ namespace sledgehamr {
         bool res = false; \
         sledgehamr::utils::constexpr_for<0, NScalars, 1>([&](auto n) { \
             double mte = TruncationModifier<n>(state, i, j, k, lev, time, dt, \
-                                               dx, te(i,j,k,n), params); \
+                    dx, te(i,j,k,n), params.data()); \
             if (mte >= te_crit[n]) { \
                 res = true; \
                 ntags_trunc[n] += 8; \
@@ -181,8 +181,7 @@ namespace sledgehamr {
     bool TruncationErrorTagGpu(const amrex::Array4<double const>& state, \
             const amrex::Array4<double const>& te, const int i, const int j, \
             const int k, const int lev, const double time, const double dt, \
-            const double dx, double* te_crit, \
-            const std::vector<double>& params) { \
+            const double dx, double* te_crit, const double* params) { \
         if (i%2 != 0 || j%2 != 0 || k%2 != 0) \
             return false; \
         bool res = false; \
@@ -214,6 +213,26 @@ namespace sledgehamr {
         amrex::Print() << std::endl; \
     };
 
+#define KO_LOCAL_SETUP amrex::Gpu::AsyncArray<double> \
+        async_dissipation_strength(dissipation_strength.data(), \
+                                   dissipation_strength.size()); \
+        double* l_dissipation_strength = async_dissipation_strength.data(); \
+        const int l_dissipation_order = dissipation_order; \
+        const bool l_with_dissipation = with_dissipation;
+
+#define RHS_PARAMS_LOCAL_SETUP std::vector<double> params_rhs; \
+        SetParamsRhs(params_rhs); \
+        amrex::Gpu::AsyncArray<double> async_params_rhs( \
+                params_rhs.data(), params_rhs.size()); \
+        double* l_params_rhs = async_params_rhs.data();
+
+#define RHS_GW_PARAMS_LOCAL_SETUP std::vector<double> params_gw_rhs; \
+        if (with_gravitational_waves) \
+            SetParamsGravitationalWaveRhs(params_rhs); \
+        amrex::Gpu::AsyncArray<double> async_params_gw_rhs( \
+                params_gw_rhs.data(), params_gw_rhs.size()); \
+        double* l_params_gw_rhs = async_params_rhs.data();
+
 /** @brief Computes Rhs for the entire grid.
  * @param   rhs_mf      Container to fill the Rhs with.
  * @param   state_mf    Current grid.
@@ -226,13 +245,9 @@ namespace sledgehamr {
                 const amrex::MultiFab& state_mf, const double time, \
                 const int lev, const double dt, const double dx) override { \
         performance_monitor->Start(performance_monitor->idx_rhs, lev); \
-        double* l_dissipation_strength = dissipation_strength.data(); \
-        const int l_dissipation_order = dissipation_order; \
-        const bool l_with_dissipation = with_dissipation; \
-        std::vector<double> params_rhs, params_gw_rhs; \
-        SetParamsRhs(params_rhs); \
-        if (with_gravitational_waves) \
-            SetParamsGravitationalWaveRhs(params_gw_rhs); \
+        KO_LOCAL_SETUP \
+        RHS_PARAMS_LOCAL_SETUP \
+        RHS_GW_PARAMS_LOCAL_SETUP \
         DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
@@ -245,12 +260,12 @@ namespace sledgehamr {
                 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
                 { \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx, \
-                        params_rhs); \
+                        l_params_rhs); \
                     GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
-                            lev, time, dt, dx, params_gw_rhs); \
+                            lev, time, dt, dx, l_params_gw_rhs); \
                     GravitationalWavesBackreaction<true>(rhs_fab, state_fab, \
-                            i, j, k, lev, time, dt, dx, params_rhs, \
-                            params_gw_rhs); \
+                            i, j, k, lev, time, dt, dx, l_params_rhs, \
+                            l_params_gw_rhs); \
                     switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
@@ -277,7 +292,7 @@ namespace sledgehamr {
                 [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept \
                 { \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx, \
-                        params_rhs); \
+                        l_params_rhs); \
                     switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
@@ -303,7 +318,6 @@ namespace sledgehamr {
         } \
         performance_monitor->Stop(performance_monitor->idx_rhs, lev); \
     };
-
 /** @brief
  */
 #define PRJ_FILL_ADD_RHS virtual void FillAddRhs(amrex::MultiFab& rhs_mf, \
@@ -312,13 +326,9 @@ namespace sledgehamr {
                 const double weight) override { \
         performance_monitor->Start(performance_monitor->idx_rhs, lev); \
         const int ncomp = rhs_mf.nComp(); \
-        double* l_dissipation_strength = dissipation_strength.data(); \
-        const int l_dissipation_order = dissipation_order; \
-        const bool l_with_dissipation = with_dissipation; \
-        std::vector<double> params_rhs, params_gw_rhs; \
-        SetParamsRhs(params_rhs); \
-        if (with_gravitational_waves) \
-            SetParamsGravitationalWaveRhs(params_gw_rhs); \
+        KO_LOCAL_SETUP \
+        RHS_PARAMS_LOCAL_SETUP \
+        RHS_GW_PARAMS_LOCAL_SETUP \
         DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
@@ -336,12 +346,12 @@ namespace sledgehamr {
                         tmp_rhs[n] = rhs_fab(i, j, k, n); \
                     }); \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx, \
-                        params_rhs); \
+                        l_params_rhs); \
                     GravitationalWavesRhs<true>(rhs_fab, state_fab, i, j, k, \
-                            lev, time, dt, dx, params_gw_rhs); \
+                            lev, time, dt, dx, l_params_gw_rhs); \
                     GravitationalWavesBackreaction<true>(rhs_fab, state_fab, \
-                            i, j, k, lev, time, dt, dx, params_rhs, \
-                            params_gw_rhs); \
+                            i, j, k, lev, time, dt, dx, l_params_rhs, \
+                            l_params_gw_rhs); \
                     switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
@@ -377,7 +387,7 @@ namespace sledgehamr {
                         tmp_rhs[n] = rhs_fab(i, j, k, n); \
                     }); \
                     Rhs(rhs_fab, state_fab, i, j, k, lev, time, dt, dx, \
-                        params_rhs); \
+                        l_params_rhs); \
                     switch (l_with_dissipation * l_dissipation_order) { \
                         case 2: \
                             sledgehamr::utils::constexpr_for \
@@ -428,7 +438,7 @@ namespace sledgehamr {
                         bool res = false; \
                         res = TagCellForRefinement<true>( \
                                 state_fab, i, j, k, lev, time, dt[lev], \
-                                dx[lev], params_tag); \
+                                dx[lev], params_tag.data()); \
                         if( res ){ \
                             tagarr(i,j,k) = amrex::TagBox::SET; \
                             (*ntags_user)++; \
@@ -461,7 +471,7 @@ namespace sledgehamr {
                         bool res = false; \
                         res = TagCellForRefinement<true>( \
                                 state_fab, i, j, k, lev, time, dt[lev], \
-                                dx[lev], params_tag); \
+                                dx[lev], params_tag.data()); \
                         if( res ){ \
                             tagarr(i,j,k) = amrex::TagBox::SET; \
                             (*ntags_user)++; \
@@ -496,23 +506,29 @@ namespace sledgehamr {
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox, \
             double time, int lev, const std::vector<double>& params_tag, \
             const std::vector<double>& params_mod) override { \
-        amrex::Gpu::AsyncArray<double> l_te_crit_arr(&te_crit[0], \
-                                                     te_crit.size()); \
+        amrex::Gpu::AsyncArray<double> async_te_crit( \
+                te_crit.data(), te_crit.size()); \
+        double* l_te_crit = async_te_crit.data(); \
+        amrex::Gpu::AsyncArray<double> async_params_mod( \
+                params_mod.data(), params_mod.size()); \
+        double* l_params_mod = async_params_mod.data(); \
+        amrex::Gpu::AsyncArray<double> async_params_tag( \
+                params_tag.data(), params_tag.size()); \
+        double* l_params_tag = async_params_tag.data(); \
         double l_dt = dt[lev]; \
         double l_dx = dx[lev]; \
-        double* l_te_crit = l_te_crit_arr.data(); \
         if (with_gravitational_waves) { \
             amrex::ParallelFor(tilebox, \
             [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept { \
                 tagarr(i,j,k) = amrex::TagBox::CLEAR; \
                 bool res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
-                        time, l_dt, l_dx, params_tag); \
+                        time, l_dt, l_dx, l_params_tag); \
                 if (res) { \
                     tagarr(i,j,k) = amrex::TagBox::SET; \
                 } \
                 bool te_res = TruncationErrorTagGpu<Gw::NGwScalars>( \
                         state_fab, state_fab_te, i, j, k, lev, time, l_dt, \
-                        l_dx, l_te_crit, params_mod); \
+                        l_dx, l_te_crit, l_params_mod); \
                 if (te_res) { \
                     tagarr(i  ,j  ,k  ) = amrex::TagBox::SET; \
                     tagarr(i+1,j  ,k  ) = amrex::TagBox::SET; \
@@ -529,13 +545,13 @@ namespace sledgehamr {
             [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept { \
                 tagarr(i,j,k) = amrex::TagBox::CLEAR; \
                 bool res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
-                        time, l_dt, l_dx, params_tag); \
+                        time, l_dt, l_dx, l_params_tag); \
                 if (res) { \
                     tagarr(i,j,k) = amrex::TagBox::SET; \
                 } \
                 bool te_res = TruncationErrorTagGpu<Scalar::NScalars>( \
                         state_fab, state_fab_te, i, j, k, lev, time, l_dt, \
-                        l_dx, l_te_crit, params_mod); \
+                        l_dx, l_te_crit, l_params_mod); \
                 if (te_res) { \
                     tagarr(i  ,j  ,k  ) = amrex::TagBox::SET; \
                     tagarr(i+1,j  ,k  ) = amrex::TagBox::SET; \
@@ -565,7 +581,7 @@ namespace sledgehamr {
                 for (int i = lo.x; i <= hi.x; ++i) { \
                     tagarr(i,j,k) = amrex::TagBox::CLEAR; \
                     bool res = TagCellForRefinement<true>(state_fab, i, j, k, \
-                            lev, time, dt[lev], dx[lev], params); \
+                            lev, time, dt[lev], dx[lev], params.data()); \
                     if (res) { \
                         tagarr(i,j,k) = amrex::TagBox::SET; \
                         (*ntags_total)++; \
@@ -582,13 +598,15 @@ namespace sledgehamr {
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox, \
             double time, int lev, \
             const std::vector<double>& params) override { \
+        amrex::Gpu::AsyncArray async_params(params.data(), params.size()); \
+        double* l_params = async_params.data(); \
         double l_dt = dt[lev]; \
         double l_dx = dx[lev]; \
         amrex::ParallelFor(tilebox, \
         [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept { \
             tagarr(i,j,k) = amrex::TagBox::CLEAR; \
             bool res = TagCellForRefinement<true>(state_fab, i, j, k, lev, \
-                                                  time, l_dt, l_dx, params); \
+                                                  time, l_dt, l_dx, l_params); \
             if (res) { \
                 tagarr(i,j,k) = amrex::TagBox::SET; \
             } \

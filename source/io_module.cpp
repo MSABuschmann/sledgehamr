@@ -155,6 +155,10 @@ IOModule::IOModule(Sledgehamr* owner) {
     output.emplace_back(output_folder, "checkpoints",
                         OUTPUT_FCT(IOModule::WriteCheckpoint),
                         interval_checkpoints);
+
+    for (OutputModule& out : output) {
+        out.SetLastTimeWritten( sim->t_start );
+    }
 }
 
 void IOModule::Write(bool force) {
