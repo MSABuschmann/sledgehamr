@@ -156,8 +156,12 @@ IOModule::IOModule(Sledgehamr* owner) {
                         OUTPUT_FCT(IOModule::WriteCheckpoint),
                         interval_checkpoints);
 
-    for (OutputModule& out : output) {
-        out.SetLastTimeWritten( sim->t_start );
+    bool write_at_start = false;
+    pp.query("write_at_start", write_at_start);
+    if (!write_at_start) {
+        for (OutputModule& out : output) {
+            out.SetLastTimeWritten( sim->t_start );
+        }
     }
 }
 

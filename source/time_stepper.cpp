@@ -86,6 +86,9 @@ void TimeStepper::Advance(int lev) {
     if (lev == 0 && !sim->shadow_level.isDefined())
         sim->BeforeTimestep(sim->grid_new[lev].t);
 
+    if (sim->grid_new[0].t  == sim->t_start)
+        sim->io_module->Write();
+
     // Advance this level.
     PreAdvanceMessage(lev);
     utils::sctp timer = utils::StartTimer();

@@ -203,6 +203,13 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
         if (veto_level >= lev)
             return false;
 
+        // Since we only create a shadow level when needed triggering a global
+        // regrid at this level is non-trivial. For now, just give up and do
+        // global at higher levels and wait for the coarse level when it is 
+        // scheduled normally.
+        if (veto_level == 0)
+            return false;
+
         // Request a global regrid. This flag will be checked by the time
         // stepper module.
         do_global_regrid[veto_level] = true;
@@ -213,7 +220,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
         // truncation errors.
         double Nsteps = 2;
         if (sim->grid_new[veto_level].istep%2 == 0)
-            Nsteps = 1;
+                Nsteps = 1;
 
         // For sim without shadow level we can do it once we have sync'ed with
         // that level.
