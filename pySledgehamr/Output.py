@@ -19,40 +19,45 @@ class Output:
 
         self.__ParseFolderStructure()
 
+    ## TODO check for empty
     ## Returns array of times at which slices have been written.
     def GetTimesOfSlices(self):
-        return self._slice_headers[:,0]
+        return self.__GetTimes(self._slice_headers)
 
     ## Returns array of times at which coarse boxes have been written.
     def GetTimesOfCoarseBoxes(self):
-        return self._coarse_box_headers[:,0]
+        return self.__GetTimes(self._coarse_box_headers)
 
     ## Returns array of times at which full boxes have been written.
     def GetTimesOfFullBoxes(self):
-        return self._full_box_headers[:,0]
+        return self.__GetTimes(self._full_box_headers)
 
     ## Returns array of times at which slices of truncation errors have been
     #  written.
     def GetTimesOfSlicesTruncationError(self):
-        return self._slice_truncation_error_headers[:,0]
+        return self.__GetTimes(self._slice_truncation_error_headers)
 
     ## Returns array of times at which a coarse box of truncation errors has
     #  been written.
     def GetTimesOfCoarseBoxesTruncationError(self):
-        return self._coarse_box_truncation_error_headers[:,0]
+        return self.__GetTimes(self._coarse_box_truncation_error_headers)
 
     ## Returns array of times at which a full box of truncation errors has been
     #  written.
     def GetTimesOfFullBoxesTruncationError(self):
-        return self._full_box_truncation_error_headers[:,0]
+        return self.__GetTimes(self._full_box_truncation_error_headers)
 
     ## Returns array of times at which projections have been written.
     def GetTimesOfProjections(self):
-        return self._projection_headers[:,0]
+        return self.__GetTimes(self._projection_headers)
 
     ## Returns array of times at which projections have been written.
     def GetTimesOfSpectra(self):
-        return self._spectrum_headers[:,0]
+        return self.__GetTimes(self._spectrum_headers)
+
+    def __GetTimes(self, array):
+        if len(array) > 0:
+            return array[:,0]
 
     ## Returns a slice.
     # @param    i           Number of slice to be read.
