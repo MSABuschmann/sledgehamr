@@ -588,6 +588,9 @@ void IOModule::DoWriteFullBox(double time, std::string prefix,
 }
 
 bool IOModule::WriteProjections(double time, std::string prefix) {
+    if (projections.empty())
+        return false;
+
     amrex::Print() << "Write projections: " << prefix << std::endl;
 
     hid_t file_id;
@@ -607,6 +610,9 @@ bool IOModule::WriteProjections(double time, std::string prefix) {
 }
 
 bool IOModule::WriteSpectra(double time, std::string prefix) {
+    if (spectra.empty())
+        return false;
+
     amrex::Print() << "Compute spectra: " << prefix << std::endl;
 
     sim->ReadSpectrumKs();
