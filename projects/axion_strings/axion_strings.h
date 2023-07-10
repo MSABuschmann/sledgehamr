@@ -25,7 +25,7 @@ void Rhs(const amrex::Array4<double>& rhs,
          const amrex::Array4<const double>& state,
          const int i, const int j, const int k, const int lev,
          const double time, const double dt, const double dx,
-         const std::vector<double>& params) {
+         const double* params) {
     // Fetch field values.
     double Psi1 = state(i, j, k, Scalar::Psi1);
     double Psi2 = state(i, j, k, Scalar::Psi2);
@@ -54,14 +54,8 @@ template<> AMREX_GPU_DEVICE AMREX_FORCE_INLINE
 void GravitationalWavesRhs<true>(const amrex::Array4<double>& rhs,
         const amrex::Array4<const double>& state, const int i, const int j,
         const int k, const int lev, const double time, const double dt,
-        const double dx, const std::vector<double>& params) {
+        const double dx, const double* params) {
     // Fetch field values.
-    double u_xx = state(i, j, k, Gw::u_xx);
-    double u_yy = state(i, j, k, Gw::u_yy);
-    double u_zz = state(i, j, k, Gw::u_zz);
-    double u_xy = state(i, j, k, Gw::u_xy);
-    double u_xz = state(i, j, k, Gw::u_xz);
-    double u_yz = state(i, j, k, Gw::u_yz);
     double du_xx = state(i, j, k, Gw::du_xx);
     double du_yy = state(i, j, k, Gw::du_yy);
     double du_zz = state(i, j, k, Gw::du_zz);
@@ -218,8 +212,7 @@ int WindingAxis3(const amrex::Array4<const double>& state,
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 bool TagCellForRefinement<true>(const amrex::Array4<const double>& state,
         const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx,
-        const std::vector<double>& params) {
+        const double dt, const double dx, const double* params) {
     // Check all three plaquettes (in positive index direction) for string
     // piercings.
     if (WindingAxis1(state, i, j, k) != 0) return true;
@@ -238,7 +231,7 @@ template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Scalar::Pi1>(const amrex::Array4<const double>& state,
         const int i, const int j, const int k, const int lev, const double time,
         const double dt, const double dx, const double truncation_error,
-        const std::vector<double>& params) {
+        const double* params) {
     return truncation_error * dt;
 }
 
@@ -246,7 +239,7 @@ template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
         const int i, const int j, const int k, const int lev, const double time,
         const double dt, const double dx, const double truncation_error,
-        const std::vector<double>& params) {
+        const double* params) {
     return truncation_error * dt;
 }
 
@@ -254,7 +247,7 @@ template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_xx>(const amrex::Array4<const double>& state,
         const int i, const int j, const int k, const int lev, const double time,
         const double dt, const double dx, const double truncation_error,
-        const std::vector<double>& params) {
+        const double* params) {
     return truncation_error * dt;
 }
 
@@ -262,7 +255,7 @@ template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_yy>(const amrex::Array4<const double>& state,
         const int i, const int j, const int k, const int lev, const double time,
         const double dt, const double dx, const double truncation_error,
-        const std::vector<double>& params) {
+        const double* params) {
     return truncation_error * dt;
 }
 
@@ -270,7 +263,7 @@ template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_zz>(const amrex::Array4<const double>& state,
         const int i, const int j, const int k, const int lev, const double time,
         const double dt, const double dx, const double truncation_error,
-        const std::vector<double>& params) {
+        const double* params) {
     return truncation_error * dt;
 }
 
@@ -278,7 +271,7 @@ template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_xy>(const amrex::Array4<const double>& state,
         const int i, const int j, const int k, const int lev, const double time,
         const double dt, const double dx, const double truncation_error,
-        const std::vector<double>& params) {
+        const double* params) {
     return truncation_error * dt;
 }
 
@@ -286,7 +279,7 @@ template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_xz>(const amrex::Array4<const double>& state,
         const int i, const int j, const int k, const int lev, const double time,
         const double dt, const double dx, const double truncation_error,
-        const std::vector<double>& params) {
+        const double* params) {
     return truncation_error * dt;
 }
 
@@ -294,7 +287,7 @@ template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double TruncationModifier<Gw::du_yz>(const amrex::Array4<const double>& state,
         const int i, const int j, const int k, const int lev, const double time,
         const double dt, const double dx, const double truncation_error,
-        const std::vector<double>& params) {
+        const double* params) {
     return truncation_error * dt;
 }
 
