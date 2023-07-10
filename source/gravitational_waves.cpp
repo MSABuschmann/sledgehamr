@@ -6,18 +6,18 @@ GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
     sim = owner;
     idx_offset = sim->scalar_fields.size();
 
-    ScalarField u_xx("u_xx", sim->scalar_fields, false);
-    ScalarField u_yy("u_yy", sim->scalar_fields, false);
-    ScalarField u_zz("u_zz", sim->scalar_fields, false);
-    ScalarField u_xy("u_xy", sim->scalar_fields, false);
-    ScalarField u_xz("u_xz", sim->scalar_fields, false);
-    ScalarField u_yz("u_yz", sim->scalar_fields, false);
-    ScalarField du_xx("du_xx", sim->scalar_fields, true);
-    ScalarField du_yy("du_yy", sim->scalar_fields, true);
-    ScalarField du_zz("du_zz", sim->scalar_fields, true);
-    ScalarField du_xy("du_xy", sim->scalar_fields, true);
-    ScalarField du_xz("du_xz", sim->scalar_fields, true);
-    ScalarField du_yz("du_yz", sim->scalar_fields, true);
+    ScalarField* u_xx = new ScalarField("u_xx", sim->scalar_fields, false);
+    ScalarField* u_yy = new ScalarField("u_yy", sim->scalar_fields, false);
+    ScalarField* u_zz = new ScalarField("u_zz", sim->scalar_fields, false);
+    ScalarField* u_xy = new ScalarField("u_xy", sim->scalar_fields, false);
+    ScalarField* u_xz = new ScalarField("u_xz", sim->scalar_fields, false);
+    ScalarField* u_yz = new ScalarField("u_yz", sim->scalar_fields, false);
+    ScalarField* du_xx = new ScalarField("du_xx", sim->scalar_fields, true);
+    ScalarField* du_yy = new ScalarField("du_yy", sim->scalar_fields, true);
+    ScalarField* du_zz = new ScalarField("du_zz", sim->scalar_fields, true);
+    ScalarField* du_xy = new ScalarField("du_xy", sim->scalar_fields, true);
+    ScalarField* du_xz = new ScalarField("du_xz", sim->scalar_fields, true);
+    ScalarField* du_yz = new ScalarField("du_yz", sim->scalar_fields, true);
 }
 
 void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
