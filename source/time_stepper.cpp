@@ -243,8 +243,15 @@ void TimeStepper::DoRegridIfScheduled(int lev) {
     if (regrid_level[index] != lev) return;
 
     // Passed all criteria, remove regrid from schedule.
-    for (int k = lev; k <= sim->finest_level; ++k)
-        scheduled_regrids[k].erase(scheduled_regrids[k].begin() + index);
+    for (int k = lev; k <= sim->finest_level; ++k) {
+        // Get index again for each level. Relevant if new level has been
+        // created between scheduling and now which can cause indices to be
+        // different.
+        int index_k = GetIndexOfScheduledRegrid(scheduled_regrids[k], sim->grid_new[k].istep);
+        if (index_k>=0) {
+            scheduled_regrids[k].erase(scheduled_regrids[k].begin() + index_k);
+        }
+    }
 
     if (lev > 0) {
         scheduled_regrids[lev-1].erase(scheduled_regrids[lev-1].begin()+index);
