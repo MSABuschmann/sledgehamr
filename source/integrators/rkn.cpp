@@ -11,7 +11,7 @@ IntegratorRkn::IntegratorRkn(Sledgehamr* owner, const IntegratorType id)
 
 void IntegratorRkn::Integrate(LevelData& mf_old, LevelData& mf_new,
         const int lev, const double dt, const double dx) {
-        const int t = mf_old.t;
+        const double t = mf_old.t;
         const int nghost = sim->nghost;
 
         // Total number of fields, gravitational field components and
@@ -37,20 +37,22 @@ void IntegratorRkn::Integrate(LevelData& mf_old, LevelData& mf_new,
         }
 
         for (int i = 0; i < number_nodes; ++i) {
-            // Get current stage time, t = t_old + h * Ci
+            // stage_time = x_0 + c_i*h
             double stage_time = t + dt * nodes[i];
 
-            // Fill S_new with the solution value for evaluating F at the
-            // current stage.
-            amrex::MultiFab::Copy(mf_new, mf_old, 0, 0, N, 0);
+            // mf_new = (y_0, y'_0)
+            amrex::MultiFab::Copy(mf_new, mf_old, 0, 0, N, nghost);
+
+            // mf_new = (y_0 + c_i * h * y'_0, y'_0)
             amrex::MultiFab::Saxpy(mf_new, dt * nodes[i], mf_old,
-                                   uN1, uN0 , uN, nghost);
+                                   uN1, uN0, uN, nghost);
             if (Ngrav > 0)
                 amrex::MultiFab::Saxpy(mf_new, dt * nodes[i], mf_old,
                                        gN1, gN0 , gN, nghost);
 
             if (i > 0) {
-                // Saxpy across the tableau row:
+                // mf_new = (y_0 + c_i * h * y'_0 + sum_j( h^2 * a_ij * k'_j ),
+                //           y'_0)
                 for (int j = 0; j < i; ++j) {
                     amrex::MultiFab::Saxpy(
                             mf_new, dt*dt * tableau[i][j], *F_nodes[j],
@@ -67,16 +69,22 @@ void IntegratorRkn::Integrate(LevelData& mf_old, LevelData& mf_new,
 
             sim->level_synchronizer->FillIntermediatePatch(
                     lev, stage_time, mf_new);
+
+            // F_nodes[i] = (null, f(stage_time, mf_new)
+            //            = (null, k'_i)
             sim->FillRhs(*F_nodes[i], mf_new, stage_time, lev, dt, dx);
         }
 
-        // Fill new State, starting with S_new = S_old.
-        // Then Saxpy S_new += h * Wi * Fi for integration weights Wi
-        amrex::MultiFab::Copy(mf_new, mf_old, 0, 0, N, 0);
+        // mf_new = (y_0, y'_0)
+        amrex::MultiFab::Copy(mf_new, mf_old, 0, 0, N, nghost);
+
+        // mf_new = (y_0 + h * y'_0, y'_0)
         amrex::MultiFab::Saxpy(mf_new, dt, mf_new, uN1, uN0, uN, nghost);
         if( Ngrav > 0 )
              amrex::MultiFab::Saxpy(mf_new, dt, mf_new, gN1, gN0, gN, nghost);
 
+        // mf_new = (y_0 + h * y'_0 + sum_i(h^2*\bar[b_i]*k'_i),
+        //           y'_0 + sum_i(b_i*k'_i))
         for (int i = 0; i < number_nodes; ++i) {
             amrex::MultiFab::Saxpy(mf_new, dt * dt * weights_bar_b[i],
                                    *F_nodes[i],
