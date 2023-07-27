@@ -3,6 +3,8 @@
 namespace sledgehamr {
 
 void Timer::Start() {
+//    amrex::Print() << "is_running: " << is_running << std::endl;
+
     if (is_running)
         return;
 

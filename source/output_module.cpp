@@ -29,14 +29,7 @@ void OutputModule::Write(double time, bool force) {
 
     // Create output folder.
     std::string folder = prefix + "/" + name + "/" + std::to_string(next_id);
-    amrex::UtilCreateCleanDirectory(folder, 0755);
-    /* // Function does not have an error check unfortunately ...
-    if (!amrex::UtilCreateCleanDirectory(folder, 0755)) {
-        std::string msg = "sledgehamr::OutputModule::Write: "
-                          "Could not create output folder " + folder;
-        amrex::Abort(msg);
-    }
-    */
+    amrex::UtilCreateCleanDirectory(folder, true);
     folder += "/";
 
     // Attempt to write.

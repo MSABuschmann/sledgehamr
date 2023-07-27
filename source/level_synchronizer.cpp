@@ -114,6 +114,22 @@ void LevelSynchronizer::FillPatch(const int lev, const double time,
                                                            bcs, bndry_func);
 #endif
 
+        if (sim->grid_new[lev-1].t == 338.046875) {
+            amrex::Print() << time << " " << mf.boxArray() << std::endl;
+            for (int m=0; m< ctime.size(); ++m) {
+                amrex::Print() << ctime[m] << " ";
+            } amrex::Print() << std::endl;
+            for (int m=0; m< ftime.size(); ++m) {
+                amrex::Print() << ftime[m] << " ";
+            } amrex::Print() << std::endl;
+            for (int m=0; m< cmfs.size(); ++m) {
+                amrex::Print() << "cmf" << m << " " << cmfs[m]->boxArray() << " ";
+            } amrex::Print() << std::endl;
+            for (int m=0; m< fmfs.size(); ++m) {
+                amrex::Print() << "fmf" << m << " " << fmfs[m]->boxArray() << " ";
+            } amrex::Print() << std::endl;
+        }
+
         amrex::FillPatchTwoLevels(mf, time, cmfs, ctime, fmfs, ftime, scomp,
                                   dcomp, ncomp, sim->geom[lev-1],
                                   geom, cphysbc, 0, fphysbc, 0,

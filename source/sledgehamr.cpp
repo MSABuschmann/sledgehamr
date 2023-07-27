@@ -73,6 +73,8 @@ void Sledgehamr::Evolve() {
 
     // Force write at the end of simulation.
     io_module->Write(true);
+
+    amrex::Print() << "Finished!" << std::endl;
 }
 
 void Sledgehamr::MakeNewLevelFromScratch(int lev, amrex::Real time,
@@ -147,7 +149,6 @@ void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
 }
 
 void Sledgehamr::CreateShadowLevel() {
-    // Create.
     const int ncomp = scalar_fields.size();
     const double time = grid_old[0].t;
     amrex::BoxArray ba = grid_old[0].boxArray();
@@ -160,11 +161,9 @@ void Sledgehamr::CreateShadowLevel() {
     shadow_level_geom = geom[0];
     shadow_level_geom.coarsen(amrex::IntVect(2,2,2));
 
-    // Fill with data.
     amrex::average_down(grid_old[0], shadow_level_tmp, geom[0],
                         shadow_level_geom, 0, ncomp, refRatio(0));
 
-    // Advance one time step.
     time_stepper->integrator->Advance(-1);
 }
 

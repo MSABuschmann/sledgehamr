@@ -29,14 +29,13 @@ IOModule::IOModule(Sledgehamr* owner) {
 
     amrex::ParallelDescriptor::Barrier();
     if (!sim->restart_sim) {
-        amrex::UtilCreateCleanDirectory(output_folder, 0755);
-/* // No error check unfortunately.
-        if (!amrex::UtilCreateCleanDirectory(output_folder, 0755)) {
-            std::string msg = "sledgehamr::IOModule::IOModule: "
-                              "Could not create output folder " + output_folder;
-            amrex::Abort(msg);
+        std::string tmp = output_folder;
+        while(tmp.back() == '/') {
+            tmp.pop_back();
         }
-*/
+
+        amrex::Print() << "Create output folder: " << tmp << std::endl;
+        amrex::UtilCreateCleanDirectory(tmp, true);
     }
 
     // Add various output formats.

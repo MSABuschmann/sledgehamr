@@ -8,8 +8,8 @@ Integrator::Integrator(Sledgehamr* owner) {
 }
 
 void Integrator::Advance(const int lev) {
-    sim->grid_old[lev].contains_truncation_errors = false;
     if (lev >= 0) {
+        sim->grid_old[lev].contains_truncation_errors = false;
         std::swap(sim->grid_old[lev], sim->grid_new[lev]);
     }
 
@@ -17,6 +17,7 @@ void Integrator::Advance(const int lev) {
     const double dx   = lev < 0 ? sim->dx[0]*2.         : sim->dx[lev];
     LevelData& mf_old = lev < 0 ? sim->shadow_level_tmp : sim->grid_old[lev];
     LevelData& mf_new = lev < 0 ? sim->shadow_level     : sim->grid_new[lev];
+
     sim->level_synchronizer->FillPatch(lev, mf_old.t, mf_old);
 
     Integrate(mf_old, mf_new, lev, dt, dx);
@@ -70,7 +71,8 @@ void Integrator::DebugMessage(amrex::MultiFab& mf, std::string msg) {
                 double Pi1  = state(i, j, k, 2);
                 double Pi2  = state(i, j, k, 3);
 
-                amrex::AllPrint() << msg << ": Psi1" << " " << Psi1 << " " << Psi2 << " "
+                amrex::AllPrint() << msg << ": Psi1" << " " << Psi1 << " "
+                                  << Psi2 << " "
                                   << Pi1 << " " << Pi2 << " | "
                                   << state(i-1, j-1, k-1, 0) << " "
                                   << std::endl;

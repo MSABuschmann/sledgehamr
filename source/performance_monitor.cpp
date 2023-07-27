@@ -81,6 +81,9 @@ PerformanceMonitor::PerformanceMonitor(Sledgehamr* owner)
 }
 
 void PerformanceMonitor::Start(int id, int offset) {
+//    if (id == idx_fill_patch)
+//        amrex::AllPrint() << "perf: " << id << " " << offset << " " << active << " " << timer.size() << std::endl;
+
     if (active)
         timer[id + offset].Start();
 }

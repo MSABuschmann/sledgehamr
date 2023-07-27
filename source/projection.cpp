@@ -4,7 +4,7 @@ namespace sledgehamr {
 
 void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     // Could be set to something lower to not include finer level.
-    int mlevel = sim->finest_level;
+    int mlevel = 0;//sim->finest_level;
 
     const int dimN = sim->dimN[mlevel];
     long long N = dimN*dimN;

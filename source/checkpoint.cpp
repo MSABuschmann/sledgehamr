@@ -14,7 +14,12 @@ void Checkpoint::Write(std::string prefix) {
 
     const int nlevels = sim->finest_level + 1;
     const int noutput = sim->io_module->output.size();
-    amrex::PreBuildDirectorHierarchy(prefix, "Level_", nlevels, true);
+
+    for(int lev = 0; lev < nlevels; ++lev) {
+        amrex::Print() << "Create : " << prefix + "/Level_" + std::to_string(lev) << std::endl;
+        amrex::UtilCreateCleanDirectory(
+                prefix + "/Level_" + std::to_string(lev), true);
+    }
 
     // write Header file
     if (amrex::ParallelDescriptor::IOProcessor()) {
