@@ -66,7 +66,8 @@ void LevelSynchronizer::FillCoarsePatch(const int lev, const double time,
 #endif
 
     // Interpolate lev from lev-1.
-    amrex::InterpFromCoarseLevel(mf, time, *cmf[0], 0, 0, mf.nComp(),
+    amrex::InterpFromCoarseLevel(mf, amrex::IntVect(sim->nghost), time, *cmf[0],
+                                 0, 0, mf.nComp(),
                                  sim->geom[lev-1], sim->geom[lev],
                                  cphysbc, 0, fphysbc, 0,
                                  sim->refRatio(lev-1), mapper, bcs, 0);
@@ -113,22 +114,6 @@ void LevelSynchronizer::FillPatch(const int lev, const double time,
         amrex::PhysBCFunct<amrex::CpuBndryFuncFab> cphysbc(sim->geom[lev-1],
                                                            bcs, bndry_func);
 #endif
-
-        if (sim->grid_new[lev-1].t == 338.046875) {
-            amrex::Print() << time << " " << mf.boxArray() << std::endl;
-            for (int m=0; m< ctime.size(); ++m) {
-                amrex::Print() << ctime[m] << " ";
-            } amrex::Print() << std::endl;
-            for (int m=0; m< ftime.size(); ++m) {
-                amrex::Print() << ftime[m] << " ";
-            } amrex::Print() << std::endl;
-            for (int m=0; m< cmfs.size(); ++m) {
-                amrex::Print() << "cmf" << m << " " << cmfs[m]->boxArray() << " ";
-            } amrex::Print() << std::endl;
-            for (int m=0; m< fmfs.size(); ++m) {
-                amrex::Print() << "fmf" << m << " " << fmfs[m]->boxArray() << " ";
-            } amrex::Print() << std::endl;
-        }
 
         amrex::FillPatchTwoLevels(mf, time, cmfs, ctime, fmfs, ftime, scomp,
                                   dcomp, ncomp, sim->geom[lev-1],

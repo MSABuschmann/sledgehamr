@@ -599,18 +599,26 @@ amrex::BoxArray LocalRegrid::WrapBoxArray(amrex::BoxArray& ba, int N) {
 void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
     // Create temporary distribution mapping, box array and multifab with only
     // the new boxes.
+    amrex::Print() << "AddBoxes: " << lev << " "  << ba << std::endl;
+
     amrex::DistributionMapping dm(ba, amrex::ParallelDescriptor::NProcs());
     amrex::MultiFab mf_new_tmp(ba, dm, sim->scalar_fields.size(), sim->nghost);
     amrex::MultiFab mf_old_tmp(ba, dm, sim->scalar_fields.size(), sim->nghost);
+
+    amrex::Print() << "Allocated" << std::endl;
 
     // Fill temporary mf with data.
     sim->level_synchronizer->FillPatch(lev, sim->grid_new[lev].t, mf_new_tmp);
     sim->level_synchronizer->FillPatch(lev, sim->grid_old[lev].t, mf_old_tmp);
 
+    amrex::Print() << "FillPatch" << std::endl;
+
     // Create new joint box array.
     amrex::BoxList new_bl = sim->grid_new[lev].boxArray().boxList();
     new_bl.join(ba.boxList());
     amrex::BoxArray new_ba(std::move(new_bl));
+
+    amrex::Print() << "Join" << std::endl;
 
     // Create new joint distribution mapping.
     amrex::Vector<int> new_pmap = sim->dmap[lev].ProcessorMap();
@@ -618,11 +626,15 @@ void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
     std::move(pmap.begin(), pmap.end(), std::back_inserter(new_pmap));
     amrex::DistributionMapping new_dm(new_pmap);
 
+    amrex::Print() << "Git dist" << std::endl;
+
     // Create new MultiFab and fill it with data.
     LevelData new_mf(new_ba, new_dm, sim->scalar_fields.size(), sim->nghost,
                      amrex::MFInfo().SetAlloc(false));
     LevelData old_mf(new_ba, new_dm, sim->scalar_fields.size(), sim->nghost,
                      amrex::MFInfo().SetAlloc(false));
+
+    amrex::Print() << "New mf" << std::endl;
 
     const int offset = new_ba.size() - ba.size();
     for (amrex::MFIter mfi(new_mf); mfi.isValid(); ++mfi) {
@@ -640,6 +652,8 @@ void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
             old_mf.setFab(mfi, std::move(old_old_fab));
         }
     }
+
+    amrex::Print() << "Now swap" << std::endl;
 
     // Swap old MulftiFab with new one
     new_mf.t = sim->grid_new[lev].t;

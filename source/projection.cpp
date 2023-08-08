@@ -4,12 +4,12 @@ namespace sledgehamr {
 
 void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     // Could be set to something lower to not include finer level.
-    int mlevel = 0;//sim->finest_level;
+    int mlevel = sim->finest_level;
 
     const int dimN = sim->dimN[mlevel];
     long long N = dimN*dimN;
-    double* d_projection = new double[N]();
-    int* n_projection = new int[N]();
+    amrex::Vector<double> d_projection(N);
+    amrex::Vector<int> n_projection(N);
 
     std::vector<double> params;
     sim->SetParamsProjections(params);
@@ -22,7 +22,7 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
         const double time = sim->grid_new[lev].t;
 
         amrex::BoxArray ba;
-        if (lev != sim->finest_level)
+        if (lev != mlevel)
             ba = sim->grid_new[lev+1].boxArray();
 
         // No OpenMP for thread-safety.
@@ -40,7 +40,7 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
                         bool contd = false;
 
                         // Only include if cell is not refined.
-                        if (lev == sim->finest_level ) {
+                        if (lev == mlevel ) {
                             contd = true;
                         } else {
                             if (!ba.contains(amrex::IntVect(i*2, j*2, k*2)))
@@ -48,9 +48,13 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
                         }
 
                         if (contd) {
+                           // if (state_fab(i,j,k,0) != 1) {
+                           //     amrex::AllPrint() << bx << " " << i << " " << j << " " << k  << " " << state_fab(i,j,k,0) << std::endl;
+                           // }
+
                             double val = fct(state_fab, i, j, k, lev, time, dt,
                                              dx, params);
-                            Add(i, j, k, d_projection, n_projection, ratio,
+                            Add(i, j, k, &d_projection[0], &n_projection[0], ratio,
                                 dimN, val);
                         }
                     }
@@ -59,10 +63,17 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
         }
     }
 
-    amrex::ParallelDescriptor::ReduceRealSum(d_projection, N,
+    amrex::ParallelDescriptor::ReduceRealSum(d_projection.dataPtr(), N,
             amrex::ParallelDescriptor::IOProcessorNumber());
-    amrex::ParallelDescriptor::ReduceIntSum(n_projection, N,
+
+//    if (n_projection[0] != 0)
+//        amrex::AllPrint() << amrex::ParallelDescriptor::MyProc() << ": before projection00: " << n_projection[0] << std::endl;
+
+    amrex::ParallelDescriptor::ReduceIntSum(n_projection.dataPtr(), N,
             amrex::ParallelDescriptor::IOProcessorNumber());
+    
+//    if (n_projection[0] != 0)
+//        amrex::AllPrint() << amrex::ParallelDescriptor::MyProc() << ": after projection00: " << n_projection[0] << std::endl;
 
     if (amrex::ParallelDescriptor::IOProcessor()) {
         if (id == 0) {
@@ -72,12 +83,9 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
             IOModule::WriteToHDF5(file_id, "Header", header_data, nparams);
         }
 
-        IOModule::WriteToHDF5(file_id, ident + "_data", d_projection, N);
-        IOModule::WriteToHDF5(file_id, ident + "_n", n_projection, N);
+        IOModule::WriteToHDF5(file_id, ident + "_data", &d_projection[0], N);
+        IOModule::WriteToHDF5(file_id, ident + "_n", &n_projection[0], N);
     }
-
-    delete[] d_projection;
-    delete[] n_projection;
 }
 
 AMREX_FORCE_INLINE 

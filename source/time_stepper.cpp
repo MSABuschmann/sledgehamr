@@ -319,12 +319,12 @@ void TimeStepper::DoRegrid(int lev, double time) {
         timer = utils::StartTimer();
         sim->performance_monitor->Start(
                 sim->performance_monitor->idx_global_regrid, lev);
- 
+
         sim->regrid(lev, time);
 
         sim->performance_monitor->Stop(
                 sim->performance_monitor->idx_global_regrid, lev);
- 
+
         local_regrid->DidGlobalRegrid(lev);
 
         amrex::Print() << "Global regrid took "

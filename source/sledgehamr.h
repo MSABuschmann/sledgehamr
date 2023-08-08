@@ -96,6 +96,7 @@ class Sledgehamr : public amrex::AmrCore {
     /** @brief Pointer to synchronization module.
      */
     LevelSynchronizer* level_synchronizer;
+    IOModule* io_module;
 
     /** @brief Number of ghost cells.
      */
@@ -230,7 +231,6 @@ class Sledgehamr : public amrex::AmrCore {
     /** @brief Pointer to sub-modules.
      */
     TimeStepper* time_stepper;
-    IOModule* io_module;
     GravitationalWaves* gravitational_waves;
     PerformanceMonitor* performance_monitor;
 

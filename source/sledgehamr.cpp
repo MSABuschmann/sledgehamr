@@ -99,9 +99,11 @@ void Sledgehamr::MakeNewLevelFromCoarse(int lev, amrex::Real time,
     const int ncomp = grid_new[lev-1].nComp();
     const int nghost = grid_new[lev-1].nGrow();
 
-    // Define a new level from scratch.
     grid_new[lev].define(ba, dm, ncomp, nghost, time);
     grid_old[lev].define(ba, dm, ncomp, nghost);
+
+    SetBoxArray(lev, ba);
+    SetDistributionMap(lev, dm);
 
     // Fill new level with coarse level data.
     level_synchronizer->FillCoarsePatch(lev, time, grid_new[lev]);

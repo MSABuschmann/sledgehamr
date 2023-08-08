@@ -19,7 +19,6 @@ void Integrator::Advance(const int lev) {
     LevelData& mf_new = lev < 0 ? sim->shadow_level     : sim->grid_new[lev];
 
     sim->level_synchronizer->FillPatch(lev, mf_old.t, mf_old);
-
     Integrate(mf_old, mf_new, lev, dt, dx);
 
     mf_new.t = mf_old.t + dt;
@@ -55,31 +54,6 @@ std::string Integrator::Name(IntegratorType type) {
     }
 }
 
-void Integrator::DebugMessage(amrex::MultiFab& mf, std::string msg) {
-#ifndef AMREX_USE_GPU
-#pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
-    for (amrex::MFIter mfi(mf, amrex::TilingIfNotGPU()); mfi.isValid();
-            ++mfi) {
-        const amrex::Box& bx = mfi.tilebox();
-        const auto& state = mf.array(mfi);
-
-        amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k)
-            noexcept {
-            if (i==0 && j==0 && k==0 ) {
-                double Psi1 = state(i, j, k, 0);
-                double Psi2 = state(i, j, k, 1);
-                double Pi1  = state(i, j, k, 2);
-                double Pi2  = state(i, j, k, 3);
-
-                amrex::AllPrint() << msg << ": Psi1" << " " << Psi1 << " "
-                                  << Psi2 << " "
-                                  << Pi1 << " " << Pi2 << " | "
-                                  << state(i-1, j-1, k-1, 0) << " "
-                                  << std::endl;
-            }
-        });
-    }
-#endif
-}
+void Integrator::DebugMessage(amrex::MultiFab& mf, std::string msg) { }
 
 };  // namespace sledgehamr
