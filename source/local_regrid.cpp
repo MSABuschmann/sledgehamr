@@ -118,14 +118,7 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
 
     // Now that we are sure we really want to attempt a local regrid initialize
     // data structures.
-    layouts.resize(sim->finest_level + 1);
-    for (int l = 1; l <= sim->finest_level; ++l) {
-        int Np = sim->dimN[l] / sim->blocking_factor[l][0];
-        for (int f = 0; f < omp_get_max_threads(); ++f) {
-            layouts[l].emplace_back( std::make_unique<UniqueLayout>(this, Np) );
-        }
-    }
-    //InitializeLayout(sim->finest_level);
+    InitializeLayout(sim->finest_level);
 
     // Get the new required box array for each level. Might still violate
     // nesting.
@@ -470,9 +463,7 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
 
 
     // Combine box layouts.
-    layouts[lev+1][0]->Merge(layouts[lev+1]);
-    layouts[lev+1][0]->Distribute();
-    //FinalizeLayout(lev+1);
+    FinalizeLayout(lev+1);
 
     // Collect global stats.
     int global_min_distance2 = INT_MAX;
@@ -569,9 +560,7 @@ void LocalRegrid::FixNesting(const int lev) {
         }
     }
 
-    layouts[lev-1][0]->Merge(layouts[lev-1]);
-    layouts[lev-1][0]->Distribute();
-    //FinalizeLayout(lev-1);
+    FinalizeLayout(lev-1);
 }
 
 amrex::BoxArray LocalRegrid::WrapBoxArray(amrex::BoxArray& ba, int N) {
@@ -599,26 +588,18 @@ amrex::BoxArray LocalRegrid::WrapBoxArray(amrex::BoxArray& ba, int N) {
 void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
     // Create temporary distribution mapping, box array and multifab with only
     // the new boxes.
-    amrex::Print() << "AddBoxes: " << lev << " "  << ba << std::endl;
-
     amrex::DistributionMapping dm(ba, amrex::ParallelDescriptor::NProcs());
     amrex::MultiFab mf_new_tmp(ba, dm, sim->scalar_fields.size(), sim->nghost);
     amrex::MultiFab mf_old_tmp(ba, dm, sim->scalar_fields.size(), sim->nghost);
-
-    amrex::Print() << "Allocated" << std::endl;
 
     // Fill temporary mf with data.
     sim->level_synchronizer->FillPatch(lev, sim->grid_new[lev].t, mf_new_tmp);
     sim->level_synchronizer->FillPatch(lev, sim->grid_old[lev].t, mf_old_tmp);
 
-    amrex::Print() << "FillPatch" << std::endl;
-
     // Create new joint box array.
     amrex::BoxList new_bl = sim->grid_new[lev].boxArray().boxList();
     new_bl.join(ba.boxList());
     amrex::BoxArray new_ba(std::move(new_bl));
-
-    amrex::Print() << "Join" << std::endl;
 
     // Create new joint distribution mapping.
     amrex::Vector<int> new_pmap = sim->dmap[lev].ProcessorMap();
@@ -626,15 +607,11 @@ void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
     std::move(pmap.begin(), pmap.end(), std::back_inserter(new_pmap));
     amrex::DistributionMapping new_dm(new_pmap);
 
-    amrex::Print() << "Git dist" << std::endl;
-
     // Create new MultiFab and fill it with data.
     LevelData new_mf(new_ba, new_dm, sim->scalar_fields.size(), sim->nghost,
                      amrex::MFInfo().SetAlloc(false));
     LevelData old_mf(new_ba, new_dm, sim->scalar_fields.size(), sim->nghost,
                      amrex::MFInfo().SetAlloc(false));
-
-    amrex::Print() << "New mf" << std::endl;
 
     const int offset = new_ba.size() - ba.size();
     for (amrex::MFIter mfi(new_mf); mfi.isValid(); ++mfi) {
@@ -652,8 +629,6 @@ void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
             old_mf.setFab(mfi, std::move(old_old_fab));
         }
     }
-
-    amrex::Print() << "Now swap" << std::endl;
 
     // Swap old MulftiFab with new one
     new_mf.t = sim->grid_new[lev].t;
