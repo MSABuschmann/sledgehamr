@@ -633,6 +633,8 @@ void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
     // Swap old MulftiFab with new one
     new_mf.t = sim->grid_new[lev].t;
     old_mf.t = sim->grid_old[lev].t;
+    new_mf.istep = sim->grid_new[lev].istep;
+    old_mf.istep = sim->grid_old[lev].istep;
     std::swap(sim->grid_new[lev], new_mf);
     std::swap(sim->grid_old[lev], old_mf);
     sim->SetBoxArray(lev, new_ba);

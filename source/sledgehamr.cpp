@@ -117,6 +117,7 @@ void Sledgehamr::RemakeLevel(int lev, amrex::Real time,
 
     // Remake new_grid and fill with data.
     LevelData new_state(ba, dm, ncomp, nghost, grid_new[lev].t);
+    new_state.istep = grid_new[lev].istep;
     level_synchronizer->FillPatch(lev, time, new_state);
     std::swap(new_state, grid_new[lev]);
     new_state.clear();
