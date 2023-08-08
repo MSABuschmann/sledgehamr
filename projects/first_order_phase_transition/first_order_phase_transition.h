@@ -40,7 +40,6 @@ void Rhs(const amrex::Array4<double>& rhs,
 
     rhs(i, j, k, Scalar::Phi)  = state(i, j, k, Scalar::dPhi);
     rhs(i, j, k, Scalar::dPhi) = laplacian_Phi + potential;
-    //rhs(i, j, k, Scalar::dPhi) = state(i, j, k, Scalar::Phi);//laplacian_Phi + potential;
 }
 
 template<> AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -74,11 +73,11 @@ void GravitationalWavesRhs<true>(const amrex::Array4<double>& rhs,
 
     // Compute EOM.
     rhs(i, j, k, Gw::u_xx) = state(i, j, k, Gw::du_xx);
-    rhs(i, j, k, Gw::u_yy) = state(i, j, k, Gw::du_xx);
-    rhs(i, j, k, Gw::u_zz) = state(i, j, k, Gw::du_xx);
-    rhs(i, j, k, Gw::u_xy) = state(i, j, k, Gw::du_xx);
-    rhs(i, j, k, Gw::u_xz) = state(i, j, k, Gw::du_xx);
-    rhs(i, j, k, Gw::u_yz) = state(i, j, k, Gw::du_xx);
+    rhs(i, j, k, Gw::u_yy) = state(i, j, k, Gw::du_yy);
+    rhs(i, j, k, Gw::u_zz) = state(i, j, k, Gw::du_zz);
+    rhs(i, j, k, Gw::u_xy) = state(i, j, k, Gw::du_xy);
+    rhs(i, j, k, Gw::u_xz) = state(i, j, k, Gw::du_xz);
+    rhs(i, j, k, Gw::u_yz) = state(i, j, k, Gw::du_yz);
     rhs(i, j, k, Gw::du_xx) = laplacian_u_xx + grad_x_Phi*grad_x_Phi;
     rhs(i, j, k, Gw::du_yy) = laplacian_u_yy + grad_y_Phi*grad_y_Phi;
     rhs(i, j, k, Gw::du_zz) = laplacian_u_zz + grad_z_Phi*grad_z_Phi;
@@ -183,9 +182,7 @@ void AddBubble(const int i, const int j, const int k, const double dx,
 
     for (int n = 0; n < fab.nComp(); ++n) {
         double val = bubble.GetVal(n, ind, frac);
-        //fab(i,j,k,n) = sqrt( val*val + fab(i,j,k,n)*fab(i,j,k,n));
         fab(i, j, k, n) += val;
-        //fab(i, j, k, n) = val;
     }
 }
 

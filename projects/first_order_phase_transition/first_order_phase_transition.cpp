@@ -150,7 +150,7 @@ void first_order_phase_transition::InjectBubbles(const double time) {
                    << std::endl;
     performance_monitor->Start(idx_perfmon_add_bubbles);
 
-    InjectBubbleLevels(ab); 
+    InjectBubbleLevels(ab);
     AddBubbleValues(ab);
 
     // Make levels consistent
