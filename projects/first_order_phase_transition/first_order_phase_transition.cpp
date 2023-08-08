@@ -121,6 +121,8 @@ void first_order_phase_transition::ParseBubbles() {
 }
 
 void first_order_phase_transition::InjectBubbles(const double time) {
+    performance_monitor->Start(idx_perfmon_add_bubbles);
+
     // Check if bubbles need to be added.
     std::vector<int> ab;
     int skip = 0;
@@ -142,6 +144,8 @@ void first_order_phase_transition::InjectBubbles(const double time) {
                        << " bubble(s) that have been injected earlier already."
                        << std::endl;
     }
+
+    performance_monitor->Stop(idx_perfmon_add_bubbles);
 
     if (ab.size() == 0) 
         return;
