@@ -28,6 +28,7 @@ IOModule::IOModule(Sledgehamr* owner) {
     }
 
     amrex::ParallelDescriptor::Barrier();
+
     if (!sim->restart_sim) {
         std::string tmp = output_folder;
         while(tmp.back() == '/') {
@@ -490,8 +491,8 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
         long len = dimx * dimy * dimz;
 
         // TODO Adjust output type.
-        float *output_arr = new float[len]();
         for (int f=0; f<sim->scalar_fields.size(); ++f) {
+            float *output_arr = new float[len]();
             for (int k=lz; k<hz; ++k) {
                 for (int j=ly; j<hy; ++j) {
                     for (int i=lx; i<hx; ++i) {
@@ -516,9 +517,9 @@ void IOModule::WriteLevel(double time, const LevelData* state, int lev,
             std::string dset_name = sim->scalar_fields[f]->name + "_" + ident
                                   + "_" + std::to_string(lex.size());
             WriteToHDF5(file_id, dset_name, output_arr, len);
+            delete[] output_arr;
         }
 
-        delete[] output_arr;
     }
 
     // Write header information for this slice.
@@ -744,8 +745,9 @@ bool IOModule::WritePerformanceMonitor(double time, std::string prefix) {
 
     sim->performance_monitor->Log(file_id);
 
-    if (amrex::ParallelDescriptor::IOProcessor())
+    if (amrex::ParallelDescriptor::IOProcessor()) {
         H5Fclose(file_id);
+    }
 
     return true;
 }
