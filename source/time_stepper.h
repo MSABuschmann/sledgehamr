@@ -3,6 +3,7 @@
 
 #include "sledgehamr.h"
 #include "local_regrid.h"
+#include "regrid_scheduler.h"
 #include "integrators/integrator.h"
 
 namespace sledgehamr {
@@ -10,6 +11,7 @@ namespace sledgehamr {
 class SledgeHAMR;
 class Integrator;
 class LocalRegrid;
+class RegridScheduler;
 
 /** @brief Class that takes care of the sub-cycling in time algorithm as well as
  *         the scheduling regrids.
@@ -33,6 +35,7 @@ class TimeStepper {
      */
     Integrator* integrator;
     LocalRegrid* local_regrid;
+    RegridScheduler* scheduler;
  
 private:
     /** @brief Synchronizes two levels by averaging down. Computes truncation
@@ -73,7 +76,7 @@ private:
      * @param   target  Time step to check.
      * @return  Index of target within vec. -1 if not found.
      */
-    int GetIndexOfScheduledRegrid(std::vector<int>& vec, int target);
+//    int GetIndexOfScheduledRegrid(std::vector<int>& vec, int target);
 
     /** @brief Performs a regrid if needed if no truncation tags are to be
      *         performed.
@@ -96,12 +99,12 @@ private:
      *         perform a regrid. Needed such that we can compute truncation
      *         errors in time.
      */
-    std::vector<std::vector<int> > scheduled_regrids;
+//    std::vector<std::vector<int> > scheduled_regrids;
 
     /** @brief Vector containing for each scheduled regrid which level is the
      *         coarsest.
      */
-    std::vector<int> regrid_level;
+//    std::vector<int> regrid_level;
 
     /** @brief Pointer to other modules.
      */

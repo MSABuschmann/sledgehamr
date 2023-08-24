@@ -282,10 +282,13 @@ void IOModule::ReadFromHDF5(std::string filename,
 
     if (dname_found  == "") {
         H5Fclose(file_id);
+
+        return; // TODO set failed flag.
+
         amrex::Abort(
                 "#error: Could not find correct dataset in file: "
                 + filename + dname_conc);
-    }
+    } 
 
     // Read dataset.
     hid_t dataset_id = H5Dopen2(file_id, dname_found.c_str(), H5P_DEFAULT);

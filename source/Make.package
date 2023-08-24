@@ -33,6 +33,9 @@ CEXE_sources += timer.cpp
 CEXE_headers += time_stepper.h
 CEXE_sources += time_stepper.cpp
 
+CEXE_headers += regrid_scheduler.h
+CEXE_sources += regrid_scheduler.cpp
+
 CEXE_headers += projection.h
 CEXE_sources += projection.cpp
 

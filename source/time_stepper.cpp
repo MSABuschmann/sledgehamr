@@ -10,6 +10,7 @@ namespace sledgehamr {
 TimeStepper::TimeStepper(Sledgehamr* owner) {
     sim = owner;
     local_regrid = new LocalRegrid(sim);
+    scheduler = new RegridScheduler();
 
     // Initialize the correct integrator.
     amrex::ParmParse pp_inte("integrator");
@@ -60,12 +61,13 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
         last_regrid_time.push_back( sim->t_start );
     }
 
-    scheduled_regrids.resize( sim->max_level+1 );
+//    scheduled_regrids.resize( sim->max_level+1 );
 }
 
 TimeStepper::~TimeStepper() {
     delete integrator;
     delete local_regrid;
+    delete scheduler;
 }
 
 void TimeStepper::Advance(int lev) {
@@ -117,11 +119,11 @@ void TimeStepper::SynchronizeLevels(int lev) {
     // Check if regrid has been scheduled so we can decide whether we need to
     // compute truncation error erstimate on top of averaging down. Value of
     // 'index' will be -1 of no regrid has been scheduled.
-    int istep = sim->grid_new[lev].istep;
-    int index = GetIndexOfScheduledRegrid(scheduled_regrids[lev], istep);
+    bool need_truncation_errors =
+            scheduler->NeedTruncationError(lev, sim->grid_new[lev].t);
 
     if (lev < sim->finest_level) {
-        if (sim->shadow_hierarchy && index != -1) {
+        if (sim->shadow_hierarchy && need_truncation_errors) {
             // A regrid is scheduled so we do not synchronize levels quite yet
             // in order to compute truncation errors first.
         } else {
@@ -130,7 +132,7 @@ void TimeStepper::SynchronizeLevels(int lev) {
         }
     }
 
-    if (lev >= 1 - sim->shadow_hierarchy && index != -1) {
+    if (lev >= 1-sim->shadow_hierarchy && need_truncation_errors) {
         // Compute truncation errors for level lev and average down between lev
         // and lev-1.
         sim->level_synchronizer->ComputeTruncationErrors(lev);
@@ -179,8 +181,10 @@ void TimeStepper::ScheduleRegrid(int lev) {
     int    istep = sim->grid_new[lev].istep;
 
     // Check if a future regrid has already been scheduled by a coarser level.
-    int index = GetIndexOfScheduledRegrid(scheduled_regrids[lev], istep + 1);
-    if (index != -1) return;
+    //int index = GetIndexOfScheduledRegrid(scheduled_regrids[lev], istep + 1);
+    //if (index != -1) return;
+    if (scheduler->DoRegrid(lev, time + sim->dt[lev]))
+        return;
 
     // Regrid changes level "lev+1" so we don't regrid on max_level.
     if (lev >= sim->max_level) return;
@@ -201,19 +205,26 @@ void TimeStepper::ScheduleRegrid(int lev) {
     if (time + 3.*sim->dt[lev] <= last_regrid_time[lev] + regrid_dt[lev] &&
         !local_regrid->do_global_regrid[lev]) return;
 
+    // This is to avoid regridding on coarse right after restarting from a
+    // checkpoint. We do not have a valid grid_old yet to evolve the needed
+    // shadow level. 
+    if (lev == 0 && sim->grid_new[lev].t == sim->grid_old[lev].t)
+        return;
+
     // Passed all criteria, now schedule regrid. Make sure we schedule the
     // computation of truncation errors at this and all finer levels to be
     // performed at the end of this levels time step and therefore several
     // timesteps away from now for finer levels.
-    for (int k = lev; k <= sim->finest_level; ++k) {
-        scheduled_regrids[k].push_back(sim->grid_new[k].istep + pow(2,k-lev));
-    }
+    //for (int k = lev; k <= sim->finest_level; ++k) {
+    //    scheduled_regrids[k].push_back(sim->grid_new[k].istep + pow(2,k-lev));
+    //}
+    scheduler->Schedule(lev, time + sim->dt[lev]);
 
     // Print message.
     std::string level_message = LevelMessage(lev, istep);
     amrex::Print() << std::left << std::setw(50) << level_message
                    << "Regrid scheduled for after time step #"
-                   << scheduled_regrids[lev].back()-1 << "." << std::endl;
+                   << istep << "." << std::endl;
 
     if (lev == 0) {
         std::string level_message = LevelMessage(-1, 0);
@@ -223,17 +234,20 @@ void TimeStepper::ScheduleRegrid(int lev) {
         sim->CreateShadowLevel();
     } else {
         // Tell the coarser level as well we need truncation error estimates.
-        scheduled_regrids[lev-1].push_back( sim->grid_new[lev-1].istep );
+        //scheduled_regrids[lev-1].push_back( sim->grid_new[lev-1].istep );
     }
 
     // Mark this as the coarsest level to be regridded.
-    regrid_level.push_back(lev);
+    //regrid_level.push_back(lev);
 }
 
 void TimeStepper::DoRegridIfScheduled(int lev) {
     double time  = sim->grid_new[lev].t;
     int    istep = sim->grid_new[lev].istep;
 
+    if (!scheduler->DoRegrid(lev, time))
+        return;
+/*
     // No regrid has been scheduled.
     int index = GetIndexOfScheduledRegrid(scheduled_regrids[lev], istep);
     if (index == -1) return;
@@ -241,7 +255,8 @@ void TimeStepper::DoRegridIfScheduled(int lev) {
     // Check if this is really the coarsest level scheduled for a regrid this
     // time.
     if (regrid_level[index] != lev) return;
-
+*/
+/*
     // Passed all criteria, remove regrid from schedule.
     for (int k = lev; k <= sim->finest_level; ++k) {
         // Get index again for each level. Relevant if new level has been
@@ -254,14 +269,19 @@ void TimeStepper::DoRegridIfScheduled(int lev) {
     }
 
     if (lev > 0) {
-        scheduled_regrids[lev-1].erase(scheduled_regrids[lev-1].begin()+index);
+        int index_lev = GetIndexOfScheduledRegrid(scheduled_regrids[lev-1], sim->grid_new[lev-1].istep);
+        if (index_lev != index) {
+            amrex::Print() << "index: " << index_lev << " vs " << index << std::endl;
+        }
+        scheduled_regrids[lev-1].erase(scheduled_regrids[lev-1].begin()+index_lev);
     }
     regrid_level.erase(regrid_level.begin() + index);
-
+*/
     // Actually do the regrid if we made it this far.
     DoRegrid(lev, time);
+    scheduler->DidRegrid(time);
 }
-
+/*
 int TimeStepper::GetIndexOfScheduledRegrid (std::vector<int>& vec, int target) {
     int index = -1;
 
@@ -273,7 +293,7 @@ int TimeStepper::GetIndexOfScheduledRegrid (std::vector<int>& vec, int target) {
 
     return index;
 }
-
+*/
 void TimeStepper::NoShadowRegrid(int lev) {
     double time = sim->grid_new[lev].t;
 
