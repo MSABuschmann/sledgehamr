@@ -186,7 +186,7 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     SetParamsTagCellForRefinement(params_tag);
     if (shadow_hierarchy)
         SetParamsTruncationModifier(params_mod);
- 
+
     // Loop over boxes and cells.
 #pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user) \
                      reduction(vec_int_plus : ntags_trunc)
@@ -203,7 +203,8 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
                                  &(ntags_trunc[0]), params_tag, params_mod);
         } else if (shadow_hierarchy) {
             std::string msg = "Trying to tag using truncation errors but no ";
-            msg += "truncation errors are computed!";
+            msg += "truncation errors are computed on level ";
+            msg += std::to_string(lev) + "!";
             amrex::Abort(msg.c_str());
         } else {
             TagWithoutTruncationCpu(state_fab, tag_arr, tilebox, time, lev,
