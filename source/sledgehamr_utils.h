@@ -78,6 +78,21 @@ double Laplacian<2>(amrex::Array4<amrex::Real const> const& state, const int i,
          - 90.* state(i,  j,  k,  c) ) / (12.*dx2);
 };
 
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double Laplacian<3>(amrex::Array4<amrex::Real const> const& state, const int i,
+                    const int j, const int k, const int c, const double dx2) {
+    return (2.*(state(i+3,j,  k,  c) + state(i-3,j,  k,  c) +
+                state(i,  j+3,k,  c) + state(i,  j-3,k,  c) +
+                state(i,  j,  k+3,c) + state(i,  j,  k-3,c) )
+          -27.*(state(i+2,j,  k,  c) + state(i-2,j,  k,  c) +
+                state(i,  j+2,k,  c) + state(i,  j-2,k,  c) +
+                state(i,  j,  k+2,c) + state(i,  j,  k-2,c) )
+         +270.*(state(i+1,j,  k,  c) + state(i-1,j,  k,  c) +
+                state(i,  j+1,k,  c) + state(i,  j-1,k,  c) +
+                state(i,  j,  k+1,c) + state(i,  j,  k-1,c) )
+         -1470.*state(i,  j,  k,  c) ) / (180.*dx2);
+};
+
 /** @brief TODO
  */
 template<int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
@@ -99,13 +114,13 @@ double Gradient<1>(amrex::Array4<amrex::Real const> const& state, const int i,
     double result = 0;
 
     switch (axis) {
-        case 'x': 
+        case 'x':
             result = (state(i+1,j,  k,  c) - state(i-1,j,  k,  c)) / (2.*dx);
             break;
-        case 'y': 
+        case 'y':
             result = (state(i,  j+1,k,  c) - state(i,  j-1,k,  c)) / (2.*dx);
             break;
-        case 'z': 
+        case 'z':
             result = (state(i,  j,  k+1,c) - state(i,  j,  k-1,c)) / (2.*dx);
             break;
     }
@@ -120,17 +135,44 @@ double Gradient<2>(amrex::Array4<amrex::Real const> const& state, const int i,
     double result = 0;
 
     switch (axis) {
-        case 'x': 
-            result = (-state(i+2,j,  k,  c) + 8.*state(i+1,j,  k,  c) 
+        case 'x':
+            result = (-state(i+2,j,  k,  c) + 8.*state(i+1,j,  k,  c)
                       +state(i-2,j,  k,  c) - 8.*state(i-1,j,  k,  c))/(12.*dx);
             break;
-        case 'y': 
-            result = (-state(i,  j+2,k,  c) + 8.*state(i,  j+1,k,  c) 
+        case 'y':
+            result = (-state(i,  j+2,k,  c) + 8.*state(i,  j+1,k,  c)
                       +state(i,  j-2,k,  c) - 8.*state(i,  j-1,k,  c))/(12.*dx);
             break;
-        case 'z': 
-            result = (-state(i,  j,  k+2,c) + 8.*state(i,  j,  k+1,c) 
+        case 'z':
+            result = (-state(i,  j,  k+2,c) + 8.*state(i,  j,  k+1,c)
                       +state(i,  j,  k-2,c) - 8.*state(i,  j,  k-1,c))/(12.*dx);
+            break;
+    }
+
+    return result;
+};
+
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+double Gradient<3>(amrex::Array4<amrex::Real const> const& state, const int i,
+                   const int j, const int k, const int c, const double dx,
+                   const char axis) {
+    double result = 0;
+
+    switch (axis) {
+        case 'x':
+            result = (+    state(i+3,j,k,c) -    state(i-3,j,k,c)
+                      - 9.*state(i+2,j,k,c) + 9.*state(i-2,j,k,c)
+                      +45.*state(i+1,j,k,c) -45.*state(i-1,j,k,c)) / (60.*dx);
+            break;
+        case 'y':
+            result = (+    state(i,j+3,k,c) -    state(i,j-3,k,c)
+                      - 9.*state(i,j+2,k,c) + 9.*state(i,j-2,k,c)
+                      +45.*state(i,j+1,k,c) -45.*state(i,j-1,k,c)) / (60.*dx);
+            break;
+        case 'z':
+            result = (+    state(i,j,k+3,c) -    state(i,j,k-3,c)
+                      - 9.*state(i,j,k+2,c) + 9.*state(i,j,k-2,c)
+                      +45.*state(i,j,k+1,c) -45.*state(i,j,k-1,c)) / (60.*dx);
             break;
     }
 
@@ -153,7 +195,7 @@ static std::string OrdinalNumberSuffix(int num) {
  */
 static std::string LevelName(int lev) {
     switch (lev) {
-        case -1: 
+        case -1:
             return "shadow level";
         case 0:
             return "coarse level";
