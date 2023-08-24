@@ -3,8 +3,10 @@
 namespace sledgehamr {
 
 void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
-    // Could be set to something lower to not include finer level.
-    int mlevel = sim->finest_level;
+    int mlevel = INT_MAX;
+    amrex::ParmParse pp("output");
+    pp.query("projection_max_level", mlevel);
+    mlevel = std::min(mlevel, sim->finest_level);
 
     const int dimN = sim->dimN[mlevel];
     long long N = dimN*dimN;
@@ -48,10 +50,6 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
                         }
 
                         if (contd) {
-                           // if (state_fab(i,j,k,0) != 1) {
-                           //     amrex::AllPrint() << bx << " " << i << " " << j << " " << k  << " " << state_fab(i,j,k,0) << std::endl;
-                           // }
-
                             double val = fct(state_fab, i, j, k, lev, time, dt,
                                              dx, params);
                             Add(i, j, k, &d_projection[0], &n_projection[0], ratio,
@@ -66,14 +64,8 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     amrex::ParallelDescriptor::ReduceRealSum(d_projection.dataPtr(), N,
             amrex::ParallelDescriptor::IOProcessorNumber());
 
-//    if (n_projection[0] != 0)
-//        amrex::AllPrint() << amrex::ParallelDescriptor::MyProc() << ": before projection00: " << n_projection[0] << std::endl;
-
     amrex::ParallelDescriptor::ReduceIntSum(n_projection.dataPtr(), N,
             amrex::ParallelDescriptor::IOProcessorNumber());
-    
-//    if (n_projection[0] != 0)
-//        amrex::AllPrint() << amrex::ParallelDescriptor::MyProc() << ": after projection00: " << n_projection[0] << std::endl;
 
     if (amrex::ParallelDescriptor::IOProcessor()) {
         if (id == 0) {
@@ -88,7 +80,7 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     }
 }
 
-AMREX_FORCE_INLINE 
+AMREX_FORCE_INLINE
 void Projection::Add(const int i, const int j, const int k, double* projection,
                      int* n_projection, const int ratio, const int dimN,
                      const double val) {
