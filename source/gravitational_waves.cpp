@@ -45,7 +45,7 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
 
     std::vector<int>& ks = sim->spectrum_ks;
     const int kmax = ks.size();
-    constexpr int NTHREADS = 16;
+    constexpr int NTHREADS = std::min(16, omp_get_max_threads());
     const unsigned long SpecLen = kmax*NTHREADS;
     double* gw_spectrum = new double [SpecLen] ();
 
@@ -78,6 +78,14 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
             for (int b = lo.y; b <= hi.y; ++b) {
                 AMREX_PRAGMA_SIMD
                 for (int a = lo.x; a <= hi.x; ++a) {
+                    int li = a >= dimN/2 ? a-dimN : a;
+                    int lj = b >= dimN/2 ? b-dimN : b;
+                    int lk = c >= dimN/2 ? c-dimN : c;
+                    unsigned int sq= li*li + lj*lj + lk*lk;
+                    unsigned long index =
+                            std::lower_bound(ks.begin(), ks.end(), sq) -
+                            ks.begin() + omp_get_thread_num() * kmax;
+
                     int abc[3] = {a, b, c};
                     double running_sum = 0;
 
@@ -85,6 +93,7 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
                         for(int j = 0; j < 3; ++j) {
                             for(int l = 0; l < 3; ++l) {
                                 for(int m = 0; m < 3; ++m) {
+
                                     running_sum +=
                                         GetLambda(i, j, l, m, abc, dimN)
                                         * ( (*du_real_arr)[mat[i][j]](a, b, c)
@@ -96,13 +105,6 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
                         }
                     }
 
-                    int li = a >= dimN/2 ? a-dimN : a;
-                    int lj = b >= dimN/2 ? b-dimN : b;
-                    int lk = c >= dimN/2 ? c-dimN : c;
-                    unsigned int sq= li*li + lj*lj + lk*lk;
-                    unsigned long index =
-                            std::lower_bound(ks.begin(), ks.end(), sq) -
-                            ks.begin() + omp_get_thread_num() * kmax;
                     gw_spectrum[index] += running_sum;
                 }
             }
