@@ -27,6 +27,8 @@ void first_order_phase_transition::SetProjections() {
 void first_order_phase_transition::ParseVariables() {
     amrex::ParmParse pp_prj("project");
     pp_prj.get("lambda_bar", lambda_bar);
+
+    pp_prj.queryarr("bubbles_to_inject", bubbles_to_inject);
 }
 
 
@@ -96,8 +98,13 @@ void first_order_phase_transition::ParseBubbles() {
             for (int n = 0; n < ncomp; ++n) {
                 std::string sname = scalar_fields[n]->name;
                 // TODO Remove old convention.
-                if (n == 0) sname = "Psi1";
-                if (n == 1) sname = "Pi1";
+                if (sname == "Phi")  {
+                    sname = "Psi1";
+                } else if (sname == "dPhi") {
+                    sname = "Pi1";
+                } else {
+                    continue;
+                }
                 std::string str_data = "profile_" + sname + "_"
                                      + std::to_string(b);
 
@@ -128,7 +135,18 @@ void first_order_phase_transition::InjectBubbles(const double time) {
     int skip = 0;
     for (int b = next_bubble; b < bubbles.size(); ++b) {
         if (bubbles[b].t > time)
-            break;
+            continue;
+
+        if (bubbles_to_inject.size() > 0) {
+            amrex::Print() << "Test: " << b << std::endl;
+            for(int x=0;x<bubbles_to_inject.size();++x)
+                amrex::Print() << bubbles_to_inject[x] << std::endl;
+
+            if(std::find(bubbles_to_inject.begin(), bubbles_to_inject.end(), b)
+                == bubbles_to_inject.end()) {
+                continue;
+            }
+        }
 
         if (time - bubbles[b].t < dt[0]) {
             ab.push_back(b);
@@ -147,11 +165,12 @@ void first_order_phase_transition::InjectBubbles(const double time) {
 
     performance_monitor->Stop(idx_perfmon_add_bubbles);
 
-    if (ab.size() == 0) 
+    if (ab.size() == 0)
         return;
 
     amrex::Print() << "Injecting " << ab.size() << " bubble(s) ... "
                    << std::endl;
+
     performance_monitor->Start(idx_perfmon_add_bubbles);
 
     InjectBubbleLevels(ab);
@@ -179,8 +198,6 @@ void first_order_phase_transition::InjectBubbleLevels(std::vector<int> ab)
 
     // Initialize entirely new levels if needed to zero for local regrid.
     for (int lev = finest_level + 1; lev <= finest_bubble_level; ++lev) {
-        amrex::Print() << "Create empty level " << lev << std::endl;
-
         const int ncomp = grid_new[0].nComp();
         const int nghost = grid_new[0].nGrow();
         amrex::BoxArray ba;
@@ -220,7 +237,7 @@ void first_order_phase_transition::InjectBubbleLevels(std::vector<int> ab)
     }
 
     // Add boxes to level for existing levels.
-    for (int lev = 1; lev <= old_finest_level; ++lev) {
+    for (int lev = 1; lev <= finest_level; ++lev) {
         if (box_arrays[lev].size() > 0) {
             time_stepper->local_regrid->AddBoxes(lev, box_arrays[lev]);
             geom[lev] = geom[lev-1];
