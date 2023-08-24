@@ -51,7 +51,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
 
     std::vector<int>& ks = sim->spectrum_ks;
     const int kmax = ks.size();
-    constexpr int NTHREADS = 16;
+    constexpr int NTHREADS = std::min(16, omp_get_max_threads());
     const unsigned long SpecLen = kmax*NTHREADS;
     double* spectrum = new double [SpecLen] ();
 
@@ -115,7 +115,22 @@ void Spectrum::Fft(const amrex::MultiFab& field, const int comp,
                    amrex::MultiFab& field_fft_imag, const amrex::Geometry& geom,
                    bool abs) {
     const amrex::BoxArray& ba = field.boxArray();
-    const amrex::DistributionMapping& dm = field.DistributionMap(); 
+    const amrex::DistributionMapping& dm = field.DistributionMap();
+    amrex::MultiFab field_tmp(ba, dm, 1, 0);
+
+#ifdef _OPENMP
+#pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
+#endif
+    for ( amrex::MFIter mfi(field, amrex::TilingIfNotGPU()); mfi.isValid(); ++mfi ){
+        const amrex::Box& bx = mfi.tilebox();
+        const auto& state_arr = field.array(mfi);
+        const auto& field_tmp_arr = field_tmp.array(mfi);
+
+        amrex::ParallelFor(bx,
+        [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+            field_tmp_arr(i, j, k, 0) = state_arr(i, j, k, comp);
+        });
+    }
 
     int nx = ba[0].size()[0];
     int ny = ba[0].size()[1];
@@ -145,7 +160,7 @@ void Spectrum::Fft(const amrex::MultiFab& field, const int comp,
     int n[3] = { domain.length(2), domain.length(1), domain.length(0)};
     hacc::Distribution d(MPI_COMM_WORLD, n, Ndims, &rank_mapping[0]);
     hacc::Dfft dfft(d);
-        
+
     for (amrex::MFIter mfi(field, false); mfi.isValid(); ++mfi) {
         int gid = mfi.index();
 
@@ -160,10 +175,10 @@ void Spectrum::Fft(const amrex::MultiFab& field, const int comp,
         dfft.makePlans(&a[0], &b[0], &a[0], &b[0]);
 
         size_t local_indx = 0;
-        for(size_t k=0; k<(size_t)nz; k++) { 
-            for(size_t j=0; j<(size_t)ny; j++) { 
+        for(size_t k=0; k<(size_t)nz; k++) {
+            for(size_t j=0; j<(size_t)ny; j++) {
                 for(size_t i=0; i<(size_t)nx; i++) {
-                    complex_t temp(field[mfi].dataPtr(comp)[local_indx],0.);
+                    complex_t temp(field_tmp[mfi].dataPtr()[local_indx],0.);
                     a[local_indx] = temp;
                     local_indx++;
                 }
@@ -173,7 +188,7 @@ void Spectrum::Fft(const amrex::MultiFab& field, const int comp,
         dfft.forward(&a[0]);
         d.redistribute_2_to_3(&a[0], &b[0], 2);
         size_t global_size  = dfft.global_size();
-        
+
         local_indx = 0;
 
         if (abs) {
