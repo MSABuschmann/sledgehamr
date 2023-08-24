@@ -8,8 +8,6 @@
 
 namespace first_order_phase_transition {
 
-//ADD_SCALARS(Phi, su_xx, su_yy, su_zz, su_xy, su_xz, su_yz)
-//ADD_CONJUGATE_MOMENTA(dPhi, sdu_xx, sdu_yy, sdu_zz, sdu_xy, sdu_xz, sdu_yz)
 ADD_SCALARS(Phi)
 ADD_CONJUGATE_MOMENTA(dPhi)
 
@@ -42,51 +40,6 @@ void Rhs(const amrex::Array4<double>& rhs,
 
     rhs(i, j, k, Scalar::Phi)  = state(i, j, k, Scalar::dPhi);
     rhs(i, j, k, Scalar::dPhi) = laplacian_Phi + potential;
-/*
-    // Compute Laplacians.
-    double dx2 = dx * dx;
-    double laplacian_u_xx = sledgehamr::utils::Laplacian<order>(
-            state, i, j, k, Scalar::su_xx, dx2);
-    double laplacian_u_yy = sledgehamr::utils::Laplacian<order>(
-            state, i, j, k, Scalar::su_yy, dx2);
-    double laplacian_u_zz = sledgehamr::utils::Laplacian<order>(
-            state, i, j, k, Scalar::su_zz, dx2);
-    double laplacian_u_xy = sledgehamr::utils::Laplacian<order>(
-            state, i, j, k, Scalar::su_xy, dx2);
-    double laplacian_u_xz = sledgehamr::utils::Laplacian<order>(
-            state, i, j, k, Scalar::su_xz, dx2);
-    double laplacian_u_yz = sledgehamr::utils::Laplacian<order>(
-            state, i, j, k, Scalar::su_yz, dx2);
-
-    // Compute gradients.
-    double grad_x_Phi = sledgehamr::utils::Gradient<order>(
-            state, i, j, k, Scalar::Phi, dx, 'x');
-    double grad_y_Phi = sledgehamr::utils::Gradient<order>(
-            state, i, j, k, Scalar::Phi, dx, 'y');
-    double grad_z_Phi = sledgehamr::utils::Gradient<order>(
-            state, i, j, k, Scalar::Phi, dx, 'z');
-
-    if( i==32 && j == 0 && k == 0 ) {
-        amrex::AllPrint() << state(i-1, j, k, Scalar::Phi) << " " << state(i, j, k, Scalar::Phi) << " " << state(i+1, j, k, Scalar::Phi) << std::endl;
-        amrex::AllPrint() << state(i, j-1, k, Scalar::Phi) << " " << state(i, j, k, Scalar::Phi) << " " << state(i, j+1, k, Scalar::Phi) << std::endl;
-        amrex::AllPrint() << state(i, j, k-1, Scalar::Phi) << " " << state(i, j, k, Scalar::Phi) << " " << state(i, j, k+1, Scalar::Phi) << std::endl;
-        amrex::AllPrint() << "-->" << grad_x_Phi << " " << grad_y_Phi << " " << grad_z_Phi << " | " << laplacian_u_xx << " " << laplacian_u_yy <<" " << laplacian_u_zz << std::endl;
-    }
-
-    // Compute EOM.
-    rhs(i, j, k, Scalar::su_xx) = state(i, j, k, Scalar::sdu_xx);
-    rhs(i, j, k, Scalar::su_yy) = state(i, j, k, Scalar::sdu_yy);
-    rhs(i, j, k, Scalar::su_zz) = state(i, j, k, Scalar::sdu_zz);
-    rhs(i, j, k, Scalar::su_xy) = state(i, j, k, Scalar::sdu_xy);
-    rhs(i, j, k, Scalar::su_xz) = state(i, j, k, Scalar::sdu_xz);
-    rhs(i, j, k, Scalar::su_yz) = state(i, j, k, Scalar::sdu_yz);
-    rhs(i, j, k, Scalar::sdu_xx) = laplacian_u_xx + grad_x_Phi*grad_x_Phi;
-    rhs(i, j, k, Scalar::sdu_yy) = laplacian_u_yy + grad_y_Phi*grad_y_Phi;
-    rhs(i, j, k, Scalar::sdu_zz) = laplacian_u_zz + grad_z_Phi*grad_z_Phi;
-    rhs(i, j, k, Scalar::sdu_xy) = laplacian_u_xy + grad_x_Phi*grad_y_Phi;
-    rhs(i, j, k, Scalar::sdu_xz) = laplacian_u_xz + grad_x_Phi*grad_z_Phi;
-    rhs(i, j, k, Scalar::sdu_yz) = laplacian_u_yz + grad_y_Phi*grad_z_Phi;
-*/
 }
 
 template<> AMREX_GPU_DEVICE AMREX_FORCE_INLINE
