@@ -16,6 +16,7 @@ class Output:
         self._full_box_truncation_error_headers = []
         self._projection_headers = []
         self._spectrum_headers = []
+        self._gravitational_wave_spectrum_headers = []
 
         self.__ParseFolderStructure()
 
@@ -54,6 +55,10 @@ class Output:
     ## Returns array of times at which projections have been written.
     def GetTimesOfSpectra(self):
         return self.__GetTimes(self._spectrum_headers)
+
+    ## Returns array of times at which projections have been written.
+    def GetTimesOfGravitationalWaveSpectra(self):
+        return self.__GetTimes(self._gravitational_wave_spectrum_headers)
 
     def __GetTimes(self, array):
         if len(array) > 0:
@@ -275,6 +280,26 @@ class Output:
         fin.close()
         return d
 
+    ## Returns gravitational wave sprectra.
+    # @param    i           State number.
+    # @para     names       List of spectrum names.
+    # @return   d           Dictionary containing the time and spectra.
+    def GetGravitationalWaveSpectrum(self, i):
+        # Get relevant parameters from header
+        t = self._gravitational_wave_spectrum_headers[i,0]
+        file = self._prefix + '/gw_spectra/'+str(i)+'/spectra.hdf5'
+
+        fin = h5py.File(file,'r')
+
+        # Start dictionary
+        d = dict();
+        d['t'] = t
+        d['k_sq'] = fin['k'][:]
+        d['spectrum'] = fin['Spectrum'][:]
+
+        fin.close()
+        return d
+
     def __Read2dField(self, folder, dim, direction, ranks, ident, downsample):
         field = np.ones((dim,dim), dtype=np.float32) * np.nan
         for f in range(ranks):
@@ -324,6 +349,7 @@ class Output:
         self.__ParseFullBoxes()
         self.__ParseProjections()
         self.__ParseSpectra()
+        self.__ParseGravitationalWaveSpectra()
         self.__ParseSlicesTruncationError()
         self.__ParseCoarseBoxesTruncationError()
         self.__ParseFullBoxesTruncationError()
@@ -492,6 +518,28 @@ class Output:
         print('Number of spectra found:',\
               len(self._spectrum_headers))
 
+    ## Determines how many projections have been written and parses their header
+    ## files.
+    def __ParseGravitationalWaveSpectra(self):
+        folder = self._prefix + '/gw_spectra/'
+        i = 0
+
+        # iterate over batches and read header of first files
+        while True:
+            file = folder + str(i) + '/spectra.hdf5'
+            if not path.exists( file ):
+                break
+            fin = h5py.File(file,'r')
+            self._gravitational_wave_spectrum_headers.append(fin['Header'][:])
+            i = i + 1
+
+        self._gravitational_wave_spectrum_headers =\
+                np.array( self._gravitational_wave_spectrum_headers )
+
+        print('Number of gravitational wave spectra found:',\
+              len(self._gravitational_wave_spectrum_headers))
+
+
     ## Path of output folder
     _prefix = "."
 
@@ -504,3 +552,4 @@ class Output:
     _full_box_truncation_error_headers = []
     _projection_headers = []
     _spectrum_headers = []
+    _gravitational_wave_spectrum_headers = []
