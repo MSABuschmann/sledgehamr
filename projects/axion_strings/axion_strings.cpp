@@ -10,7 +10,8 @@ void axion_strings::Init() {
 }
 
 bool axion_strings::CreateLevelIf(const int lev, const double time) {
-    return StringWidth(lev, time) <= string_width_threshold;
+    if (lev <= 0) return true;
+    return StringWidth(lev-1, time) <= string_width_threshold;
 }
 
 void axion_strings::ParseVariables() {
@@ -26,7 +27,7 @@ void axion_strings::PrintRefinementTimes() {
         amrex::Print() << "Level " << lev << " ("
                        << sledgehamr::utils::LevelName(lev)
                        << ") will be introduced at eta = "
-                       << RefinementTime(lev) << std::endl;
+                       << RefinementTime(lev-1) << std::endl;
     }
 }
 
