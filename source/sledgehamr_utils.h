@@ -209,6 +209,10 @@ static bool IsPowerOfTwo(int val) {
     return (val > 0) && ((val & (val - 1)) == 0);
 }
 
+static bool ApproxEqual(double a, double b, double eps = 1e-8) {
+    return (fabs(a - b) < a*eps);
+}
+
 }; // namespace utils
 }; // namespace sledgehamr
 
