@@ -4,6 +4,7 @@
 
 #include "level_synchronizer.h"
 #include "kernels.h"
+#include "sledgehamr_utils.h"
 
 namespace sledgehamr{
 
@@ -205,7 +206,8 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
 
     // Sanity check shadow level was created at the right time and is properly
     // sync'd with the coarse level.
-    if (lev == 0 && sim->shadow_level.t != sim->grid_new[lev].t) {
+    if ( lev == 0 &&
+         !utils::ApproxEqual(sim->shadow_level.t, sim->grid_new[lev].t) ) {
         std::string msg = "Shadow level not sync'd with coarse level! "
                         + std::to_string(sim->shadow_level.t) + " (shadow) vs "
                         + std::to_string(sim->grid_new[lev].t) + " (coarse)";
