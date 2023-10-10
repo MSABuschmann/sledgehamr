@@ -20,6 +20,7 @@ class GravitationalWaves {
 
     int idx_offset;
     static constexpr int NScalars = 12;
+    int projection_type = 2;
 
     enum Gw { 
         u_xx = 0, u_yy, u_zz, u_xy, u_xz, u_yz, du_xx, du_yy, du_zz, du_xy,

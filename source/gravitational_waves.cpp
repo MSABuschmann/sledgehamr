@@ -18,6 +18,9 @@ GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
     ScalarField* du_xy = new ScalarField("du_xy", sim->scalar_fields, true);
     ScalarField* du_xz = new ScalarField("du_xz", sim->scalar_fields, true);
     ScalarField* du_yz = new ScalarField("du_yz", sim->scalar_fields, true);
+
+    amrex::ParmParse pp("output");
+    pp.query("gw_projection_type", projection_type);
 }
 
 void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
@@ -45,12 +48,12 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
 
     std::vector<int>& ks = sim->spectrum_ks;
     const int kmax = ks.size();
-    constexpr int NTHREADS = std::min(16, omp_get_max_threads());
+    constexpr int NTHREADS = 16;
     const unsigned long SpecLen = kmax*NTHREADS;
     double* gw_spectrum = new double [SpecLen] ();
 
     // Non-trivial load-balancing here. Not sure what wins.
-#pragma omp parallel num_threads(NTHREADS)
+#pragma omp parallel num_threads(std::min(NTHREADS, omp_get_max_threads()))
     for (amrex::MFIter mfi(du_real[0], true); mfi.isValid(); ++mfi) {
         const amrex::Box& bx = mfi.tilebox();
         // Ugly work around since arrays of references are not allowed.
@@ -140,9 +143,9 @@ inline double GravitationalWaves::IndexToK(int a, int N) {
     double n_tilde = a-N <= -N/2-1 ? a : a-N;
     double two_pi_n_tilde = 2.*M_PI/static_cast<double>(N)*n_tilde;
 
-    if (sim->nghost == 1) {
+    if (projection_type == 1) {
         return sin(two_pi_n_tilde);
-    } else if (sim->nghost > 1) {
+    } else if (projection_type == 2) {
         return (8.*sin(two_pi_n_tilde) - sin(2.*two_pi_n_tilde)) / 6.;
     }
 
