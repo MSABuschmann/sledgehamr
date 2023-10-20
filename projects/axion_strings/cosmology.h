@@ -5,10 +5,8 @@
 
 namespace axion_strings {
 
-//namespace Tmp {
 ADD_SCALARS(Psi1, Psi2)
 ADD_CONJUGATE_MOMENTA(Pi1, Pi2)
-//}
 
 /** @brief TODO
  */

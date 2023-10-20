@@ -7,9 +7,6 @@
 
 namespace axion_strings {
 
-//ADD_SCALARS(Psi1, Psi2)
-//ADD_CONJUGATE_MOMENTA(Pi1, Pi2)
-
 /** @brief Function that calculates the RHS of the EOM at a single cell.
  * @param   rhs     Container to be filled with RHS.
  * @param   state   Data from which to calculate RHS (current state).
@@ -300,8 +297,13 @@ class axion_strings : public sledgehamr::Sledgehamr {
   public:
     START_PROJECT(axion_strings)
 
-    void Init() override;
-    bool CreateLevelIf(const int lev, const double time) override;
+    void Init() override {
+        cosmo.Init(this);
+    };
+
+    bool CreateLevelIf(const int lev, const double time) override {
+        return cosmo.CreateLevelIf(lev, time);
+    };
 
   private:
     Cosmology cosmo;
