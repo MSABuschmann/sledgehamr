@@ -3,11 +3,12 @@
 
 #include <sledgehamr.h>
 #include <sledgehamr_utils.h>
+#include "cosmology.h"
 
-namespace axion_strings{
+namespace axion_strings {
 
-ADD_SCALARS(Psi1, Psi2)
-ADD_CONJUGATE_MOMENTA(Pi1, Pi2)
+//ADD_SCALARS(Psi1, Psi2)
+//ADD_CONJUGATE_MOMENTA(Pi1, Pi2)
 
 /** @brief Function that calculates the RHS of the EOM at a single cell.
  * @param   rhs     Container to be filled with RHS.
@@ -35,7 +36,7 @@ void Rhs(const amrex::Array4<double>& rhs,
     double eta = time;
 
     // Compute Laplacians.
-    constexpr int order = 1;
+    constexpr int order = 2;
     double laplacian_Psi1 = sledgehamr::utils::Laplacian<order>(
             state, i, j, k, Scalar::Psi1, dx*dx);
     double laplacian_Psi2 = sledgehamr::utils::Laplacian<order>(
@@ -67,7 +68,7 @@ void GravitationalWavesRhs<true>(const amrex::Array4<double>& rhs,
 
     // Compute Laplacians.
     double dx2 = dx * dx;
-    constexpr int order = 1;
+    constexpr int order = 2;
     double laplacian_u_xx = sledgehamr::utils::Laplacian<order>(
             state, i, j, k, Gw::u_xx, dx2);
     double laplacian_u_yy = sledgehamr::utils::Laplacian<order>(
@@ -291,49 +292,6 @@ double TruncationModifier<Gw::du_yz>(const amrex::Array4<const double>& state,
     return truncation_error * dt;
 }
 
-/** @brief TODO
- */
-AMREX_FORCE_INLINE
-double a_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
-        const int j, const int k, const int lev, const double time,
-        const double dt, const double dx,
-        const std::vector<double>& params) {
-    double Psi1    = state(i, j, k, Scalar::Psi1);
-    double Psi2    = state(i, j, k, Scalar::Psi2);
-    double Pi1     = state(i, j, k, Scalar::Pi1);
-    double Pi2     = state(i, j, k, Scalar::Pi2);
-    double r2      = Psi1*Psi1 + Psi2*Psi2;
-    double prime_a = (Psi1*Pi2 - Psi2*Pi1)/r2;
-    return prime_a*prime_a;
-}
-
-AMREX_FORCE_INLINE
-double a_prime_screened(amrex::Array4<amrex::Real const> const& state,
-        const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx,
-        const std::vector<double>& params) {
-    double Psi1    = state(i, j, k, Scalar::Psi1);
-    double Psi2    = state(i, j, k, Scalar::Psi2);
-    double Pi1     = state(i, j, k, Scalar::Pi1);
-    double Pi2     = state(i, j, k, Scalar::Pi2);
-    double prime_a = (Psi1*Pi2 - Psi2*Pi1);
-    return prime_a;
-}
-
-AMREX_FORCE_INLINE
-double r_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
-        const int j, const int k, const int lev, const double time,
-        const double dt, const double dx,
-        const std::vector<double>& params) {
-    double Psi1    = state(i, j, k, Scalar::Psi1);
-    double Psi2    = state(i, j, k, Scalar::Psi2);
-    double Pi1     = state(i, j, k, Scalar::Pi1);
-    double Pi2     = state(i, j, k, Scalar::Pi2);
-    double r2      = Psi1*Psi1 + Psi2*Psi2;
-    double prime_r = (Psi1*Pi1 + Psi2*Pi2);
-    return prime_r*prime_r/r2;
-}
-
 FINISH_SLEDGEHAMR_SETUP
 
 /** @brief Class to simulate axion strings.
@@ -346,44 +304,7 @@ class axion_strings : public sledgehamr::Sledgehamr {
     bool CreateLevelIf(const int lev, const double time) override;
 
   private:
-    void ParseVariables();
-    void PrintRefinementTimes();
-    void SetProjections();
-    void SetSpectra();
-
-    double Mr(const double eta) {
-        return std::sqrt(2. * lambda) * eta; 
-    }
-
-    double H(const double eta) {
-        return 1./eta;
-    }
-
-    double StringWidth(const int lev, const double eta) {
-        return 1./(Mr(eta) * dx[lev]); 
-    }
-
-    double RefinementTime(const int lev) {
-        return dimN[lev] / (sqrt(2.*lambda) * string_width_threshold * L);
-    }
-
-    double Log(double eta) {
-        if (eta <= 0)
-            return -DBL_MAX;
-        return std::log( Mr(eta) / H(eta) );
-    }
-
-    double LogTruncated(const double eta) {
-        double log = Log(eta);
-        if (log < spectra_log_min) 
-            return 0;
-        else
-            return log;
-    }
-
-    double string_width_threshold;
-    double spectra_log_min = 5;
-    const double lambda = 1;
+    Cosmology cosmo;
 };
 
 }; // namespace axion_strings

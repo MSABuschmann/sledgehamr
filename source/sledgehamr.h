@@ -93,6 +93,28 @@ class Sledgehamr : public amrex::AmrCore {
                             const int lev, const double dt, const double dx,
                             const double weight) = 0;
 
+    double GetL() {
+        return L;
+    };
+
+    /** TODO: Add max lev check and other methods.
+     */
+    double GetDx(const int lev) {
+        return dx[lev];
+    }
+
+    double GetDt(const int lev) {
+        return dt[lev];
+    }
+
+    int GetDimN(const int lev) {
+        return dimN[lev];
+    }
+
+    int GetMaxLevel() {
+        return max_level;
+    }
+
     /** @brief Pointer to synchronization module.
      */
     LevelSynchronizer* level_synchronizer;
