@@ -58,6 +58,7 @@ class Cosmology {
     void Init(sledgehamr::Sledgehamr* owner);
 
     bool CreateLevelIf(const int lev, const double time);
+
     double Mr(const double eta) {
         return std::sqrt(2. * lambda) * eta;
     }

@@ -139,7 +139,7 @@ void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
     if (time == t_start && shadow_hierarchy) return;
 
     // Also skip if level is not supposed to be created yet.
-    if (!CreateLevelIf(lev+1, time)) return;
+    if (!DoCreateLevelIf(lev+1, time)) return;
 
     performance_monitor->Start(performance_monitor->idx_tagging, lev);
     utils::sctp timer = utils::StartTimer();

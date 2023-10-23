@@ -232,6 +232,11 @@ class Sledgehamr : public amrex::AmrCore {
      * @param   time    Time before which the level would be created.
      * @return  If the given level is allowed to be created.
      */
+    bool DoCreateLevelIf(const int lev, const double time) {
+        // We always need to have a shadow or coarse level.
+        return lev <= 0 ? true : CreateLevelIf(lev, time);
+    }
+
     virtual bool CreateLevelIf(const int lev, const double time) {
         return true;
     };

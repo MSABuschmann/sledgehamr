@@ -12,7 +12,6 @@ void Cosmology::Init(sledgehamr::Sledgehamr* owner) {
 }
 
 bool Cosmology::CreateLevelIf(const int lev, const double time) {
-    if (lev <= 0) return true;
     return StringWidth(lev-1, time) <= string_width_threshold;
 }
 

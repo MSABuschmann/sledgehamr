@@ -163,6 +163,8 @@ void TimeStepper::PostAdvanceMessage(int lev, double duration) {
     amrex::Print() << std::left << std::setw(50) << level_message
                    << "Advanced to t=" << sim->grid_new[lev].t << " by "
                    << "dt=" << sim->dt[lev] << " in " << duration << "s."
+                   << " (" << amrex::ParallelDescriptor::second()
+                   << "s since start)"
                    << std::endl;
 }
 
@@ -196,7 +198,7 @@ void TimeStepper::ScheduleRegrid(int lev) {
     // Check user requirement if we want to invoke a new level. Pass it the
     // level to be created and the time by which the next regrid could be
     // performed if we were to skip this regrid.
-    if (!sim->CreateLevelIf(lev+1, time + 3.*sim->dt[lev])) return;
+    if (!sim->DoCreateLevelIf(lev+1, time + 3.*sim->dt[lev])) return;
 
     // Check if enough time since last regrid has passed. We add 3*dt[lev] since
     // we do not want to violate this criteria next time around in case we skip
@@ -312,7 +314,7 @@ void TimeStepper::NoShadowRegrid(int lev) {
     // Check user requirement if we want to invoke a new level. Pass it the
     // level to be created and the time by which the next regrid could be
     // performed if we were to skip this regrid.
-    if (!sim->CreateLevelIf(lev+1, time + sim->dt[lev])) return;
+    if (!sim->DoCreateLevelIf(lev+1, time + sim->dt[lev])) return;
 
     // Actually do regrid if we made it this far.
     DoRegrid(lev, time);
