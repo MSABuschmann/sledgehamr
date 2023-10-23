@@ -241,6 +241,10 @@ class Sledgehamr : public amrex::AmrCore {
         return true;
     };
 
+    virtual bool StopRunning(const double time) {
+        return time >= t_end;
+    }
+
     virtual void SetParamsRhs(std::vector<double>& params) {};
     virtual void SetParamsGravitationalWaveRhs(std::vector<double>& params) {};
     virtual void SetParamsTagCellForRefinement(std::vector<double>& params) {};

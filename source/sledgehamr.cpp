@@ -60,7 +60,7 @@ void Sledgehamr::InitSledgehamr() {
 
 void Sledgehamr::Evolve() {
     // Main loop over time.
-    while (grid_new[0].t < t_end) {
+    while (!StopRunning(grid_new[0].t)) {
         // Advance all levels starting at lev=0. This performs an entire
         // shadow/coarse level time step.
         amrex::Print() << std::endl;
