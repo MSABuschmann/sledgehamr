@@ -11,10 +11,6 @@ void Cosmology::Init(sledgehamr::Sledgehamr* owner) {
     SetSpectra();
 }
 
-bool Cosmology::CreateLevelIf(const int lev, const double time) {
-    return StringWidth(lev-1, time) <= string_width_threshold;
-}
-
 void Cosmology::ParseVariables() {
     amrex::ParmParse pp_prj("project");
     pp_prj.get("string_width_threshold", string_width_threshold);
@@ -46,6 +42,25 @@ void Cosmology::SetSpectra() {
     sim->io_module->spectra.push_back(spec1);
     sim->io_module->output[sim->io_module->idx_spectra].SetTimeFunction(
             TIME_FCT(Cosmology::LogTruncated));
+}
+
+double Cosmology::Xi(const int string_tags, const int lev, const double eta) {
+    const double T1    = 5.4954174414835757e+17;
+    const double mpl   = 1.22e19;
+    const double gStar = 106;
+
+    double string_length_sim_units = static_cast<double>(string_tags) 
+                                        * 2./3. * sim->GetDx(lev);
+    double physical_string_length  = BoxToPhysical(string_length_sim_units, eta,
+                                                   T1, mpl, gStar);
+    double physical_box_size       = BoxToPhysical(sim->GetL(), eta, T1, mpl,
+                                                   gStar);
+
+    double T    = XiTemp(eta, T1);
+    double time = XiTime(T, mpl, gStar);
+    double xi   = physical_string_length * std::pow(time, 2) 
+                    / std::pow(physical_box_size, 3);
+    return xi;
 }
 
 }; // namespace axion_strings

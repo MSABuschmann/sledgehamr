@@ -4,6 +4,7 @@
 #include <sledgehamr.h>
 #include <sledgehamr_utils.h>
 #include "../axion_strings/cosmology.h"
+#include "../axion_strings/axion_strings.h"
 
 namespace axion_strings_preevolution {
 using namespace axion_strings;
@@ -66,13 +67,16 @@ class axion_strings_preevolution : public sledgehamr::Sledgehamr {
 
     void SetParamsRhs(std::vector<double>& params) override;
     void Init() override;
+    bool StopRunning(const double time) override;
 
   private:
     void ParseConstants();
+    int GetStringTags(const int lev);
 
-    double Log_0;
-    double eta_0;
-    double Xi_0;
+    double log_0 = 2;
+    double eta_0 = 2.3;
+    double xi_0 = 0.18;
+    double min_eta = 2;
     Cosmology cosmo;
 };
 

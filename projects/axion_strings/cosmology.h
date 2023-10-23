@@ -57,7 +57,9 @@ class Cosmology {
   public:
     void Init(sledgehamr::Sledgehamr* owner);
 
-    bool CreateLevelIf(const int lev, const double time);
+    bool CreateLevelIf(const int lev, const double time) {
+        return StringWidth(lev-1, time) <= string_width_threshold;
+    }
 
     double Mr(const double eta) {
         return std::sqrt(2. * lambda) * eta;
@@ -86,9 +88,28 @@ class Cosmology {
         double log = Log(eta);
         if (log < spectra_log_min) 
             return 0;
-        else
-            return log;
+        return log;
     }
+
+    double BoxToPhysical(const double L, const double eta, const double T1,
+                         const double mpl, const double gStar) {
+        return L * eta / Hubble(T1, mpl, gStar);
+    }
+
+    double Hubble(const double T, const double mpl, const double gStar) {
+        return std::sqrt(4.*std::pow(M_PI, 3) / 45. * gStar * std::pow(T, 4)
+                / std::pow(mpl, 2));
+    }
+
+    double XiTime(double T, double mpl, double gStar) {
+        return 0.3012 / std::sqrt(gStar) * mpl / std::pow(T, 2);
+    }
+
+    double XiTemp(double eta, double T1) {
+        return T1 / eta;
+    }
+
+    double Xi(const int string_tags, const int lev, const double eta);
 
   private:
     void ParseVariables();
