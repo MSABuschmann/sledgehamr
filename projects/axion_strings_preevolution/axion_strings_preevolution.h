@@ -61,10 +61,6 @@ class axion_strings_preevolution : public sledgehamr::Sledgehamr {
         cosmo.Init(this);
     };
 
-    bool CreateLevelIf(const int lev, const double time) override {
-        return cosmo.CreateLevelIf(lev, time);
-    };
-
   private:
     Cosmology cosmo;
 };
