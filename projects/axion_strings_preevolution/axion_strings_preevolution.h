@@ -41,12 +41,19 @@ void Rhs(const amrex::Array4<double>& rhs,
             state, i, j, k, Scalar::Psi2, dx*dx);
 
     // Compute EOM.
-    double potential = eta*eta*( Psi1*Psi1 + Psi2*Psi2 - 1. ) + 0.56233;
+    const double eta_0 = params[0];
+    const double eta_sq = eta*eta;
+    const double lambda = eta_0*eta_0;
+    const double drag = eta_0;
+
+    double potential = lambda/eta_sq*( Psi1*Psi1 + Psi2*Psi2 - 1. );
 
     rhs(i, j, k, Scalar::Psi1) =  Pi1;
     rhs(i, j, k, Scalar::Psi2) =  Pi2;
-    rhs(i, j, k, Scalar::Pi1)  = -Pi1*2./eta + laplacian_Psi1 - Psi1*potential;
-    rhs(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + laplacian_Psi2 - Psi2*potential;
+    rhs(i, j, k, Scalar::Pi1)  = - Pi1*3./eta + laplacian_Psi1/eta_sq/drag
+                                 - Psi1*potential;
+    rhs(i, j, k, Scalar::Pi2)  = - Pi2*3./eta + laplacian_Psi2/eta_sq/drag
+                                 - Psi2*potential;
 }
 
 FINISH_SLEDGEHAMR_SETUP
@@ -57,11 +64,15 @@ class axion_strings_preevolution : public sledgehamr::Sledgehamr {
   public:
     START_PROJECT(axion_strings_preevolution)
 
-    void Init() override {
-        cosmo.Init(this);
-    };
+    void SetParamsRhs(std::vector<double>& params) override;
+    void Init() override;
 
   private:
+    void ParseConstants();
+
+    double Log_0;
+    double eta_0;
+    double Xi_0;
     Cosmology cosmo;
 };
 
