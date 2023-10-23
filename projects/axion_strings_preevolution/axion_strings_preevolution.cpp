@@ -11,19 +11,19 @@ void axion_strings_preevolution::Init() {
     ParseConstants();
 }
 
-void axion_strings_preevolution::ParseConstants() {
-    amrex::ParmParse pp("project");
-    pp.get("StartingLog", log_0);
-    pp.get("StartingXi", xi_0);
-    pp.get("MinEta", min_eta);
-    eta_0 = std::sqrt(std::exp(log_0)/std::sqrt(2.));
-}
-
 bool axion_strings_preevolution::StopRunning(const double time) {
     const int lev = 0;
     int string_tags = GetStringTags(lev);
     double xi = cosmo.Xi(string_tags, lev, eta_0);
     return (xi <= xi_0 && time >= min_eta);    
+}
+
+void axion_strings_preevolution::ParseConstants() {
+    amrex::ParmParse pp("project");
+    pp.get("starting_log", log_0);
+    pp.get("starting_xi", xi_0);
+    pp.get("min_eta", min_eta);
+    eta_0 = std::sqrt(std::exp(log_0)/std::sqrt(2.));
 }
 
 int axion_strings_preevolution::GetStringTags(const int lev) {
