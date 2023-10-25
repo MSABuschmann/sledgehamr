@@ -17,7 +17,6 @@ LocalRegrid::LocalRegrid(Sledgehamr* owner) {
 bool LocalRegrid::AttemptRegrid(const int lev) {
     amrex::Print() << std::endl;
     bool res = DoAttemptRegrid(lev);
-    layouts.clear();
     ClearLayout();
     return res;
 }
@@ -64,7 +63,7 @@ void LocalRegrid::FinalizeLayout(const int lev) {
     layouts[lev][0]->Distribute();
 }
 
-bool LocalRegrid::DoAttemptRegrid(const int lev) {
+bool LocalRegrid::Prechecks(const int lev) {
     if (nregrids++ >= max_local_regrids) {
         if (max_local_regrids > 0) {
             amrex::Print() << "Maximum number of local regrids reached: "
@@ -105,9 +104,10 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
         return false;
     }
 
-    amrex::Print() << std::endl << "Attempting local regrid at level " << lev+1
-                   << " and higher." << std::endl;
+    return true;
+}
 
+void LocalRegrid::InitializeLocalRegrid() {
     // Check if we have new levels. At the (re)start all levels will be
     // considered new.
     while (last_numPts.size() <= sim->finest_level) {
@@ -119,87 +119,115 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     // Now that we are sure we really want to attempt a local regrid initialize
     // data structures.
     InitializeLayout(sim->finest_level);
+}
 
+void LocalRegrid::DetermineAllBoxArrays(const int lev) {
     // Get the new required box array for each level. Might still violate
     // nesting.
-    std::vector<double> min_distance(sim->finest_level + 1, -1.);
+    min_distance.clear();
+    min_distance.resize(sim->finest_level + 1, -1.);
     for (int l = lev; l < sim->finest_level && !no_local_regrid[l]; ++l) {
         min_distance[l+1] = DetermineNewBoxArray(l);
     }
+}
 
+void LocalRegrid::FixAllNesting() {
     // Make sure we do not violate nesting requirements.
     for (int l = sim->finest_level; l > 1; --l) {
         FixNesting(l);
     }
+}
 
+void LocalRegrid::JoinAllBoxArrays(std::vector<amrex::BoxArray>& box_arrays) {
     // Join all boxes across MPI ranks.
-    std::vector<amrex::BoxArray> box_arrays(sim->finest_level+1);
     for (int l = 1; l <= sim->finest_level; ++l) {
-        amrex::BoxList bl = layouts[l][0]->BoxList(sim->blocking_factor[l][0]);
-        bl.simplify(true);
-        amrex::Vector<amrex::Box> bv = std::move(bl.data());
-        amrex::AllGatherBoxes(bv);
-        bl = amrex::BoxList(std::move(bv));
-        bl.simplify(false);
-        box_arrays[l] = amrex::BoxArray(std::move(bl));
-
-        //JoinBoxArrays(l, box_arrays[l]);
+        JoinBoxArrays(l, box_arrays[l]);
     }
+}
 
-    // Check if we want to go ahead and add those boxes.
+bool LocalRegrid::CheckThresholds(const int lev, amrex::BoxArray& ba) {
     bool veto = false;
-    std::vector<double> latest_possible_regrid_time(sim->finest_level+1, -1.);
-    for (int l = 1; l <= sim->finest_level; ++l) {
-        double Nb = box_arrays[l].numPts();
-        double Nc = sim->grid_new[l].boxArray().numPts();
-        double Nr = last_numPts[l];
 
-        if (Nr == 0)
-            Nr = Nc;
+    double Nb = ba.numPts();
+    double Nc = sim->grid_new[lev].boxArray().numPts();
+    double Nr = last_numPts[lev];
 
-        double dV = Nb / Nc;
-        double fV = (Nb+Nc) / Nr;
+    if (Nr == 0)
+        Nr = Nc;
 
-        // This level exceeds strong threshold so we veto.
-        if (fV > volume_threshold_strong)
-            veto = true;
+    double dV = Nb / Nc;
+    double fV = (Nb+Nc) / Nr;
 
-        // In case any level vetos the local regrid, this is the level on which
-        // we want to perform the global regrid.
-        if( fV > volume_threshold_weak && veto_level == -1 )
-            veto_level = l - 1;
+    // This level exceeds strong threshold so we veto.
+    if (fV > volume_threshold_strong)
+        veto = true;
 
-        if (l > lev) {
-            double dx_c = n_error_buf;
-            double regrid_dt = sim->time_stepper->regrid_dt[l];
-            double dt_delay = DBL_MAX;
-            if (min_distance[l] >= 0)
-                dt_delay = min_distance[l] / dx_c * regrid_dt;
+    // In case any level vetos the local regrid, this is the level on which
+    // we want to perform the global regrid.
+    if( fV > volume_threshold_weak && veto_level == -1 )
+        veto_level = lev - 1;
 
-            latest_possible_regrid_time[l] = sim->grid_new[l].t + dt_delay;
-        }
+    amrex::Print() << "  Additional boxes on level " << lev << " required: "
+                   << ba.size() << std::endl
+                   << "    Instantanous volume increase: " << dV
+                   << std::endl
+                   << "    Volume increase since last global regrid: "
+                   << fV << ". Threshold: " << volume_threshold_strong
+                   << std::endl;
 
-        amrex::Print() << "  Additional boxes on level " << l << " required: "
-                       << box_arrays[l].size() << std::endl
-                       << "    Instantanous volume increase: " << dV
-                       << std::endl
-                       << "    Volume increase since last global regrid: "
-                       << fV << ". Threshold: " << volume_threshold_strong
+    return veto;
+}
+
+void LocalRegrid::ComputeLatestPossibleRegridTime(const int l, const int lev) {
+    if (l <= lev)
+        return;
+
+    double dx_c = n_error_buf;
+    double regrid_dt = sim->time_stepper->regrid_dt[l];
+    double dt_delay = DBL_MAX;
+    if (min_distance[l] >= 0)
+        dt_delay = min_distance[l] / dx_c * regrid_dt;
+
+    latest_possible_regrid_time[l] = sim->grid_new[l].t + dt_delay;
+
+    if (latest_possible_regrid_time[l] > sim->grid_new[l].t ) {
+        if (min_distance[l] >= 0)
+            amrex::Print() << "    Could delay regridding this level "
+                           << "until: t = "
+                           << latest_possible_regrid_time[l]
+                           << std::endl;
+    } else {
+        amrex::Print() << "    Cannot delay this regrid."
                        << std::endl;
-
-        if( l>lev ) {
-            if (latest_possible_regrid_time[l] > sim->grid_new[l].t ) {
-                if (min_distance[l] >= 0)
-                    amrex::Print() << "    Could delay regridding this level "
-                                   << "until: t = "
-                                   << latest_possible_regrid_time[l]
-                                   << std::endl;
-            } else {
-                amrex::Print() << "    Cannot delay this regrid."
-                               << std::endl;
-            }
-        }
     }
+}
+
+bool LocalRegrid::VetoLocalRegrid(const int lev,
+                                  std::vector<amrex::BoxArray>& box_arrays) {
+    bool veto = false;
+    latest_possible_regrid_time.clear();
+    latest_possible_regrid_time.resize(sim->finest_level+1, -1.);
+
+    for (int l = 1; l <= sim->finest_level; ++l) {
+        veto = CheckThresholds(l, box_arrays[l]);
+        ComputeLatestPossibleRegridTime(l, lev);
+    }
+
+    return veto;
+}
+
+bool LocalRegrid::DoAttemptRegrid(const int lev) {
+    if (!Prechecks(lev)) return false;
+
+    amrex::Print() << std::endl << "Attempting local regrid at level " << lev+1
+                   << " and higher." << std::endl;
+
+    InitializeLocalRegrid();
+    DetermineAllBoxArrays(lev);
+    FixAllNesting();
+    std::vector<amrex::BoxArray> box_arrays(sim->finest_level+1);
+    JoinAllBoxArrays(box_arrays);
+    bool veto = VetoLocalRegrid(lev, box_arrays);
 
     // Check what to do if we veto local regrid.
     if (veto) {

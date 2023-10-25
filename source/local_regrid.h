@@ -62,6 +62,15 @@ class LocalRegrid {
 
   private:
     bool DoAttemptRegrid(const int lev);
+    bool Prechecks(const int lev);
+    void InitializeLocalRegrid();
+    void DetermineAllBoxArrays(const int lev);
+    void FixAllNesting();
+    void JoinAllBoxArrays(std::vector<amrex::BoxArray>& box_arrays);
+    bool CheckThresholds(const int lev, amrex::BoxArray& box_array);
+    void ComputeLatestPossibleRegridTime(const int l, const int lev);
+    bool VetoLocalRegrid(const int lev,
+                         std::vector<amrex::BoxArray>& box_arrays);
     void ParseInput();
 
     /** @brief Creates comm_matrix loop-up table.
@@ -114,6 +123,9 @@ class LocalRegrid {
      *         conditions.
      */
     std::vector< std::vector<int> > wrapped_index;
+
+    std::vector<double> latest_possible_regrid_time;
+    std::vector<double> min_distance;
 
     /** @brief Vector of UniqueLayouts for each level and each core.
      */
