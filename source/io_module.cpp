@@ -752,4 +752,33 @@ bool IOModule::WritePerformanceMonitor(double time, std::string prefix) {
     return true;
 }
 
+void IOModule::WriteBoxArray(amrex::BoxArray& ba) {
+    if (!amrex::ParallelDescriptor::IOProcessor()) 
+        return;
+
+    const int nba = ba.size();
+    std::vector<int> x0(nba), y0(nba), z0(nba), x1(nba), y1(nba), z1(nba);
+    for (int b = 0; b < nba; ++b) {
+        x0[b] = ba[b].smallEnd(0);
+        y0[b] = ba[b].smallEnd(1);
+        z0[b] = ba[b].smallEnd(2);
+        x1[b] = ba[b].bigEnd(0);
+        y1[b] = ba[b].bigEnd(1);
+        z1[b] = ba[b].bigEnd(2);
+    }
+    int header[1] = {nba}; 
+ 
+    std::string filename = output_folder + "/box_layout.h5";
+    hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                            H5P_DEFAULT);
+    WriteToHDF5(file_id, "header", header, 1);
+    WriteToHDF5(file_id, "x0", x0.data(), nba);
+    WriteToHDF5(file_id, "y0", y0.data(), nba);
+    WriteToHDF5(file_id, "z0", z0.data(), nba);
+    WriteToHDF5(file_id, "x1", x1.data(), nba);
+    WriteToHDF5(file_id, "y1", y1.data(), nba);
+    WriteToHDF5(file_id, "z1", z1.data(), nba);
+    H5Fclose(file_id);
+}
+
 }; // namespace sledgehamr

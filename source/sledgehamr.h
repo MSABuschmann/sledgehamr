@@ -320,6 +320,9 @@ class Sledgehamr : public amrex::AmrCore {
 
 private:
 
+    void DoPrerunChecks();
+    void DetermineBoxLayout();
+
     /* @brief Do ErrorEst on either CPU or GPU.
      */
     void DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time);
@@ -344,6 +347,9 @@ private:
     /* @brief Whether tagging should be performed on gpu if possible.
      */
     bool tagging_on_gpu = false;
+
+    bool no_simulation = false;
+    int get_box_layout_nodes = 0;
 };
 
 }; // namespace sledgehamr

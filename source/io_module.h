@@ -62,6 +62,8 @@ class IOModule {
 
     void RestartSim();
 
+    void WriteBoxArray(amrex::BoxArray& ba);
+
     /** @brief Vectors containing instructions for projections and spectra.
      */
     std::vector<Projection> projections;

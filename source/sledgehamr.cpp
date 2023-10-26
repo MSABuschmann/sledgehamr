@@ -17,7 +17,6 @@ Sledgehamr::Sledgehamr () {
     time_stepper = new TimeStepper(this);
     io_module = new IOModule(this);
 
-    // Fill various level vectors.
     grid_new.resize(max_level+1);
     grid_old.resize(max_level+1);
 
@@ -26,6 +25,8 @@ Sledgehamr::Sledgehamr () {
         dx.push_back( L/(double)dimN[lev] );
         dt.push_back( dx[lev] * cfl );
     }
+
+    DoPrerunChecks();
 }
 
 Sledgehamr::~Sledgehamr() {
@@ -35,6 +36,8 @@ Sledgehamr::~Sledgehamr() {
 }
 
 void Sledgehamr::InitSledgehamr() {
+    if (no_simulation) return;
+
     if (with_gravitational_waves)
         gravitational_waves = new GravitationalWaves(this);
 
@@ -59,6 +62,8 @@ void Sledgehamr::InitSledgehamr() {
 }
 
 void Sledgehamr::Evolve() {
+    if (no_simulation) return;
+
     // Main loop over time.
     while (!StopRunning(grid_new[0].t)) {
         // Advance all levels starting at lev=0. This performs an entire
@@ -284,6 +289,7 @@ void Sledgehamr::ParseInput() {
     pp_amr.query("tagging_on_gpu", tagging_on_gpu);
 
     amrex::ParmParse pp_sim("sim");
+    pp_sim.query("get_box_layout_nodes", get_box_layout_nodes);
     pp_sim.get("t_start", t_start);
     pp_sim.get("t_end", t_end);
     pp_sim.query("restart", restart_sim);
@@ -360,6 +366,22 @@ void Sledgehamr::ReadSpectrumKs() {
 
     spectrum_ks.resize(nks[0]);
     IOModule::ReadFromHDF5(filename, {sdimN}, &(spectrum_ks[0]));
+}
+
+void Sledgehamr::DoPrerunChecks() {
+    if (get_box_layout_nodes > 0)
+        DetermineBoxLayout();
+}
+
+void Sledgehamr::DetermineBoxLayout() {
+    amrex::Print() << "Get box layout for " << get_box_layout_nodes
+                   << " nodes and exit ..." << std::endl;
+
+    amrex::Box bx(amrex::IntVect(0), amrex::IntVect(coarse_level_grid_size-1));
+    amrex::BoxArray ba(bx);
+    ChopGrids(0, ba, get_box_layout_nodes);
+    io_module->WriteBoxArray(ba);
+    no_simulation = true;
 }
 
 }; // namespace sledgehamr
