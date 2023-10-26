@@ -3,6 +3,7 @@ from scipy import stats
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
+from memory_profiler import profile
 
 ## Class that handles everything special for the Axion string project
 #  such as creating initial states and computing the string length and
@@ -14,6 +15,7 @@ class AxionStrings:
     # @param    k_max           Maximum wave number to be included.
     # @param    output_file     Name of output file (must include prefix).
     # @param    lambda_param    Coupling parameter lambda.
+    @profile
     def CreateInitialState(self, L, N, k_max, t_start, output_file,\
                            lambda_param = 1., sim_output_with_box_layout=''):
         if sim_output_with_box_layout != '':
@@ -95,6 +97,7 @@ class AxionStrings:
     # @param    nK      n_k.
     # @param    k_max   Maximum wave number to be included.
     # @param    eta     Starting eta of simulation.
+    @profile
     def __GetField(self, field, N, omegaK, kMags, nK, k_max, eta):
         # Compute the norm and phase.
         norm = (N / 2 / np.pi)**3
@@ -112,13 +115,17 @@ class AxionStrings:
 
         # Generate spectra.
         field_spectrum = np.sqrt(magnitude)*np.exp(phase)*norm
-   
+
+        del magnitude
+        del phase
+
         # Return inverse FFT of spectra.
         if field:
             return np.fft.irfftn(field_spectrum)
         else:
             return eta * np.fft.irfftn(field_spectrum)
 
+    @profile
     def __SaveField(self, file, name, box_layout, field, N, omegaK, kMags, nK,
                     k_max, eta):
         print('Generate '+name+' ...')
@@ -129,9 +136,15 @@ class AxionStrings:
         else:
             for i in range(len(box_layout[0])):
                 file.create_dataset(name+'_'+str(i),
-                        data = field_state[box_layout[0][i]:box_layout[3][i]+1,
-                                           box_layout[1][i]:box_layout[4][i]+1,
-                                           box_layout[2][i]:box_layout[5][i]+1])
+                       # data = np.copy(field_state
+                       #             [box_layout[0][i]:box_layout[3][i]+1,
+                       #              box_layout[1][i]:box_layout[4][i]+1,
+                       #              box_layout[2][i]:box_layout[5][i]+1]))
+                     data = field_state
+                                    [box_layout[0][i]:box_layout[3][i]+1,
+                                     box_layout[1][i]:box_layout[4][i]+1,
+                                     box_layout[2][i]:box_layout[5][i]+1])
+
 
         del field_state
 
