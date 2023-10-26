@@ -15,7 +15,12 @@ class AxionStrings:
     # @param    output_file     Name of output file (must include prefix).
     # @param    lambda_param    Coupling parameter lambda.
     def CreateInitialState(self, L, N, k_max, t_start, output_file,\
-                           lambda_param = 1.):
+                           lambda_param = 1., sim_output_with_box_layout=''):
+        if sim_output_with_box_layout != '':
+            box_layout = self.__GetBoxLayout(sim_output_with_box_layout)
+        else:
+            box_layout = np.array([])
+
         # The temperature at eta = 1 in units of f_a.
         T1 = np.sqrt(1.687) 
 
@@ -49,28 +54,15 @@ class AxionStrings:
 
         # Generate and write files.
         archive = h5py.File(output_file, 'w')
-
-        print('Generate Psi1...')
-        Psi1 = self.__GetField(True, N, omegaK, kMags, nK, k_max, eta)
-        archive.create_dataset('Psi1', data = Psi1)
-        del Psi1
-
-        print('Generate Psi2...')
-        Psi2 = self.__GetField(True, N, omegaK, kMags, nK, k_max, eta)
-        archive.create_dataset('Psi2', data = Psi2)
-        del Psi2
-
-        print('Generate Pi1...')
-        Pi1 = self.__GetField(False, N, omegaK, kMags, nK, k_max, eta)
-        archive.create_dataset('Pi1', data = Pi1)
-        del Pi1
-
-        print('Generate Pi2...')
-        Pi2 = self.__GetField(False, N, omegaK, kMags, nK, k_max, eta)
-        archive.create_dataset('Pi2', data = Pi2)
-        del Pi2
-
-        archive.close()	
+        self.__SaveField(archive, 'Psi1', box_layout, True, N,\
+                         omegaK, kMags, nK, k_max, eta)
+        self.__SaveField(archive, 'Psi2', box_layout, True, N,\
+                         omegaK, kMags, nK, k_max, eta)
+        self.__SaveField(archive, 'Pi1', box_layout, True, N,\
+                         omegaK, kMags, nK, k_max, eta)
+        self.__SaveField(archive, 'Pi2', box_layout, True, N,\
+                         omegaK, kMags, nK, k_max, eta)
+        archive.close()
         print('Done.')
 
     def PlotAxionAndRadialModeSlice(self, axion, radial_mode, save_name=""):
@@ -126,3 +118,32 @@ class AxionStrings:
             return np.fft.irfftn(field_spectrum)
         else:
             return eta * np.fft.irfftn(field_spectrum)
+
+    def __SaveField(self, file, name, box_layout, field, N, omegaK, kMags, nK,
+                    k_max, eta):
+        print('Generate '+name+' ...')
+        field_state = self.__GetField(field, N, omegaK, kMags, nK, k_max, eta)
+
+        if len(box_layout) == 0:
+            file.create_dataset(name, data = field_state)
+        else:
+            for i in range(len(box_layout[0])):
+                file.create_dataset(name+'_'+str(i),
+                        data = field_state[box_layout[0][i]:box_layout[3][i]+1,
+                                           box_layout[1][i]:box_layout[4][i]+1,
+                                           box_layout[2][i]:box_layout[5][i]+1])
+
+        del field_state
+
+    def __GetBoxLayout(self, sim_output_with_box_layout):
+        filename = sim_output_with_box_layout + '/box_layout.h5'
+        file = h5py.File(filename,'r')
+        x0 = np.array(file['x0'][:], dtype='int')
+        y0 = np.array(file['y0'][:], dtype='int')
+        z0 = np.array(file['z0'][:], dtype='int')
+        x1 = np.array(file['x1'][:], dtype='int')
+        y1 = np.array(file['y1'][:], dtype='int')
+        z1 = np.array(file['z1'][:], dtype='int')
+        file.close()
+        return np.array([x0,y0,z0,x1,y1,z1])
+
