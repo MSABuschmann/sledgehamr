@@ -48,6 +48,9 @@ class IOModule {
     static void WriteToHDF5(hid_t file_id, std::string dset, T* data,
                      unsigned long long size);
 
+    std::string ExistingDataset(std::string filename,
+                                       std::vector<std::string> dnames);
+
     /** @brief Fills a given level with data from hdf5 file(s).
      * @param   lev Level to be filled with data.
      */
@@ -97,16 +100,7 @@ class IOModule {
     void FillLevelFromArray(int lev, const int comp, double* data,
                             const long long dimN);
 
-    /** @brief Fills a given level with chunked data distributed over many
-     *         files.
-     * @param   lev Level to be filled with data.
-     */
-    void FillLevelFromFile_Chunks(int lev);
-
-    /** @brief Fills a given level with data from a single hdf5 file.
-     * @param   lev Level to be filled with data.
-     */
-    void FillLevelFromFile_NoChunks(int lev);
+    void FillChunkFromArray(int lev, const int comp, double* data);
 
     /** @brief OUTPUT_FCT. Wrapper to write slices along all three directions
      *         and all scalar fields.
