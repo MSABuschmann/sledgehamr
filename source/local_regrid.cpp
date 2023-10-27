@@ -1,5 +1,3 @@
-#include "boost/multi_array.hpp"
-
 #include "local_regrid.h"
 
 namespace sledgehamr {
@@ -145,6 +143,15 @@ void LocalRegrid::JoinAllBoxArrays(std::vector<amrex::BoxArray>& box_arrays) {
     }
 }
 
+void LocalRegrid::AddAllBoxes(std::vector<amrex::BoxArray>& box_arrays) {
+    // Finally add new boxes to each grid.
+    for (int l = 1; l <= sim->finest_level; ++l) {
+        if (box_arrays[l].size() > 0) {
+            AddBoxes(l, box_arrays[l]);
+        }
+    }
+}
+
 bool LocalRegrid::CheckThresholds(const int lev, amrex::BoxArray& ba) {
     bool veto = false;
 
@@ -202,8 +209,8 @@ void LocalRegrid::ComputeLatestPossibleRegridTime(const int l, const int lev) {
     }
 }
 
-bool LocalRegrid::VetoLocalRegrid(const int lev,
-                                  std::vector<amrex::BoxArray>& box_arrays) {
+bool LocalRegrid::CheckForVeto(const int lev,
+                               std::vector<amrex::BoxArray>& box_arrays) {
     bool veto = false;
     latest_possible_regrid_time.clear();
     latest_possible_regrid_time.resize(sim->finest_level+1, -1.);
@@ -214,6 +221,69 @@ bool LocalRegrid::VetoLocalRegrid(const int lev,
     }
 
     return veto;
+}
+
+int LocalRegrid::DealWithVeto(const int lev) {
+    amrex::Print() << "Local regrid has been vetoed. "
+                   << "Global regrid on level " << veto_level
+                   << " (adjusting level " << veto_level+1<<") "
+                   << "deemed optimal." << std::endl;
+
+    // We can do a globl regrid right away.
+    if (veto_level >= lev)
+        return false;
+
+    // Since we only create a shadow level when needed triggering a global
+    // regrid at this level is non-trivial. For now, just give up and do
+    // global at higher levels and wait for the coarse level when it is 
+    // scheduled normally.
+    if (veto_level == 0)
+        return false;
+
+    // Request a global regrid. This flag will be checked by the time
+    // stepper module.
+    do_global_regrid[veto_level] = true;
+
+    // Figure out when is the next possible time we can do a global regrid
+    // at the requested level. For a sim with shadow hierarchy this is
+    // either in one or two time steps from now to allow for computation of
+    // truncation errors.
+    double Nsteps = 2;
+    if (sim->grid_new[veto_level].istep%2 == 0)
+            Nsteps = 1;
+
+    // For sim without shadow level we can do it once we have sync'ed with
+    // that level.
+    if (sim->shadow_hierarchy)
+        Nsteps = 0;
+
+    double regrid_target_time = sim->grid_new[veto_level].t
+                                + Nsteps * sim->dt[veto_level];
+
+    // Check if we can satisfy target time.
+    bool possible_to_wait = true;
+    for (int l = lev+1; l <= sim->finest_level; ++l) {
+        if (latest_possible_regrid_time[l] < regrid_target_time) {
+            amrex::Print() << "Regrid cannot wait until "
+                           << regrid_target_time
+                           << " so will perform local regrid followed by "
+                           << "global." << std::endl;
+            possible_to_wait = false;
+            break;
+        }
+    }
+
+    if (possible_to_wait) {
+        amrex::Print() << "Possible to delay regrid until "
+                       << regrid_target_time << std::endl;
+
+        for (int l = lev; l <= sim->finest_level; ++l)
+            no_local_regrid[l] = true;
+
+        return true;
+    }
+
+    return 2;
 }
 
 bool LocalRegrid::DoAttemptRegrid(const int lev) {
@@ -227,76 +297,13 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     FixAllNesting();
     std::vector<amrex::BoxArray> box_arrays(sim->finest_level+1);
     JoinAllBoxArrays(box_arrays);
-    bool veto = VetoLocalRegrid(lev, box_arrays);
 
-    // Check what to do if we veto local regrid.
-    if (veto) {
-        amrex::Print() << "Local regrid has been vetoed. "
-                       << "Global regrid on level " << veto_level
-                       << " (adjusting level " << veto_level+1<<") "
-                       << "deemed optimal." << std::endl;
-
-        // We can do a globl regrid right away.
-        if (veto_level >= lev)
-            return false;
-
-        // Since we only create a shadow level when needed triggering a global
-        // regrid at this level is non-trivial. For now, just give up and do
-        // global at higher levels and wait for the coarse level when it is 
-        // scheduled normally.
-        if (veto_level == 0)
-            return false;
-
-        // Request a global regrid. This flag will be checked by the time
-        // stepper module.
-        do_global_regrid[veto_level] = true;
-
-        // Figure out when is the next possible time we can do a global regrid
-        // at the requested level. For a sim with shadow hierarchy this is
-        // either in one or two time steps from now to allow for computation of
-        // truncation errors.
-        double Nsteps = 2;
-        if (sim->grid_new[veto_level].istep%2 == 0)
-                Nsteps = 1;
-
-        // For sim without shadow level we can do it once we have sync'ed with
-        // that level.
-        if (sim->shadow_hierarchy)
-            Nsteps = 0;
-
-        double regrid_target_time = sim->grid_new[veto_level].t
-                                    + Nsteps * sim->dt[veto_level];
-
-        // Check if we can satisfy target time.
-        bool possible_to_wait = true;
-        for (int l = lev+1; l <= sim->finest_level; ++l) {
-            if (latest_possible_regrid_time[l] < regrid_target_time) {
-                amrex::Print() << "Regrid cannot wait until "
-                               << regrid_target_time
-                               << " so will perform local regrid followed by "
-                               << "global." << std::endl;
-                possible_to_wait = false;
-                break;
-            }
-        }
-
-        if (possible_to_wait) {
-            amrex::Print() << "Possible to delay regrid until "
-                           << regrid_target_time << std::endl;
-
-            for (int l = lev; l <= sim->finest_level; ++l)
-                no_local_regrid[l] = true;
-
-            return true;
-        }
+    if( CheckForVeto(lev, box_arrays) ) {
+        int status = DealWithVeto(lev);
+        if (status < 2) return status;
     }
 
-    // Finally add new boxes to each grid.
-    for (int l = 1; l <= sim->finest_level; ++l) {
-        if (box_arrays[l].size() > 0) {
-            AddBoxes(l, box_arrays[l]);
-        }
-    }
+    AddAllBoxes(box_arrays);
 
     return true;
 }
@@ -344,15 +351,120 @@ void LocalRegrid::WrapIndices(const int lev) {
     wrapped_index.push_back( indices );
 }
 
+inline int LocalRegrid::GetBoxCoarseFineBorders(
+        const amrex::Box& tilebox, const amrex::IntVect& c0,
+        const amrex::IntVect& c1, const int lev,
+        boost::multi_array<bool, 3>& border) {
+    const amrex::BoxArray& ba = sim->grid_new[lev+1].boxArray();
+
+    const amrex::IntVect xs = c1 - c0 + 1;
+    const amrex::IntVect xsb = xs + 2;
+
+    int remaining = 0;
+    border.resize(boost::extents[xsb[0]][xsb[1]][xsb[2]]);
+
+    for (int k=-1; k<=xs[2]; ++k) {
+        for (int j=-1; j<=xs[1]; ++j) {
+            for (int i=-1; i<=xs[0]; ++i) {
+                border[i+1][j+1][k+1] = !ba.contains( amrex::IntVect(
+                        wrapped_index[lev+1][c0[0]+i],
+                        wrapped_index[lev+1][c0[1]+j],
+                        wrapped_index[lev+1][c0[2]+k]));
+
+                remaining += border[i+1][j+1][k+1];
+            }
+        }
+    }
+
+    return remaining;
+}
+
+inline void LocalRegrid::TagAndMeasure(
+        const amrex::Dim3& lo, const amrex::Dim3& hi, int remaining,
+        const amrex::Array4<char>& tag_arr, const amrex::IntVect& c0,
+        const amrex::IntVect& c1, const int lev, const int ibff,
+        const double bff, boost::multi_array<bool, 3>& border,
+        const double threshold, const int omp_thread_num) {
+    // Now find tags and determine distances.
+    for (int k = lo.z; k <= hi.z && remaining > 0; ++k) {
+        for (int j = lo.y; j <= hi.y && remaining > 0; ++j) {
+            AMREX_PRAGMA_SIMD
+            for (int i = lo.x; i <= hi.x; ++i) {
+                if (remaining == 0)
+                    break;
+
+                if (tag_arr(i,j,k) != amrex::TagBox::SET)
+                    continue;
+
+                amrex::IntVect ci(i,j,k);
+                CheckBorders(ci, c0, c1, ibff, bff, remaining, lev, border,
+                             threshold, omp_thread_num);
+            }
+        }
+    }
+}
+
+inline void LocalRegrid::CheckBorders(
+        const amrex::IntVect& ci, const amrex::IntVect& c0,
+        const amrex::IntVect& c1, const int ibff, const double bff,
+        int remaining, const int lev, boost::multi_array<bool, 3>& border,
+        const double threshold, const int omp_thread_num) {
+    amrex::IntVect fi = ci*2;
+    amrex::IntVect cfi(static_cast<int>(static_cast<double>(fi[0])/bff)+1,
+                       static_cast<int>(static_cast<double>(fi[1])/bff)+1,
+                       static_cast<int>(static_cast<double>(fi[2])/bff)+1);
+
+    // Check each possible border.
+    for (int kk=-1; kk<=1; ++kk) {
+        for (int jj=-1; jj<=1; ++jj) {
+            for (int ii=-1; ii<=1; ++ii) {
+                amrex::IntVect cii(ii, jj, kk);
+                amrex::IntVect ref = cfi - c0 + cii + 1;
+
+                if (!border[ref[0]][ref[1]][ref[2]])
+                    continue;
+
+                amrex::IntVect smt = ibff*(cfi + cii - 1);
+                amrex::IntVect bgt = ibff*(cfi + cii) - 1;
+
+                int d_sq = 0;
+                for(int d=0; d < 3; d++) {
+                    d_sq += smt[d] < fi[d] && fi[d] < bgt[d] ? 0 :
+                                std::min((fi[d] - smt[d])*(fi[d] - smt[d]),
+                                         (fi[d] - bgt[d])*(fi[d] - bgt[d]));
+                }
+/*
+                if (d_sq < min_distance2[omp_thread_num]) {
+                    min_distance2[omp_thread_num] = d2;
+                    min_i[omp_thread_num] = i;
+                    min_j[omp_thread_num] = j;
+                    min_k[omp_thread_num] = k;
+                }
+*/
+                // Add new box if below threshold.
+                if (d_sq < threshold) {
+                    border[ref[0]][ref[1]][ref[2]] = false;
+                    remaining--;
+                    layouts[lev+1][omp_thread_num]->Add(
+                        static_cast<int>(static_cast<double>(
+                        wrapped_index[lev+1][cfi[0]+ii])/bff-0.5),
+                        static_cast<int>(static_cast<double>(
+                        wrapped_index[lev+1][cfi[1]+jj])/bff-0.5),
+                        static_cast<int>(static_cast<double>(
+                        wrapped_index[lev+1][cfi[2]+kk])/bff-0.5));
+                }
+            }
+        }
+    }
+}
+
 double LocalRegrid::DetermineNewBoxArray(const int lev) {
     const double threshold = (n_error_buf+1) * (n_error_buf+1);
-
     const double dimNf = sim->dimN[lev+1];
-    const int ibff = sim->blocking_factor[lev+1][0];
-    const double bff = static_cast<double>(ibff);
-
     const amrex::BoxArray& ba = sim->grid_new[lev+1].boxArray();
     const LevelData& state = sim->grid_new[lev];
+    const int ibff = sim->blocking_factor[lev+1][0];
+    const double bff = static_cast<double>(ibff);
 
     // Tag cells.
     amrex::TagBoxArray tags(state.boxArray(), state.DistributionMap());
@@ -372,121 +484,23 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
         const amrex::Box& tilebox  = mfi.tilebox();
         const amrex::Dim3 lo = amrex::lbound(tilebox);
         const amrex::Dim3 hi = amrex::ubound(tilebox);
+        const amrex::IntVect c0(
+                static_cast<int>(static_cast<double>(lo.x*2)/bff) + 1,
+                static_cast<int>(static_cast<double>(lo.y*2)/bff) + 1,
+                static_cast<int>(static_cast<double>(lo.z*2)/bff) + 1);
+        const amrex::IntVect c1(
+                static_cast<int>(static_cast<double>(hi.x*2)/bff) + 1,
+                static_cast<int>(static_cast<double>(hi.y*2)/bff) + 1,
+                static_cast<int>(static_cast<double>(hi.z*2)/bff) + 1);
 
         // Determine if tilebox is near a C/F border.
-        const int cx0 = static_cast<int>(static_cast<double>(lo.x*2)/bff) + 1;
-        const int cy0 = static_cast<int>(static_cast<double>(lo.y*2)/bff) + 1;
-        const int cz0 = static_cast<int>(static_cast<double>(lo.z*2)/bff) + 1;
-        const int cx1 = static_cast<int>(static_cast<double>(hi.x*2)/bff) + 1;
-        const int cy1 = static_cast<int>(static_cast<double>(hi.y*2)/bff) + 1;
-        const int cz1 = static_cast<int>(static_cast<double>(hi.z*2)/bff) + 1;
-
-        const int xs = cx1 - cx0 + 1;
-        const int ys = cy1 - cy0 + 1;
-        const int zs = cz1 - cz0 + 1;
-
-        const int xsb = xs + 2;
-        const int ysb = ys + 2;
-        const int zsb = zs + 2;
-
-        int remaining = 0;
-
         boost::multi_array<bool, 3> border;
-        border.resize(boost::extents[xsb][ysb][zsb]);
-
-        for (int k=-1; k<=zs; ++k) {
-            for (int j=-1; j<=ys; ++j) {
-                for (int i=-1; i<=xs; ++i) {
-                    border[i+1][j+1][k+1] = !ba.contains( amrex::IntVect(
-                            wrapped_index[lev+1][cx0+i],
-                            wrapped_index[lev+1][cy0+j],
-                            wrapped_index[lev+1][cz0+k]));
-
-                    remaining += border[i+1][j+1][k+1];
-                }
-            }
-        }
-
+        int remaining = GetBoxCoarseFineBorders(tilebox, c0, c1, lev, border);
         if (remaining == 0)
             continue;
 
-        // Now find tags and determine distances.
-        for (int k = lo.z; k <= hi.z && remaining > 0; ++k) {
-            for (int j = lo.y; j <= hi.y && remaining > 0; ++j) {
-                AMREX_PRAGMA_SIMD
-                for (int i = lo.x; i <= hi.x; ++i) {
-                    if (remaining == 0)
-                        break;
-
-                    if (tag_arr(i,j,k) != amrex::TagBox::SET)
-                        continue;
-
-                    const int i0 = i*2;
-                    const int j0 = j*2;
-                    const int k0 = k*2;
-
-                    const int cx = static_cast<int>(
-                            static_cast<double>(i0)/bff) + 1;
-                    const int cy = static_cast<int>(
-                            static_cast<double>(j0)/bff) + 1;
-                    const int cz = static_cast<int>(
-                            static_cast<double>(k0)/bff) + 1;
-
-                    // Check each possible border.
-                    for (int kk=-1; kk<=1; ++kk) {
-                        for (int jj=-1; jj<=1; ++jj) {
-                            for (int ii=-1; ii<=1; ++ii) {
-                                const int refx = cx - cx0 + ii + 1;
-                                const int refy = cy - cy0 + jj + 1;
-                                const int refz = cz - cz0 + kk + 1;
-
-                                if (!border[refx][refy][refz])
-                                    continue;
-
-                                amrex::IntVect smt(ibff*(cx+ii-1),
-                                                   ibff*(cy+jj-1),
-                                                   ibff*(cz+kk-1));
-                                amrex::IntVect bgt(ibff*(cx+ii)-1,
-                                                   ibff*(cy+jj)-1,
-                                                   ibff*(cz+kk)-1);
-
-                                int dx2 = smt[0]<i0 && i0<bgt[0] ? 0 :
-                                        std::min((i0-smt[0])*(i0-smt[0]),
-                                                 (i0-bgt[0])*(i0-bgt[0]));
-                                int dy2 = smt[1]<j0 && j0<bgt[1] ? 0 :
-                                        std::min((j0-smt[1])*(j0-smt[1]),
-                                                 (j0-bgt[1])*(j0-bgt[1]));
-                                int dz2 = smt[2]<k0 && k0<bgt[2] ? 0 :
-                                        std::min((k0-smt[2])*(k0-smt[2]),
-                                                 (k0-bgt[2])*(k0-bgt[2]));
-
-                                int d2 =  dx2 + dy2 + dz2;
-
-                                if (d2<min_distance2[omp_get_thread_num()]) {
-                                    min_distance2[omp_get_thread_num()] = d2;
-                                    min_i[omp_get_thread_num()] = i;
-                                    min_j[omp_get_thread_num()] = j;
-                                    min_k[omp_get_thread_num()] = k;
-                                }
-
-                                // Add new box if below threshold.
-                                if (d2<threshold) {
-                                    border[refx][refy][refz] = false;
-                                    remaining--;
-                                    layouts[lev+1][omp_get_thread_num()]->Add(
-                                        static_cast<int>(static_cast<double>(
-                                        wrapped_index[lev+1][cx+ii])/bff-0.5),
-                                        static_cast<int>(static_cast<double>(
-                                        wrapped_index[lev+1][cy+jj])/bff-0.5),
-                                        static_cast<int>(static_cast<double>(
-                                        wrapped_index[lev+1][cz+kk])/bff-0.5));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        TagAndMeasure(lo, hi, remaining, tag_arr, c0, c1, lev, ibff, bff,
+                      border, threshold, omp_get_thread_num());
     }
 
 

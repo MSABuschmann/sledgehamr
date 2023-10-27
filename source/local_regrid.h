@@ -1,6 +1,8 @@
 #ifndef SLEDGEHAMR_LOCAL_REGRID_H_
 #define SLEDGEHAMR_LOCAL_REGRID_H_
 
+#include "boost/multi_array.hpp"
+
 #include "sledgehamr.h"
 #include "unique_layout.h"
 
@@ -67,10 +69,12 @@ class LocalRegrid {
     void DetermineAllBoxArrays(const int lev);
     void FixAllNesting();
     void JoinAllBoxArrays(std::vector<amrex::BoxArray>& box_arrays);
+    void AddAllBoxes(std::vector<amrex::BoxArray>& box_arrays);
     bool CheckThresholds(const int lev, amrex::BoxArray& box_array);
     void ComputeLatestPossibleRegridTime(const int l, const int lev);
-    bool VetoLocalRegrid(const int lev,
-                         std::vector<amrex::BoxArray>& box_arrays);
+    bool CheckForVeto(const int lev,
+                      std::vector<amrex::BoxArray>& box_arrays);
+    int DealWithVeto(const int lev);
     void ParseInput();
 
     /** @brief Creates comm_matrix loop-up table.
@@ -82,6 +86,24 @@ class LocalRegrid {
      */
     double DetermineNewBoxArray(const int lev);
 
+    inline int GetBoxCoarseFineBorders(
+        const amrex::Box& tilebox, const amrex::IntVect& c0,
+        const amrex::IntVect& c1, const int lev,
+        boost::multi_array<bool, 3>& border);
+
+    inline void TagAndMeasure(
+        const amrex::Dim3& lo, const amrex::Dim3& hi, int remaining,
+        const amrex::Array4<char>& tag_arr, const amrex::IntVect& c0,
+        const amrex::IntVect& c1, const int lev, const int ibff,
+        const double bff, boost::multi_array<bool, 3>& border,
+        const double threshold, const int omp_thread_num); 
+
+    inline void CheckBorders(
+        const amrex::IntVect& ci, const amrex::IntVect& c0,
+        const amrex::IntVect& c1, const int ibff, const double bff,
+        int remaining, const int lev, boost::multi_array<bool, 3>& border,
+        const double threshold, const int omp_thread_num);
+   
     /** @brief Wrapps an amrex::BoxArray across periodic boundary conditions.
      */
     amrex::BoxArray WrapBoxArray(amrex::BoxArray& ba, int N);
