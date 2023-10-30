@@ -3,7 +3,6 @@ from scipy import stats
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
-from memory_profiler import profile
 
 ## Class that handles everything special for the Axion string project
 #  such as creating initial states and computing the string length and
@@ -15,7 +14,6 @@ class AxionStrings:
     # @param    k_max           Maximum wave number to be included.
     # @param    output_file     Name of output file (must include prefix).
     # @param    lambda_param    Coupling parameter lambda.
-    @profile
     def CreateInitialState(self, L, N, k_max, t_start, output_file,\
                            lambda_param = 1., sim_output_with_box_layout=''):
         if sim_output_with_box_layout != '':
@@ -97,7 +95,6 @@ class AxionStrings:
     # @param    nK      n_k.
     # @param    k_max   Maximum wave number to be included.
     # @param    eta     Starting eta of simulation.
-    @profile
     def __GetField(self, field, N, omegaK, kMags, nK, k_max, eta):
         # Compute the norm and phase.
         norm = (N / 2 / np.pi)**3
@@ -125,7 +122,6 @@ class AxionStrings:
         else:
             return eta * np.fft.irfftn(field_spectrum)
 
-    @profile
     def __SaveField(self, file, name, box_layout, field, N, omegaK, kMags, nK,
                     k_max, eta):
         print('Generate '+name+' ...')
@@ -159,4 +155,3 @@ class AxionStrings:
         z1 = np.array(file['z1'][:], dtype='int')
         file.close()
         return np.array([x0,y0,z0,x1,y1,z1])
-
