@@ -57,13 +57,13 @@ class AxionStrings:
         # Generate and write files.
         archive = h5py.File(output_file, 'w')
         self.__SaveField(archive, 'Psi1', box_layout, True, N,\
-                         omegaK, kMags, nK, k_max, eta)
+                         omegaK, kMags, nK, kMax, eta)
         self.__SaveField(archive, 'Psi2', box_layout, True, N,\
-                         omegaK, kMags, nK, k_max, eta)
+                         omegaK, kMags, nK, kMax, eta)
         self.__SaveField(archive, 'Pi1', box_layout, True, N,\
-                         omegaK, kMags, nK, k_max, eta)
+                         omegaK, kMags, nK, kMax, eta)
         self.__SaveField(archive, 'Pi2', box_layout, True, N,\
-                         omegaK, kMags, nK, k_max, eta)
+                         omegaK, kMags, nK, kMax, eta)
         archive.close()
         print('Done.')
 
