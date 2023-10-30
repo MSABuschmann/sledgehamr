@@ -259,8 +259,8 @@ void Checkpoint::UpdateOutputModules(std::string filename) {
 }
 
 void Checkpoint::UpdateLevels(std::string filename) {
-    std::vector<int> blocking_factor(sim->finest_level);
-    std::vector<int> istep(sim->finest_level);
+    std::vector<int> blocking_factor(sim->finest_level+1);
+    std::vector<int> istep(sim->finest_level+1);
     IOModule::ReadFromHDF5(filename, {"isteps"}, &(istep[0]));
     IOModule::ReadFromHDF5(filename, {"blocking_factors"},
                             &(blocking_factor[0]));
