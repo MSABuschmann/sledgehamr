@@ -89,7 +89,7 @@ void TimeStepper::Advance(int lev) {
         sim->BeforeTimestep(sim->grid_new[lev].t);
 
     if (sim->grid_new[0].t  == sim->t_start)
-        sim->io_module->Write();
+        sim->io_module->Write(true);
 
     // Advance this level.
     PreAdvanceMessage(lev);
