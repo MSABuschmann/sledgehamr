@@ -223,7 +223,7 @@ bool LocalRegrid::CheckForVeto(const int lev,
     return veto;
 }
 
-int LocalRegrid::DealWithVeto(const int lev) {
+LocalRegrid::VetoResult LocalRegrid::DealWithVeto(const int lev) {
     amrex::Print() << "Local regrid has been vetoed. "
                    << "Global regrid on level " << veto_level
                    << " (adjusting level " << veto_level+1<<") "
@@ -231,14 +231,14 @@ int LocalRegrid::DealWithVeto(const int lev) {
 
     // We can do a globl regrid right away.
     if (veto_level >= lev)
-        return false;
+        return VetoResult::DoGlobalRegrid;
 
     // Since we only create a shadow level when needed triggering a global
     // regrid at this level is non-trivial. For now, just give up and do
-    // global at higher levels and wait for the coarse level when it is 
+    // global at higher levels and wait for the coarse level when it is
     // scheduled normally.
     if (veto_level == 0)
-        return false;
+        return VetoResult::DoGlobalRegrid;
 
     // Request a global regrid. This flag will be checked by the time
     // stepper module.
@@ -280,10 +280,10 @@ int LocalRegrid::DealWithVeto(const int lev) {
         for (int l = lev; l <= sim->finest_level; ++l)
             no_local_regrid[l] = true;
 
-        return true;
+        return VetoResult::DoNoRegrid;
     }
 
-    return 2;
+    return VetoResult::DoLocalRegrid;
 }
 
 bool LocalRegrid::DoAttemptRegrid(const int lev) {
@@ -299,8 +299,16 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     JoinAllBoxArrays(box_arrays);
 
     if( CheckForVeto(lev, box_arrays) ) {
-        int status = DealWithVeto(lev);
-        if (status < 2) return status;
+        switch (DealWithVeto(lev)) {
+            case VetoResult::DoGlobalRegrid:
+                return false;
+            case VetoResult::DoNoRegrid:
+                return true;
+            case VetoResult::DoLocalRegrid:
+                //[[fallthrough]];
+            default:
+                break;
+        }
     }
 
     AddAllBoxes(box_arrays);
@@ -384,7 +392,8 @@ inline void LocalRegrid::TagAndMeasure(
         const amrex::Array4<char>& tag_arr, const amrex::IntVect& c0,
         const amrex::IntVect& c1, const int lev, const int ibff,
         const double bff, boost::multi_array<bool, 3>& border,
-        const double threshold, const int omp_thread_num) {
+        std::vector<Location>& closest_locations, const double threshold,
+        const int omp_thread_num) {
     // Now find tags and determine distances.
     for (int k = lo.z; k <= hi.z && remaining > 0; ++k) {
         for (int j = lo.y; j <= hi.y && remaining > 0; ++j) {
@@ -398,7 +407,7 @@ inline void LocalRegrid::TagAndMeasure(
 
                 amrex::IntVect ci(i,j,k);
                 CheckBorders(ci, c0, c1, ibff, bff, remaining, lev, border,
-                             threshold, omp_thread_num);
+                             closest_locations, threshold, omp_thread_num);
             }
         }
     }
@@ -408,7 +417,8 @@ inline void LocalRegrid::CheckBorders(
         const amrex::IntVect& ci, const amrex::IntVect& c0,
         const amrex::IntVect& c1, const int ibff, const double bff,
         int remaining, const int lev, boost::multi_array<bool, 3>& border,
-        const double threshold, const int omp_thread_num) {
+        std::vector<Location>& closest_locations, const double threshold,
+        const int omp_thread_num) {
     amrex::IntVect fi = ci*2;
     amrex::IntVect cfi(static_cast<int>(static_cast<double>(fi[0])/bff)+1,
                        static_cast<int>(static_cast<double>(fi[1])/bff)+1,
@@ -433,14 +443,10 @@ inline void LocalRegrid::CheckBorders(
                                 std::min((fi[d] - smt[d])*(fi[d] - smt[d]),
                                          (fi[d] - bgt[d])*(fi[d] - bgt[d]));
                 }
-/*
-                if (d_sq < min_distance2[omp_thread_num]) {
-                    min_distance2[omp_thread_num] = d2;
-                    min_i[omp_thread_num] = i;
-                    min_j[omp_thread_num] = j;
-                    min_k[omp_thread_num] = k;
-                }
-*/
+
+                closest_locations[omp_thread_num].SelectClosest(
+                        ci[0], ci[2], ci[3], d_sq);
+
                 // Add new box if below threshold.
                 if (d_sq < threshold) {
                     border[ref[0]][ref[1]][ref[2]] = false;
@@ -470,11 +476,7 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
     amrex::TagBoxArray tags(state.boxArray(), state.DistributionMap());
     sim->ErrorEst(lev, tags, state.t, 0);
 
-    // Manual OpenMP reduction since it's all correlated (ugh).
-    std::vector<int> min_distance2(omp_get_max_threads(), INT_MAX);
-    std::vector<int> min_i(omp_get_max_threads(), -1);
-    std::vector<int> min_j(omp_get_max_threads(), -1);
-    std::vector<int> min_k(omp_get_max_threads(), -1);
+    std::vector<Location> closest_locations(omp_get_max_threads());
 
 #pragma omp parallel
     for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
@@ -500,55 +502,21 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
             continue;
 
         TagAndMeasure(lo, hi, remaining, tag_arr, c0, c1, lev, ibff, bff,
-                      border, threshold, omp_get_thread_num());
+                      border, closest_locations, threshold,
+                      omp_get_thread_num());
     }
 
 
     // Combine box layouts.
     FinalizeLayout(lev+1);
-
-    // Collect global stats.
-    int global_min_distance2 = INT_MAX;
-    int global_min_i = -1, global_min_j = -1, global_min_k = -1;
-    for (int f=0; f<omp_get_max_threads(); f++) {
-        if (global_min_distance2 > min_distance2[f]) {
-            global_min_distance2 = min_distance2[f];
-            global_min_i = min_i[f];
-            global_min_j = min_j[f];
-            global_min_k = min_k[f];
-        }
-    }
-
-    const int nprocs = amrex::ParallelDescriptor::NProcs();
-    const int ioproc = amrex::ParallelDescriptor::IOProcessorNumber();
-    std::vector<int> all_min_distance2(nprocs);
-    std::vector<int> all_min_i(nprocs);
-    std::vector<int> all_min_j(nprocs);
-    std::vector<int> all_min_k(nprocs);
-    amrex::ParallelDescriptor::Gather(&global_min_distance2, 1,
-                                      &all_min_distance2[0], 1, ioproc);
-    amrex::ParallelDescriptor::Gather(&global_min_i, 1, &all_min_i[0], 1,
-                                      ioproc);
-    amrex::ParallelDescriptor::Gather(&global_min_j, 1, &all_min_j[0], 1,
-                                      ioproc);
-    amrex::ParallelDescriptor::Gather(&global_min_k, 1, &all_min_k[0], 1,
-                                      ioproc);
+    Location closest = Location::FindClosestGlobally(closest_locations);
 
     if (amrex::ParallelDescriptor::IOProcessor()) {
-        for (int n=0; n<nprocs; ++n) {
-            if (global_min_distance2 > all_min_distance2[n]) {
-                global_min_distance2 = all_min_distance2[n];
-                global_min_i = all_min_i[n];
-                global_min_j = all_min_j[n];
-                global_min_k = all_min_k[n];
-            }
-        }
-
-        if( global_min_i >= 0 ) {
+        if( closest.i >= 0 ) {
             amrex::Print() << "  Shortest distance to C/F boundary: "
-                           << sqrt(static_cast<double>(global_min_distance2))
-                           << " grid sites @ (" << global_min_i << ","
-                           << global_min_j << "," << global_min_k << ")"
+                           << sqrt(static_cast<double>(closest.distance_sq))
+                           << " grid sites @ (" << closest.i << ","
+                           << closest.j << "," << closest.k << ")"
                            << std::endl;
         } else {
             amrex::Print() << "  Shortest distance to C/F boundary: "
@@ -557,8 +525,8 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
         }
     }
 
-    if (global_min_i >= 0 )
-        return sqrt(static_cast<double>(global_min_distance2));
+    if (closest.i >= 0 )
+        return sqrt(static_cast<double>(closest.distance_sq));
     else
         return -1;
 }

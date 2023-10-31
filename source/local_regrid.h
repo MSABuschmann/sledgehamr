@@ -5,11 +5,13 @@
 
 #include "sledgehamr.h"
 #include "unique_layout.h"
+#include "location.h"
 
 namespace sledgehamr {
 
 class Sledgehamr;
 class UniqueLayout;
+class Location;
 
 /** @brief Class to perform a local regrid (if possible).
  */
@@ -63,6 +65,12 @@ class LocalRegrid {
     void WrapIndices(const int lev);
 
   private:
+    enum VetoResult {
+        DoGlobalRegrid = 0,
+        DoNoRegrid = 1,
+        DoLocalRegrid = 2,
+    };
+
     bool DoAttemptRegrid(const int lev);
     bool Prechecks(const int lev);
     void InitializeLocalRegrid();
@@ -74,7 +82,7 @@ class LocalRegrid {
     void ComputeLatestPossibleRegridTime(const int l, const int lev);
     bool CheckForVeto(const int lev,
                       std::vector<amrex::BoxArray>& box_arrays);
-    int DealWithVeto(const int lev);
+    VetoResult DealWithVeto(const int lev);
     void ParseInput();
 
     /** @brief Creates comm_matrix loop-up table.
@@ -96,13 +104,15 @@ class LocalRegrid {
         const amrex::Array4<char>& tag_arr, const amrex::IntVect& c0,
         const amrex::IntVect& c1, const int lev, const int ibff,
         const double bff, boost::multi_array<bool, 3>& border,
-        const double threshold, const int omp_thread_num); 
+        std::vector<Location>& closest_locations, const double threshold,
+        const int omp_thread_num); 
 
     inline void CheckBorders(
         const amrex::IntVect& ci, const amrex::IntVect& c0,
         const amrex::IntVect& c1, const int ibff, const double bff,
         int remaining, const int lev, boost::multi_array<bool, 3>& border,
-        const double threshold, const int omp_thread_num);
+        std::vector<Location>& closest_locations, const double threshold,
+        const int omp_thread_num);
    
     /** @brief Wrapps an amrex::BoxArray across periodic boundary conditions.
      */
