@@ -15,6 +15,9 @@ CEXE_sources += local_regrid.cpp
 CEXE_headers += unique_layout.h
 CEXE_sources += unique_layout.cpp
 
+CEXE_headers += location.h
+CEXE_sources += location.cpp
+
 CEXE_headers += io_module.h
 CEXE_sources += io_module.cpp
 
