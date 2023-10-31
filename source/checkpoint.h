@@ -13,6 +13,7 @@ class Checkpoint {
 
     void Write(std::string prefix);
     void Read(std::string prefix, int id);
+    void Read(std::string folder);
 
   private:
     static void GotoNextLine(std::istream& is);

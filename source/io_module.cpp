@@ -194,6 +194,21 @@ void IOModule::FillLevelFromFile(int lev) {
     std::string initial_state_file = "";
     pp.query("initial_state", initial_state_file);
 
+    if (amrex::FileExists(initial_state_file + "/Meta.hdf5")) {
+        FillLevelFromCheckpointFile(lev, initial_state_file);
+    } else {
+        FillLevelFromHdf5File(lev, initial_state_file);
+    }
+}
+
+void IOModule::FillLevelFromCheckpointFile(int lev, std::string folder) {
+    Checkpoint chk(sim);
+    chk.Read(folder);
+}
+
+void IOModule::FillLevelFromHdf5File(int lev, std::string initial_state_file) {
+    amrex::ParmParse pp("input");
+
     // Iterate over fields but introduce offset such that each node grabs a
     // different file first.
     const int ncomp = sim->scalar_fields.size();
@@ -245,7 +260,6 @@ void IOModule::FillLevelFromFile(int lev) {
             }
         }
     }
-
 }
 
 void IOModule::FillLevelFromArray(int lev, const int comp, double* data,

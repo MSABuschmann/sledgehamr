@@ -56,6 +56,9 @@ class IOModule {
      */
     void FillLevelFromFile(int lev);
 
+    void FillLevelFromHdf5File(int lev, std::string initial_state_file);
+    void FillLevelFromCheckpointFile(int lev, std::string folder);
+
     /** @brief Fills LevelData with a constant value.
      * @param   lev     Level to be filled with data.
      * @param   comp    Component to be filled.

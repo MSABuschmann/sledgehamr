@@ -96,7 +96,12 @@ void Checkpoint::Write(std::string prefix) {
 
 void Checkpoint::Read(std::string prefix, int id) {
     std::string folder = prefix + "/checkpoints/" + std::to_string(id);
-    amrex::Print() << "Restarting from checkpoint: " << folder << std::endl;
+    Read(folder);
+}
+
+void Checkpoint::Read(std::string folder) {
+    if (sim->restart_sim)
+        amrex::Print() << "Restarting from checkpoint: " << folder << std::endl;
 
     const int nparams = 8;
     double header[nparams];
@@ -171,7 +176,8 @@ void Checkpoint::Read(std::string prefix, int id) {
     }
 
     UpdateLevels(filename);
-    UpdateOutputModules(filename);
+    if (sim->restart_sim)
+        UpdateOutputModules(filename);
 }
 
 void Checkpoint::GotoNextLine(std::istream& is) {
