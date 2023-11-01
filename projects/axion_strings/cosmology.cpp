@@ -9,6 +9,7 @@ void Cosmology::Init(sledgehamr::Sledgehamr* owner) {
     PrintRefinementTimes();
     SetProjections();
     SetSpectra();
+    SetXiMeasurement();
 }
 
 void Cosmology::ParseVariables() {
@@ -17,6 +18,7 @@ void Cosmology::ParseVariables() {
 
     amrex::ParmParse pp_out("output");
     pp_out.get("spectra_log_min", spectra_log_min);
+    pp_out.get("interval_xi_log", interval_xi_log);
 }
 
 void Cosmology::PrintRefinementTimes() {
@@ -44,7 +46,35 @@ void Cosmology::SetSpectra() {
             TIME_FCT(Cosmology::LogTruncated));
 }
 
-double Cosmology::Xi(const int string_tags, const int lev, const double eta) {
+void Cosmology::SetXiMeasurement() {
+    sim->io_module->output.emplace_back(sim->io_module->output_folder, "xi",
+            OUTPUT_FCT(Cosmology::WriteXi), interval_xi_log);
+    sim->io_module->output.back().SetTimeFunction(TIME_FCT(Cosmology::Log));
+}
+
+bool Cosmology::WriteXi(double time, std::string prefix) {
+    int lev    = sim->GetFinestLevel();
+    double xi  = Xi(lev, time);
+    double log = Log(time);
+    constexpr int nsize = 4;
+    double data[nsize] = {lev, time, log, xi};
+
+    amrex::Print() << "Write xi: " << prefix << ", xi=" << xi << std::endl;
+
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        std::string filename = prefix + "/xi.h5";
+        hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                            H5P_DEFAULT);
+        sledgehamr::IOModule::WriteToHDF5(file_id, "data", data, nsize);
+        H5Fclose(file_id); 
+    }
+
+    return true; 
+}
+
+double Cosmology::Xi(const int lev, const double eta) {
+    int string_tags = GetStringTags(lev);
+
     const double T1    = 5.4954174414835757e+17;
     const double mpl   = 1.22e19;
     const double gStar = 106;
@@ -61,6 +91,36 @@ double Cosmology::Xi(const int string_tags, const int lev, const double eta) {
     double xi   = physical_string_length * std::pow(time, 2) 
                     / std::pow(physical_box_size, 3);
     return xi;
+}
+
+int Cosmology::GetStringTags(const int lev) {
+    const sledgehamr::LevelData& state = sim->GetLevelData(lev);
+    double dx = sim->GetDx(lev);
+    double dt = sim->GetDt(lev);
+    int ntags = 0;
+
+    // Lets just do this on CPU even if GPUs available. This section is not
+    // performace critical and it is a lot simpler this way.
+#pragma omp parallel reduction(+: ntags)
+    for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
+        const amrex::Array4<double const>& state_fab = state.array(mfi);
+        const amrex::Box& tilebox  = mfi.tilebox();
+        const amrex::Dim3 lo = amrex::lbound(tilebox);
+        const amrex::Dim3 hi = amrex::ubound(tilebox);
+
+        for (int k = lo.z; k <= hi.z; ++k) {
+            for (int j = lo.y; j <= hi.y; ++j) {
+                AMREX_PRAGMA_SIMD
+                for (int i = lo.x; i <= hi.x; ++i) {
+                    ntags += TagCellForRefinement<true>(state_fab, i, j, k, lev,
+                                                        state.t, dt, dx, NULL);
+                }
+            }
+        }
+    } 
+
+    amrex::ParallelDescriptor::ReduceIntSum(ntags);
+    return ntags; 
 }
 
 }; // namespace axion_strings

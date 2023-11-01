@@ -51,6 +51,105 @@ double r_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
     return prime_r*prime_r/r2;
 }
 
+/** @brief Checks for zero-crossings between two points in the complex scalar
+ *         field.
+ * @param   Psi1_1  \Psi_1 of first point.
+ * @param   Psi2_1  \Psi_2 of first point.
+ * @param   Psi1_2  \Psi_1 of second point.
+ * @param   Psi2_2  \Psi_2 of second point.
+ * @return Sign of slope of zero-crossing. 0 if no crossing.
+ */
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+int ZeroXing(double Psi1_1, double Psi2_1, double Psi1_2, double Psi2_2) {
+    if (Psi2_1 * Psi2_2 >= 0) return 0;
+    if (Psi2_1 * Psi1_2 - Psi1_1 * Psi2_2 > 0) return 1;
+    return -1;
+}
+
+/** @brief Computes the winding factor along a given axis. Will be non-zero if
+ *         plaquette is pierced by a string.
+ * @return  Winding factor.
+ */
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+int WindingAxis1(const amrex::Array4<const double>& state,
+                 const int i, const int j, const int k) {
+    return ZeroXing(state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2),
+                    state(i+1,j  ,k  ,Scalar::Psi1),
+                    state(i+1,j  ,k  ,Scalar::Psi2))
+         + ZeroXing(state(i+1,j  ,k  ,Scalar::Psi1),
+                    state(i+1,j  ,k  ,Scalar::Psi2),
+                    state(i+1,j+1,k  ,Scalar::Psi1),
+                    state(i+1,j+1,k  ,Scalar::Psi2))
+         + ZeroXing(state(i+1,j+1,k  ,Scalar::Psi1),
+                    state(i+1,j+1,k  ,Scalar::Psi2),
+                    state(i  ,j+1,k  ,Scalar::Psi1),
+                    state(i  ,j+1,k  ,Scalar::Psi2))
+         + ZeroXing(state(i  ,j+1,k  ,Scalar::Psi1),
+                    state(i  ,j+1,k  ,Scalar::Psi2),
+                    state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2));
+}
+
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+int WindingAxis2(const amrex::Array4<const double>& state,
+                 const int i, const int j, const int k) {
+    return ZeroXing(state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2),
+                    state(i+1,j  ,k  ,Scalar::Psi1),
+                    state(i+1,j  ,k  ,Scalar::Psi2))
+         + ZeroXing(state(i+1,j  ,k  ,Scalar::Psi1),
+                    state(i+1,j  ,k  ,Scalar::Psi2),
+                    state(i+1,j  ,k+1,Scalar::Psi1),
+                    state(i+1,j  ,k+1,Scalar::Psi2))
+         + ZeroXing(state(i+1,j  ,k+1,Scalar::Psi1),
+                    state(i+1,j  ,k+1,Scalar::Psi2),
+                    state(i  ,j  ,k+1,Scalar::Psi1),
+                    state(i  ,j  ,k+1,Scalar::Psi2))
+         + ZeroXing(state(i  ,j  ,k+1,Scalar::Psi1),
+                    state(i  ,j  ,k+1,Scalar::Psi2),
+                    state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2));
+}
+
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+int WindingAxis3(const amrex::Array4<const double>& state,
+                 const int i, const int j, const int k) {
+    return ZeroXing(state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2),
+                    state(i  ,j+1,k  ,Scalar::Psi1),
+                    state(i  ,j+1,k  ,Scalar::Psi2))
+         + ZeroXing(state(i  ,j+1,k  ,Scalar::Psi1),
+                    state(i  ,j+1,k  ,Scalar::Psi2),
+                    state(i  ,j+1,k+1,Scalar::Psi1),
+                    state(i  ,j+1,k+1,Scalar::Psi2))
+         + ZeroXing(state(i  ,j+1,k+1,Scalar::Psi1),
+                    state(i  ,j+1,k+1,Scalar::Psi2),
+                    state(i  ,j  ,k+1,Scalar::Psi1),
+                    state(i  ,j  ,k+1,Scalar::Psi2))
+         + ZeroXing(state(i  ,j  ,k+1,Scalar::Psi1),
+                    state(i  ,j  ,k+1,Scalar::Psi2),
+                    state(i  ,j  ,k  ,Scalar::Psi1),
+                    state(i  ,j  ,k  ,Scalar::Psi2));
+}
+
+/** @brief Function that tags individual cells for refinement.
+ * @return  Boolean value as to whether cell should be refined or not.
+ */
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
+bool TagCellForRefinement<true>(const amrex::Array4<const double>& state,
+        const int i, const int j, const int k, const int lev, const double time,
+        const double dt, const double dx, const double* params) {
+    // Check all three plaquettes (in positive index direction) for string
+    // piercings.
+    if (WindingAxis1(state, i, j, k) != 0) return true;
+    if (WindingAxis2(state, i, j, k) != 0) return true;
+    if (WindingAxis3(state, i, j, k) != 0) return true;
+
+    return false;
+};
+
+
 /** @brief Class to simulate axion strings.
  */
 class Cosmology {
@@ -78,7 +177,7 @@ class Cosmology {
                 * string_width_threshold * sim->GetL());
     }
 
-    double Log(double eta) {
+    double Log(const double eta) {
         if (eta <= 0)
             return -DBL_MAX;
         return std::log( Mr(eta) / H(eta) );
@@ -109,16 +208,21 @@ class Cosmology {
         return T1 / eta;
     }
 
-    double Xi(const int string_tags, const int lev, const double eta);
+    double Xi(const int lev, const double eta);
 
   private:
     void ParseVariables();
     void PrintRefinementTimes();
     void SetProjections();
     void SetSpectra();
+    void SetXiMeasurement();
+
+    int GetStringTags(const int lev);
+    bool WriteXi(double time, std::string prefix);
 
     double string_width_threshold;
     double spectra_log_min = 5;
+    double interval_xi_log = 0;
     const double lambda = 1;
 
     sledgehamr::Sledgehamr* sim;

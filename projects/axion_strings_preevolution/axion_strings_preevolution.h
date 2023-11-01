@@ -71,7 +71,6 @@ class axion_strings_preevolution : public sledgehamr::Sledgehamr {
 
   private:
     void ParseConstants();
-    int GetStringTags(const int lev);
 
     double log_0 = 2;
     double eta_0 = 2.3;

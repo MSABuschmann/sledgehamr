@@ -115,6 +115,14 @@ class Sledgehamr : public amrex::AmrCore {
         return max_level;
     }
 
+    int GetFinestLevel() {
+        return finest_level;
+    }
+
+    LevelData& GetLevelData(const int lev) {
+        return grid_new[lev];
+    }
+
     /** @brief Pointer to synchronization module.
      */
     LevelSynchronizer* level_synchronizer;

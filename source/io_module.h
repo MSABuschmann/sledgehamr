@@ -93,6 +93,8 @@ class IOModule {
      */
     std::vector<OutputModule> output;
 
+    std::string output_folder;
+
   private:
     /** @brief Copies data from array into LevelData.
      * @param   lev Level to be filled with data.
@@ -239,8 +241,6 @@ class IOModule {
     int full_box_downsample_factor = 1;
     int full_box_truncation_error_downsample_factor = 1;
     
-    std::string output_folder;
-
     /** @brief Pointer to owner on whose data this class operates.
      */
     Sledgehamr* sim;

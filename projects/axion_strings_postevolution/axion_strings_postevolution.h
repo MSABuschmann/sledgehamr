@@ -58,8 +58,8 @@ void Rhs(const amrex::Array4<double>& rhs,
 }
 
 using axion_strings::GravitationalWavesRhs;
-using axion_strings::TagCellForRefinement;
 using axion_strings::TruncationModifier;
+using axion_strings::TagCellForRefinement;
 
 FINISH_SLEDGEHAMR_SETUP
 
