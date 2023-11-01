@@ -340,4 +340,69 @@ amrex::Vector<amrex::MultiFab*> LevelSynchronizer::GetLevelData(const int lev,
     return mfs;
 }
 
+void LevelSynchronizer::IncreaseCoarseLevelResolution() {
+    amrex::Print() << "Increase Coarse Level resolution!" << std::endl;
+
+    if (sim->finest_level > 0) {
+        std::string msg = std::string("Increasing coarse level resolution ")
+                        + "is currently only supported if grid has not been "
+                        + "refined yet.";
+        amrex::Abort(msg);
+    }
+
+    // Initalize new level.
+    const int lev = 0;
+    const int ncomp = sim->grid_new[lev].nComp();
+    const int nghost = sim->grid_new[lev].nGrow();
+    const double time = sim->grid_new[lev].t;
+
+    amrex::Geometry old_geom = sim->geom[lev];
+    amrex::Geometry new_geom = amrex::refine(sim->geom[lev],
+                                             amrex::IntVect(2,2,2));
+    amrex::BoxArray ba = sim->grid_new[lev].boxArray();
+    ba.refine(2);
+
+    sim->geom[lev] = new_geom;
+    sim->ChopGrids(lev, ba, amrex::ParallelDescriptor::NProcs());
+    sim->geom[lev] = old_geom;
+
+    amrex::DistributionMapping dm =
+            amrex::DistributionMapping(ba, amrex::ParallelDescriptor::NProcs());
+    LevelData ld(ba, dm, ncomp, nghost, time);
+
+    // Interpolate new from old coarse level.
+    amrex::CpuBndryFuncFab bndry_func(nullptr);
+    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> cphysbc(old_geom,bcs,bndry_func);
+    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> fphysbc(new_geom,bcs,bndry_func);
+
+    amrex::Vector<amrex::MultiFab*> cmf{&sim->grid_new[lev]};
+    amrex::Vector<amrex::MultiFab*> fmf{&ld};
+    amrex::Vector<double> ctime{time};
+    amrex::Vector<double> ftime{time};
+
+    amrex::InterpFromCoarseLevel(ld, time, sim->grid_new[lev], 0, 0, ncomp,
+                                 old_geom, new_geom, cphysbc, 0, fphysbc, 0,
+                                 amrex::IntVect(2,2,2), mapper, bcs, 0);
+
+    // Replace old coarse level.
+    sim->grid_new[lev].clear();
+    sim->grid_old[lev].clear();
+
+    std::swap(sim->grid_new[lev], ld);
+    sim->grid_old[lev].define(ba, dm, ncomp, nghost, time);
+
+    // Update metadata.
+    sim->SetBoxArray(lev, ba);
+    sim->SetDistributionMap(lev, dm);
+    sim->geom[lev] = new_geom;
+
+    sim->max_level -= 1;
+    sim->coarse_level_grid_size *= 2;
+    sim->dimN.erase(sim->dimN.begin());
+    sim->dx.erase(sim->dx.begin());
+    sim->dt.erase(sim->dt.begin());
+
+    sim->ReadSpectrumKs(true);
+}
+
 }; // namespace sledgehamr

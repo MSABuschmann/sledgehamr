@@ -342,7 +342,7 @@ private:
 
     /** @brief TODO
      */
-    void ReadSpectrumKs();
+    void ReadSpectrumKs(bool reload = false);
 
     /* @brief Whether tagging should be performed on gpu if possible.
      */
@@ -350,6 +350,7 @@ private:
 
     bool no_simulation = false;
     int get_box_layout_nodes = 0;
+    bool increase_coarse_level_resolution = false;
 };
 
 }; // namespace sledgehamr

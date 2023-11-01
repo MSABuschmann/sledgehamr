@@ -55,6 +55,10 @@ void Sledgehamr::InitSledgehamr() {
     } else {
         InitFromScratch( t_start );
     }
+
+    if (increase_coarse_level_resolution) 
+        level_synchronizer->IncreaseCoarseLevelResolution();
+    
     performance_monitor->Stop(performance_monitor->idx_read_input);
 
     // Initialize project
@@ -285,8 +289,10 @@ void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
 void Sledgehamr::ParseInput() {
     amrex::ParmParse pp_amr("amr");
     pp_amr.query("nghost", nghost);
-    pp_amr.query("coarse_level_grid_size", coarse_level_grid_size);
     pp_amr.query("tagging_on_gpu", tagging_on_gpu);
+    pp_amr.query("coarse_level_grid_size", coarse_level_grid_size);
+    pp_amr.query("increase_coarse_level_resolution",
+                  increase_coarse_level_resolution);
 
     amrex::ParmParse pp_sim("sim");
     pp_sim.query("get_box_layout_nodes", get_box_layout_nodes);
@@ -353,9 +359,12 @@ void Sledgehamr::ParseInputScalars() {
     }
 }
 
-void Sledgehamr::ReadSpectrumKs() {
-    if (!spectrum_ks.empty())
+void Sledgehamr::ReadSpectrumKs(bool reload) {
+    if (!spectrum_ks.empty() && !reload)
         return;
+
+    if (reload)
+        spectrum_ks.clear();
 
     std::string filename = SLEDGEHAMR_DATA_PATH;
     filename += "spectra_ks.hdf5";

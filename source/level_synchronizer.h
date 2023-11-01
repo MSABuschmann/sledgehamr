@@ -79,6 +79,8 @@ class LevelSynchronizer {
      */
     void ComputeTruncationErrors(const int lev);
 
+    void IncreaseCoarseLevelResolution();
+
     /** @brief Integer array containing the type of boundary condition at each
      *         boundary edge. Needs to be amrex::Vector not std::vector.
      */
