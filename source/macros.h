@@ -221,14 +221,14 @@ namespace sledgehamr {
         const bool l_with_dissipation = with_dissipation;
 
 #define RHS_PARAMS_LOCAL_SETUP std::vector<double> params_rhs; \
-        SetParamsRhs(params_rhs); \
+        SetParamsRhs(params_rhs, time, lev); \
         amrex::Gpu::AsyncArray<double> async_params_rhs( \
                 params_rhs.data(), params_rhs.size()); \
         double* l_params_rhs = async_params_rhs.data();
 
 #define RHS_GW_PARAMS_LOCAL_SETUP std::vector<double> params_gw_rhs; \
         if (with_gravitational_waves) \
-            SetParamsGravitationalWaveRhs(params_rhs); \
+            SetParamsGravitationalWaveRhs(params_rhs, time, lev); \
         amrex::Gpu::AsyncArray<double> async_params_gw_rhs( \
                 params_gw_rhs.data(), params_gw_rhs.size()); \
         double* l_params_gw_rhs = async_params_rhs.data();

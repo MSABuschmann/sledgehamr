@@ -34,7 +34,7 @@ void Rhs(const amrex::Array4<double>& rhs,
     double Phi       = state(i, j, k, Scalar::Phi);
     double potential = quadratic*Phi + cubic*Phi*Phi + quartic*Phi*Phi*Phi;
 
-    constexpr int order = 1;
+    constexpr int order = 2;
     double laplacian_Phi = sledgehamr::utils::Laplacian<order>(
             state, i, j, k, Scalar::Phi, dx*dx);
 
@@ -49,7 +49,7 @@ void GravitationalWavesRhs<true>(const amrex::Array4<double>& rhs,
         const double dx, const double* params) {
     // Compute Laplacians.
     double dx2 = dx * dx;
-    constexpr int order = 1;
+    constexpr int order = 2;
     double laplacian_u_xx = sledgehamr::utils::Laplacian<order>(
             state, i, j, k, Gw::u_xx, dx2);
     double laplacian_u_yy = sledgehamr::utils::Laplacian<order>(
@@ -64,11 +64,12 @@ void GravitationalWavesRhs<true>(const amrex::Array4<double>& rhs,
             state, i, j, k, Gw::u_yz, dx2);
 
     // Compute gradients.
-    double grad_x_Phi = sledgehamr::utils::Gradient<order>(
+    constexpr int order2 = 2;
+    double grad_x_Phi = sledgehamr::utils::Gradient<order2>(
             state, i, j, k, Scalar::Phi, dx, 'x');
-    double grad_y_Phi = sledgehamr::utils::Gradient<order>(
+    double grad_y_Phi = sledgehamr::utils::Gradient<order2>(
             state, i, j, k, Scalar::Phi, dx, 'y');
-    double grad_z_Phi = sledgehamr::utils::Gradient<order>(
+    double grad_z_Phi = sledgehamr::utils::Gradient<order2>(
             state, i, j, k, Scalar::Phi, dx, 'z');
 
     // Compute EOM.
@@ -200,7 +201,8 @@ class first_order_phase_transition : public sledgehamr::Sledgehamr {
     START_PROJECT(first_order_phase_transition)
 
     void Init() override;
-    void SetParamsRhs(std::vector<double>& params) override;
+    void SetParamsRhs(std::vector<double>& params, const double time,
+                      const int lev) override;
     void BeforeTimestep(const double time) override;
 
   private:

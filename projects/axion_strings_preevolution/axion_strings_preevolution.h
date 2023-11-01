@@ -65,8 +65,11 @@ class axion_strings_preevolution : public sledgehamr::Sledgehamr {
   public:
     START_PROJECT(axion_strings_preevolution)
 
-    void SetParamsRhs(std::vector<double>& params) override;
+    void SetParamsRhs(std::vector<double>& params, const double time,
+                      const int lev) override;
+
     void Init() override;
+
     bool StopRunning(const double time) override;
 
   private:

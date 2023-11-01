@@ -32,7 +32,8 @@ void first_order_phase_transition::ParseVariables() {
 }
 
 
-void first_order_phase_transition::SetParamsRhs(std::vector<double>& params) {
+void first_order_phase_transition::SetParamsRhs(
+        std::vector<double>& params, const double time, const int lev) {
     params.resize(3);
     params[0] = quadratic;
     params[1] = cubic;

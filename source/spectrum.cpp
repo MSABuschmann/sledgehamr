@@ -22,7 +22,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     field_fft.define(ba, sim->dmap[lev], 1, 0);
 
     std::vector<double> params;
-    sim->SetParamsSpectra(params);
+    sim->SetParamsSpectra(params, time);
 
 #pragma omp parallel
     for (amrex::MFIter mfi(field, true); mfi.isValid(); ++mfi) {

@@ -14,7 +14,7 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     amrex::Vector<int> n_projection(N);
 
     std::vector<double> params;
-    sim->SetParamsProjections(params);
+    sim->SetParamsProjections(params, sim->grid_new[0].t);
 
     for (int lev = 0; lev <= mlevel; ++lev) {
         const int dimN_lev = sim->dimN[lev];

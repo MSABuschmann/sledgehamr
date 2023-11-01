@@ -253,12 +253,18 @@ class Sledgehamr : public amrex::AmrCore {
         return time >= t_end;
     }
 
-    virtual void SetParamsRhs(std::vector<double>& params) {};
-    virtual void SetParamsGravitationalWaveRhs(std::vector<double>& params) {};
-    virtual void SetParamsTagCellForRefinement(std::vector<double>& params) {};
-    virtual void SetParamsTruncationModifier(std::vector<double>& params) {};
-    virtual void SetParamsSpectra(std::vector<double>& params) {};
-    virtual void SetParamsProjections(std::vector<double>& params) {};
+    virtual void SetParamsRhs(
+            std::vector<double>& params, const double time, const int lev) {};
+    virtual void SetParamsGravitationalWaveRhs(
+            std::vector<double>& params, const double time, const int lev) {};
+    virtual void SetParamsTagCellForRefinement(
+            std::vector<double>& params, const double time, const int lev) {};
+    virtual void SetParamsTruncationModifier(
+            std::vector<double>& params, const double time, const int lev) {};
+    virtual void SetParamsSpectra(
+            std::vector<double>& params, const double time) {};
+    virtual void SetParamsProjections(
+            std::vector<double>& params, const double time) {};
 
     /** @brief Creates a shadow level and evolves it by one time step. Needed
      *         to compute truncation errors on the coarse level.

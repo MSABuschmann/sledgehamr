@@ -149,7 +149,6 @@ bool TagCellForRefinement<true>(const amrex::Array4<const double>& state,
     return false;
 };
 
-
 /** @brief Class to simulate axion strings.
  */
 class Cosmology {

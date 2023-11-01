@@ -195,9 +195,9 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     std::vector<int> ntags_trunc(scalar_fields.size(), 0);
 
     std::vector<double> params_tag, params_mod;
-    SetParamsTagCellForRefinement(params_tag);
+    SetParamsTagCellForRefinement(params_tag, time, lev);
     if (shadow_hierarchy)
-        SetParamsTruncationModifier(params_mod);
+        SetParamsTruncationModifier(params_mod, time, lev);
 
     // Loop over boxes and cells.
 #pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user) \
@@ -260,9 +260,9 @@ void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
     const amrex::MultiFab& state_te = grid_old[lev];
 
     std::vector<double> params_tag, params_mod;
-    SetParamsTagCellForRefinement(params_tag);
+    SetParamsTagCellForRefinement(params_tag, time, lev);
     if (shadow_hierarchy)
-        SetParamsTruncationModifier(params_mod);
+        SetParamsTruncationModifier(params_mod, time, lev);
 
     // Loop over boxes and cells.
 #pragma omp parallel if (amrex::Gpu::notInLaunchRegion())

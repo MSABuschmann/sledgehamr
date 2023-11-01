@@ -2,7 +2,8 @@
 
 namespace axion_strings_preevolution {
 
-void axion_strings_preevolution::SetParamsRhs(std::vector<double>& params) {
+void axion_strings_preevolution::SetParamsRhs(
+        std::vector<double>& params, const double time, const int lev) {
     params.push_back(eta_0);
 }
 

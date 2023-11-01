@@ -57,7 +57,7 @@ bool Cosmology::WriteXi(double time, std::string prefix) {
     double xi  = Xi(lev, time);
     double log = Log(time);
     constexpr int nsize = 4;
-    double data[nsize] = {lev, time, log, xi};
+    double data[nsize] = {static_cast<double>(lev), time, log, xi};
 
     amrex::Print() << "Write xi: " << prefix << ", xi=" << xi << std::endl;
 
