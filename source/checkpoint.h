@@ -14,14 +14,14 @@ class Checkpoint {
     void Write(std::string prefix);
     void Read(std::string prefix, int id);
     void Read(std::string folder);
+    void UpdateOutputModules(std::string folder);
+    void UpdateOutputModules(std::string prefix, int id);
 
   private:
     static void GotoNextLine(std::istream& is);
     void ChangeNGhost(int new_nghost);
     void RegridCoarse();
     void UpdateLevels(std::string filename);
-    void UpdateOutputModules(std::string filename);
-
     Sledgehamr* sim;
 };
 

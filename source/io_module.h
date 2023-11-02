@@ -68,6 +68,8 @@ class IOModule {
 
     void RestartSim();
 
+    void UpdateOutputModules();
+
     void WriteBoxArray(amrex::BoxArray& ba);
 
     /** @brief Vectors containing instructions for projections and spectra.
@@ -240,6 +242,8 @@ class IOModule {
     int coarse_box_truncation_error_downsample_factor = 1;
     int full_box_downsample_factor = 1;
     int full_box_truncation_error_downsample_factor = 1;
+
+    int chk_id = -1;
     
     /** @brief Pointer to owner on whose data this class operates.
      */

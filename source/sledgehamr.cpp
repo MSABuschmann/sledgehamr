@@ -50,19 +50,22 @@ void Sledgehamr::InitSledgehamr() {
     ParseInputScalars();
 
     performance_monitor->Start(performance_monitor->idx_read_input);
+
     if (restart_sim) {
         io_module->RestartSim();
     } else {
         InitFromScratch( t_start );
     }
 
-    if (increase_coarse_level_resolution) 
+    if (increase_coarse_level_resolution)
         level_synchronizer->IncreaseCoarseLevelResolution();
-    
+
     performance_monitor->Stop(performance_monitor->idx_read_input);
 
     // Initialize project
     Init();
+
+    io_module->UpdateOutputModules();
 }
 
 void Sledgehamr::Evolve() {

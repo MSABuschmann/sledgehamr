@@ -123,13 +123,6 @@ void Checkpoint::Read(std::string folder) {
         amrex::Abort(msg);
     }
 
-    if (noutput != sim->io_module->output.size() ||
-        npredefoutput != sim->io_module->idx_checkpoints) {
-        const char* msg = "Sledgehamr::Checkpoint::Read: "
-                          "Number of output types changed!";
-        amrex::Abort(msg);
-    }
-
     std::string File(folder + "/BoxArrays");
     amrex::VisMF::IO_Buffer io_buffer(amrex::VisMF::GetIOBufferSize());
     amrex::Vector<char> fileCharPtr;
@@ -176,8 +169,6 @@ void Checkpoint::Read(std::string folder) {
     }
 
     UpdateLevels(filename);
-    if (sim->restart_sim)
-        UpdateOutputModules(filename);
 }
 
 void Checkpoint::GotoNextLine(std::istream& is) {
@@ -250,8 +241,30 @@ void Checkpoint::RegridCoarse() {
     sim->SetDistributionMap(lev, dm);
 }
 
-void Checkpoint::UpdateOutputModules(std::string filename) {
-    const int noutput = sim->io_module->output.size();
+void Checkpoint::UpdateOutputModules(std::string prefix, int id) {
+    std::string folder = prefix + "/checkpoints/" + std::to_string(id);
+    UpdateOutputModules(folder);
+}
+
+void Checkpoint::UpdateOutputModules(std::string folder) {
+    if (!sim->restart_sim)
+        return;
+
+    const int nparams = 8;
+    double header[nparams];
+    std::string filename = folder + "/Meta.hdf5";
+    IOModule::ReadFromHDF5(filename, {"Header"}, header);
+    int noutput_file = static_cast<int>(header[6]);
+    int npredefoutput = static_cast<int>(header[7]);
+    int noutput = sim->io_module->output.size();
+
+    if (noutput != noutput_file ||
+        npredefoutput != sim->io_module->idx_checkpoints) {
+        const char* msg = "Sledgehamr::Checkpoint::Read: "
+                          "Number of output types changed!";
+        amrex::Abort(msg);
+    }
+
     std::vector<int> next_id(noutput);
     std::vector<double> last_time_written(noutput);
     IOModule::ReadFromHDF5(filename, {"next_id"}, &(next_id[0]));

@@ -735,7 +735,7 @@ void IOModule::RestartSim() {
     int selected_chk = -1;
     pp.query("select_checkpoint", selected_chk);
 
-    int chk_id = 0;
+    chk_id = 0;
     if (selected_chk < 0) {
         int latest = FindLatestCheckpoint();
 
@@ -761,6 +761,11 @@ void IOModule::RestartSim() {
     amrex::ParallelDescriptor::Barrier();
     Checkpoint chk(sim);
     chk.Read(output_folder, chk_id);
+}
+
+void IOModule::UpdateOutputModules() {
+    Checkpoint chk(sim);
+    chk.UpdateOutputModules(output_folder, chk_id);
 }
 
 int IOModule::FindLatestCheckpoint() {
