@@ -1,7 +1,7 @@
 #ifndef PROJECTS_FIRST_ORDER_PHASE_TRANSITION_BUBBLE_H_
 #define PROJECTS_FIRST_ORDER_PHASE_TRANSITION_BUBBLE_H_
 
-namespace first_order_phase_transition {
+namespace FirstOrderPhaseTransition {
 
 class Bubble {
   public:

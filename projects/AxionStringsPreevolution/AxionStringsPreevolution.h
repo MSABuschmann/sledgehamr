@@ -2,9 +2,7 @@
 #define PROJECTS_AXION_STRINGS_PREEVOLUTION_H_
 
 #include <sledgehamr.h>
-#include <sledgehamr_utils.h>
 #include "../AxionStrings/cosmology.h"
-#include "../AxionStrings/AxionStrings.h"
 #include "kernels_rhs.h"
 
 namespace AxionStringsPreevolution {

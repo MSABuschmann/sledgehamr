@@ -1,6 +1,7 @@
 #ifndef PROJECTS_AXION_STRINGS_KERNELS_RHS_H_
 #define PROJECTS_AXION_STRINGS_KERNELS_RHS_H_
 
+#include <sledgehamr_utils.h>
 #include "setup.h"
 
 namespace AxionStrings {

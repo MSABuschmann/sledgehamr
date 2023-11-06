@@ -1,8 +1,8 @@
-#include "axion_strings_postevolution.h"
+#include "AxionStringsPostevolution.h"
 
-namespace axion_strings_postevolution {
+namespace AxionStringsPostevolution {
 
-void axion_strings_postevolution::SetParamsRhs(
+void AxionStringsPostevolution::SetParamsRhs(
         std::vector<double>& params, const double time, const int lev) {
     double eta = time;
     double eta_pre = eta_pre_0 + (eta - eta_0);
@@ -13,14 +13,14 @@ void axion_strings_postevolution::SetParamsRhs(
     params.push_back(frac);
 }
 
-void axion_strings_postevolution::Init() {
+void AxionStringsPostevolution::Init() {
     cosmo.Init(this);
     ParseConstants();
     GetPreevolutionTime();
     ReinterpretInitialState();
 }
 
-void axion_strings_postevolution::ParseConstants() {
+void AxionStringsPostevolution::ParseConstants() {
     amrex::ParmParse pp("project");
     pp.get("starting_log", log_0);
     pp.get("eta_transition", eta_transition);
@@ -29,14 +29,14 @@ void axion_strings_postevolution::ParseConstants() {
     eta_0 = std::sqrt(std::exp(log_0)/std::sqrt(2.));
 }
 
-void axion_strings_postevolution::ReinterpretInitialState() {
+void AxionStringsPostevolution::ReinterpretInitialState() {
     // Set starting time if we are starting a new sim.
     if (!restart_sim) {
         grid_new[0].t = eta_0;
     }
 }
 
-void axion_strings_postevolution::GetPreevolutionTime() {
+void AxionStringsPostevolution::GetPreevolutionTime() {
     // Get end time of the preevolution from the initial checkpoint file.
     std::string folder;
     amrex::ParmParse pp("input");
@@ -49,4 +49,4 @@ void axion_strings_postevolution::GetPreevolutionTime() {
     eta_pre_0 = header[0];
 }
 
-} // namespace axion_strings_postevolution
+} // namespace AxionStringsPostevolution

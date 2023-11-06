@@ -1,8 +1,8 @@
-#include "first_order_phase_transition.h"
+#include "FirstOrderPhaseTransition.h"
 
-namespace first_order_phase_transition{
+namespace FirstOrderPhaseTransition{
 
-void first_order_phase_transition::Init() {
+void FirstOrderPhaseTransition::Init() {
     ParseVariables();
     ParseBubbles();
     ComputeParameters();
@@ -12,19 +12,19 @@ void first_order_phase_transition::Init() {
     performance_monitor->timer.push_back(sledgehamr::Timer("InjectBubbles"));
 }
 
-void first_order_phase_transition::ComputeParameters() {
+void FirstOrderPhaseTransition::ComputeParameters() {
     double numer = 3. + sqrt(9. - 8*lambda_bar);
     quadratic = -1.;
     cubic = 3.*numer/(4.*lambda_bar);
     quartic = -numer*numer/(8.*lambda_bar);
 }
 
-void first_order_phase_transition::SetProjections() {
+void FirstOrderPhaseTransition::SetProjections() {
     sledgehamr::Projection proj(dPhi2, "dPhi2");
     io_module->projections.push_back(proj);
 }
 
-void first_order_phase_transition::ParseVariables() {
+void FirstOrderPhaseTransition::ParseVariables() {
     amrex::ParmParse pp_prj("project");
     pp_prj.get("lambda_bar", lambda_bar);
 
@@ -32,7 +32,7 @@ void first_order_phase_transition::ParseVariables() {
 }
 
 
-void first_order_phase_transition::SetParamsRhs(
+void FirstOrderPhaseTransition::SetParamsRhs(
         std::vector<double>& params, const double time, const int lev) {
     params.resize(3);
     params[0] = quadratic;
@@ -40,11 +40,11 @@ void first_order_phase_transition::SetParamsRhs(
     params[2] = quartic;
 }
 
-void first_order_phase_transition::BeforeTimestep(const double time) {
+void FirstOrderPhaseTransition::BeforeTimestep(const double time) {
     InjectBubbles(time);
 }
 
-void first_order_phase_transition::ParseBubbles() {
+void FirstOrderPhaseTransition::ParseBubbles() {
     std::string file = "";
     amrex::ParmParse pp("input");
     pp.get("bubbles", file);
@@ -128,7 +128,7 @@ void first_order_phase_transition::ParseBubbles() {
                    << std::endl;
 }
 
-void first_order_phase_transition::InjectBubbles(const double time) {
+void FirstOrderPhaseTransition::InjectBubbles(const double time) {
     performance_monitor->Start(idx_perfmon_add_bubbles);
 
     // Check if bubbles need to be added.
@@ -184,7 +184,7 @@ void first_order_phase_transition::InjectBubbles(const double time) {
     performance_monitor->Stop(idx_perfmon_add_bubbles);
 }
 
-void first_order_phase_transition::InjectBubbleLevels(std::vector<int> ab)
+void FirstOrderPhaseTransition::InjectBubbleLevels(std::vector<int> ab)
 {
     // Check what finest injection level is.
     int finest_bubble_level = 0;
@@ -249,7 +249,7 @@ void first_order_phase_transition::InjectBubbleLevels(std::vector<int> ab)
     time_stepper->local_regrid->ClearLayout();
 }
 
-void first_order_phase_transition::FillBubbleLayout(const int lev,
+void FirstOrderPhaseTransition::FillBubbleLayout(const int lev,
                                                     std::vector<int> ab) {
     const amrex::BoxArray ba = grid_new[lev].boxArray();
     int Nbs = dimN[lev] / blocking_factor[lev][0];
@@ -314,7 +314,7 @@ void first_order_phase_transition::FillBubbleLayout(const int lev,
     time_stepper->local_regrid->FinalizeLayout(lev);
 }
 
-void first_order_phase_transition::AddBubbleValues(std::vector<int> ab) {
+void FirstOrderPhaseTransition::AddBubbleValues(std::vector<int> ab) {
     for (int lev = 0; lev <= finest_level; ++lev) {
         amrex::MultiFab& mf = grid_new[lev];
 
@@ -340,4 +340,4 @@ void first_order_phase_transition::AddBubbleValues(std::vector<int> ab) {
     }
 }
 
-}; // namespace first_order_phase_transition
+}; // namespace FirstOrderPhaseTransition

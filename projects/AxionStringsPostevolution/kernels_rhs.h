@@ -1,10 +1,10 @@
-#ifndef PROJECTS_AXION_STRINGS_PREEVOLUTION_KERNELS_RHS_H_
-#define PROJECTS_AXION_STRINGS_PREEVOLUTION_KERNELS_RHS_H_
+#ifndef PROJECTS_AXION_STRINGS_POSTEVOLUTION_KERNELS_RHS_H_
+#define PROJECTS_AXION_STRINGS_POSTEVOLUTION_KERNELS_RHS_H_
 
 #include <sledgehamr_utils.h>
 #include "../AxionStrings/cosmology.h"
 
-namespace AxionStringsPreevolution {
+namespace AxionStringsPostevolution {
 using namespace AxionStrings;
 
 /** @brief Function that calculates the RHS of the EOM at a single cell.
@@ -41,20 +41,28 @@ void Rhs(const amrex::Array4<double>& rhs,
 
     // Compute EOM.
     const double eta_0 = params[0];
-    const double eta_sq = eta*eta;
+    const double eta_pre = params[1];
+    const double eta_sq = eta_pre*eta_pre;
     const double lambda = eta_0*eta_0;
     const double drag = eta_0;
 
-    double potential = lambda/eta_sq*( Psi1*Psi1 + Psi2*Psi2 - 1. );
+    double potential_pre = lambda/eta_sq*( Psi1*Psi1 + Psi2*Psi2 - 1. );
+    double rhs_Psi1_pre = -Pi1*3./eta_pre + laplacian_Psi1/eta_sq/drag
+                                 - Psi1*potential_pre;
+    double rhs_Psi2_pre = -Pi2*3./eta_pre + laplacian_Psi2/eta_sq/drag
+                                 - Psi2*potential_pre;
 
+    double potential_post = eta*eta*( Psi1*Psi1 + Psi2*Psi2 - 1. ) + 0.56233;
+    double rhs_Psi1_post = -Pi1*2./eta + laplacian_Psi1 - Psi1*potential_post;
+    double rhs_Psi2_post = -Pi2*2./eta + laplacian_Psi2 - Psi2*potential_post;
+
+    double frac = params[2];
     rhs(i, j, k, Scalar::Psi1) =  Pi1;
     rhs(i, j, k, Scalar::Psi2) =  Pi2;
-    rhs(i, j, k, Scalar::Pi1)  = - Pi1*3./eta + laplacian_Psi1/eta_sq/drag
-                                 - Psi1*potential;
-    rhs(i, j, k, Scalar::Pi2)  = - Pi2*3./eta + laplacian_Psi2/eta_sq/drag
-                                 - Psi2*potential;
+    rhs(i, j, k, Scalar::Pi1)  = (1.-frac)*rhs_Psi1_pre + frac*rhs_Psi1_post;
+    rhs(i, j, k, Scalar::Pi2)  = (1.-frac)*rhs_Psi2_pre + frac*rhs_Psi2_post;
 }
 
-}; // namespace AxionStringsPreevolution
+}; // namespace AxionStringsPostevolution
 
-#endif // PROJECTS_AXION_STRINGS_PREEVOLUTION_KERNELS_RHS_H_
+#endif // PROJECTS_AXION_STRINGS_POSTEVOLUTION_KERNELS_RHS_H_

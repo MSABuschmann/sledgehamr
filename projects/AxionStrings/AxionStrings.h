@@ -2,7 +2,6 @@
 #define PROJECTS_AXION_STRINGS_H_
 
 #include <sledgehamr.h>
-#include <sledgehamr_utils.h>
 
 #include "cosmology.h"
 #include "kernels_rhs.h"

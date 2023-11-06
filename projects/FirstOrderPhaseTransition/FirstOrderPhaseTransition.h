@@ -6,7 +6,7 @@
 
 #include "bubbles.h"
 
-namespace first_order_phase_transition {
+namespace FirstOrderPhaseTransition {
 
 ADD_SCALARS(Phi)
 ADD_CONJUGATE_MOMENTA(dPhi)
@@ -196,9 +196,9 @@ FINISH_SLEDGEHAMR_SETUP
 
 /** @brief Class to simulate a first order phase transition.
  */
-class first_order_phase_transition : public sledgehamr::Sledgehamr {
+class FirstOrderPhaseTransition : public sledgehamr::Sledgehamr {
   public:
-    START_PROJECT(first_order_phase_transition)
+    START_PROJECT(FirstOrderPhaseTransition)
 
     void Init() override;
     void SetParamsRhs(std::vector<double>& params, const double time,
@@ -225,6 +225,6 @@ class first_order_phase_transition : public sledgehamr::Sledgehamr {
     std::vector<int> bubbles_to_inject;
 };
 
-}; // namespace first_order_phase_transition
+}; // namespace FirstOrderPhaseTransition
 
 #endif // PROJECTS_FIRST_ORDER_PHASE_TRANSITION_H_
