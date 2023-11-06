@@ -1,0 +1,9 @@
+#ifndef PROJECTS_AXION_STRINGS_SETUP_H_
+#define PROJECTS_AXION_STRINGS_SETUP_H_
+
+namespace AxionStrings {
+ADD_SCALARS(Psi1, Psi2)
+ADD_CONJUGATE_MOMENTA(Pi1, Pi2)
+}; // namespace AxionStrings
+
+#endif // PROJECTS_AXION_STRINGS_SETUP_H_

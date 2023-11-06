@@ -1,7 +1,7 @@
 #include "cosmology.h"
 #include <sledgehamr_utils.h>
 
-namespace axion_strings {
+namespace AxionStrings {
 
 void Cosmology::Init(sledgehamr::Sledgehamr* owner) {
     sim = owner;
@@ -123,4 +123,4 @@ int Cosmology::GetStringTags(const int lev) {
     return ntags; 
 }
 
-}; // namespace axion_strings
+}; // namespace AxionStrings
