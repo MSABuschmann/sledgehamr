@@ -1,25 +1,25 @@
-#include "axion_strings_preevolution.h"
+#include "AxionStringsPreevolution.h"
 
-namespace axion_strings_preevolution {
+namespace AxionStringsPreevolution {
 
-void axion_strings_preevolution::SetParamsRhs(
+void AxionStringsPreevolution::SetParamsRhs(
         std::vector<double>& params, const double time, const int lev) {
     params.push_back(eta_0);
 }
 
-void axion_strings_preevolution::Init() {
+void AxionStringsPreevolution::Init() {
     cosmo.Init(this);
     ParseConstants();
 }
 
-bool axion_strings_preevolution::StopRunning(const double time) {
+bool AxionStringsPreevolution::StopRunning(const double time) {
     double xi = cosmo.Xi(finest_level, eta_0);
     amrex::Print() << "String length: " << xi << ", target: " << xi_0
                    << std::endl;
     return (xi <= xi_0 && time >= min_eta);
 }
 
-void axion_strings_preevolution::ParseConstants() {
+void AxionStringsPreevolution::ParseConstants() {
     amrex::ParmParse pp("project");
     pp.get("starting_log", log_0);
     pp.get("starting_xi", xi_0);
@@ -27,4 +27,4 @@ void axion_strings_preevolution::ParseConstants() {
     eta_0 = std::sqrt(std::exp(log_0)/std::sqrt(2.));
 }
 
-} // namespace axion_strings_preevolution
+} // namespace AxionStringsPreevolution
