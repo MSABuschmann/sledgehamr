@@ -101,76 +101,30 @@ bool TagCellForRefinement<true>(const amrex::Array4<const double>& state,
     if (WindingAxis3(state, i, j, k) != 0) return true;
 
     return false;
-};
+}
 
 /** @brief Modifies the truncation error criteria for Pi1 and Pi2 from its
  *         default \tau > \tau_{crit} to \tau * \Delta t_{\ell} > \tau_{crit}.
  * @param   truncation_error    \tau
  * @return f(\tau) for criteria f(\tau) > \tau_{crit}.
  */
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Scalar::Pi1>(const amrex::Array4<const double>& state,
-        const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx, const double truncation_error,
-        const double* params) {
-    return truncation_error * dt;
+#define AXION_STRING_TRUNCATION_MODIFIER(x) \
+template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
+double TruncationModifier<x>(const amrex::Array4<const double>& state, \
+        const int i, const int j, const int k, const int lev, \
+        const double time, const double dt, const double dx, \
+        const double truncation_error, const double* params) { \
+    return truncation_error * dt; \
 }
 
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Scalar::Pi2>(const amrex::Array4<const double>& state,
-        const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx, const double truncation_error,
-        const double* params) {
-    return truncation_error * dt;
-}
-
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Gw::du_xx>(const amrex::Array4<const double>& state,
-        const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx, const double truncation_error,
-        const double* params) {
-    return truncation_error * dt;
-}
-
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Gw::du_yy>(const amrex::Array4<const double>& state,
-        const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx, const double truncation_error,
-        const double* params) {
-    return truncation_error * dt;
-}
-
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Gw::du_zz>(const amrex::Array4<const double>& state,
-        const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx, const double truncation_error,
-        const double* params) {
-    return truncation_error * dt;
-}
-
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Gw::du_xy>(const amrex::Array4<const double>& state,
-        const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx, const double truncation_error,
-        const double* params) {
-    return truncation_error * dt;
-}
-
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Gw::du_xz>(const amrex::Array4<const double>& state,
-        const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx, const double truncation_error,
-        const double* params) {
-    return truncation_error * dt;
-}
-
-template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-double TruncationModifier<Gw::du_yz>(const amrex::Array4<const double>& state,
-        const int i, const int j, const int k, const int lev, const double time,
-        const double dt, const double dx, const double truncation_error,
-        const double* params) {
-    return truncation_error * dt;
-}
+AXION_STRING_TRUNCATION_MODIFIER(Scalar::Pi1)
+AXION_STRING_TRUNCATION_MODIFIER(Scalar::Pi2)
+AXION_STRING_TRUNCATION_MODIFIER(Gw::du_xx)
+AXION_STRING_TRUNCATION_MODIFIER(Gw::du_yy)
+AXION_STRING_TRUNCATION_MODIFIER(Gw::du_zz)
+AXION_STRING_TRUNCATION_MODIFIER(Gw::du_xy)
+AXION_STRING_TRUNCATION_MODIFIER(Gw::du_xz)
+AXION_STRING_TRUNCATION_MODIFIER(Gw::du_yz)
 
 }; // namespace AxionStrings
 
