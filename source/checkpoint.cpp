@@ -39,7 +39,7 @@ void Checkpoint::Write(std::string prefix) {
             HeaderFile << '\n';
         }
 
-        std::string filename = prefix + "/Meta.hdf5";
+        std::string filename = GetHeaderName(prefix);
         hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
                               H5P_DEFAULT);
 
@@ -94,22 +94,12 @@ void Checkpoint::Write(std::string prefix) {
     }
 }
 
-void Checkpoint::Read(std::string prefix, int id) {
-    std::string folder = prefix + "/checkpoints/" + std::to_string(id);
-    Read(folder);
-}
-
-void Checkpoint::Read(std::string folder) {
-    if (sim->restart_sim)
-        amrex::Print() << "Restarting from checkpoint: " << folder << std::endl;
-
+bool Checkpoint::ReadHeader(std::string folder) {
     const int nparams = 8;
     double header[nparams];
-    std::string filename = folder + "/Meta.hdf5";
+    std::string filename = GetHeaderName(folder);
     if (!IOModule::ReadFromHDF5(filename, {"Header"}, header)) {
-        const char* msg = "Sledgehamr::Checkpoint::Read: "
-                          "Could not find checkpoint header!";
-        amrex::Abort(msg);
+        return false;
     }
 
     double time = header[0];
@@ -120,6 +110,23 @@ void Checkpoint::Read(std::string folder) {
     int nscalars = static_cast<int>(header[5]);
     int noutput = static_cast<int>(header[6]);
     int npredefoutput = static_cast<int>(header[7]);
+    return true;
+}
+
+void Checkpoint::Read(std::string prefix, int id) {
+    std::string folder = prefix + "/checkpoints/" + std::to_string(id);
+    Read(folder);
+}
+
+void Checkpoint::Read(std::string folder) {
+    if (sim->restart_sim)
+        amrex::Print() << "Restarting from checkpoint: " << folder << std::endl;
+
+    if (!ReadHeader(folder)) {
+        const char* msg = "Sledgehamr::Checkpoint::Read: "
+                          "Could not find checkpoint header!";
+        amrex::Abort(msg);
+    }
 
     if (nscalars != sim->scalar_fields.size()) {
         const char* msg = "Sledgehamr::Checkpoint::Read: "
@@ -172,7 +179,7 @@ void Checkpoint::Read(std::string folder) {
         RegridCoarse();
     }
 
-    UpdateLevels(filename);
+    UpdateLevels(folder);
 }
 
 void Checkpoint::GotoNextLine(std::istream& is) {
@@ -254,27 +261,20 @@ void Checkpoint::UpdateOutputModules(std::string folder) {
     if (!sim->restart_sim)
         return;
 
-    const int nparams = 8;
-    double header[nparams];
-    std::string filename = folder + "/Meta.hdf5";
-
-    if (!IOModule::ReadFromHDF5(filename, {"Header"}, header)) {
+    if (!ReadHeader(folder)) {
         const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
                           "Could not find checkpoint header!";
         amrex::Abort(msg);
     }
 
-    int noutput_file = static_cast<int>(header[6]);
-    int npredefoutput = static_cast<int>(header[7]);
-    int noutput = sim->io_module->output.size();
-
-    if (noutput != noutput_file ||
+    if (noutput       != sim->io_module->output.size() ||
         npredefoutput != sim->io_module->idx_checkpoints) {
         const char* msg = "Sledgehamr::Checkpoint::Read: "
                           "Number of output types changed!";
         amrex::Abort(msg);
     }
 
+    std::string filename = GetHeaderName(folder);
     std::vector<int> next_id(noutput);
     std::vector<double> last_time_written(noutput);
     if (!IOModule::ReadFromHDF5(filename, {"next_id"}, &(next_id[0]))) {
@@ -296,7 +296,8 @@ void Checkpoint::UpdateOutputModules(std::string folder) {
     }
 }
 
-void Checkpoint::UpdateLevels(std::string filename) {
+void Checkpoint::UpdateLevels(std::string folder) {
+    std::string filename = GetHeaderName(folder);
     std::vector<int> blocking_factor(sim->finest_level+1);
     std::vector<int> istep(sim->finest_level+1);
     if (!IOModule::ReadFromHDF5(filename, {"isteps"}, &(istep[0]))) {

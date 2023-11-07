@@ -748,6 +748,7 @@ void IOModule::CheckDownsampleFactor(int factor, std::string name,
 bool IOModule::WriteCheckpoint(double time, std::string prefix) {
     Checkpoint chk(sim);
     chk.Write(prefix);
+
     return true;
 }
 
@@ -799,14 +800,13 @@ int IOModule::FindLatestCheckpoint() {
         str.erase(0, prefix.size());
 
         if (amrex::is_integer(str.c_str())) {
-            std::string filename = prefix + str + "/Meta.hdf5";
-            const int nparams = 8;
-            double header[nparams];
+            std::string chk_folder = prefix + str;
 
-            if (!IOModule::ReadFromHDF5(filename, {"Header"}, header))
+            Checkpoint chk(sim);
+            if (!chk.ReadHeader(chk_folder))
                 continue;
 
-            double time = header[0];
+            double time = chk.GetTime();
             if (time > latest_time) {
                 latest_time = time;
                 latest_chk = std::stoi(str);
