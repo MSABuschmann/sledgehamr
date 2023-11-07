@@ -235,7 +235,7 @@ class IOModule {
     int FindLatestCheckpoint();
     
     std::vector<std::string> GetDirectories(const std::string prefix);
-    
+
     bool WritePerformanceMonitor(double time, std::string prefix);
 
     /** Downsampling factors for coarse/full level output.
@@ -246,7 +246,7 @@ class IOModule {
     int full_box_truncation_error_downsample_factor = 1;
 
     int chk_id = -1;
-    
+
     /** @brief Pointer to owner on whose data this class operates.
      */
     Sledgehamr* sim;
@@ -264,6 +264,9 @@ bool IOModule::ReadFromHDF5(std::string filename,
     } else if (std::is_same<T, int>::value) {
         mem_type_id = H5T_NATIVE_INT;
     }
+
+    if (!amrex::FileExists(filename))
+        return false;
 
     // Try and open HDF5 file.
     hid_t file_id = H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
