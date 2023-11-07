@@ -169,9 +169,8 @@ class AxionStrings:
 
         del field_state
 
-    def __GetBoxLayout(self, sim_output_with_box_layout):
-        filename = sim_output_with_box_layout + '/box_layout.h5'
-        file = h5py.File(filename,'r')
+    def __GetBoxLayout(self, box_layout_file):
+        file = h5py.File(box_layout_file, 'r')
         x0 = np.array(file['x0'][:], dtype='int')
         y0 = np.array(file['y0'][:], dtype='int')
         z0 = np.array(file['z0'][:], dtype='int')
