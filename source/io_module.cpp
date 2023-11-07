@@ -232,6 +232,11 @@ void IOModule::FillLevelFromHdf5File(int lev, std::string initial_state_file) {
         if(initial_state_file_component == "") {
             FillLevelFromConst(lev, f2, 0);
         } else {
+            amrex::Print() << "Reading initial state for "
+                           << sim->scalar_fields[f2]->name
+                           << " from " << initial_state_file_component
+                           << std::endl;
+
             // Test if chunks exist.
             std::string chunk1 = sim->scalar_fields[f2]->name + "_"
                                + std::to_string(lr);
