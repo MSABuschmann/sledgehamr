@@ -1,3 +1,5 @@
+#include <filesystem>
+
 #include <AMReX_VisMF.H>
 #include <AMReX_PlotFileUtil.H>
 #include <AMReX_PlotFileDataImpl.H>
@@ -769,15 +771,37 @@ void IOModule::UpdateOutputModules() {
 }
 
 int IOModule::FindLatestCheckpoint() {
-    int latest = 0;
-    std::string folder = output_folder + "/checkpoints/"
-                       + std::to_string(latest);
+    std::string prefix = output_folder + "/checkpoints/";
+    std::vector<std::string> folders = GetDirectories(prefix);
 
-    while (amrex::FileExists(folder)) {
-        ++latest;
-        folder = output_folder + "/checkpoints/" + std::to_string(latest);
+    double latest_time = -DBL_MAX;
+    int latest_chk = -1;
+    for (std::string& str : folders) {
+        str.erase(0, prefix.size());
+
+        if (amrex::is_integer(str.c_str())) {
+            std::string filename = prefix + str + "/Meta.hdf5";
+            const int nparams = 8;
+            double header[nparams];
+            IOModule::ReadFromHDF5(filename, {"Header"}, header);
+            double time = header[0];
+
+            if (time > latest_time) {
+                latest_time = time;
+                latest_chk = std::stoi(str);
+            }
+        }
     }
-    return latest - 1;
+
+    return latest_chk;
+}
+
+std::vector<std::string> IOModule::GetDirectories(const std::string prefix) {
+    std::vector<std::string> res;
+    for (auto& p : std::filesystem::recursive_directory_iterator(prefix))
+        if (p.is_directory())
+            res.push_back(p.path().string());
+    return res;
 }
 
 bool IOModule::WritePerformanceMonitor(double time, std::string prefix) {

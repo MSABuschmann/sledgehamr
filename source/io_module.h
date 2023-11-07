@@ -234,6 +234,8 @@ class IOModule {
 
     int FindLatestCheckpoint();
     
+    std::vector<std::string> GetDirectories(const std::string prefix);
+    
     bool WritePerformanceMonitor(double time, std::string prefix);
 
     /** Downsampling factors for coarse/full level output.
