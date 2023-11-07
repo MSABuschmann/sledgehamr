@@ -296,7 +296,11 @@ bool IOModule::ReadFromHDF5(std::string filename,
 
     // Read dataset.
     hid_t dataset_id = H5Dopen2(file_id, dname_found.c_str(), H5P_DEFAULT);
-    H5Dread(dataset_id, mem_type_id, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+    if (H5Dread(dataset_id, mem_type_id, H5S_ALL,
+                H5S_ALL, H5P_DEFAULT, data) < 0) {
+        return false;
+    }
+
     H5Dclose(dataset_id);
     H5Fclose(file_id);
 
