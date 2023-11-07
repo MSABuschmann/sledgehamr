@@ -65,6 +65,31 @@ class AxionStrings:
         archive.close()
         print('Done.')
 
+    def GetXi(self, output_folder):
+        l_eta = []
+        l_log = []
+        l_xi  = []
+
+        i = 0
+        while True:
+            file = output_folder + '/xi/' + str(i) + '/xi.h5'
+            if not path.exists(file):
+                break
+
+            fin = h5py.File(file,'r')
+            l_eta.append( fin['data'][1] )
+            l_log.append( fin['data'][2] )
+            l_xi.append( fin['data'][3] )
+            i = i + 1
+
+        # Start dictionary
+        d = dict();
+        d['eta'] = np.array(l_eta)
+        d['log'] = np.array(l_log)
+        d['xi'] = np.array(l_xi)
+        return d
+ 
+
     def PlotAxionAndRadialModeSlice(self, axion, radial_mode, save_name=""):
         fig, ax = plt.subplots(figsize=(20,10),ncols=2)
 
