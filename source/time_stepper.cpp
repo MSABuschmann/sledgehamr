@@ -62,6 +62,8 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
     }
 
 //    scheduled_regrids.resize( sim->max_level+1 );
+    amrex::ParmParse pp_out("output");
+    pp_out.query("output_of_initial_state", output_of_initial_state);
 }
 
 TimeStepper::~TimeStepper() {
@@ -88,7 +90,7 @@ void TimeStepper::Advance(int lev) {
     if (lev == 0 && !sim->shadow_level.isDefined())
         sim->BeforeTimestep(sim->grid_new[lev].t);
 
-    if (sim->grid_new[0].t  == sim->t_start)
+    if (sim->grid_new[0].t  == sim->t_start && output_of_initial_state)
         sim->io_module->Write(true);
 
     // Advance this level.
@@ -335,7 +337,7 @@ void TimeStepper::DoRegrid(int lev, double time) {
 
     // Do global regrid if local regrid failed.
     if (!successfull) {
-        amrex::Print() << std::endl << "Perform global regrid at level "
+        amrex::AllPrint() << std::endl << "Perform global regrid at level "
                        << lev+1 << " and higher." << std::endl;
 
         timer = utils::StartTimer();

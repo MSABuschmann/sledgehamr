@@ -106,6 +106,8 @@ private:
      */
 //    std::vector<int> regrid_level;
 
+    bool output_of_initial_state = true;
+
     /** @brief Pointer to other modules.
      */
     Sledgehamr* sim;
