@@ -3,8 +3,6 @@
 namespace sledgehamr {
 
 void Timer::Start() {
-//    amrex::Print() << "is_running: " << is_running << std::endl;
-
     if (is_running)
         return;
 
@@ -14,9 +12,8 @@ void Timer::Start() {
 }
 
 void Timer::CheckClock() {
-    amrex::ParallelDescriptor::Barrier();
     stop_time = std::chrono::steady_clock::now();
-    last_duration_micro = 
+    last_duration_micro =
             std::chrono::duration_cast<std::chrono::microseconds>(
                 stop_time - start_time);
 }
@@ -25,6 +22,7 @@ void Timer::Stop() {
     if (!is_running)
         return;
 
+    amrex::ParallelDescriptor::Barrier();
     CheckClock();
     total_micro +=  static_cast<double>(last_duration_micro.count());
     is_running = false;

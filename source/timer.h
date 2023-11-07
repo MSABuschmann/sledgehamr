@@ -21,6 +21,10 @@ class Timer {
         return name;
     };
 
+    bool IsRunning() const {
+        return is_running;
+    };
+
   private:
     void CheckClock();
 

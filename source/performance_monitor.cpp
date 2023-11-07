@@ -81,7 +81,7 @@ PerformanceMonitor::PerformanceMonitor(Sledgehamr* owner)
 }
 
 void PerformanceMonitor::Start(int id, int offset) {
-    if (active)
+    if (active) 
         timer[id + offset].Start();
 }
 
