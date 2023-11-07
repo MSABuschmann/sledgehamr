@@ -244,9 +244,16 @@ void IOModule::FillLevelFromHdf5File(int lev, std::string initial_state_file) {
                 const long long dsetsize = dimN*dimN*dimN;
                 double* input_data = new double [dsetsize] ();
 
-                ReadFromHDF5(initial_state_file_component,
+                if (!ReadFromHDF5(initial_state_file_component,
                         {sim->scalar_fields[f2]->name, "data"},
-                        input_data);
+                        input_data)) {
+                    std::string msg =
+                               "Sledgehamr::IOModule::FillLevelFromHdf5File: "
+                               "Could not find initial state data for "
+                             + sim->scalar_fields[f2]->name + "!";
+                    amrex::Abort(msg);
+                }
+
                 FillLevelFromArray(lev, f2, input_data, dimN);
                 delete[] input_data;
             } else {
@@ -254,9 +261,16 @@ void IOModule::FillLevelFromHdf5File(int lev, std::string initial_state_file) {
                 const long long dsetsize= bx.numPts();
                 double* input_data = new double [dsetsize] ();
 
-                ReadFromHDF5(initial_state_file_component,
+               if (!ReadFromHDF5(initial_state_file_component,
                         {chunk1, chunk2},
-                        input_data);
+                        input_data)) {
+                    std::string msg =
+                               "Sledgehamr::IOModule::FillLevelFromHdf5File: "
+                               "Could not find initial state chunk "
+                             + chunk1 + "!";
+                    amrex::Abort(msg);
+                }
+
                 FillChunkFromArray(lev, f2, input_data);
                 delete[] input_data;
             }
@@ -783,9 +797,11 @@ int IOModule::FindLatestCheckpoint() {
             std::string filename = prefix + str + "/Meta.hdf5";
             const int nparams = 8;
             double header[nparams];
-            IOModule::ReadFromHDF5(filename, {"Header"}, header);
-            double time = header[0];
 
+            if (!IOModule::ReadFromHDF5(filename, {"Header"}, header))
+                continue;
+
+            double time = header[0];
             if (time > latest_time) {
                 latest_time = time;
                 latest_chk = std::stoi(str);

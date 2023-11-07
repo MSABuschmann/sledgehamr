@@ -106,7 +106,11 @@ void Checkpoint::Read(std::string folder) {
     const int nparams = 8;
     double header[nparams];
     std::string filename = folder + "/Meta.hdf5";
-    IOModule::ReadFromHDF5(filename, {"Header"}, header);
+    if (!IOModule::ReadFromHDF5(filename, {"Header"}, header)) {
+        const char* msg = "Sledgehamr::Checkpoint::Read: "
+                          "Could not find checkpoint header!";
+        amrex::Abort(msg);
+    }
 
     double time = header[0];
     int MPIranks = static_cast<int>(header[1]);
@@ -253,7 +257,13 @@ void Checkpoint::UpdateOutputModules(std::string folder) {
     const int nparams = 8;
     double header[nparams];
     std::string filename = folder + "/Meta.hdf5";
-    IOModule::ReadFromHDF5(filename, {"Header"}, header);
+
+    if (!IOModule::ReadFromHDF5(filename, {"Header"}, header)) {
+        const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
+                          "Could not find checkpoint header!";
+        amrex::Abort(msg);
+    }
+
     int noutput_file = static_cast<int>(header[6]);
     int npredefoutput = static_cast<int>(header[7]);
     int noutput = sim->io_module->output.size();
@@ -267,9 +277,18 @@ void Checkpoint::UpdateOutputModules(std::string folder) {
 
     std::vector<int> next_id(noutput);
     std::vector<double> last_time_written(noutput);
-    IOModule::ReadFromHDF5(filename, {"next_id"}, &(next_id[0]));
-    IOModule::ReadFromHDF5(filename, {"last_time_written"},
-                           &(last_time_written[0]));
+    if (!IOModule::ReadFromHDF5(filename, {"next_id"}, &(next_id[0]))) {
+        const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
+                          "Could not find next_id!";
+        amrex::Abort(msg);
+    }
+
+    if (!IOModule::ReadFromHDF5(filename, {"last_time_written"},
+                                &(last_time_written[0]))) {
+        const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
+                          "Could not find last_time_written!";
+        amrex::Abort(msg);
+    }
 
     for (int i = 0; i < noutput; ++i) {
         sim->io_module->output[i].SetNextId(next_id[i]);
@@ -280,9 +299,18 @@ void Checkpoint::UpdateOutputModules(std::string folder) {
 void Checkpoint::UpdateLevels(std::string filename) {
     std::vector<int> blocking_factor(sim->finest_level+1);
     std::vector<int> istep(sim->finest_level+1);
-    IOModule::ReadFromHDF5(filename, {"isteps"}, &(istep[0]));
-    IOModule::ReadFromHDF5(filename, {"blocking_factors"},
-                            &(blocking_factor[0]));
+    if (!IOModule::ReadFromHDF5(filename, {"isteps"}, &(istep[0]))) {
+        const char* msg = "Sledgehamr::Checkpoint::UpdateLevels: "
+                          "Could not find isteps!";
+        amrex::Abort(msg);
+    }
+
+    if (!IOModule::ReadFromHDF5(filename, {"blocking_factors"},
+                            &(blocking_factor[0]))) {
+        const char* msg = "Sledgehamr::Checkpoint::UpdateLevels: "
+                          "Could not find blocking_factors!";
+        amrex::Abort(msg);
+    }
 
     // Check if blocking factor changed and react accordingly.
     for(int lev = 0; lev <= sim->finest_level; ++lev) {

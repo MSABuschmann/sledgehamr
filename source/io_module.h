@@ -34,7 +34,7 @@ class IOModule {
      *                      float or int. TODO: Add static_assert.
      */
     template <typename T>
-    static void ReadFromHDF5(std::string filename,
+    static bool ReadFromHDF5(std::string filename,
                              std::vector<std::string> dnames, T* data);
 
     /** @brief Write dataset to HDF5 file.
@@ -253,7 +253,7 @@ class IOModule {
 };
 
 template <typename T>
-void IOModule::ReadFromHDF5(std::string filename,
+bool IOModule::ReadFromHDF5(std::string filename,
                             std::vector<std::string> dnames, T* data) {
     // Identify datatype.
     hid_t mem_type_id;
@@ -288,18 +288,16 @@ void IOModule::ReadFromHDF5(std::string filename,
     if (dname_found  == "") {
         H5Fclose(file_id);
 
-        return; // TODO set failed flag.
-
-        amrex::Abort(
-                "#error: Could not find correct dataset in file: "
-                + filename + dname_conc);
-    } 
+        return false;
+    }
 
     // Read dataset.
     hid_t dataset_id = H5Dopen2(file_id, dname_found.c_str(), H5P_DEFAULT);
     H5Dread(dataset_id, mem_type_id, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
     H5Dclose(dataset_id);
     H5Fclose(file_id);
+
+    return true;
 }
 
 template <typename T>
