@@ -7,7 +7,7 @@ LocalRegrid::LocalRegrid(Sledgehamr* owner) {
     ParseInput();
     CreateCommMatrix();
 
-    no_local_regrid.resize(sim->max_level+1,false);
+    no_local_regrid.resize(sim->max_level+1, false);
     do_global_regrid.resize(sim->max_level+1, false);
     nregrids = 0;
 }
@@ -20,7 +20,7 @@ bool LocalRegrid::AttemptRegrid(const int lev) {
 }
 
 void LocalRegrid::DidGlobalRegrid(const int lev) {
-    for (int l = 0; l < sim->finest_level; ++l) {
+    for (int l = 0; l <= sim->max_level; ++l) {
         no_local_regrid[l] = false;
         do_global_regrid[l] = false;
         nregrids = 0;
@@ -120,8 +120,8 @@ void LocalRegrid::InitializeLocalRegrid() {
 }
 
 void LocalRegrid::DetermineAllBoxArrays(const int lev) {
-    // Get the new required box array for each level. Might still violate
-    // nesting.
+    // Get the new required box array for each level. Still allowed to violate
+    // nesting at this point.
     min_distance.clear();
     min_distance.resize(sim->finest_level + 1, -1.);
     for (int l = lev; l < sim->finest_level && !no_local_regrid[l]; ++l) {
@@ -277,8 +277,9 @@ LocalRegrid::VetoResult LocalRegrid::DealWithVeto(const int lev) {
         amrex::Print() << "Possible to delay regrid until "
                        << regrid_target_time << std::endl;
 
-        for (int l = lev; l <= sim->finest_level; ++l)
+        for (int l = lev; l <= sim->finest_level; ++l) {
             no_local_regrid[l] = true;
+        }
 
         return VetoResult::DoNoRegrid;
     }
