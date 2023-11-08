@@ -25,13 +25,15 @@ Location Location::FindClosestGlobally(
         closest.SelectClosest(location);
 
     // MPI reducation
-    std::vector<int> all_i = Gather(closest.i);
-    std::vector<int> all_j = Gather(closest.j);
-    std::vector<int> all_k = Gather(closest.k);
-    std::vector<int> all_d = Gather(closest.distance_sq);
-    for (int l = 0; l <= all_d.size(); ++l)  
+    std::vector<int> all_i = AllGather(closest.i);
+    std::vector<int> all_j = AllGather(closest.j);
+    std::vector<int> all_k = AllGather(closest.k);
+    std::vector<int> all_d = AllGather(closest.distance_sq);
+
+    for (int l = 0; l < all_d.size(); ++l) {
         closest.SelectClosest(all_i[l], all_j[l], all_k[l], all_d[l]);
-   
+    }
+
     return closest;
 }
 
@@ -41,6 +43,13 @@ std::vector<int> Location::Gather(const int val) {
             amrex::ParallelDescriptor::IOProcessorNumber());
     return all;
 }
+
+std::vector<int> Location::AllGather(const int val) {
+    std::vector<int> all(amrex::ParallelDescriptor::NProcs());
+    amrex::ParallelAllGather::AllGather(&val, 1, &all[0], MPI_COMM_WORLD);
+    return all;
+}
+
 
 }; // namespace sledgehamr
 

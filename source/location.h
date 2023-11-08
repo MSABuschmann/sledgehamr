@@ -26,6 +26,7 @@ class Location {
 
     private:
         static std::vector<int> Gather(const int val);
+        static std::vector<int> AllGather(const int val);
 };
 
 }; // namespace sledgehamr
