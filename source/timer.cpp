@@ -6,7 +6,7 @@ void Timer::Start() {
     if (is_running)
         return;
 
-    amrex::ParallelDescriptor::Barrier();
+    //amrex::ParallelDescriptor::Barrier();
     start_time = std::chrono::steady_clock::now();
     is_running = true;
 }
@@ -22,7 +22,7 @@ void Timer::Stop() {
     if (!is_running)
         return;
 
-    amrex::ParallelDescriptor::Barrier();
+    //amrex::ParallelDescriptor::Barrier();
     CheckClock();
     total_micro +=  static_cast<double>(last_duration_micro.count());
     is_running = false;
