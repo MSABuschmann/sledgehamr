@@ -246,6 +246,9 @@ class IOModule {
     int full_box_truncation_error_downsample_factor = 1;
 
     int chk_id = -1;
+    std::string old_checkpoint = "";
+    bool rolling_checkpoints = false;
+    bool delete_restart_checkpoint = false;
 
     /** @brief Pointer to owner on whose data this class operates.
      */

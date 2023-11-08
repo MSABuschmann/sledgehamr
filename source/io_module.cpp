@@ -17,6 +17,10 @@ IOModule::IOModule(Sledgehamr* owner) {
     pp.get("output_folder", output_folder);
     bool rename_old = false;
     pp.query("rename_old_output", rename_old);
+    pp.query("rolling_checkpoints", rolling_checkpoints);
+
+    amrex::ParmParse pp_sim("sim");
+    pp_sim.query("delete_restart_checkpoint", delete_restart_checkpoint);
 
     if (amrex::FileExists(output_folder) && !sim->restart_sim &&
         amrex::ParallelDescriptor::IOProcessor() && !rename_old)  {
@@ -206,6 +210,10 @@ void IOModule::FillLevelFromFile(int lev) {
 void IOModule::FillLevelFromCheckpointFile(int lev, std::string folder) {
     Checkpoint chk(sim);
     chk.Read(folder);
+
+    if (delete_restart_checkpoint)  {
+        old_checkpoint = folder;
+    }
 }
 
 void IOModule::FillLevelFromHdf5File(int lev, std::string initial_state_file) {
@@ -749,6 +757,15 @@ bool IOModule::WriteCheckpoint(double time, std::string prefix) {
     Checkpoint chk(sim);
     chk.Write(prefix);
 
+    if (rolling_checkpoints) {
+        if (old_checkpoint != "") {
+            Checkpoint chk_del(sim);
+            chk_del.Delete(old_checkpoint);
+        }
+
+        old_checkpoint = prefix;
+    }
+
     return true;
 }
 
@@ -783,6 +800,11 @@ void IOModule::RestartSim() {
     amrex::ParallelDescriptor::Barrier();
     Checkpoint chk(sim);
     chk.Read(output_folder, chk_id);
+
+    if (delete_restart_checkpoint) {
+        old_checkpoint = output_folder + "/checkpoints/"
+                       + std::to_string(chk_id);
+    }
 }
 
 void IOModule::UpdateOutputModules() {

@@ -1,9 +1,12 @@
+#include <filesystem>
+
 #include <AMReX_VisMF.H>
 #include <AMReX_PlotFileUtil.H>
 #include <AMReX_PlotFileDataImpl.H>
 #include <AMReX_PhysBCFunct.H>
 #include <AMReX_FillPatchUtil.H>
 #include <AMReX_MultiFabUtil.H>
+#include <AMReX_FileSystem.H>
 
 #include "checkpoint.h"
 
@@ -16,14 +19,13 @@ void Checkpoint::Write(std::string prefix) {
     const int noutput = sim->io_module->output.size();
 
     for(int lev = 0; lev < nlevels; ++lev) {
-        amrex::Print() << "Create : " << prefix + "/Level_" + std::to_string(lev) << std::endl;
-        amrex::UtilCreateCleanDirectory(
-                prefix + "/Level_" + std::to_string(lev), true);
+        std::string level_dir = GetLevelDirName(prefix, lev);
+        amrex::UtilCreateCleanDirectory(level_dir, true);
     }
 
     // write Header file
     if (amrex::ParallelDescriptor::IOProcessor()) {
-        std::string HeaderFileName(prefix + "/BoxArrays");
+        std::string HeaderFileName = GetBoxArrayName(prefix);
         amrex::VisMF::IO_Buffer io_buffer(amrex::VisMF::IO_Buffer_Size);
         std::ofstream HeaderFile;
         HeaderFile.rdbuf()->pubsetbuf(io_buffer.dataPtr(), io_buffer.size());
@@ -92,6 +94,8 @@ void Checkpoint::Write(std::string prefix) {
                 amrex::MultiFabFileFullPrefix(
                         lev, prefix, "Level_", "Cell"));
     }
+
+    amrex::ParallelDescriptor::Barrier();
 }
 
 bool Checkpoint::ReadHeader(std::string folder) {
@@ -102,14 +106,14 @@ bool Checkpoint::ReadHeader(std::string folder) {
         return false;
     }
 
-    double time = header[0];
-    int MPIranks = static_cast<int>(header[1]);
-    int finest_level = static_cast<int>(header[2]);
-    int dim0 = static_cast<int>(header[3]);
-    int nghost = static_cast<int>(header[4]);
-    int nscalars = static_cast<int>(header[5]);
-    int noutput = static_cast<int>(header[6]);
-    int npredefoutput = static_cast<int>(header[7]);
+    time = header[0];
+    MPIranks = static_cast<int>(header[1]);
+    finest_level = static_cast<int>(header[2]);
+    dim0 = static_cast<int>(header[3]);
+    nghost = static_cast<int>(header[4]);
+    nscalars = static_cast<int>(header[5]);
+    noutput = static_cast<int>(header[6]);
+    npredefoutput = static_cast<int>(header[7]);
     return true;
 }
 
@@ -332,6 +336,43 @@ void Checkpoint::UpdateLevels(std::string folder) {
 
         sim->grid_new[lev].istep = istep[lev];
     }
+}
+
+void Checkpoint::Delete(std::string prefix, int id) {
+    std::string folder = prefix + "/checkpoints/" + std::to_string(id);
+    Delete(folder);
+}
+
+void Checkpoint::Delete(std::string folder) {
+    amrex::Print() << "Deleting checkpoint " << folder << " ..." << std::endl;
+
+    if (!amrex::ParallelDescriptor::IOProcessor())
+        return;
+
+    // First verify the given folder is actually a checkpoint file ...
+    if (!ReadHeader(folder)) {
+        amrex::Print() << "Not a valid checkpoint! How did this happen ??"
+                       << std::endl;
+    }
+
+    // Delete files/folders individually to make sure we aren't accidentally
+    // deleting user data.
+
+    std::string header = GetHeaderName(folder);
+    amrex::FileSystem::Remove(header);
+
+    std::string ba_file = GetBoxArrayName(folder);
+    amrex::FileSystem::Remove(ba_file);
+
+    for (int lev = 0; lev <= finest_level; ++lev) {
+        std::string lev_dir = GetLevelDirName(folder, lev);
+        amrex::FileSystem::RemoveAll(lev_dir);
+    }
+
+    // Specifically use std::filesystem here and not amrex::FileSystem.
+    // The amrex version does not delete emtpy folders but std::filesystem
+    // does.
+    std::filesystem::remove(folder);
 }
 
 }; // namespace sledgehamr

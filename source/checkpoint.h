@@ -17,6 +17,8 @@ class Checkpoint {
     bool ReadHeader(std::string folder);
     void UpdateOutputModules(std::string folder);
     void UpdateOutputModules(std::string prefix, int id);
+    void Delete(std::string folder);
+    void Delete(std::string prefix, int id);
 
     double GetTime() const {
         return time;
@@ -30,6 +32,14 @@ class Checkpoint {
 
     std::string GetHeaderName(std::string folder) const {
         return folder + "/Meta.hdf5";
+    }
+
+    std::string GetBoxArrayName(std::string folder) const {
+        return folder + "/BoxArrays";
+    }
+
+    std::string GetLevelDirName(std::string folder, const int lev) const {
+        return folder + "/Level_" + std::to_string(lev);
     }
 
     Sledgehamr* sim;
