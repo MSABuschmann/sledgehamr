@@ -233,7 +233,7 @@ class IOModule {
 
     bool WriteCheckpoint(double time, std::string prefix);
 
-    int FindLatestCheckpoint();
+    int FindLatestCheckpoint(std::string folder);
     
     std::vector<std::string> GetDirectories(const std::string prefix);
 
@@ -251,7 +251,7 @@ class IOModule {
     int full_box_downsample_factor = 1;
     int full_box_truncation_error_downsample_factor = 1;
 
-    int chk_id = -1;
+    std::string initial_chk = "";
     std::string old_checkpoint = "";
     bool rolling_checkpoints = false;
     bool delete_restart_checkpoint = false;

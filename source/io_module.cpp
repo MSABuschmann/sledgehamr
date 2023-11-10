@@ -23,7 +23,7 @@ void IOModule::ParseParams() {
     amrex::ParmParse pp("output");
     pp.get("output_folder", output_folder);
     pp.query("alternative_output_folder", alternative_output_folder);
-    pp.query("rolling_checkpoints", rolling_checkpoints);
+    pp.query("checkpoints.rolling", rolling_checkpoints);
 
     amrex::ParmParse pp_sim("sim");
     pp_sim.query("delete_restart_checkpoint", delete_restart_checkpoint);
@@ -712,49 +712,63 @@ bool IOModule::WriteCheckpoint(double time, std::string prefix) {
 
 void IOModule::RestartSim() {
     amrex::ParmParse pp("sim");
-    int selected_chk = -1;
+    std::string selected_chk = "None Selected";
     pp.query("select_checkpoint", selected_chk);
 
-    chk_id = 0;
-    if (selected_chk < 0) {
-        int latest = FindLatestCheckpoint();
+    if (selected_chk == "None Selected") {
+        int latest     = FindLatestCheckpoint(output_folder);
+        int latest_alt = FindLatestCheckpoint(alternative_output_folder);
 
-        if (latest == -1 && amrex::ParallelDescriptor::IOProcessor()) {
+        if (latest > latest_alt) {
+            initial_chk = output_folder + "/checkpoints/"
+                        + std::to_string(latest);
+        } else {
+            initial_chk = alternative_output_folder + "/checkpoints/"
+                        + std::to_string(latest_alt);
+        }
+
+        if (std::max(latest, latest_alt) == -1 &&
+            amrex::ParallelDescriptor::IOProcessor()) {
             const char* msg = "Sledgehamr::IOModule::RestartSim: "
                               "No checkpoint found!";
             amrex::Abort(msg);
         }
-
-        chk_id = latest;
    } else {
-        std::string folder = output_folder + "/checkpoints/"
-                           + std::to_string(selected_chk);
-        if (!amrex::FileExists(folder)) {
+        if (amrex::is_integer(selected_chk.c_str())) {
+
+            initial_chk = output_folder + "/checkpoints/" + selected_chk;
+
+            if (!amrex::FileExists(initial_chk)) {
+                initial_chk = alternative_output_folder + "/checkpoints/"
+                            + selected_chk;
+            }
+        } else {
+            initial_chk = selected_chk;
+        }
+
+        if (!amrex::FileExists(initial_chk)) {
             const char* msg = "Sledgehamr::IOModule::RestartSim: "
                               "Selected checkpoint not found!";
             amrex::Abort(msg);
         }
-
-        chk_id = selected_chk;
     }
 
     amrex::ParallelDescriptor::Barrier();
-    Checkpoint chk(sim, output_folder, chk_id);
+    Checkpoint chk(sim, initial_chk);
     chk.Read();
 
     if (delete_restart_checkpoint) {
-        old_checkpoint = output_folder + "/checkpoints/"
-                       + std::to_string(chk_id);
+        old_checkpoint = initial_chk;
     }
 }
 
 void IOModule::UpdateOutputModules() {
-    Checkpoint chk(sim, output_folder, chk_id);
+    Checkpoint chk(sim, initial_chk);
     chk.UpdateOutputModules();
 }
 
-int IOModule::FindLatestCheckpoint() {
-    std::string prefix = output_folder + "/checkpoints/";
+int IOModule::FindLatestCheckpoint(std::string folder) {
+    std::string prefix = folder + "/checkpoints/";
     std::vector<std::string> folders = GetDirectories(prefix);
 
     double latest_time = -DBL_MAX;

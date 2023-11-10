@@ -10,10 +10,6 @@ class Checkpoint {
     Checkpoint(Sledgehamr* owner, std::string chk_folder)
         : sim(owner), folder(chk_folder) {};
 
-    Checkpoint(Sledgehamr* owner, std::string prefix, int id) : sim(owner) {
-        folder = prefix + "/checkpoints/" + std::to_string(id);
-    };
-
     void Write();
     void Read();
     bool ReadHeader();
