@@ -12,20 +12,20 @@
 
 namespace sledgehamr {
 
-void Checkpoint::Write(std::string prefix) {
-    amrex::Print() << "Writing checkpoint " << prefix << std::endl;
+void Checkpoint::Write() {
+    amrex::Print() << "Writing checkpoint " << folder << std::endl;
 
     const int nlevels = sim->finest_level + 1;
     const int noutput = sim->io_module->output.size();
 
     for(int lev = 0; lev < nlevels; ++lev) {
-        std::string level_dir = GetLevelDirName(prefix, lev);
+        std::string level_dir = GetLevelDirName(lev);
         amrex::UtilCreateCleanDirectory(level_dir, true);
     }
 
     // write Header file
     if (amrex::ParallelDescriptor::IOProcessor()) {
-        std::string HeaderFileName = GetBoxArrayName(prefix);
+        std::string HeaderFileName = GetBoxArrayName();
         amrex::VisMF::IO_Buffer io_buffer(amrex::VisMF::IO_Buffer_Size);
         std::ofstream HeaderFile;
         HeaderFile.rdbuf()->pubsetbuf(io_buffer.dataPtr(), io_buffer.size());
@@ -41,7 +41,7 @@ void Checkpoint::Write(std::string prefix) {
             HeaderFile << '\n';
         }
 
-        std::string filename = GetHeaderName(prefix);
+        std::string filename = GetHeaderName();
         hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
                               H5P_DEFAULT);
 
@@ -92,16 +92,16 @@ void Checkpoint::Write(std::string prefix) {
         amrex::VisMF::Write(
                 sim->grid_new[lev],
                 amrex::MultiFabFileFullPrefix(
-                        lev, prefix, "Level_", "Cell"));
+                        lev, folder, "Level_", "Cell"));
     }
 
     amrex::ParallelDescriptor::Barrier();
 }
 
-bool Checkpoint::ReadHeader(std::string folder) {
+bool Checkpoint::ReadHeader() {
     const int nparams = 8;
     double header[nparams];
-    std::string filename = GetHeaderName(folder);
+    std::string filename = GetHeaderName();
     if (!IOModule::ReadFromHDF5(filename, {"Header"}, header)) {
         return false;
     }
@@ -117,16 +117,11 @@ bool Checkpoint::ReadHeader(std::string folder) {
     return true;
 }
 
-void Checkpoint::Read(std::string prefix, int id) {
-    std::string folder = prefix + "/checkpoints/" + std::to_string(id);
-    Read(folder);
-}
-
-void Checkpoint::Read(std::string folder) {
+void Checkpoint::Read() {
     if (sim->restart_sim)
         amrex::Print() << "Restarting from checkpoint: " << folder << std::endl;
 
-    if (!ReadHeader(folder)) {
+    if (!ReadHeader()) {
         const char* msg = "Sledgehamr::Checkpoint::Read: "
                           "Could not find checkpoint header!";
         amrex::Abort(msg);
@@ -138,7 +133,7 @@ void Checkpoint::Read(std::string folder) {
         amrex::Abort(msg);
     }
 
-    std::string File(folder + "/BoxArrays");
+    std::string File(GetBoxArrayName());
     amrex::VisMF::IO_Buffer io_buffer(amrex::VisMF::GetIOBufferSize());
     amrex::Vector<char> fileCharPtr;
     amrex::ParallelDescriptor::ReadAndBcastFile(File, fileCharPtr);
@@ -183,7 +178,7 @@ void Checkpoint::Read(std::string folder) {
         RegridCoarse();
     }
 
-    UpdateLevels(folder);
+    UpdateLevels();
 }
 
 void Checkpoint::GotoNextLine(std::istream& is) {
@@ -204,7 +199,7 @@ void Checkpoint::ChangeNGhost(int new_nghost) {
     // Allocate and fill.
     LevelData ld_new(ba, dm, ncomp, new_nghost, time);
 
-    amrex::CpuBndryFuncFab bndry_func(nullptr); 
+    amrex::CpuBndryFuncFab bndry_func(nullptr);
     amrex::PhysBCFunct<amrex::CpuBndryFuncFab> physbc(
             geom, sim->level_synchronizer->bcs, bndry_func);
 
@@ -233,13 +228,13 @@ void Checkpoint::RegridCoarse() {
     amrex::BoxArray ba = ld_old.boxArray();
     amrex::Box bx = ba.minimalBox();
     ba = amrex::BoxArray(bx);
-    sim->ChopGrids(lev, ba, amrex::ParallelDescriptor::NProcs()); 
+    sim->ChopGrids(lev, ba, amrex::ParallelDescriptor::NProcs());
     amrex::DistributionMapping dm(ba, amrex::ParallelDescriptor::NProcs());
 
     // Allocate and fill.
     LevelData ld_new(ba, dm, ncomp, sim->nghost, time);
 
-    amrex::CpuBndryFuncFab bndry_func(nullptr); 
+    amrex::CpuBndryFuncFab bndry_func(nullptr);
     amrex::PhysBCFunct<amrex::CpuBndryFuncFab> physbc(
             geom, sim->level_synchronizer->bcs, bndry_func);
 
@@ -256,16 +251,11 @@ void Checkpoint::RegridCoarse() {
     sim->SetDistributionMap(lev, dm);
 }
 
-void Checkpoint::UpdateOutputModules(std::string prefix, int id) {
-    std::string folder = prefix + "/checkpoints/" + std::to_string(id);
-    UpdateOutputModules(folder);
-}
-
-void Checkpoint::UpdateOutputModules(std::string folder) {
+void Checkpoint::UpdateOutputModules() {
     if (!sim->restart_sim)
         return;
 
-    if (!ReadHeader(folder)) {
+    if (!ReadHeader()) {
         const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
                           "Could not find checkpoint header!";
         amrex::Abort(msg);
@@ -278,7 +268,7 @@ void Checkpoint::UpdateOutputModules(std::string folder) {
         amrex::Abort(msg);
     }
 
-    std::string filename = GetHeaderName(folder);
+    std::string filename = GetHeaderName();
     std::vector<int> next_id(noutput);
     std::vector<double> last_time_written(noutput);
     if (!IOModule::ReadFromHDF5(filename, {"next_id"}, &(next_id[0]))) {
@@ -300,8 +290,8 @@ void Checkpoint::UpdateOutputModules(std::string folder) {
     }
 }
 
-void Checkpoint::UpdateLevels(std::string folder) {
-    std::string filename = GetHeaderName(folder);
+void Checkpoint::UpdateLevels() {
+    std::string filename = GetHeaderName();
     std::vector<int> blocking_factor(sim->finest_level+1);
     std::vector<int> istep(sim->finest_level+1);
     if (!IOModule::ReadFromHDF5(filename, {"isteps"}, &(istep[0]))) {
@@ -338,19 +328,14 @@ void Checkpoint::UpdateLevels(std::string folder) {
     }
 }
 
-void Checkpoint::Delete(std::string prefix, int id) {
-    std::string folder = prefix + "/checkpoints/" + std::to_string(id);
-    Delete(folder);
-}
-
-void Checkpoint::Delete(std::string folder) {
+void Checkpoint::Delete() {
     amrex::Print() << "Deleting checkpoint " << folder << " ..." << std::endl;
 
     if (!amrex::ParallelDescriptor::IOProcessor())
         return;
 
     // First verify the given folder is actually a checkpoint file ...
-    if (!ReadHeader(folder)) {
+    if (!ReadHeader()) {
         amrex::Print() << "Not a valid checkpoint! How did this happen ??"
                        << std::endl;
     }
@@ -358,14 +343,14 @@ void Checkpoint::Delete(std::string folder) {
     // Delete files/folders individually to make sure we aren't accidentally
     // deleting user data.
 
-    std::string header = GetHeaderName(folder);
+    std::string header = GetHeaderName();
     amrex::FileSystem::Remove(header);
 
-    std::string ba_file = GetBoxArrayName(folder);
+    std::string ba_file = GetBoxArrayName();
     amrex::FileSystem::Remove(ba_file);
 
     for (int lev = 0; lev <= finest_level; ++lev) {
-        std::string lev_dir = GetLevelDirName(folder, lev);
+        std::string lev_dir = GetLevelDirName(lev);
         amrex::FileSystem::RemoveAll(lev_dir);
     }
 

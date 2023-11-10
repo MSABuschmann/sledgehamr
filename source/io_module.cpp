@@ -208,8 +208,8 @@ void IOModule::FillLevelFromFile(int lev) {
 }
 
 void IOModule::FillLevelFromCheckpointFile(int lev, std::string folder) {
-    Checkpoint chk(sim);
-    chk.Read(folder);
+    Checkpoint chk(sim, folder);
+    chk.Read();
 
     if (delete_restart_checkpoint)  {
         old_checkpoint = folder;
@@ -754,13 +754,13 @@ void IOModule::CheckDownsampleFactor(int factor, std::string name,
 }
 
 bool IOModule::WriteCheckpoint(double time, std::string prefix) {
-    Checkpoint chk(sim);
-    chk.Write(prefix);
+    Checkpoint chk(sim, prefix);
+    chk.Write();
 
     if (rolling_checkpoints) {
         if (old_checkpoint != "") {
-            Checkpoint chk_del(sim);
-            chk_del.Delete(old_checkpoint);
+            Checkpoint chk_del(sim, old_checkpoint);
+            chk_del.Delete();
         }
 
         old_checkpoint = prefix;
@@ -798,8 +798,8 @@ void IOModule::RestartSim() {
     }
 
     amrex::ParallelDescriptor::Barrier();
-    Checkpoint chk(sim);
-    chk.Read(output_folder, chk_id);
+    Checkpoint chk(sim, output_folder, chk_id);
+    chk.Read();
 
     if (delete_restart_checkpoint) {
         old_checkpoint = output_folder + "/checkpoints/"
@@ -808,8 +808,8 @@ void IOModule::RestartSim() {
 }
 
 void IOModule::UpdateOutputModules() {
-    Checkpoint chk(sim);
-    chk.UpdateOutputModules(output_folder, chk_id);
+    Checkpoint chk(sim, output_folder, chk_id);
+    chk.UpdateOutputModules();
 }
 
 int IOModule::FindLatestCheckpoint() {
@@ -824,8 +824,8 @@ int IOModule::FindLatestCheckpoint() {
         if (amrex::is_integer(str.c_str())) {
             std::string chk_folder = prefix + str;
 
-            Checkpoint chk(sim);
-            if (!chk.ReadHeader(chk_folder))
+            Checkpoint chk(sim, chk_folder);
+            if (!chk.ReadHeader())
                 continue;
 
             double time = chk.GetTime();

@@ -7,18 +7,18 @@ namespace sledgehamr {
 
 class Checkpoint {
   public:
-    Checkpoint(Sledgehamr* owner) {
-        sim = owner;
+    Checkpoint(Sledgehamr* owner, std::string chk_folder)
+        : sim(owner), folder(chk_folder) {};
+
+    Checkpoint(Sledgehamr* owner, std::string prefix, int id) : sim(owner) {
+        folder = prefix + "/checkpoints/" + std::to_string(id);
     };
 
-    void Write(std::string prefix);
-    void Read(std::string prefix, int id);
-    void Read(std::string folder);
-    bool ReadHeader(std::string folder);
-    void UpdateOutputModules(std::string folder);
-    void UpdateOutputModules(std::string prefix, int id);
-    void Delete(std::string folder);
-    void Delete(std::string prefix, int id);
+    void Write();
+    void Read();
+    bool ReadHeader();
+    void UpdateOutputModules();
+    void Delete();
 
     double GetTime() const {
         return time;
@@ -28,21 +28,22 @@ class Checkpoint {
     static void GotoNextLine(std::istream& is);
     void ChangeNGhost(int new_nghost);
     void RegridCoarse();
-    void UpdateLevels(std::string folder);
+    void UpdateLevels();
 
-    std::string GetHeaderName(std::string folder) const {
+    std::string GetHeaderName() const {
         return folder + "/Meta.hdf5";
     }
 
-    std::string GetBoxArrayName(std::string folder) const {
+    std::string GetBoxArrayName() const {
         return folder + "/BoxArrays";
     }
 
-    std::string GetLevelDirName(std::string folder, const int lev) const {
+    std::string GetLevelDirName(const int lev) const {
         return folder + "/Level_" + std::to_string(lev);
     }
 
     Sledgehamr* sim;
+    std::string folder;
 
     double time;
     int MPIranks;
