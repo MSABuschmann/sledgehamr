@@ -1,8 +1,29 @@
 #include <filesystem>
 
+#include <AMReX_ParmParse.H>
+
 #include "output_module.h"
 
 namespace sledgehamr {
+
+OutputModule::OutputModule(std::string output_prefix, std::string folder,
+                           output_fct function, bool is_forceable)
+    : prefix(output_prefix),
+      fct(function),
+      name(folder),
+      forceable(is_forceable) {
+    CreateParentFolder(prefix);
+    ParseParams();
+}
+
+void OutputModule::ParseParams() {
+    std::string pre = "output." + name;
+    amrex::ParmParse pp(pre);
+    pp.query("interval", interval);
+    pp.query("alternate", alternate);
+    pp.query("t_min", t_min);
+    pp.query("t_max", t_max);
+}
 
 void OutputModule::CreateParentFolder(std::string this_prefix) {
     std::string output_folder = this_prefix + "/" + name;
@@ -14,13 +35,14 @@ void OutputModule::CreateParentFolder(std::string this_prefix) {
 }
 
 void OutputModule::Write(double time, bool force) {
-    if (interval <= 0) return;
+    if (interval < 0) return;
 
     // Check if it is time to write output.
     double t_now  = time_modifier(time);
     double t_last = time_modifier(last_written);
 
-    if( t_now - t_last < interval && (!force && forceable) ) return;
+    if (t_now > t_max || t_now < t_min) return;
+    if (t_now - t_last < interval && (!force && forceable)) return;
 
     std::string this_prefix = (alternate && next_id%2 == 1) ?
                               alt_prefix : prefix;

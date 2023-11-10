@@ -38,15 +38,8 @@ class OutputModule {
      *                          interval.
      */
     OutputModule(std::string output_prefix, std::string folder,
-                 output_fct function, double write_interval,
-                 bool is_forceable=true)
-        : prefix(output_prefix),
-          fct(function),
-          interval(write_interval),
-          name(folder),
-          forceable(is_forceable) {
-        CreateParentFolder(prefix);
-    }
+                 output_fct function, bool is_forceable=true);
+
 
     /** @brief Does the actual writing if criteria are met.
      * @param   time    Current time.
@@ -97,6 +90,9 @@ class OutputModule {
     };
 
 private:
+    void ParseParams();
+    void CreateParentFolder(std::string this_prefix);
+
     /** @brief Function pointer to function that does the actual writing.
      */
     output_fct fct;
@@ -113,7 +109,7 @@ private:
 
     /** @brief Interval at which this output shall be written.
      */
-    double interval;
+    double interval = -1;
 
     /** @brief Prefix of the output.
      */
@@ -122,6 +118,9 @@ private:
     std::string alt_prefix = "";
 
     bool alternate = false;
+
+    double t_min = -DBL_MAX;
+    double t_max =  DBL_MAX; 
 
     /** @brief Defines whether we can force a write, e.g. at the end of the
      *         simulation. Default is forceable=true.

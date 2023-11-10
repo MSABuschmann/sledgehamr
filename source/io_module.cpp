@@ -46,89 +46,39 @@ IOModule::IOModule(Sledgehamr* owner) {
     }
 
     // Add various output formats.
-    // Slices.
-    double interval_slices = -1;
-    pp.query("interval_slices", interval_slices);
     idx_slices = output.size();
     output.emplace_back(output_folder, "slices",
-                        OUTPUT_FCT(IOModule::WriteSlices),
-                        interval_slices);
+                        OUTPUT_FCT(IOModule::WriteSlices));
 
     // Full coarse box.
-    double interval_coarse_box = -1;
-    pp.query("interval_coarse_box", interval_coarse_box);
-    pp.query("coarse_box_downsample_factor", coarse_box_downsample_factor);
-    CheckDownsampleFactor(coarse_box_downsample_factor,
-                         "coarse_box_downsample_factor", 0);
     idx_coarse_box = output.size();
     output.emplace_back(output_folder, "coarse_box",
-                        OUTPUT_FCT(IOModule::WriteCoarseBox),
-                        interval_coarse_box);
+                        OUTPUT_FCT(IOModule::WriteCoarseBox));
 
     // Entire volume.
-    double interval_full_box = -1;
-    pp.query("interval_full_box", interval_full_box);
-    pp.query("full_box_downsample_factor", full_box_downsample_factor);
-    CheckDownsampleFactor(full_box_downsample_factor,
-                         "full_box_downsample_factor", sim->max_level);
     idx_full_box = output.size();
     output.emplace_back(output_folder, "full_box",
-                        OUTPUT_FCT(IOModule::WriteFullBox),
-                        interval_full_box);
+                        OUTPUT_FCT(IOModule::WriteFullBox));
 
     // Slices of truncation errors.
-    double interval_slices_truncation_error = -1;
-    pp.query("interval_slices_truncation_error",
-             interval_slices_truncation_error);
     idx_slices_truncation_error = output.size();
     output.emplace_back(output_folder, "slices_truncation_error",
-                        OUTPUT_FCT(IOModule::WriteSlicesTruncationError),
-                        interval_slices_truncation_error);
+                        OUTPUT_FCT(IOModule::WriteSlicesTruncationError));
 
     // Full coarse box of truncation errors.
-    double interval_coarse_box_truncation_error = -1;
-    pp.query("interval_coarse_box_truncation_error",
-             interval_coarse_box_truncation_error);
-    pp.query("coarse_box_truncation_error_downsample_factor",
-             coarse_box_truncation_error_downsample_factor);
-    CheckDownsampleFactor(coarse_box_truncation_error_downsample_factor,
-                         "coarse_box_truncation_error_downsample_factor", 0);
     idx_coarse_box_truncation_error = output.size();
     output.emplace_back(output_folder, "coarse_box_truncation_error",
-                        OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError),
-                        interval_coarse_box_truncation_error);
+                        OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError));
 
     // Entire volume of truncation errors.
-    double interval_full_box_truncation_error = -1;
-    pp.query("interval_full_box_truncation_error",
-             interval_full_box_truncation_error);
-    pp.query("full_box_truncation_error_downsample_factor",
-             full_box_truncation_error_downsample_factor);
-    CheckDownsampleFactor(full_box_truncation_error_downsample_factor,
-                         "full_box_truncation_error_downsample_factor",
-                          sim->max_level);
     idx_full_box_truncation_error = output.size();
     output.emplace_back(output_folder, "full_box_truncation_error",
-                        OUTPUT_FCT(IOModule::WriteFullBoxTruncationError),
-                        interval_full_box_truncation_error);
-
-/*
-   // yt output
-    double interval_yt = -1;
-    pp.query("interval_yt", interval_yt);
-    idx_yt = output.size();
-    output.emplace_back(output_folder + "/yt",
-                        OUTPUT_FCT(IOModule::WriteYt),
-                        interval_yt);
-*/
+                        OUTPUT_FCT(IOModule::WriteFullBoxTruncationError));
 
     // Projections.
-    double interval_projections = -1;
-    pp.query("interval_projections", interval_projections);
     idx_projections = output.size();
     output.emplace_back(output_folder, "projections",
-                        OUTPUT_FCT(IOModule::WriteProjections),
-                        interval_projections);
+                        OUTPUT_FCT(IOModule::WriteProjections));
 
     // Spectra.
     double interval_spectra = -1;
