@@ -4,14 +4,10 @@
 
 namespace sledgehamr {
 
-OutputModule::OutputModule(std::string output_prefix, std::string folder,
-                           output_fct function, double write_interval,
-                           bool is_forceable)
-    : prefix(output_prefix), fct(function), interval(write_interval),
-      name(folder), forceable(is_forceable) {
-    std::string output_folder = prefix + "/" + name;
+void OutputModule::CreateParentFolder(std::string this_prefix) {
+    std::string output_folder = this_prefix + "/" + name;
     if (!amrex::UtilCreateDirectory(output_folder, 0755)) {
-        std::string msg = "sledgehamr::OutputModule::OutputModule: "
+        std::string msg = "sledgehamr::OutputModule::CreateParentFolder: "
                           "Could not create output folder " + output_folder;
         amrex::Abort(msg);
     }
@@ -24,11 +20,14 @@ void OutputModule::Write(double time, bool force) {
     double t_now  = time_modifier(time);
     double t_last = time_modifier(last_written);
 
-//    if( t_now == t_last ) return;
     if( t_now - t_last < interval && (!force && forceable) ) return;
 
+    std::string this_prefix = (alternate && next_id%2 == 1) ?
+                              alt_prefix : prefix;
+
     // Create output folder.
-    std::string folder = prefix + "/" + name + "/" + std::to_string(next_id);
+    std::string folder = this_prefix + "/" + name + "/"
+                       + std::to_string(next_id);
     amrex::UtilCreateCleanDirectory(folder, true);
     folder += "/";
 

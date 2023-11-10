@@ -39,7 +39,14 @@ class OutputModule {
      */
     OutputModule(std::string output_prefix, std::string folder,
                  output_fct function, double write_interval,
-                 bool is_forceable=true);
+                 bool is_forceable=true)
+        : prefix(output_prefix),
+          fct(function),
+          interval(write_interval),
+          name(folder),
+          forceable(is_forceable) {
+        CreateParentFolder(prefix);
+    }
 
     /** @brief Does the actual writing if criteria are met.
      * @param   time    Current time.
@@ -72,6 +79,15 @@ class OutputModule {
         last_written = time;
     };
 
+    void Alternate(bool do_alternate) {
+        alternate = do_alternate;
+    }
+
+    void SetAlternativePrefix(bool alternative_prefix) {
+        alt_prefix = alternative_prefix;
+        CreateParentFolder(alt_prefix);
+    }
+
     double GetLastTimeWritten() const {
         return last_written;
     };
@@ -102,6 +118,10 @@ private:
     /** @brief Prefix of the output.
      */
     std::string prefix;
+
+    std::string alt_prefix = "";
+
+    bool alternate = false;
 
     /** @brief Defines whether we can force a write, e.g. at the end of the
      *         simulation. Default is forceable=true.
