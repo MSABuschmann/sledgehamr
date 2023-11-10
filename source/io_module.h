@@ -96,6 +96,7 @@ class IOModule {
     std::vector<OutputModule> output;
 
     std::string output_folder;
+    std::string alternative_output_folder = "";
 
   private:
     /** @brief Copies data from array into LevelData.
@@ -237,6 +238,11 @@ class IOModule {
     std::vector<std::string> GetDirectories(const std::string prefix);
 
     bool WritePerformanceMonitor(double time, std::string prefix);
+
+    void CheckIfOutputAlreadyExists(std::string folder);
+    void CreateOutputFolder(std::string folder);
+    void AddOutputModules();
+    void ParseParams();
 
     /** Downsampling factors for coarse/full level output.
      */

@@ -9,115 +9,110 @@
 
 namespace sledgehamr {
 
-IOModule::IOModule(Sledgehamr* owner) {
-    sim = owner;
+IOModule::IOModule(Sledgehamr* owner) : sim(owner) {
+    ParseParams();
+    CheckIfOutputAlreadyExists(output_folder);
+    CheckIfOutputAlreadyExists(alternative_output_folder);
+    amrex::ParallelDescriptor::Barrier();
+    CreateOutputFolder(output_folder);
+    CreateOutputFolder(alternative_output_folder);
+    AddOutputModules();
+}
 
-    // Determine and create output folder.
+void IOModule::ParseParams() {
     amrex::ParmParse pp("output");
     pp.get("output_folder", output_folder);
-    bool rename_old = false;
-    pp.query("rename_old_output", rename_old);
+    pp.query("alternative_output_folder", alternative_output_folder);
     pp.query("rolling_checkpoints", rolling_checkpoints);
 
     amrex::ParmParse pp_sim("sim");
     pp_sim.query("delete_restart_checkpoint", delete_restart_checkpoint);
+}
 
-    if (amrex::FileExists(output_folder) && !sim->restart_sim &&
+void IOModule::AddOutputModules() {
+    idx_slices = output.size();
+    output.emplace_back("slices", OUTPUT_FCT(IOModule::WriteSlices));
+
+    idx_coarse_box = output.size();
+    output.emplace_back("coarse_box", OUTPUT_FCT(IOModule::WriteCoarseBox));
+
+    idx_full_box = output.size();
+    output.emplace_back("full_box", OUTPUT_FCT(IOModule::WriteFullBox));
+
+    idx_slices_truncation_error = output.size();
+    output.emplace_back("slices_truncation_error",
+                        OUTPUT_FCT(IOModule::WriteSlicesTruncationError));
+
+    idx_coarse_box_truncation_error = output.size();
+    output.emplace_back("coarse_box_truncation_error",
+                        OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError));
+
+    idx_full_box_truncation_error = output.size();
+    output.emplace_back("full_box_truncation_error",
+                        OUTPUT_FCT(IOModule::WriteFullBoxTruncationError));
+
+    idx_projections = output.size();
+    output.emplace_back("projections", OUTPUT_FCT(IOModule::WriteProjections));
+
+    idx_spectra = output.size();
+    output.emplace_back("spectra", OUTPUT_FCT(IOModule::WriteSpectra));
+
+    idx_gw_spectra = output.size();
+    output.emplace_back("gw_spectra",
+                        OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum));
+
+    idx_performance_monitor = output.size();
+    output.emplace_back("performance_log",
+                        OUTPUT_FCT(IOModule::WritePerformanceMonitor));
+
+    // Checkpoint. Always add checkpoints last.
+    idx_checkpoints = output.size();
+    output.emplace_back("checkpoints", OUTPUT_FCT(IOModule::WriteCheckpoint));
+
+    bool write_at_start = false;
+    amrex::ParmParse pp("output");
+    pp.query("write_at_start", write_at_start);
+    if (!write_at_start) {
+        for (OutputModule& out : output) {
+            out.SetLastTimeWritten( sim->t_start );
+        }
+    }
+}
+
+void IOModule::CheckIfOutputAlreadyExists(std::string folder) {
+    if (folder=="")
+        return;
+
+    // Determine and create output folder.
+    bool rename_old = false;
+    amrex::ParmParse pp("output");
+    pp.query("rename_old_output", rename_old);
+
+    if (amrex::FileExists(folder) && !sim->restart_sim &&
         amrex::ParallelDescriptor::IOProcessor() && !rename_old)  {
-        const char* msg =
-                "sledgehamr::IOModule: Output folder already exists!\n"
+        std::string msg =
+                "sledgehamr::IOModule: Output folder " + folder + " "
+                "already exists!\n"
                 "If you intended to restart the simulation from the latest "
                 "checkpoint within this folder please add 'sim.restart = 1' "
                 "to your input file.\nOtherwise please chose a different "
                 "directory.";
         amrex::Abort(msg);
     }
+}
 
-    amrex::ParallelDescriptor::Barrier();
+void IOModule::CreateOutputFolder(std::string folder) {
+    if (folder=="")
+        return;
 
     if (!sim->restart_sim) {
-        std::string tmp = output_folder;
+        std::string tmp = folder;
         while(tmp.back() == '/') {
             tmp.pop_back();
         }
 
         amrex::Print() << "Create output folder: " << tmp << std::endl;
         amrex::UtilCreateCleanDirectory(tmp, true);
-    }
-
-    // Add various output formats.
-    idx_slices = output.size();
-    output.emplace_back(output_folder, "slices",
-                        OUTPUT_FCT(IOModule::WriteSlices));
-
-    // Full coarse box.
-    idx_coarse_box = output.size();
-    output.emplace_back(output_folder, "coarse_box",
-                        OUTPUT_FCT(IOModule::WriteCoarseBox));
-
-    // Entire volume.
-    idx_full_box = output.size();
-    output.emplace_back(output_folder, "full_box",
-                        OUTPUT_FCT(IOModule::WriteFullBox));
-
-    // Slices of truncation errors.
-    idx_slices_truncation_error = output.size();
-    output.emplace_back(output_folder, "slices_truncation_error",
-                        OUTPUT_FCT(IOModule::WriteSlicesTruncationError));
-
-    // Full coarse box of truncation errors.
-    idx_coarse_box_truncation_error = output.size();
-    output.emplace_back(output_folder, "coarse_box_truncation_error",
-                        OUTPUT_FCT(IOModule::WriteCoarseBoxTruncationError));
-
-    // Entire volume of truncation errors.
-    idx_full_box_truncation_error = output.size();
-    output.emplace_back(output_folder, "full_box_truncation_error",
-                        OUTPUT_FCT(IOModule::WriteFullBoxTruncationError));
-
-    // Projections.
-    idx_projections = output.size();
-    output.emplace_back(output_folder, "projections",
-                        OUTPUT_FCT(IOModule::WriteProjections));
-
-    // Spectra.
-    double interval_spectra = -1;
-    pp.query("interval_spectra", interval_spectra);
-    idx_spectra = output.size();
-    output.emplace_back(output_folder, "spectra",
-                        OUTPUT_FCT(IOModule::WriteSpectra),
-                        interval_spectra);
-
-    // GW spectra.
-    double interval_gw_spectra = -1;
-    pp.query("interval_gw_spectra", interval_gw_spectra);
-    idx_gw_spectra = output.size();
-    output.emplace_back(output_folder, "gw_spectra",
-                        OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum),
-                        interval_gw_spectra);
-
-    // GW spectra.
-    double interval_performance_monitor = -1;
-    pp.query("interval_performance_monitor", interval_performance_monitor);
-    idx_performance_monitor = output.size();
-    output.emplace_back(output_folder, "performance_log",
-                        OUTPUT_FCT(IOModule::WritePerformanceMonitor),
-                        interval_performance_monitor);
-
-    // Checkpoint. Always add checkpoints last.
-    double interval_checkpoints = -1;
-    pp.query("interval_checkpoints", interval_checkpoints);
-    idx_checkpoints = output.size();
-    output.emplace_back(output_folder, "checkpoints",
-                        OUTPUT_FCT(IOModule::WriteCheckpoint),
-                        interval_checkpoints);
-
-    bool write_at_start = false;
-    pp.query("write_at_start", write_at_start);
-    if (!write_at_start) {
-        for (OutputModule& out : output) {
-            out.SetLastTimeWritten( sim->t_start );
-        }
     }
 }
 
@@ -128,9 +123,7 @@ void IOModule::Write(bool force) {
         if (i != idx_checkpoints) {
             sim->performance_monitor->Start(
                     sim->performance_monitor->idx_output, i);
-
             output[i].Write(sim->grid_new[0].t, force);
-
             sim->performance_monitor->Stop(
                     sim->performance_monitor->idx_output, i);
         }
@@ -138,9 +131,7 @@ void IOModule::Write(bool force) {
 
     sim->performance_monitor->Start(
             sim->performance_monitor->idx_output, idx_checkpoints);
- 
     output[idx_checkpoints].Write(sim->grid_new[0].t, force);
-
     sim->performance_monitor->Stop(
             sim->performance_monitor->idx_output, idx_checkpoints);
 }

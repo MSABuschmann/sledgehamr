@@ -42,13 +42,6 @@ class Cosmology {
         return std::log( Mr(eta) / H(eta) );
     }
 
-    double LogTruncated(const double eta) {
-        double log = Log(eta);
-        if (log < spectra_log_min)
-            return 0;
-        return log;
-    }
-
     double BoxToPhysical(const double L, const double eta, const double T1,
                          const double mpl, const double gStar) {
         return L * eta / Hubble(T1, mpl, gStar);

@@ -37,9 +37,8 @@ class OutputModule {
      *                          of the simulation independent of the time
      *                          interval.
      */
-    OutputModule(std::string output_prefix, std::string folder,
-                 output_fct function, bool is_forceable=true);
-
+    OutputModule(std::string module_name, output_fct function,
+                 bool is_forceable=true);
 
     /** @brief Does the actual writing if criteria are met.
      * @param   time    Current time.

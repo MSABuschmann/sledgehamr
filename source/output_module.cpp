@@ -6,23 +6,28 @@
 
 namespace sledgehamr {
 
-OutputModule::OutputModule(std::string output_prefix, std::string folder,
-                           output_fct function, bool is_forceable)
-    : prefix(output_prefix),
-      fct(function),
-      name(folder),
+OutputModule::OutputModule(std::string module_name, output_fct function,
+                           bool is_forceable)
+    : fct(function),
+      name(module_name),
       forceable(is_forceable) {
-    CreateParentFolder(prefix);
     ParseParams();
+    CreateParentFolder(prefix);
+    if (alternate)
+        CreateParentFolder(alt_prefix);
 }
 
 void OutputModule::ParseParams() {
+    amrex::ParmParse pp_out("output");
+    pp_out.get("output_folder", prefix);
+    pp_out.query("alternative_output_folder", alt_prefix);
+
     std::string pre = "output." + name;
     amrex::ParmParse pp(pre);
     pp.query("interval", interval);
     pp.query("alternate", alternate);
-    pp.query("t_min", t_min);
-    pp.query("t_max", t_max);
+    pp.query("min_t", t_min);
+    pp.query("max_t", t_max);
 }
 
 void OutputModule::CreateParentFolder(std::string this_prefix) {
