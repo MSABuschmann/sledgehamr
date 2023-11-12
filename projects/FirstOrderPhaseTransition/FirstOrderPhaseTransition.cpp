@@ -9,7 +9,7 @@ void FirstOrderPhaseTransition::Init() {
     SetProjections();
 
     idx_perfmon_add_bubbles = performance_monitor->timer.size();
-    performance_monitor->timer.push_back(sledgehamr::Timer("InjectBubbles"));
+    performance_monitor->timer.emplace_back("InjectBubbles");
 }
 
 void FirstOrderPhaseTransition::ComputeParameters() {
@@ -20,14 +20,12 @@ void FirstOrderPhaseTransition::ComputeParameters() {
 }
 
 void FirstOrderPhaseTransition::SetProjections() {
-    sledgehamr::Projection proj(dPhi2, "dPhi2");
-    io_module->projections.push_back(proj);
+    io_module->projections.emplace_back(dPhi2, "dPhi2");
 }
 
 void FirstOrderPhaseTransition::ParseVariables() {
     amrex::ParmParse pp_prj("project");
     pp_prj.get("lambda_bar", lambda_bar);
-
     pp_prj.queryarr("bubbles_to_inject", bubbles_to_inject);
 }
 

@@ -28,16 +28,13 @@ void Cosmology::PrintRefinementTimes() {
 
 void Cosmology::SetProjections() {
     // Add projections.
-    sledgehamr::Projection proj1(a_prime2, "a_prime2");
-    sledgehamr::Projection proj2(r_prime2, "r_prime2");
-    sim->io_module->projections.push_back(proj1);
-    sim->io_module->projections.push_back(proj2);
+    sim->io_module->projections.emplace_back(a_prime2, "a_prime2");
+    sim->io_module->projections.emplace_back(r_prime2, "r_prime2");
 }
 
 void Cosmology::SetSpectra() {
     // Add spectra and change time interval to log(m_r/H).
-    sledgehamr::Spectrum spec1(a_prime_screened, "a_prime_screened");
-    sim->io_module->spectra.push_back(spec1);
+    sim->io_module->spectra.emplace_back(a_prime_screened, "a_prime_screened");
     sim->io_module->output[sim->io_module->idx_spectra].SetTimeFunction(
             TIME_FCT(Cosmology::Log));
 }
