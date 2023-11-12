@@ -7,7 +7,7 @@
 #include "macros.h"
 #include "level_data.h"
 #include "level_synchronizer.h"
-#include "local_regrid.h"
+#include "local_regrid/local_regrid.h"
 #include "time_stepper.h"
 #include "io_module.h"
 #include "scalars.h"

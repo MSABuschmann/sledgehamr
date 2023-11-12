@@ -2,7 +2,7 @@
 #define SLEDGEHAMR_TIMESTEPPER_H_
 
 #include "sledgehamr.h"
-#include "local_regrid.h"
+#include "local_regrid/local_regrid.h"
 #include "regrid_scheduler.h"
 #include "integrators/integrator.h"
 
