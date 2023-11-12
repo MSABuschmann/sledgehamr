@@ -109,7 +109,6 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     delete[] spectrum;
 }
 
-#define ALIGN 16
 void Spectrum::Fft(const amrex::MultiFab& field, const int comp,
                    amrex::MultiFab& field_fft_real_or_abs,
                    amrex::MultiFab& field_fft_imag, const amrex::Geometry& geom,
@@ -166,6 +165,7 @@ void Spectrum::Fft(const amrex::MultiFab& field, const int comp,
 
         size_t local_size  = dfft.local_size();
 
+        constexpr int ALIGN = 16;
         std::vector<complex_t, hacc::AlignedAllocator<complex_t, ALIGN> > a;
         std::vector<complex_t, hacc::AlignedAllocator<complex_t, ALIGN> > b;
 
