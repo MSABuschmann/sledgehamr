@@ -13,70 +13,69 @@ PerformanceMonitor::PerformanceMonitor(Sledgehamr* owner)
         return;
 
     idx_total = timer.size();
-    timer.push_back(Timer("Total time"));
+    timer.emplace_back("Total time");
     timer[idx_total].Start();
 
     // + 1 for shadow level support.
     idx_rhs = timer.size() + 1;
     for(int lev = -1; lev <= sim->max_level; ++lev) {
         std::string post = utils::LevelName(lev);
-        timer.push_back(Timer("::Rhs " + post));
+        timer.emplace_back("::Rhs " + post);
     }
 
     idx_fill_patch = timer.size() + 1;
     for(int lev = -1; lev <= sim->max_level; ++lev) {
         std::string post = utils::LevelName(lev);
-        timer.push_back(Timer("LevelSynchronizer::FillPatch " + post));
+        timer.emplace_back("LevelSynchronizer::FillPatch " + post);
     }
 
     idx_fill_intermediate_patch = timer.size() + 1;
     for(int lev = -1; lev <= sim->max_level; ++lev) {
         std::string post = utils::LevelName(lev);
-        timer.push_back(
-                Timer("LevelSynchronizer::FillIntermediatePatch " + post));
+        timer.emplace_back("LevelSynchronizer::FillIntermediatePatch " + post);
     }
 
     idx_average_down = timer.size() + 1;
     for(int lev = -1; lev <= sim->max_level; ++lev) {
         std::string post = utils::LevelName(lev);
-        timer.push_back(Timer("LevelSynchronizer::AverageDownTo " + post));
+        timer.emplace_back("LevelSynchronizer::AverageDownTo " + post);
     }
 
     idx_truncation_error = timer.size() + 1;
     for(int lev = -1; lev <= sim->max_level; ++lev) {
         std::string post = utils::LevelName(lev);
-        timer.push_back(
-                Timer("LevelSynchronizer::ComputeTruncationErrors " + post));
+        timer.emplace_back(
+                "LevelSynchronizer::ComputeTruncationErrors " + post);
     }
 
     idx_tagging = timer.size() + 1;
     for(int lev = -1; lev <= sim->max_level; ++lev) {
         std::string post = utils::LevelName(lev);
-        timer.push_back(Timer("Sledgehamr::ErrorEst " + post));
+        timer.emplace_back("Sledgehamr::ErrorEst " + post);
     }
 
     idx_local_regrid = timer.size() + 1;
     for(int lev = -1; lev <= sim->max_level; ++lev) {
         std::string post = utils::LevelName(lev);
-        timer.push_back(Timer("LocalRegrid::AttemptRegrid " + post
-                            + " (and higher)"));
+        timer.emplace_back("LocalRegrid::AttemptRegrid " + post
+                           + " (and higher)");
     }
 
     idx_global_regrid = timer.size() + 1;
     for(int lev = -1; lev <= sim->max_level; ++lev) {
         std::string post = utils::LevelName(lev);
-        timer.push_back(Timer("AmrCore::regrid " + post + " (and higher)"));
+        timer.emplace_back("AmrCore::regrid " + post + " (and higher)");
     }
 
     idx_read_input = timer.size();
     if (sim->restart_sim)
-        timer.push_back(Timer("IOModule::RestartSim"));
+        timer.emplace_back("IOModule::RestartSim");
     else
-        timer.push_back(Timer("Sledgehamr::InitFromScratch"));
+        timer.emplace_back("Sledgehamr::InitFromScratch");
 
     idx_output = timer.size();
     for(OutputModule& out : sim->io_module->output) {
-        timer.push_back(Timer("OutputModule::Write " + out.GetName()));
+        timer.emplace_back("OutputModule::Write " + out.GetName());
     }
 }
 
