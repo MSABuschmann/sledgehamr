@@ -12,13 +12,13 @@
 
 namespace FirstOrderPhaseTransition {
 
-FINISH_SLEDGEHAMR_SETUP
+SLEDGEHAMR_FINISH_SETUP
 
 /** @brief Class to simulate a first order phase transition.
  */
 class FirstOrderPhaseTransition : public sledgehamr::Sledgehamr {
   public:
-    START_PROJECT(FirstOrderPhaseTransition)
+    SLEDGEHAMR_INITIALIZE_PROJECT(FirstOrderPhaseTransition)
 
     void Init() override;
     void SetParamsRhs(std::vector<double>& params, const double time,

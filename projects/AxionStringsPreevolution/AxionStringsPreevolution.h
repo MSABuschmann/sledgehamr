@@ -7,13 +7,13 @@
 
 namespace AxionStringsPreevolution {
 
-FINISH_SLEDGEHAMR_SETUP
+SLEDGEHAMR_FINISH_SETUP
 
 /** @brief Class to simulate axion strings.
  */
 class AxionStringsPreevolution : public sledgehamr::Sledgehamr {
   public:
-    START_PROJECT(AxionStringsPreevolution)
+    SLEDGEHAMR_INITIALIZE_PROJECT(AxionStringsPreevolution)
 
     void SetParamsRhs(std::vector<double>& params, const double time,
                       const int lev) override;

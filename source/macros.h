@@ -21,60 +21,64 @@ namespace sledgehamr {
                        omp_out.begin(), std::plus<int>())) \
         initializer(omp_priv = omp_orig)
 
-#define DO_PRAGMA(x) _Pragma(#x)
+#define SLEDGEHAMR_DO_PRAGMA(x) _Pragma(#x)
 
 /** @brief Macros to declare and initialize scalar fields within project
  *         namespace.
  */
-#define ADD_SCALAR(field) \
+#define SLEDGEHAMR_ADD_SCALAR(field) \
     static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
             {#field, l_scalar_fields, false}; \
     namespace Scalar { \
         constexpr int field = _Scalar::field; \
     };
 
-#define EXPAND_SCALARS(r, data, field) ADD_SCALAR(field)
+#define SLEDGEHAMR_EXPAND_SCALARS(r, data, field) SLEDGEHAMR_ADD_SCALAR(field)
 
-#define ADD_MOMENTUM(field) \
+#define SLEDGEHAMR_ADD_MOMENTUM(field) \
     static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
             {#field, l_scalar_fields, true}; \
     namespace Scalar { \
         constexpr int field = _Momentum::field + _Scalar::NScalarFields; \
     };
 
-#define EXPAND_MOMENTA(r, data, field) ADD_MOMENTUM(field)
+#define SLEDGEHAMR_EXPAND_MOMENTA(r, data, field) SLEDGEHAMR_ADD_MOMENTUM(field)
 
 /** @brief Macros to create enum of fields for fast and convinient component
  *         access within the project namespace.
  */
-#define SCALAR_ENUM_VALUE(r, data, elem) elem,
+#define SLEDGEHAMR_SCALAR_ENUM_VALUE(r, data, elem) elem,
 
-#define SCALAR_ENUM(...) \
-    enum _Scalar { BOOST_PP_SEQ_FOR_EACH(SCALAR_ENUM_VALUE, _, \
-            BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NScalarFields \
+#define SLEDGEHAMR_SCALAR_ENUM(...) \
+    enum _Scalar { \
+        BOOST_PP_SEQ_FOR_EACH( SLEDGEHAMR_SCALAR_ENUM_VALUE, _, \
+                               BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
+        NScalarFields \
     };
 
-#define MOMENTUM_ENUM(...) \
-    enum _Momentum { BOOST_PP_SEQ_FOR_EACH(SCALAR_ENUM_VALUE, _, \
-            BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) NMomentumFields \
+#define SLEDGEHAMR_MOMENTUM_ENUM(...) \
+    enum _Momentum { \
+        BOOST_PP_SEQ_FOR_EACH( SLEDGEHAMR_SCALAR_ENUM_VALUE, _, \
+                               BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
+        NMomentumFields \
     };
 
-#define GW_ENUM enum Gw { u_xx = Scalar::NScalars, u_yy, u_zz, u_xy, u_xz, \
-                          u_yz, du_xx, du_yy, du_zz, du_xy, du_xz, du_yz, \
-                          NGwScalars \
+#define SLEDGEHAMR_GW_ENUM \
+    enum Gw { \
+        u_xx = Scalar::NScalars, u_yy, u_zz, u_xy, u_xz, u_yz, du_xx, du_yy, \
+        du_zz, du_xy, du_xz, du_yz, NGwScalars \
     };
 
 /* brief Default implementation for f(\tau) > \tau_{crit} criteria:
  *       f(\tau) = \tau. This template can be specialized for each scalar field
  *       component by the project.
  */
-#define TRUNCATION_MODIFIER template<int> \
+#define SLEDGEHAMR_TRUNCATION_MODIFIER template<int> \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
     double TruncationModifier(const amrex::Array4<const double>& state, \
             const int i, const int j, const int k, const int lev, \
             const double time, const double dt, const double dx, \
-            const double truncation_error, \
-            const double* params) { \
+            const double truncation_error, const double* params) { \
         return truncation_error; \
     };
 
@@ -82,7 +86,7 @@ namespace sledgehamr {
  *       will be used by tagger and this specialisation can be implemented
  *       within the project.
  */
-#define TAG_CELL_FOR_REFINEMENT template<bool> \
+#define SLEDGEHAMR_TAG_CELL_FOR_REFINEMENT template<bool> \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
     bool TagCellForRefinement(const amrex::Array4<const double>& state, \
             const int i, const int j, const int k, const int lev, \
@@ -93,50 +97,47 @@ namespace sledgehamr {
 
 /* brief TODO
  */
-#define GRAVITATIONAL_WAVES_RHS template<bool> \
+#define SLEDGEHAMR_GRAVITATIONAL_WAVES_RHS template<bool> \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
     void GravitationalWavesRhs(const amrex::Array4<double>& rhs, \
             const amrex::Array4<const double>& state, const int i, \
             const int j, const int k, const int lev, const double time, \
-            const double dt, const double dx, \
-            const double* params) { \
+            const double dt, const double dx, const double* params) { \
     };
 
 /* brief TODO
  */
-#define GRAVITATIONAL_WAVES_BACKREACTION template<bool> \
+#define SLEDGEHAMR_GRAVITATIONAL_WAVES_BACKREACTION template<bool> \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
     void GravitationalWavesBackreaction(const amrex::Array4<double>& rhs, \
             const amrex::Array4<const double>& state, const int i, \
             const int j, const int k, const int lev, const double time, \
-            const double dt, const double dx, \
-            const double* params_scalars, \
+            const double dt, const double dx, const double* params_scalars, \
             const double* params_gw) { \
     };
 
 /** @brief Macro to add multiple scalar fields and default template functions to
  *         the project namespace.
  */
-#define ADD_SCALARS(...) \
-    SCALAR_ENUM(__VA_ARGS__) \
+#define SLEDGEHAMR_ADD_SCALARS(...) \
+    SLEDGEHAMR_SCALAR_ENUM(__VA_ARGS__) \
     static std::vector<sledgehamr::ScalarField*> l_scalar_fields; \
-    BOOST_PP_SEQ_FOR_EACH(EXPAND_SCALARS, _, \
+    BOOST_PP_SEQ_FOR_EACH(SLEDGEHAMR_EXPAND_SCALARS, _, \
                           BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__))
 
-#define ADD_CONJUGATE_MOMENTA(...) \
-    MOMENTUM_ENUM(__VA_ARGS__) \
-    BOOST_PP_SEQ_FOR_EACH(EXPAND_MOMENTA, _, \
+#define SLEDGEHAMR_ADD_CONJUGATE_MOMENTA(...) \
+    SLEDGEHAMR_MOMENTUM_ENUM(__VA_ARGS__) \
+    BOOST_PP_SEQ_FOR_EACH(SLEDGEHAMR_EXPAND_MOMENTA, _, \
                           BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \
     namespace Scalar { \
         constexpr int NScalars = _Scalar::NScalarFields \
                                + _Momentum::NMomentumFields; \
     }; \
-    GW_ENUM \
-    TRUNCATION_MODIFIER \
-    TAG_CELL_FOR_REFINEMENT \
-    GRAVITATIONAL_WAVES_RHS \
-    GRAVITATIONAL_WAVES_BACKREACTION
-
+    SLEDGEHAMR_GW_ENUM \
+    SLEDGEHAMR_TRUNCATION_MODIFIER \
+    SLEDGEHAMR_TAG_CELL_FOR_REFINEMENT \
+    SLEDGEHAMR_GRAVITATIONAL_WAVES_RHS \
+    SLEDGEHAMR_GRAVITATIONAL_WAVES_BACKREACTION
 
 /** @brief Identifies cells that violate the truncation error threshold. To be
  *         run on CPU code.
@@ -153,7 +154,7 @@ namespace sledgehamr {
  * @param   ntags_trunc Counts number of tags.
  * @return  If truncation error threshold has been exceeded.
  */
-#define TRUNCATION_ERROR_TAG_CPU template<int NScalars> \
+#define SLEDGEHAMR_TRUNCATION_ERROR_TAG_CPU template<int NScalars> \
     AMREX_FORCE_INLINE \
     bool TruncationErrorTagCpu(const amrex::Array4<const double>& state, \
             const amrex::Array4<const double>& te, const int i, const int j, \
@@ -176,7 +177,7 @@ namespace sledgehamr {
 
 /** @brief Same as TRUNCATION_ERROR_TAG_CPU but to be used for GPU code.
  */
-#define TRUNCATION_ERROR_TAG_GPU template<int NScalars> \
+#define SLEDGEHAMR_TRUNCATION_ERROR_TAG_GPU template<int NScalars> \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
     bool TruncationErrorTagGpu(const amrex::Array4<double const>& state, \
             const amrex::Array4<double const>& te, const int i, const int j, \
@@ -198,13 +199,13 @@ namespace sledgehamr {
 /** @brief Add functions to project namespace that depend on custom template
  *         specialisations.
  */
-#define FINISH_SLEDGEHAMR_SETUP TRUNCATION_ERROR_TAG_CPU \
-    TRUNCATION_ERROR_TAG_GPU
+#define SLEDGEHAMR_FINISH_SETUP SLEDGEHAMR_TRUNCATION_ERROR_TAG_CPU \
+    SLEDGEHAMR_TRUNCATION_ERROR_TAG_GPU
 
 /** @brief Constructor of project class to initialize scalar fields
  *         automatically.
  */
-#define PRJ_CONSTRUCTOR(prj) \
+#define SLEDGEHAMR_PRJ_CONSTRUCTOR(prj) \
     prj (){ \
         scalar_fields = l_scalar_fields; \
         amrex::Print() << "Starting "  << #prj << " project..." << std::endl; \
@@ -213,20 +214,20 @@ namespace sledgehamr {
         amrex::Print() << std::endl; \
     };
 
-#define KO_LOCAL_SETUP amrex::Gpu::AsyncArray<double> \
+#define SLEDGEHAMR_KO_LOCAL_SETUP amrex::Gpu::AsyncArray<double> \
         async_dissipation_strength(dissipation_strength.data(), \
                                    dissipation_strength.size()); \
         double* l_dissipation_strength = async_dissipation_strength.data(); \
         const int l_dissipation_order = dissipation_order; \
         const bool l_with_dissipation = with_dissipation;
 
-#define RHS_PARAMS_LOCAL_SETUP std::vector<double> params_rhs; \
+#define SLEDGEHAMR_RHS_PARAMS_LOCAL_SETUP std::vector<double> params_rhs; \
         SetParamsRhs(params_rhs, time, lev); \
         amrex::Gpu::AsyncArray<double> async_params_rhs( \
                 params_rhs.data(), params_rhs.size()); \
         double* l_params_rhs = async_params_rhs.data();
 
-#define RHS_GW_PARAMS_LOCAL_SETUP std::vector<double> params_gw_rhs; \
+#define SLEDGEHAMR_RHS_GW_PARAMS_LOCAL_SETUP std::vector<double> params_gw_rhs; \
         if (with_gravitational_waves) \
             SetParamsGravitationalWaveRhs(params_rhs, time, lev); \
         amrex::Gpu::AsyncArray<double> async_params_gw_rhs( \
@@ -241,14 +242,14 @@ namespace sledgehamr {
  * @param   dt          Time step size.
  * @param   dx          Grid spacing.
  */
-#define PRJ_FILL_RHS virtual void FillRhs(amrex::MultiFab& rhs_mf, \
+#define SLEDGEHAMR_PRJ_FILL_RHS virtual void FillRhs(amrex::MultiFab& rhs_mf, \
                 const amrex::MultiFab& state_mf, const double time, \
                 const int lev, const double dt, const double dx) override { \
         performance_monitor->Start(performance_monitor->idx_rhs, lev); \
-        KO_LOCAL_SETUP \
-        RHS_PARAMS_LOCAL_SETUP \
-        RHS_GW_PARAMS_LOCAL_SETUP \
-        DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
+        SLEDGEHAMR_KO_LOCAL_SETUP \
+        SLEDGEHAMR_RHS_PARAMS_LOCAL_SETUP \
+        SLEDGEHAMR_RHS_GW_PARAMS_LOCAL_SETUP \
+        SLEDGEHAMR_DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
             const amrex::Box& bx = mfi.tilebox(); \
@@ -320,16 +321,17 @@ namespace sledgehamr {
     };
 /** @brief
  */
-#define PRJ_FILL_ADD_RHS virtual void FillAddRhs(amrex::MultiFab& rhs_mf, \
-                const amrex::MultiFab& state_mf, const double time, \
-                const int lev, const double dt, const double dx, \
-                const double weight) override { \
+#define SLEDGEHAMR_PRJ_FILL_ADD_RHS virtual void \
+    FillAddRhs(amrex::MultiFab& rhs_mf, \
+               const amrex::MultiFab& state_mf, const double time, \
+               const int lev, const double dt, const double dx, \
+               const double weight) override { \
         performance_monitor->Start(performance_monitor->idx_rhs, lev); \
         const int ncomp = rhs_mf.nComp(); \
-        KO_LOCAL_SETUP \
-        RHS_PARAMS_LOCAL_SETUP \
-        RHS_GW_PARAMS_LOCAL_SETUP \
-        DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
+        SLEDGEHAMR_KO_LOCAL_SETUP \
+        SLEDGEHAMR_RHS_PARAMS_LOCAL_SETUP \
+        SLEDGEHAMR_RHS_GW_PARAMS_LOCAL_SETUP \
+        SLEDGEHAMR_DO_PRAGMA(omp parallel if (amrex::Gpu::notInLaunchRegion())) \
         for (amrex::MFIter mfi(rhs_mf, amrex::TilingIfNotGPU()); \
              mfi.isValid(); ++mfi) { \
             const amrex::Box& bx = mfi.tilebox(); \
@@ -420,7 +422,8 @@ namespace sledgehamr {
 
 /** @brief Overrides function in project class.
  */
-#define PRJ_TAG_WITH_TRUNCATION_CPU virtual void TagWithTruncationCpu( \
+#define SLEDGEHAMR_PRJ_TAG_WITH_TRUNCATION_CPU virtual void \
+    TagWithTruncationCpu( \
             const amrex::Array4<double const>& state_fab, \
             const amrex::Array4<double const>& state_fab_te, \
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox, \
@@ -500,7 +503,8 @@ namespace sledgehamr {
 
 /** @brief Overrides function in project class.
  */
-#define PRJ_TAG_WITH_TRUNCATION_GPU virtual void TagWithTruncationGpu( \
+#define SLEDGEHAMR_PRJ_TAG_WITH_TRUNCATION_GPU virtual void \
+    TagWithTruncationGpu( \
             const amrex::Array4<double const>& state_fab, \
             const amrex::Array4<double const>& state_fab_te, \
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox, \
@@ -568,7 +572,8 @@ namespace sledgehamr {
 
 /** @brief Overrides function in project class.
  */
-#define PRJ_TAG_WITHOUT_TRUNCATION_CPU virtual void TagWithoutTruncationCpu( \
+#define SLEDGEHAMR_PRJ_TAG_WITHOUT_TRUNCATION_CPU virtual void \
+    TagWithoutTruncationCpu( \
             const amrex::Array4<double const>& state_fab, \
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox, \
             double time, int lev, int* ntags_total, \
@@ -593,7 +598,8 @@ namespace sledgehamr {
 
 /** @brief Overrides function in project class.
  */
-#define PRJ_TAG_WITHOUT_TRUNCATION_GPU virtual void TagWithoutTruncationGpu( \
+#define SLEDGEHAMR_PRJ_TAG_WITHOUT_TRUNCATION_GPU virtual void \
+    TagWithoutTruncationGpu( \
             const amrex::Array4<double const>& state_fab, \
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox, \
             double time, int lev, \
@@ -615,14 +621,14 @@ namespace sledgehamr {
 
 /** @brief Add boilerplate functions to project class.
  */
-#define START_PROJECT(prj) \
-    PRJ_CONSTRUCTOR(prj) \
-    PRJ_FILL_RHS \
-    PRJ_FILL_ADD_RHS \
-    PRJ_TAG_WITH_TRUNCATION_CPU \
-    PRJ_TAG_WITH_TRUNCATION_GPU \
-    PRJ_TAG_WITHOUT_TRUNCATION_CPU \
-    PRJ_TAG_WITHOUT_TRUNCATION_GPU
+#define SLEDGEHAMR_INITIALIZE_PROJECT(prj) \
+    SLEDGEHAMR_PRJ_CONSTRUCTOR(prj) \
+    SLEDGEHAMR_PRJ_FILL_RHS \
+    SLEDGEHAMR_PRJ_FILL_ADD_RHS \
+    SLEDGEHAMR_PRJ_TAG_WITH_TRUNCATION_CPU \
+    SLEDGEHAMR_PRJ_TAG_WITH_TRUNCATION_GPU \
+    SLEDGEHAMR_PRJ_TAG_WITHOUT_TRUNCATION_CPU \
+    SLEDGEHAMR_PRJ_TAG_WITHOUT_TRUNCATION_GPU
 
 }; // namespace sledgehamr
 

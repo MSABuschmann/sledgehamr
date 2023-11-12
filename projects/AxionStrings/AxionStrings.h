@@ -8,13 +8,13 @@
 
 namespace AxionStrings {
 
-FINISH_SLEDGEHAMR_SETUP
+SLEDGEHAMR_FINISH_SETUP
 
 /** @brief Class to simulate axion strings.
  */
 class AxionStrings : public sledgehamr::Sledgehamr {
   public:
-    START_PROJECT(AxionStrings)
+    SLEDGEHAMR_INITIALIZE_PROJECT(AxionStrings)
 
     void Init() override {
         cosmo.Init(this);

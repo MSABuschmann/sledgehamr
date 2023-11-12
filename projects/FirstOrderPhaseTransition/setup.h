@@ -5,8 +5,8 @@
 
 namespace FirstOrderPhaseTransition {
 
-ADD_SCALARS(Phi)
-ADD_CONJUGATE_MOMENTA(dPhi)
+SLEDGEHAMR_ADD_SCALARS(Phi)
+SLEDGEHAMR_ADD_CONJUGATE_MOMENTA(dPhi)
 
 }; // namespace FirstOrderPhaseTransition
 

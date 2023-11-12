@@ -10,13 +10,13 @@ using AxionStrings::GravitationalWavesRhs;
 using AxionStrings::TruncationModifier;
 using AxionStrings::TagCellForRefinement;
 
-FINISH_SLEDGEHAMR_SETUP
+SLEDGEHAMR_FINISH_SETUP
 
 /** @brief Class to simulate axion strings.
  */
 class AxionStringsPostevolution : public sledgehamr::Sledgehamr {
   public:
-    START_PROJECT(AxionStringsPostevolution)
+    SLEDGEHAMR_INITIALIZE_PROJECT(AxionStringsPostevolution)
 
     void SetParamsRhs(std::vector<double>& params, const double time,
                       const int lev) override;
