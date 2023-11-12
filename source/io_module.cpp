@@ -6,6 +6,7 @@
 
 #include "io_module.h"
 #include "sledgehamr_utils.h"
+#include "output_types/slices.h"
 
 namespace sledgehamr {
 
@@ -304,8 +305,8 @@ void IOModule::FillLevelFromConst(int lev, const int comp, const double c) {
 }
 
 bool IOModule::WriteSlices(double time, std::string prefix) {
-    amrex::Print() << "Write slices: " << prefix << std::endl;
-    DoWriteSlices(time, prefix, false);
+    Slices slices(sim, prefix, false);
+    slices.Write();
     return true;
 }
 
@@ -313,117 +314,9 @@ bool IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
     if (!sim->grid_old[0].contains_truncation_errors)
         return false;
 
-    amrex::Print() << "Write truncation error slices: " << prefix << std::endl;
-    DoWriteSlices(time, prefix, true);
+    Slices slices(sim, prefix, true);
+    slices.Write();
     return true;
-}
-
-void IOModule::DoWriteSlices(double time, std::string prefix,
-                             bool with_truncation_errors) {
-    for (int lev = 0; lev <= sim->finest_level; ++lev) {
-        // Create folder and file.
-        std::string folder = prefix + "/Level_" + std::to_string(lev);
-        amrex::UtilCreateDirectory(folder.c_str(), 0755);
-
-        std::string filename = folder + "/"
-                        + std::to_string(amrex::ParallelDescriptor::MyProc())
-                        + ".hdf5";
-        hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
-                                  H5P_DEFAULT);
-
-        // Write field data.
-        const LevelData* state = &sim->grid_new[lev];
-        WriteSingleSlice(time, state, lev, file_id, "x", 0, 1, 2, false);
-        WriteSingleSlice(time, state, lev, file_id, "y", 1, 0, 2, false);
-        WriteSingleSlice(time, state, lev, file_id, "z", 2, 0, 1, false);
-
-        if (with_truncation_errors) {
-            // Write truncation errors.
-            const LevelData* state = &sim->grid_old[lev];
-            WriteSingleSlice(time, state, lev, file_id, "te_x", 0, 1, 2, true);
-            WriteSingleSlice(time, state, lev, file_id, "te_y", 1, 0, 2, true);
-            WriteSingleSlice(time, state, lev, file_id, "te_z", 2, 0, 1, true);
-        }
-
-        H5Fclose(file_id);
-    }
-}
-
-void IOModule::WriteSingleSlice(double time, const LevelData* state, int lev,
-                                hid_t file_id, std::string ident, int d1,
-                                int d2, int d3, bool is_truncation_errors) {
-    std::vector<int> le1, he1, le2, he2;
-    const int ndist = is_truncation_errors ? 2 : 1;
-
-    // Not performance critical. Do not use OpenMP because not thread-safe.
-    for (amrex::MFIter mfi(*state, false); mfi.isValid(); ++mfi){
-        const amrex::Box& bx = mfi.tilebox();
-
-        // Find box that cuts through selected plane.
-        if (bx.smallEnd(d1) == 0) {
-            const auto& state_arr = state->array(mfi);
-
-            // Get box dimensions
-            int l1 = bx.smallEnd(d2);
-            int l2 = bx.smallEnd(d3);
-            int h1 = bx.bigEnd(d2)+1;
-            int h2 = bx.bigEnd(d3)+1;
-            le1.push_back(l1);
-            le2.push_back(l2);
-            he1.push_back(h1);
-            he2.push_back(h2);
-
-            int dim1 = (h1-l1)/ndist;
-            int dim2 = (h2-l2)/ndist;
-
-            // Copy data into flattened array for each scalar field.
-            long len = dim1 * dim2;
-            // TODO Adjust output type.
-            float *output_arr = new float[len]();
-            for (int f=0; f<sim->scalar_fields.size(); ++f) {
-                for (int j=l2; j<h2; ++j) {
-                    for (int i=l1; i<h1; ++i) {
-                        if (is_truncation_errors && (i%2 != 0 || j%2 != 0))
-                            continue;
-
-                        int ind = (i-l1)/ndist*dim2 + (j-l2)/ndist;
-
-                        if (d1 == 0) {
-                            output_arr[ind] = state_arr(0,i,j,f);
-                        } else if (d1 == 1) {
-                            output_arr[ind] = state_arr(i,0,j,f);
-                        } else if (d1 == 2) {
-                            output_arr[ind] = state_arr(i,j,0,f);
-                        }
-                    }
-                }
-
-                std::string dset_name = sim->scalar_fields[f]->name
-                                      + "_" + ident
-                                      + "_" + std::to_string(le1.size());
-                WriteToHDF5(file_id, dset_name, output_arr, len);
-            }
-
-            delete[] output_arr;
-        }
-    }
-
-    // Write header information for this slice.
-    const int nparams = 5;
-    double header_data[nparams] = {time,
-                (double)amrex::ParallelDescriptor::NProcs(),
-                (double)(sim->finest_level),
-                (double)sim->dimN[lev],
-                (double)le1.size()};
-    WriteToHDF5(file_id, "Header_"+ident, header_data, nparams);
-
-    // Write box dimensions so we can reassemble slice.
-    if (le1.size() > 0) {
-        WriteToHDF5(file_id, "le1_"+ident, (int*)&(le1[0]), le1.size());
-        WriteToHDF5(file_id, "le2_"+ident, (int*)&(le2[0]), le2.size());
-        WriteToHDF5(file_id, "he1_"+ident, (int*)&(he1[0]), he1.size());
-        WriteToHDF5(file_id, "he2_"+ident, (int*)&(he2[0]), he2.size());
-    }
 }
 
 bool IOModule::WriteCoarseBox(double time, std::string prefix) {

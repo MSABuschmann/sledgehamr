@@ -93,34 +93,42 @@ class Sledgehamr : public amrex::AmrCore {
                             const int lev, const double dt, const double dx,
                             const double weight) = 0;
 
-    double GetL() {
+    double GetL() const {
         return L;
     };
 
     /** TODO: Add max lev check and other methods.
      */
-    double GetDx(const int lev) {
+    double GetDx(const int lev) const {
         return dx[lev];
     }
 
-    double GetDt(const int lev) {
+    double GetDt(const int lev) const {
         return dt[lev];
     }
 
-    int GetDimN(const int lev) {
+    int GetDimN(const int lev) const {
         return dimN[lev];
     }
 
-    int GetMaxLevel() {
+    int GetMaxLevel() const {
         return max_level;
     }
 
-    int GetFinestLevel() {
+    int GetFinestLevel() const {
         return finest_level;
     }
 
     LevelData& GetLevelData(const int lev) {
         return grid_new[lev];
+    }
+
+    LevelData& GetOldLevelData(const int lev) {
+        return grid_old[lev];
+    }
+
+    std::string GetScalarFieldName(const int comp) const {
+        return scalar_fields[comp]->name;
     }
 
     /** @brief Pointer to synchronization module.
