@@ -1,5 +1,5 @@
-#ifndef INTEGRATOR_LSSSPRK3_H_
-#define INTEGRATOR_LSSSPRK3_H_
+#ifndef SLEDGEHAMR_INTEGRATOR_LSSSPRK3_H_
+#define SLEDGEHAMR_INTEGRATOR_LSSSPRK3_H_
 
 #include "integrator.h"
 
@@ -15,4 +15,4 @@ class IntegratorLsssprk3 : public Integrator {
 
 }; // namespace sledgehamr
 
-#endif // INTEGRATOR_LSSSPRK3_H_
+#endif // SLEDGEHAMR_INTEGRATOR_LSSSPRK3_H_

@@ -1,5 +1,5 @@
-#ifndef INTEGRATOR_AMREX_H_
-#define INTEGRATOR_AMREX_H_
+#ifndef SLEDGEHAMR_INTEGRATOR_AMREX_H_
+#define SLEDGEHAMR_INTEGRATOR_AMREX_H_
 
 #include "integrator.h"
 
@@ -15,4 +15,4 @@ class IntegratorAMReX : public Integrator {
 
 }; // namespace sledgehamr
 
-#endif // INTEGRATOR_AMREX_H_
+#endif // SLEDGEHAMR_INTEGRATOR_AMREX_H_
