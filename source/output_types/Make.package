@@ -1,2 +1,5 @@
 CEXE_headers += slices.h
 CEXE_sources += slices.cpp
+
+CEXE_headers += checkpoint.h
+CEXE_sources += checkpoint.cpp
