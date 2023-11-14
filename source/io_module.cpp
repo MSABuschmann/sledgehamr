@@ -7,6 +7,7 @@
 #include "io_module.h"
 #include "sledgehamr_utils.h"
 #include "output_types/slices.h"
+#include "output_types/level_writer.h"
 
 namespace sledgehamr {
 
@@ -320,8 +321,8 @@ bool IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
 }
 
 bool IOModule::WriteCoarseBox(double time, std::string prefix) {
-    amrex::Print() << "Write coarse level box: " << prefix << std::endl;
-    DoWriteCoarseBox(time, prefix, coarse_box_downsample_factor, false);
+    LevelWriter writer(sim, prefix, idx_coarse_box);
+    writer.Write();
     return true;
 }
 
@@ -329,129 +330,17 @@ bool IOModule::WriteCoarseBoxTruncationError(double time, std::string prefix) {
     if (!sim->grid_old[0].contains_truncation_errors)
         return false;
 
-    amrex::Print() << "Write truncation errors on coarse level box: "
-                   << prefix << std::endl;
-    DoWriteCoarseBox(time, prefix,
-                     coarse_box_truncation_error_downsample_factor, true);
+    LevelWriter writer(sim, prefix, idx_coarse_box_truncation_error);
+    writer.Write();
     return true;
 }
 
-void IOModule::DoWriteCoarseBox(double time, std::string prefix,
-                                int downsample_factor,
-                                bool with_truncation_errors) {
-    const int lev = 0;
-
-    // Create folder and file.
-    std::string filename = prefix + "/"
-                    + std::to_string(amrex::ParallelDescriptor::MyProc())
-                    + ".hdf5";
-    hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
-                              H5P_DEFAULT);
-
-    // Write fields.
-    const LevelData* state = &sim->grid_new[lev];
-    WriteLevel(time, state, lev, file_id, "data", downsample_factor, false);
-
-    if (with_truncation_errors) {
-        const LevelData* state = &sim->grid_old[lev];
-        WriteLevel(time, state, lev, file_id, "te", downsample_factor, true);
-    }
-
-    H5Fclose(file_id);
-}
-
-void IOModule::WriteLevel(double time, const LevelData* state, int lev,
-                          hid_t file_id, std::string ident, 
-                          int downsample_factor, bool is_truncation_errors) {
-    const int ndist = is_truncation_errors ? 2 : 1;
-    const int grid_density = downsample_factor * ndist;
-
-    std::vector<int> lex, hex, ley, hey, lez, hez;
-
-    // Not performance critical. Do not use OpenMP because not thread-safe.
-    for (amrex::MFIter mfi(*state, false); mfi.isValid(); ++mfi){
-        const amrex::Box& bx = mfi.tilebox();
-        const auto& state_arr = state->array(mfi);
-
-        // Get box dimensions
-        int lx = bx.smallEnd(0);
-        int ly = bx.smallEnd(1);
-        int lz = bx.smallEnd(2);
-        int hx = bx.bigEnd(0)+1;
-        int hy = bx.bigEnd(1)+1;
-        int hz = bx.bigEnd(2)+1;
-        lex.push_back(lx);
-        ley.push_back(ly);
-        lez.push_back(lz);
-        hex.push_back(hx);
-        hey.push_back(hy);
-        hez.push_back(hz);
-
-
-        int dimx = (hx-lx) / grid_density;
-        int dimy = (hy-ly) / grid_density;
-        int dimz = (hz-lz) / grid_density;
-        double volfac = 1./std::pow(downsample_factor, 3);
-
-        // Copy data into flattened array for each scalar field.
-        long len = dimx * dimy * dimz;
-
-        // TODO Adjust output type.
-        for (int f=0; f<sim->scalar_fields.size(); ++f) {
-            float *output_arr = new float[len]();
-            for (int k=lz; k<hz; ++k) {
-                for (int j=ly; j<hy; ++j) {
-                    for (int i=lx; i<hx; ++i) {
-                        if (is_truncation_errors
-                            && (i%2 != 0 || j%2 != 0 || k%2 != 0))
-                            continue;
-
-                        int ind = (i-lx)/grid_density*dimy*dimz
-                                + (j-ly)/grid_density*dimz
-                                + (k-lz)/grid_density;
-
-                        if (is_truncation_errors)
-                            output_arr[ind] = std::max(
-                                    static_cast<float>(state_arr(i,j,k,f)),
-                                    output_arr[ind]);
-                        else
-                            output_arr[ind] += state_arr(i,j,k,f) * volfac;
-                    }
-                }
-            }
-
-            std::string dset_name = sim->scalar_fields[f]->name + "_" + ident
-                                  + "_" + std::to_string(lex.size());
-            WriteToHDF5(file_id, dset_name, output_arr, len);
-            delete[] output_arr;
-        }
-
-    }
-
-    // Write header information for this slice.
-    const int nparams = 6;
-    double header_data[nparams] = {time,
-                (double)amrex::ParallelDescriptor::NProcs(),
-                (double)sim->finest_level,
-                (double)sim->dimN[lev],
-                (double)downsample_factor,
-                (double)lex.size()};
-    WriteToHDF5(file_id, "Header_" + ident, header_data, nparams);
-
-    // Write box dimensions so we can reassemble slice.
-    if (lex.size() > 0) {
-        WriteToHDF5(file_id, "lex_"+ident, (int*)&(lex[0]), lex.size());
-        WriteToHDF5(file_id, "ley_"+ident, (int*)&(ley[0]), ley.size());
-        WriteToHDF5(file_id, "lez_"+ident, (int*)&(lez[0]), lez.size());
-        WriteToHDF5(file_id, "hex_"+ident, (int*)&(hex[0]), hex.size());
-        WriteToHDF5(file_id, "hey_"+ident, (int*)&(hey[0]), hey.size());
-        WriteToHDF5(file_id, "hez_"+ident, (int*)&(hez[0]), hez.size());
-    }
-}
-
 bool IOModule::WriteFullBox(double time, std::string prefix) {
-    amrex::Print() << "Write full box at all levels: " << prefix << std::endl;
-    DoWriteFullBox(time, prefix, full_box_downsample_factor, false);
+    if (!sim->grid_old[0].contains_truncation_errors)
+        return false;
+
+    LevelWriter writer(sim, prefix, idx_full_box);
+    writer.Write();
     return true;
 }
 
@@ -459,42 +348,9 @@ bool IOModule::WriteFullBoxTruncationError(double time, std::string prefix) {
     if (!sim->grid_old[0].contains_truncation_errors)
         return false;
 
-    amrex::Print() << "Write truncation errors at all levels: "
-                   << prefix << std::endl;
-    DoWriteFullBox(time, prefix, full_box_truncation_error_downsample_factor,
-                   true);
+    LevelWriter writer(sim, prefix, idx_full_box_truncation_error);
+    writer.Write();
     return true;
-}
-
-void IOModule::DoWriteFullBox(double time, std::string prefix,
-                              int downsample_factor,
-                              bool is_truncation_errors) {
-    for (int lev = 0; lev <= sim->finest_level; ++lev) {
-        // Create folder and file.
-        std::string folder = prefix + "/Level_" + std::to_string(lev);
-        amrex::UtilCreateDirectory(folder.c_str(), 0755);
-
-        std::string filename = folder + "/"
-                        + std::to_string(amrex::ParallelDescriptor::MyProc())
-                        + ".hdf5";
-        hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
-                                  H5P_DEFAULT);
-
-        // Write fields.
-        const LevelData* state = &sim->grid_new[lev];
-        WriteLevel(time, state, lev, file_id, "data", 
-                   downsample_factor, false);
-
-        if (is_truncation_errors) {
-            // Write truncation errors.
-            const LevelData* state = &sim->grid_old[lev];
-
-            WriteLevel(time, state, lev, file_id, "te", 
-                       downsample_factor, true);
-        }
-
-        H5Fclose(file_id);
-    }
 }
 
 bool IOModule::WriteProjections(double time, std::string prefix) {
@@ -565,26 +421,6 @@ bool IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
         H5Fclose(file_id);
 
     return true;
-}
-
-void IOModule::CheckDownsampleFactor(int factor, std::string name,
-                                     int max_level) {
-    if (!amrex::ParallelDescriptor::IOProcessor())
-        return;
-
-    if (!utils::IsPowerOfTwo(factor)) {
-        std::string msg = "sledgehamr::IOModule: Downsample factor output."
-                        + name + " is not a power of 2";
-        amrex::Abort(msg);
-    }
-
-    for (int lev = 0; lev <= max_level; ++lev) {
-        if (factor > sim->blocking_factor[lev][0]) {
-            std::string msg = "sledgehamr::IOModule: Downsample factor output."
-                            + name + " exceeds blocking factor";
-            amrex::Abort(msg);
-        }
-    }
 }
 
 bool IOModule::WriteCheckpoint(double time, std::string prefix) {

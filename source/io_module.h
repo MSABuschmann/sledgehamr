@@ -137,30 +137,6 @@ class IOModule {
      */
     bool WriteCoarseBoxTruncationError(double time, std::string prefix);
 
-    /** @brief Writes the coarse level possibly with truncation errors.
-     * @param   time                    Current time.
-     * @param   prefix                  Output path.
-     * @param   downsample_factor       Downsampling factor.
-     * @param   with_truncation_errors  Whether truncation errors shall be
-     *                                  written.
-     */
-    void DoWriteCoarseBox(double time, std::string prefix,
-                          int downsample_factor, bool with_truncation_errors);
-
-    /** @brief Writes an entire level to file.
-     * @param   time                    Current time.
-     * @param   state                   Pointer to full grid from which the
-     *                                  slice shall be taken.
-     * @param   ident                   String identifier, e.g. "data" or "te".
-     * @param   file_id                 ID of HDF5 file.
-     * @param   downsample_factor       Downsample level by this factor.
-     * @param   is_truncation_errors    Whether the data contains truncation
-     *                                  errors.
-     */
-    void WriteLevel(double time, const LevelData* state, int lev,
-                    hid_t file_id, std::string ident, int downsample_factor,
-                    bool is_truncation_errors);
-
     /** @brief OUTPUT_FCT. Wrapper to write all levels.
      * @param   time   Current time.
      * @param   prefix Output path.
@@ -172,16 +148,6 @@ class IOModule {
      * @param   prefix Output path.
      */
     bool WriteFullBoxTruncationError(double time, std::string prefix);
-
-    /** @brief Writes all levels possibly with truncation errors.
-     * @param   time                    Current time.
-     * @param   prefix                  Output path.
-     * @param   downsample_factor       Downsampling factor.
-     * @param   with_truncation_errors  Whether truncation errors shall be
-     *                                  written.
-     */
-    void DoWriteFullBox(double time, std::string prefix, int downsample_factor,
-                        bool with_truncation_errors);
 
     /** @brief OUTPUT_FCT. Write projections.
      * @param   time   Current time.
@@ -200,8 +166,6 @@ class IOModule {
      * @param   prefix Output path.
      */
     bool WriteGravitationalWaveSpectrum(double time, std::string prefix);
-
-    void CheckDownsampleFactor(int factor, std::string name, int max_level);
 
     bool WriteCheckpoint(double time, std::string prefix);
 
