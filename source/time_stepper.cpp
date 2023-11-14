@@ -272,11 +272,16 @@ void TimeStepper::NoShadowRegrid(int lev) {
 }
 
 void TimeStepper::DoRegrid(int lev, double time) {
+    // Before regridding we want to attempt to write output to allow for
+    // truncation errors estimates to be written to file. Those would be
+    // corrupted or non-exist at any other stage of the simulation.
+    if (lev == 0)
+        sim->io_module->Write();
+
     // Try local regrid first.
     utils::sctp timer = utils::StartTimer();
     sim->performance_monitor->Start(
             sim->performance_monitor->idx_local_regrid, lev);
-
     bool successfull = local_regrid->AttemptRegrid(lev);
 
     sim->performance_monitor->Stop(
