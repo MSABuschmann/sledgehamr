@@ -4,8 +4,8 @@ namespace sledgehamr {
 
 void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     int mlevel = INT_MAX;
-    amrex::ParmParse pp("output");
-    pp.query("projection_max_level", mlevel);
+    amrex::ParmParse pp("output.projections");
+    pp.query("max_level", mlevel);
     mlevel = std::min(mlevel, sim->finest_level);
 
     const int dimN = sim->dimN[mlevel];
