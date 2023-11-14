@@ -25,6 +25,11 @@ void LocalRegrid::DidGlobalRegrid(const int lev) {
         do_global_regrid[l] = false;
         nregrids = 0;
     }
+
+    for (int l = lev+1; l < last_numPts.size(); ++l) {
+        last_numPts[l] = sim->grid_new[l].boxArray().numPts();
+        sim->grid_old[l].contains_truncation_errors = false;
+    }
 }
 
 void LocalRegrid::InitializeLayout(const int max_lev) {
@@ -216,7 +221,7 @@ bool LocalRegrid::CheckForVeto(const int lev,
     latest_possible_regrid_time.resize(sim->finest_level+1, -1.);
 
     for (int l = 1; l <= sim->finest_level; ++l) {
-        veto = CheckThresholds(l, box_arrays[l]);
+        veto = veto || CheckThresholds(l, box_arrays[l]);
         ComputeLatestPossibleRegridTime(l, lev);
     }
 
@@ -371,7 +376,6 @@ inline int LocalRegrid::GetBoxCoarseFineBorders(
 
     int remaining = 0;
     border.resize(boost::extents[xsb[0]][xsb[1]][xsb[2]]);
-
     for (int k=-1; k<=xs[2]; ++k) {
         for (int j=-1; j<=xs[1]; ++j) {
             for (int i=-1; i<=xs[0]; ++i) {
@@ -446,7 +450,7 @@ inline void LocalRegrid::CheckBorders(
                 }
 
                 closest_locations[omp_thread_num].SelectClosest(
-                        ci[0], ci[2], ci[3], d_sq);
+                        ci[0], ci[1], ci[2], d_sq);
 
                 // Add new box if below threshold.
                 if (d_sq < threshold) {
@@ -480,7 +484,7 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
     std::vector<Location> closest_locations(omp_get_max_threads());
 
 #pragma omp parallel
-    for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
+    for (amrex::MFIter mfi(state, false); mfi.isValid(); ++mfi) {
         const amrex::Array4<double const>& state_fab = state.array(mfi);
         const amrex::Array4<char>& tag_arr = tags.array(mfi);
 
@@ -513,7 +517,7 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
     Location closest = Location::FindClosestGlobally(closest_locations);
 
     if (amrex::ParallelDescriptor::IOProcessor()) {
-        if( closest.i >= 0 ) {
+        if( closest.distance_sq < 46000) {
             amrex::Print() << "  Shortest distance to C/F boundary: "
                            << sqrt(static_cast<double>(closest.distance_sq))
                            << " grid sites @ (" << closest.i << ","
