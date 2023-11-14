@@ -63,7 +63,7 @@ void IOModule::AddOutputModules() {
                         OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum));
 
     idx_performance_monitor = output.size();
-    output.emplace_back("performance_log",
+    output.emplace_back("performance_monitor",
                         OUTPUT_FCT(IOModule::WritePerformanceMonitor));
 
     // Checkpoint. Always add checkpoints last.
@@ -661,6 +661,9 @@ void IOModule::UpdateOutputModules() {
 }
 
 int IOModule::FindLatestCheckpoint(std::string folder) {
+    if (folder == "")
+        return -1;
+
     std::string prefix = folder + "/checkpoints/";
     std::vector<std::string> folders = GetDirectories(prefix);
 
