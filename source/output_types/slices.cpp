@@ -4,7 +4,7 @@ namespace sledgehamr {
 
 void Slices::Write() {
     if (with_truncation_errors) {
-        amrex::Print() << "Write slices of truncation error estimates: " 
+        amrex::Print() << "Write slices of truncation error estimates: "
                        << folder << std::endl;
     } else {
         amrex::Print() << "Write slices: " << folder << std::endl;
@@ -42,6 +42,12 @@ void Slices::Write() {
 void Slices::WriteSingleSlice(const LevelData* state, int lev, hid_t file_id,
                               std::string ident, int d1, int d2, int d3,
                               bool is_truncation_error) {
+    if (is_truncation_error && !state->contains_truncation_errors) {
+        std::string msg = "Attempting to save truncation errors but none exist "
+                          "on level " + std::to_string(lev) + "!";
+        amrex::Abort(msg);
+    }
+
     std::vector<int> le1, he1, le2, he2;
     const int ndist = is_truncation_error ? 2 : 1;
 
