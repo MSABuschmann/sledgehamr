@@ -14,7 +14,7 @@
 #include "projection.h"
 #include "spectrum.h"
 #include "gravitational_waves.h"
-#include "checkpoint.h"
+#include "output_types/checkpoint.h"
 #include "performance_monitor.h"
 
 namespace sledgehamr {
