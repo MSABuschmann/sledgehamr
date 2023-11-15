@@ -1,5 +1,6 @@
 #include "gravitational_waves.h"
 #include "hdf5_utils.h"
+#include "fft.h"
 
 namespace sledgehamr {
 
@@ -40,8 +41,8 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
     for (int i = 0; i < 6; ++i) {
         du_real[i].define(ba, dm, 1, 0);
         du_imag[i].define(ba, dm, 1, 0);
-        Spectrum::Fft(ld, comps[i] + idx_offset, du_real[i], du_imag[i],
-                      sim->geom[lev], false);
+        utils::Fft(ld, comps[i] + idx_offset, du_real[i], du_imag[i],
+                   sim->geom[lev], false);
     }
 
     double dk = 2.*M_PI / sim->L;

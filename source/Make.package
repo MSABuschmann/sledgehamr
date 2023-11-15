@@ -47,6 +47,7 @@ CEXE_sources += gravitational_waves.cpp
 
 CEXE_headers += sledgehamr_utils.h
 CEXE_headers += io_module_utils.h
+CEXE_headers += fft.h
 CEXE_headers += level_data.h
 CEXE_headers += scalars.h
 CEXE_headers += projects.h
