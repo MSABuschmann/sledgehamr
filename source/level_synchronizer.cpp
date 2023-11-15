@@ -231,8 +231,8 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
             auto const& crsema = S_crse.arrays();
             auto const& finema = S_fine.const_arrays();
             auto const& tema = S_te.arrays();
-            ParallelFor(S_crse, amrex::IntVect(0), S_crse.nComp(),
-                [=] AMREX_GPU_DEVICE (int box_no, int i, int j, int k, int n)
+            ParallelFor(S_crse, amrex::IntVect(0),
+                [=] AMREX_GPU_DEVICE (int box_no, int i, int j, int k)
                 noexcept {
                 sledgehamr::kernels::AverageDownWithTruncationError(i, j, k,
                         ncomp, crsema[box_no], finema[box_no], tema[box_no]);
@@ -271,8 +271,8 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
             auto const& crsema = crse_S_fine.arrays();
             auto const& finema = S_fine.const_arrays();
             auto const& tema = S_te.arrays();
-            ParallelFor(crse_S_fine, amrex::IntVect(0), ncomp,
-                [=] AMREX_GPU_DEVICE (int box_no, int i, int j, int k, int n)
+            ParallelFor(crse_S_fine, amrex::IntVect(0),
+                [=] AMREX_GPU_DEVICE (int box_no, int i, int j, int k)
                 noexcept {
                     sledgehamr::kernels::AverageDownWithTruncationError(i, j, k,
                             ncomp, crsema[box_no], finema[box_no],
