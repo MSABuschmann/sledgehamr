@@ -39,9 +39,6 @@ CEXE_sources += time_stepper.cpp
 CEXE_headers += regrid_scheduler.h
 CEXE_sources += regrid_scheduler.cpp
 
-CEXE_headers += spectrum.h
-CEXE_sources += spectrum.cpp
-
 CEXE_headers += gravitational_waves.h
 CEXE_sources += gravitational_waves.cpp
 

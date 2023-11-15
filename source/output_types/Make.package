@@ -7,5 +7,8 @@ CEXE_sources += level_writer.cpp
 CEXE_headers += projection.h
 CEXE_sources += projection.cpp
 
+CEXE_headers += spectrum.h
+CEXE_sources += spectrum.cpp
+
 CEXE_headers += checkpoint.h
 CEXE_sources += checkpoint.cpp
