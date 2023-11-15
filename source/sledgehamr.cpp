@@ -5,6 +5,8 @@
 
 #include "sledgehamr.h"
 #include "sledgehamr_utils.h"
+#include "hdf5_utils.h"
+#include "fill_level.h"
 
 namespace sledgehamr {
 
@@ -102,7 +104,8 @@ void Sledgehamr::MakeNewLevelFromScratch(int lev, amrex::Real time,
     SetDistributionMap(lev, dm);
 
     // Fill current level lev with initial state data.
-    io_module->FillLevelFromFile(lev);
+    FillLevel fill_level(this, lev);
+    fill_level.FromInitialStateFile();
 }
 
 void Sledgehamr::MakeNewLevelFromCoarse(int lev, amrex::Real time,
@@ -383,12 +386,12 @@ void Sledgehamr::ReadSpectrumKs(bool reload) {
                       "notebook sledgehamr/data/MakeSpectrumBins.ipynb.";
 
     std::vector<int> nks(1);
-    if (!IOModule::ReadFromHDF5(filename, {sdimN+"_nks"}, &(nks[0]))) {
+    if (!utils::hdf5::Read(filename, {sdimN+"_nks"}, &(nks[0]))) {
         amrex::Abort(msg);
     }
 
     spectrum_ks.resize(nks[0]);
-    if (!IOModule::ReadFromHDF5(filename, {sdimN}, &(spectrum_ks[0]))) {
+    if (!utils::hdf5::Read(filename, {sdimN}, &(spectrum_ks[0]))) {
         amrex::Abort(msg);
     }
 }

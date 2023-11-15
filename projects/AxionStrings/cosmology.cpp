@@ -1,5 +1,6 @@
 #include "cosmology.h"
 #include <sledgehamr_utils.h>
+#include <hdf5_utils.h>
 
 namespace AxionStrings {
 
@@ -57,7 +58,7 @@ bool Cosmology::WriteXi(double time, std::string prefix) {
         std::string filename = prefix + "/xi.h5";
         hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
                             H5P_DEFAULT);
-        sledgehamr::IOModule::WriteToHDF5(file_id, "data", data, nsize);
+        sledgehamr::utils::hdf5::Write(file_id, "data", data, nsize);
         H5Fclose(file_id);
     }
 

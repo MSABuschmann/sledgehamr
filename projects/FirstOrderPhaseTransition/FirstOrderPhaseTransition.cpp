@@ -1,3 +1,5 @@
+#include <hdf5_utils.h>
+
 #include "FirstOrderPhaseTransition.h"
 
 namespace FirstOrderPhaseTransition{
@@ -53,7 +55,7 @@ void FirstOrderPhaseTransition::ParseBubbles() {
     amrex::Print() << "Read bubble information: " << file << std::endl;
 
     double header[5];
-    sledgehamr::IOModule::ReadFromHDF5(file, {"Header"}, header);
+    sledgehamr::utils::hdf5::Read(file, {"Header"}, header);
 
     int NB = header[2];
     if( NB == 0 )
@@ -65,11 +67,11 @@ void FirstOrderPhaseTransition::ParseBubbles() {
     std::vector<double> ts(NB);
     std::vector<int> use_profile(NB);
 
-    sledgehamr::IOModule::ReadFromHDF5(file, {"xlocs"}, &xlocs[0]);
-    sledgehamr::IOModule::ReadFromHDF5(file, {"ylocs"}, &ylocs[0]);
-    sledgehamr::IOModule::ReadFromHDF5(file, {"zlocs"}, &zlocs[0]);
-    sledgehamr::IOModule::ReadFromHDF5(file, {"t"}, &ts[0]);
-    sledgehamr::IOModule::ReadFromHDF5(file, {"use_profile"}, &use_profile[0]);
+    sledgehamr::utils::hdf5::Read(file, {"xlocs"}, &xlocs[0]);
+    sledgehamr::utils::hdf5::Read(file, {"ylocs"}, &ylocs[0]);
+    sledgehamr::utils::hdf5::Read(file, {"zlocs"}, &zlocs[0]);
+    sledgehamr::utils::hdf5::Read(file, {"t"}, &ts[0]);
+    sledgehamr::utils::hdf5::Read(file, {"use_profile"}, &use_profile[0]);
 
     const int ncomp = grid_new[0].nComp();
     for (int b = 0; b < NB; ++b) {
@@ -83,7 +85,7 @@ void FirstOrderPhaseTransition::ParseBubbles() {
             double profile_header[4];
             std::string str_profile_header = "profile_header_"
                                            + std::to_string(b);
-            sledgehamr::IOModule::ReadFromHDF5(file, {str_profile_header},
+            sledgehamr::utils::hdf5::Read(file, {str_profile_header},
                                                profile_header);
 
             B.inv_dx = profile_header[1];
@@ -92,7 +94,7 @@ void FirstOrderPhaseTransition::ParseBubbles() {
 
             B.level.resize((int)profile_header[0]);
             std::string str_data_level = "profile_level_" + std::to_string(b);
-            sledgehamr::IOModule::ReadFromHDF5(file, {str_data_level}, &B.level[0]);
+            sledgehamr::utils::hdf5::Read(file, {str_data_level}, &B.level[0]);
 
             for (int n = 0; n < ncomp; ++n) {
                 std::string sname = scalar_fields[n]->name;
@@ -108,7 +110,7 @@ void FirstOrderPhaseTransition::ParseBubbles() {
                                      + std::to_string(b);
 
                 std::vector<double> profile((int)profile_header[0]);
-                sledgehamr::IOModule::ReadFromHDF5(file, {str_data},
+                sledgehamr::utils::hdf5::Read(file, {str_data},
                                                    &profile[0]);
                 B.profile.push_back( profile );
             }

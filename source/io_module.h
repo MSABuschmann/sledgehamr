@@ -1,8 +1,6 @@
 #ifndef SLEDGEHAMR_IO_MODULE_H_
 #define SLEDGEHAMR_IO_MODULE_H_
 
-#include <hdf5.h>
-
 #include <AMReX_ParmParse.H>
 
 #include "sledgehamr.h"
@@ -25,46 +23,6 @@ class IOModule {
     /** @brief Writes output if requested.
      */
     void Write(bool force=false);
-
-    /** @brief Reads dataset from HDF5 file.
-     * @param   filename    Name of HDF5 file.
-     * @param   dnames      Vector of datasets to be tried. First dataset to be
-     *                      found will be read.
-     * @param   data        Data pointer to be filled with data. Can be double,
-     *                      float or int. TODO: Add static_assert.
-     */
-    template <typename T>
-    static bool ReadFromHDF5(std::string filename,
-                             std::vector<std::string> dnames, T* data);
-
-    /** @brief Write dataset to HDF5 file.
-     * @param   file_id ID of HDF5 file.
-     * @param   dset    Name of dataset.
-     * @param   data    Pointer to data. Can be double, float or int. TODO: Add
-     *                  static_assert
-     * @param   size    Size of data.
-     */
-    template <typename T>
-    static void WriteToHDF5(hid_t file_id, std::string dset, T* data,
-                     unsigned long long size);
-
-    std::string ExistingDataset(std::string filename,
-                                       std::vector<std::string> dnames);
-
-    /** @brief Fills a given level with data from hdf5 file(s).
-     * @param   lev Level to be filled with data.
-     */
-    void FillLevelFromFile(int lev);
-
-    void FillLevelFromHdf5File(int lev, std::string initial_state_file);
-    void FillLevelFromCheckpointFile(int lev, std::string folder);
-
-    /** @brief Fills LevelData with a constant value.
-     * @param   lev     Level to be filled with data.
-     * @param   comp    Component to be filled.
-     * @param   c       Constant.
-     */
-    void FillLevelFromConst(int lev, const int comp, const double c);
 
     void RestartSim();
 
@@ -97,86 +55,26 @@ class IOModule {
 
     std::string output_folder;
     std::string alternative_output_folder = "";
+    std::string old_checkpoint = "";
 
   private:
-    /** @brief Copies data from array into LevelData.
-     * @param   lev Level to be filled with data.
-     * @param   comp    Component to be filled.
-     * @param   data    Data array.
-     * @param   dimN    Number of cells in each direction of level lev.
-     */
-    void FillLevelFromArray(int lev, const int comp, double* data,
-                            const long long dimN);
-
-    void FillChunkFromArray(int lev, const int comp, double* data);
-
-    /** @brief OUTPUT_FCT. Wrapper to write slices along all three directions
-     *         and all scalar fields.
-     * @param   time   Current time.
-     * @param   prefix Output path.
-     */
     bool WriteSlices(double time, std::string prefix);
-
-    /** @brief OUTPUT_FCT. Wrapper to write slices of truncation errors and
-     *         corresponding fields.
-     * @param   time   Current time.
-     * @param   prefix Output path.
-     */
     bool WriteSlicesTruncationError(double time, std::string prefix);
-
-    /** @brief OUTPUT_FCT. Wrapper to write the coarse level.
-     * @param   time   Current time.
-     * @param   prefix Output path.
-     */
     bool WriteCoarseBox(double time, std::string prefix);
-
-    /** @brief OUTPUT_FCT. Wrapper to write the coarse level with truncation
-     *         errors.
-     * @param   time   Current time.
-     * @param   prefix Output path.
-     */
     bool WriteCoarseBoxTruncationError(double time, std::string prefix);
-
-    /** @brief OUTPUT_FCT. Wrapper to write all levels.
-     * @param   time   Current time.
-     * @param   prefix Output path.
-     */
     bool WriteFullBox(double time, std::string prefix);
-
-    /** @brief OUTPUT_FCT. Wrapper to write truncation errors on all levels.
-     * @param   time   Current time.
-     * @param   prefix Output path.
-     */
     bool WriteFullBoxTruncationError(double time, std::string prefix);
-
-    /** @brief OUTPUT_FCT. Write projections.
-     * @param   time   Current time.
-     * @param   prefix Output path.
-     */
     bool WriteProjections(double time, std::string prefix);
-
-    /** @brief OUTPUT_FCT. Write spectra.
-     * @param   time   Current time.
-     * @param   prefix Output path.
-     */
     bool WriteSpectra(double time, std::string prefix);
-
-    /** @brief OUTPUT_FCT. Write gravitational wave spectrum.
-     * @param   time   Current time.
-     * @param   prefix Output path.
-     */
     bool WriteGravitationalWaveSpectrum(double time, std::string prefix);
-
-    bool WriteCheckpoint(double time, std::string prefix);
-
-    int FindLatestCheckpoint(std::string folder);
-    
-    std::vector<std::string> GetDirectories(const std::string prefix);
-
     bool WritePerformanceMonitor(double time, std::string prefix);
+    bool WriteCheckpoint(double time, std::string prefix);
+    int FindLatestCheckpoint(std::string folder);
 
+    std::vector<std::string> GetDirectories(const std::string prefix);
     void CheckIfOutputAlreadyExists(std::string folder);
     void CreateOutputFolder(std::string folder);
+
     void AddOutputModules();
     void ParseParams();
 
@@ -188,7 +86,6 @@ class IOModule {
     int full_box_truncation_error_downsample_factor = 1;
 
     std::string initial_chk = "";
-    std::string old_checkpoint = "";
     bool rolling_checkpoints = false;
     bool delete_restart_checkpoint = false;
 
@@ -196,89 +93,6 @@ class IOModule {
      */
     Sledgehamr* sim;
 };
-
-template <typename T>
-bool IOModule::ReadFromHDF5(std::string filename,
-                            std::vector<std::string> dnames, T* data) {
-    // Identify datatype.
-    hid_t mem_type_id;
-    if (std::is_same<T, float>::value) {
-        mem_type_id = H5T_NATIVE_FLOAT;
-    } else if (std::is_same<T, double>::value) {
-        mem_type_id = H5T_NATIVE_DOUBLE;
-    } else if (std::is_same<T, int>::value) {
-        mem_type_id = H5T_NATIVE_INT;
-    }
-
-    if (!amrex::FileExists(filename))
-        return false;
-
-    // Try and open HDF5 file.
-    hid_t file_id = H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
-    if (file_id == H5I_INVALID_HID) {
-        amrex::Abort("#error: Could not open file: " + filename);
-    }
-
-    // Try and find dataset. Iterate over vector, use first to be found.
-    std::string dname_conc = " |";
-    std::string dname_found = "";
-    for (std::string dname : dnames) {
-        htri_t exists = H5Lexists(file_id, dname.c_str(), H5P_DEFAULT);
-
-        if (exists > 0) {
-            dname_found = dname;
-            break;
-        }
-
-        dname_conc += " " + dname;
-    }
-
-    if (dname_found  == "") {
-        H5Fclose(file_id);
-
-        return false;
-    }
-
-    // Read dataset.
-    hid_t dataset_id = H5Dopen2(file_id, dname_found.c_str(), H5P_DEFAULT);
-    if (H5Dread(dataset_id, mem_type_id, H5S_ALL,
-                H5S_ALL, H5P_DEFAULT, data) < 0) {
-        return false;
-    }
-
-    H5Dclose(dataset_id);
-    H5Fclose(file_id);
-
-    return true;
-}
-
-template <typename T>
-void IOModule::WriteToHDF5(hid_t file_id, std::string dset, T* data,
-                           unsigned long long size) {
-    // Identify datatype.
-    hid_t mem_type_id, dset_type_id;
-    if (std::is_same<T, float>::value) {
-        mem_type_id = H5T_NATIVE_FLOAT;
-        dset_type_id = H5T_IEEE_F32LE;
-    } else if (std::is_same<T, double>::value) {
-        mem_type_id = H5T_NATIVE_DOUBLE;
-        dset_type_id = H5T_IEEE_F64LE;
-    } else if (std::is_same<T, int>::value) {
-        mem_type_id = H5T_NATIVE_INT;
-        dset_type_id = H5T_IEEE_F64LE;
-    } else {
-        amrex::Abort("#error: Writing of dataset " + dset
-                     + " failed due to unknown datatype.");
-    }
-
-    // Create and write dataset.
-    hsize_t dims[1] = {size};
-    hid_t space = H5Screate_simple(1,dims, NULL);
-    hid_t dataset_id = H5Dcreate(file_id, dset.c_str(), dset_type_id, space,
-                                 H5P_DEFAULT, H5P_DEFAULT,H5P_DEFAULT);
-    H5Dwrite(dataset_id, mem_type_id, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
-    H5Dclose(dataset_id);
-}
 
 }; // namespace sledgehamr
 

@@ -5,6 +5,7 @@
 #include <AMReX_PlotFileDataImpl.H>
 
 #include "io_module.h"
+#include "hdf5_utils.h"
 #include "sledgehamr_utils.h"
 #include "output_types/slices.h"
 #include "output_types/level_writer.h"
@@ -136,173 +137,6 @@ void IOModule::Write(bool force) {
     output[idx_checkpoints].Write(sim->grid_new[0].t, force);
     sim->performance_monitor->Stop(
             sim->performance_monitor->idx_output, idx_checkpoints);
-}
-
-void IOModule::FillLevelFromFile(int lev) {
-    amrex::ParmParse pp("input");
-    std::string initial_state_file = "";
-    pp.query("initial_state", initial_state_file);
-
-    if (amrex::FileExists(initial_state_file + "/Meta.hdf5")) {
-        FillLevelFromCheckpointFile(lev, initial_state_file);
-    } else {
-        FillLevelFromHdf5File(lev, initial_state_file);
-    }
-}
-
-void IOModule::FillLevelFromCheckpointFile(int lev, std::string folder) {
-    Checkpoint chk(sim, folder);
-    chk.Read();
-
-    if (delete_restart_checkpoint)  {
-        old_checkpoint = folder;
-    }
-}
-
-void IOModule::FillLevelFromHdf5File(int lev, std::string initial_state_file) {
-    amrex::ParmParse pp("input");
-
-    // Iterate over fields but introduce offset such that each node grabs a
-    // different file first.
-    const int ncomp = sim->scalar_fields.size();
-    int lr = amrex::ParallelDescriptor::MyProc();
-    int mr = amrex::ParallelDescriptor::NProcs();
-    for (int f=0; f<ncomp; ++f) {
-        int f2 = (f+lr) % ncomp;
-
-        // Determine which input file to use if any.
-        std::string initial_state_file_component = "";
-        std::string query = "initial_state_" + sim->scalar_fields[f2]->name;
-        pp.query(query.c_str(), initial_state_file_component);
-
-        if (initial_state_file_component == "")
-            initial_state_file_component = initial_state_file;
-
-        // If no file found, fill level with 0's. Otherwise read file and fill
-        // LevelData.
-        if(initial_state_file_component == "") {
-            FillLevelFromConst(lev, f2, 0);
-        } else {
-            amrex::Print() << "Reading initial state for "
-                           << sim->scalar_fields[f2]->name
-                           << " from " << initial_state_file_component
-                           << std::endl;
-
-            // Test if chunks exist.
-            std::string chunk1 = sim->scalar_fields[f2]->name + "_"
-                               + std::to_string(lr);
-            std::string chunk2 = "data_" + std::to_string(lr);
-            std::string existing_chunk = ExistingDataset(
-                    initial_state_file_component, {chunk1, chunk2});
-
-            if (existing_chunk == "") {
-                const int dimN = sim->dimN[lev];
-                const long long dsetsize = dimN*dimN*dimN;
-                double* input_data = new double [dsetsize] ();
-
-                if (!ReadFromHDF5(initial_state_file_component,
-                        {sim->scalar_fields[f2]->name, "data"},
-                        input_data)) {
-                    std::string msg =
-                               "Sledgehamr::IOModule::FillLevelFromHdf5File: "
-                               "Could not find initial state data for "
-                             + sim->scalar_fields[f2]->name + "!";
-                    amrex::Abort(msg);
-                }
-
-                FillLevelFromArray(lev, f2, input_data, dimN);
-                delete[] input_data;
-            } else {
-                amrex::Box bx = sim->grid_new[lev].boxArray()[lr];
-                const long long dsetsize= bx.numPts();
-                double* input_data = new double [dsetsize] ();
-
-               if (!ReadFromHDF5(initial_state_file_component,
-                        {chunk1, chunk2},
-                        input_data)) {
-                    std::string msg =
-                               "Sledgehamr::IOModule::FillLevelFromHdf5File: "
-                               "Could not find initial state chunk "
-                             + chunk1 + "!";
-                    amrex::Abort(msg);
-                }
-
-                FillChunkFromArray(lev, f2, input_data);
-                delete[] input_data;
-            }
-        }
-    }
-}
-
-void IOModule::FillLevelFromArray(int lev, const int comp, double* data,
-                                  const long long dimN) {
-    LevelData& state = sim->grid_new[lev];
-
-#pragma omp parallel
-    for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
-        const amrex::Box& bx = mfi.tilebox();
-        const auto& state_arr = state.array(mfi);
-
-        const amrex::Dim3 lo = amrex::lbound(bx);
-        const amrex::Dim3 hi = amrex::ubound(bx);
-
-        for (int k = lo.z; k <= hi.z; ++k) {
-            for (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
-                for (int i = lo.x; i <= hi.x; ++i) {
-                    long long ind =  static_cast<long long>(i) * dimN*dimN
-                                   + static_cast<long long>(j) * dimN
-                                   + static_cast<long long>(k);
-                    state_arr(i,j,k,comp) = data[ind];
-                }
-            }
-        }
-    }
-}
-
-void IOModule::FillChunkFromArray(int lev, const int comp, double* data) {
-    LevelData& state = sim->grid_new[lev];
-
-#pragma omp parallel
-    for (amrex::MFIter mfi(state, false); mfi.isValid(); ++mfi) {
-        const amrex::Box& bx = mfi.tilebox();
-        const auto& state_arr = state.array(mfi);
-
-        const amrex::Dim3 lo = amrex::lbound(bx);
-        const amrex::Dim3 hi = amrex::ubound(bx);
-        const int lx = bx.length(0);
-        const int ly = bx.length(1);
-        const int lz = bx.length(2);
-
-        for (int k = lo.z; k <= hi.z; ++k) {
-            for (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
-                for (int i = lo.x; i <= hi.x; ++i) {
-                    long long ind =  static_cast<long long>(i-lo.x) * lz*ly
-                                   + static_cast<long long>(j-lo.y) * lz
-                                   + static_cast<long long>(k-lo.z);
-
-                    state_arr(i,j,k,comp) = data[ind];
-                }
-            }
-        }
-    }
-}
-
-void IOModule::FillLevelFromConst(int lev, const int comp, const double c) {
-    LevelData& state = sim->grid_new[lev];
-
-#pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
-    for (amrex::MFIter mfi(state, amrex::TilingIfNotGPU()); mfi.isValid();
-            ++mfi) {
-        const amrex::Box& bx = mfi.tilebox();
-        const auto& state_arr = state.array(mfi);
-
-        amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k)
-            noexcept {
-            state_arr(i,j,k,comp) = c;
-        });
-    }
 }
 
 bool IOModule::WriteSlices(double time, std::string prefix) {
@@ -555,7 +389,7 @@ bool IOModule::WritePerformanceMonitor(double time, std::string prefix) {
 }
 
 void IOModule::WriteBoxArray(amrex::BoxArray& ba) {
-    if (!amrex::ParallelDescriptor::IOProcessor()) 
+    if (!amrex::ParallelDescriptor::IOProcessor())
         return;
 
     const int nba = ba.size();
@@ -568,39 +402,19 @@ void IOModule::WriteBoxArray(amrex::BoxArray& ba) {
         y1[b] = ba[b].bigEnd(1);
         z1[b] = ba[b].bigEnd(2);
     }
-    int header[1] = {nba}; 
- 
+    int header[1] = {nba};
+
     std::string filename = output_folder + "/box_layout.h5";
     hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
                             H5P_DEFAULT);
-    WriteToHDF5(file_id, "header", header, 1);
-    WriteToHDF5(file_id, "x0", x0.data(), nba);
-    WriteToHDF5(file_id, "y0", y0.data(), nba);
-    WriteToHDF5(file_id, "z0", z0.data(), nba);
-    WriteToHDF5(file_id, "x1", x1.data(), nba);
-    WriteToHDF5(file_id, "y1", y1.data(), nba);
-    WriteToHDF5(file_id, "z1", z1.data(), nba);
+    utils::hdf5::Write(file_id, "header", header, 1);
+    utils::hdf5::Write(file_id, "x0", x0.data(), nba);
+    utils::hdf5::Write(file_id, "y0", y0.data(), nba);
+    utils::hdf5::Write(file_id, "z0", z0.data(), nba);
+    utils::hdf5::Write(file_id, "x1", x1.data(), nba);
+    utils::hdf5::Write(file_id, "y1", y1.data(), nba);
+    utils::hdf5::Write(file_id, "z1", z1.data(), nba);
     H5Fclose(file_id);
-}
-
-std::string IOModule::ExistingDataset(std::string filename,
-                                            std::vector<std::string> dnames) {
-    // Try and open HDF5 file.
-    hid_t file_id = H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
-    if (file_id == H5I_INVALID_HID) {
-        amrex::Abort("#error: Could not open file: " + filename);
-    }
-
-    // Try and find dataset. Iterate over vector, use first to be found.
-    std::string dname_found = "";
-    for (std::string dname : dnames) {
-        htri_t exists = H5Lexists(file_id, dname.c_str(), H5P_DEFAULT);
-
-        if (exists > 0)
-            return dname;
-    }
-
-    return "";
 }
 
 }; // namespace sledgehamr

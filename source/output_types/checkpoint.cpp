@@ -9,6 +9,7 @@
 #include <AMReX_FileSystem.H>
 
 #include "checkpoint.h"
+#include "hdf5_utils.h"
 
 namespace sledgehamr {
 
@@ -56,7 +57,7 @@ void Checkpoint::Write() {
                 (double)noutput,
                 (double)sim->io_module->idx_checkpoints
         };
-        IOModule::WriteToHDF5(file_id, "Header", header_data, nparams);
+        utils::hdf5::Write(file_id, "Header", header_data, nparams);
 
         // levels: blocking_factor, istep
         std::vector<int> bf(nlevels), istep(nlevels);
@@ -64,8 +65,8 @@ void Checkpoint::Write() {
             bf[lev] = sim->blocking_factor[lev][0];
             istep[lev] = sim->grid_new[lev].istep;
         }
-        IOModule::WriteToHDF5(file_id, "blocking_factors", &(bf[0]), nlevels);
-        IOModule::WriteToHDF5(file_id, "isteps", &(istep[0]), nlevels);
+        utils::hdf5::Write(file_id, "blocking_factors", &(bf[0]), nlevels);
+        utils::hdf5::Write(file_id, "isteps", &(istep[0]), nlevels);
 
         // outputs: last id, last time written
         std::vector<int> next_id(noutput);
@@ -80,8 +81,8 @@ void Checkpoint::Write() {
         next_id[sim->io_module->idx_checkpoints]++;
         last_time_written[sim->io_module->idx_checkpoints] = sim->grid_new[0].t;
 
-        IOModule::WriteToHDF5(file_id, "next_id", &(next_id[0]), noutput);
-        IOModule::WriteToHDF5(file_id, "last_time_written",
+        utils::hdf5::Write(file_id, "next_id", &(next_id[0]), noutput);
+        utils::hdf5::Write(file_id, "last_time_written",
                               &(last_time_written[0]), noutput);
 
         H5Fclose(file_id);
@@ -102,7 +103,7 @@ bool Checkpoint::ReadHeader() {
     const int nparams = 8;
     double header[nparams];
     std::string filename = GetHeaderName();
-    if (!IOModule::ReadFromHDF5(filename, {"Header"}, header)) {
+    if (!utils::hdf5::Read(filename, {"Header"}, header)) {
         return false;
     }
 
@@ -271,13 +272,13 @@ void Checkpoint::UpdateOutputModules() {
     std::string filename = GetHeaderName();
     std::vector<int> next_id(noutput);
     std::vector<double> last_time_written(noutput);
-    if (!IOModule::ReadFromHDF5(filename, {"next_id"}, &(next_id[0]))) {
+    if (!utils::hdf5::Read(filename, {"next_id"}, &(next_id[0]))) {
         const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
                           "Could not find next_id!";
         amrex::Abort(msg);
     }
 
-    if (!IOModule::ReadFromHDF5(filename, {"last_time_written"},
+    if (!utils::hdf5::Read(filename, {"last_time_written"},
                                 &(last_time_written[0]))) {
         const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
                           "Could not find last_time_written!";
@@ -294,13 +295,13 @@ void Checkpoint::UpdateLevels() {
     std::string filename = GetHeaderName();
     std::vector<int> blocking_factor(sim->finest_level+1);
     std::vector<int> istep(sim->finest_level+1);
-    if (!IOModule::ReadFromHDF5(filename, {"isteps"}, &(istep[0]))) {
+    if (!utils::hdf5::Read(filename, {"isteps"}, &(istep[0]))) {
         const char* msg = "Sledgehamr::Checkpoint::UpdateLevels: "
                           "Could not find isteps!";
         amrex::Abort(msg);
     }
 
-    if (!IOModule::ReadFromHDF5(filename, {"blocking_factors"},
+    if (!utils::hdf5::Read(filename, {"blocking_factors"},
                             &(blocking_factor[0]))) {
         const char* msg = "Sledgehamr::Checkpoint::UpdateLevels: "
                           "Could not find blocking_factors!";

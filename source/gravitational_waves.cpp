@@ -1,4 +1,5 @@
 #include "gravitational_waves.h"
+#include "hdf5_utils.h"
 
 namespace sledgehamr {
 
@@ -131,9 +132,9 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
     if (amrex::ParallelDescriptor::IOProcessor()) {
         const int nparams = 3;
         double header_data[nparams] = {ld.t, (double)dimN, (double)kmax};
-        IOModule::WriteToHDF5(file_id, "Header", header_data, nparams);
-        IOModule::WriteToHDF5(file_id, "k", &(ks[0]), kmax);
-        IOModule::WriteToHDF5(file_id, "Spectrum", gw_spectrum, kmax);
+        utils::hdf5::Write(file_id, "Header", header_data, nparams);
+        utils::hdf5::Write(file_id, "k", &(ks[0]), kmax);
+        utils::hdf5::Write(file_id, "Spectrum", gw_spectrum, kmax);
     }
 
     delete[] gw_spectrum;

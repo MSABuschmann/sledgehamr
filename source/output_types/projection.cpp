@@ -1,4 +1,5 @@
 #include "projection.h"
+#include "hdf5_utils.h"
 
 namespace sledgehamr {
 
@@ -72,11 +73,11 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
             const int nparams = 2;
             hsize_t dims[1] = {nparams};
             double header_data[nparams] = {sim->grid_new[0].t, (double)dimN};
-            IOModule::WriteToHDF5(file_id, "Header", header_data, nparams);
+            utils::hdf5::Write(file_id, "Header", header_data, nparams);
         }
 
-        IOModule::WriteToHDF5(file_id, ident + "_data", &d_projection[0], N);
-        IOModule::WriteToHDF5(file_id, ident + "_n", &n_projection[0], N);
+        utils::hdf5::Write(file_id, ident + "_data", &d_projection[0], N);
+        utils::hdf5::Write(file_id, ident + "_n", &n_projection[0], N);
     }
 }
 

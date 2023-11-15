@@ -1,4 +1,5 @@
 #include "AxionStringsPostevolution.h"
+#include <hdf5_utils.h>
 
 namespace AxionStringsPostevolution {
 
@@ -45,7 +46,7 @@ void AxionStringsPostevolution::GetPreevolutionTime() {
     const int nparams = 8;
     double header[nparams];
     std::string filename = folder + "/Meta.hdf5";
-    sledgehamr::IOModule::ReadFromHDF5(filename, {"Header"}, header);
+    sledgehamr::utils::hdf5::Read(filename, {"Header"}, header);
     eta_pre_0 = header[0];
 }
 

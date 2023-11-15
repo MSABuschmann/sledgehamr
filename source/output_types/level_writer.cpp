@@ -1,5 +1,6 @@
 #include "level_writer.h"
 #include "sledgehamr_utils.h"
+#include "hdf5_utils.h"
 
 namespace sledgehamr {
 
@@ -155,7 +156,7 @@ void LevelWriter::WriteSingleLevel(
 
             std::string dset_name = sim->GetScalarFieldName(f) + "_" + ident
                                   + "_" + std::to_string(lex.size());
-            IOModule::WriteToHDF5(file_id, dset_name, output_arr, len);
+            utils::hdf5::Write(file_id, dset_name, output_arr, len);
             delete[] output_arr;
         }
 
@@ -169,17 +170,17 @@ void LevelWriter::WriteSingleLevel(
                 (double)sim->GetDimN(lev),
                 (double)downsample_factor,
                 (double)lex.size()};
-    IOModule::WriteToHDF5(file_id, "Header_" + ident, header_data, nparams);
+    utils::hdf5::Write(file_id, "Header_" + ident, header_data, nparams);
 
     // Write box dimensions so we can reassemble slice.
     if (lex.size() == 0)
         return;
 
-    IOModule::WriteToHDF5(file_id, "lex_"+ident, (int*)&(lex[0]), lex.size());
-    IOModule::WriteToHDF5(file_id, "ley_"+ident, (int*)&(ley[0]), ley.size());
-    IOModule::WriteToHDF5(file_id, "lez_"+ident, (int*)&(lez[0]), lez.size());
-    IOModule::WriteToHDF5(file_id, "hex_"+ident, (int*)&(hex[0]), hex.size());
-    IOModule::WriteToHDF5(file_id, "hey_"+ident, (int*)&(hey[0]), hey.size());
+    utils::hdf5::Write(file_id, "lex_"+ident, (int*)&(lex[0]), lex.size());
+    utils::hdf5::Write(file_id, "ley_"+ident, (int*)&(ley[0]), ley.size());
+    utils::hdf5::Write(file_id, "lez_"+ident, (int*)&(lez[0]), lez.size());
+    utils::hdf5::Write(file_id, "hex_"+ident, (int*)&(hex[0]), hex.size());
+    utils::hdf5::Write(file_id, "hey_"+ident, (int*)&(hey[0]), hey.size());
 }
 
 }; // namespace sledgehamr

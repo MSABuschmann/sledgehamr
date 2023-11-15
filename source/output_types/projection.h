@@ -1,6 +1,8 @@
 #ifndef SLEDGEHAMR_PROJECTION_H_
 #define SLEDGEHAMR_PROJECTION_H_
 
+#include <hdf5.h>
+
 #include <AMReX_AmrCore.H>
 
 #include "sledgehamr.h"
