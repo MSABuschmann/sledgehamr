@@ -31,6 +31,7 @@ class FirstOrderPhaseTransition : public sledgehamr::Sledgehamr {
     void ComputeParameters();
     void SetProjections();
 
+    std::vector<int> FindBubbles(const double time);
     void InjectBubbles(const double time);
     void InjectBubbleLevels(std::vector<int> ab);
     void FillBubbleLayout(const int lev, std::vector<int> ab);

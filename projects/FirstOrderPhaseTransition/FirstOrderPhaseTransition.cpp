@@ -128,10 +128,7 @@ void FirstOrderPhaseTransition::ParseBubbles() {
                    << std::endl;
 }
 
-void FirstOrderPhaseTransition::InjectBubbles(const double time) {
-    performance_monitor->Start(idx_perfmon_add_bubbles);
-
-    // Check if bubbles need to be added.
+std::vector<int> FirstOrderPhaseTransition::FindBubbles(const double time) {
     std::vector<int> ab;
     int skip = 0;
     for (int b = next_bubble; b < bubbles.size(); ++b) {
@@ -139,7 +136,6 @@ void FirstOrderPhaseTransition::InjectBubbles(const double time) {
             continue;
 
         if (bubbles_to_inject.size() > 0) {
-            amrex::Print() << "Test: " << b << std::endl;
             for(int x=0;x<bubbles_to_inject.size();++x)
                 amrex::Print() << bubbles_to_inject[x] << std::endl;
 
@@ -160,19 +156,24 @@ void FirstOrderPhaseTransition::InjectBubbles(const double time) {
 
     if (skip > 0) {
         amrex::Print() << "Skipping " << skip
-                       << " bubble(s) that have been injected earlier already."
-                       << std::endl;
+               << " bubble(s) that have been injected earlier already."
+               << std::endl;
     }
 
-    performance_monitor->Stop(idx_perfmon_add_bubbles);
+    return ab;
+}
 
-    if (ab.size() == 0)
+void FirstOrderPhaseTransition::InjectBubbles(const double time) {
+    performance_monitor->Start(idx_perfmon_add_bubbles);
+
+    std::vector<int> ab = FindBubbles(time);
+    if (ab.size() == 0) {
+        performance_monitor->Stop(idx_perfmon_add_bubbles);
         return;
+    }
 
     amrex::Print() << "Injecting " << ab.size() << " bubble(s) ... "
                    << std::endl;
-
-    performance_monitor->Start(idx_perfmon_add_bubbles);
 
     InjectBubbleLevels(ab);
     AddBubbleValues(ab);
