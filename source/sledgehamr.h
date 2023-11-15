@@ -127,6 +127,10 @@ class Sledgehamr : public amrex::AmrCore {
         return grid_old[lev];
     }
 
+    int GetBlockingFactor(const int lev) const {
+        return blocking_factor[lev][0];
+    }
+
     std::string GetScalarFieldName(const int comp) const {
         return scalar_fields[comp]->name;
     }
