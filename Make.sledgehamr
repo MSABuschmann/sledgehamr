@@ -15,6 +15,14 @@ VPATH_LOCATIONS   += $(SRC)/local_regrid
 INCLUDE_LOCATIONS += $(SRC)/local_regrid
 include $(SRC)/local_regrid/Make.package
 
+VPATH_LOCATIONS   += $(SRC)/output_types
+INCLUDE_LOCATIONS += $(SRC)/output_types
+include $(SRC)/output_types/Make.package
+
+VPATH_LOCATIONS   += $(SRC)/utils
+INCLUDE_LOCATIONS += $(SRC)/utils
+include $(SRC)/utils/Make.package
+
 # Projects
 pdir = $(SLEDGEHAMR_HOME_ABS)/projects
 PROJECTS = $(shell ls $(pdir)/)
