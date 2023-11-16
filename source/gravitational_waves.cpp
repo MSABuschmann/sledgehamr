@@ -21,8 +21,8 @@ GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
     ScalarField* du_xz = new ScalarField("du_xz", sim->scalar_fields, true);
     ScalarField* du_yz = new ScalarField("du_yz", sim->scalar_fields, true);
 
-    amrex::ParmParse pp("output");
-    pp.query("gw_projection_type", projection_type);
+    amrex::ParmParse pp("output.gw_spectra");
+    pp.query("projection_type", projection_type);
 }
 
 void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
