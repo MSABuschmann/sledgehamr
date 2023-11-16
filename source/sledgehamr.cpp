@@ -301,13 +301,15 @@ void Sledgehamr::ParseInput() {
                   increase_coarse_level_resolution);
 
     amrex::ParmParse pp_sim("sim");
-    pp_sim.query("get_box_layout_nodes", get_box_layout_nodes);
     pp_sim.get("t_start", t_start);
     pp_sim.get("t_end", t_end);
-    pp_sim.query("restart", restart_sim);
     pp_sim.get("L", L);
     pp_sim.get("cfl", cfl);
     pp_sim.query("gravitational_waves", with_gravitational_waves);
+
+    amrex::ParmParse pp_input("input");
+    pp_input.query("restart", restart_sim);
+    pp_input.query("get_box_layout_nodes", get_box_layout_nodes);
 }
 
 void Sledgehamr::ParseInputScalars() {

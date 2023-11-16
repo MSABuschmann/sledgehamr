@@ -21,7 +21,7 @@ void FillLevel::FromCheckpointFile(std::string folder) {
     chk.Read();
 
     bool delete_restart_checkpoint = false;
-    amrex::ParmParse pp("sim");
+    amrex::ParmParse pp("input");
     pp.query("delete_restart_checkpoint", delete_restart_checkpoint);
 
     if (delete_restart_checkpoint)  {

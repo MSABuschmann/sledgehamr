@@ -28,8 +28,8 @@ void IOModule::ParseParams() {
     pp.query("alternative_output_folder", alternative_output_folder);
     pp.query("checkpoints.rolling", rolling_checkpoints);
 
-    amrex::ParmParse pp_sim("sim");
-    pp_sim.query("delete_restart_checkpoint", delete_restart_checkpoint);
+    amrex::ParmParse pp_input("input");
+    pp_input.query("delete_restart_checkpoint", delete_restart_checkpoint);
 }
 
 void IOModule::AddOutputModules() {
@@ -274,7 +274,7 @@ bool IOModule::WriteCheckpoint(double time, std::string prefix) {
 }
 
 void IOModule::RestartSim() {
-    amrex::ParmParse pp("sim");
+    amrex::ParmParse pp("input");
     std::string selected_chk = "None Selected";
     pp.query("select_checkpoint", selected_chk);
 
