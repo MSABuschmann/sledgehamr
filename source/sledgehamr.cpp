@@ -11,7 +11,7 @@
 namespace sledgehamr {
 
 Sledgehamr::Sledgehamr () {
-    amrex::Print() << "Starting sledgehamr..." << std::endl;
+    amrex::Print() << "\nStarting sledgehamr..." << std::endl;
 
     ParseInput();
 
@@ -38,8 +38,6 @@ Sledgehamr::~Sledgehamr() {
 }
 
 void Sledgehamr::InitSledgehamr() {
-    if (no_simulation) return;
-
     if (with_gravitational_waves)
         gravitational_waves = new GravitationalWaves(this);
 
@@ -50,6 +48,15 @@ void Sledgehamr::InitSledgehamr() {
     performance_monitor = new PerformanceMonitor(this);
 
     ParseInputScalars();
+
+    if (nerrors > 0) {
+        amrex::ParallelDescriptor::Barrier();
+        amrex::Abort("Found " + std::to_string(nerrors) + " error(s)");
+    }
+
+    if (no_simulation) {
+        return;
+    }
 
     performance_monitor->Start(performance_monitor->idx_read_input);
 
@@ -293,23 +300,91 @@ void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
 }
 
 void Sledgehamr::ParseInput() {
-    amrex::ParmParse pp_amr("amr");
-    pp_amr.query("nghost", nghost);
-    pp_amr.query("tagging_on_gpu", tagging_on_gpu);
-    pp_amr.query("coarse_level_grid_size", coarse_level_grid_size);
-    pp_amr.query("increase_coarse_level_resolution",
-                  increase_coarse_level_resolution);
+    amrex::ParmParse pp("");
 
-    amrex::ParmParse pp_sim("sim");
-    pp_sim.get("t_start", t_start);
-    pp_sim.get("t_end", t_end);
-    pp_sim.get("L", L);
-    pp_sim.get("cfl", cfl);
-    pp_sim.query("gravitational_waves", with_gravitational_waves);
+    pp.query("input.do_parameter_check_for_n_mpi_ranks", check_mpi_ranks);
+    do_thorough_checks = check_mpi_ranks > 0;
+    if (!do_thorough_checks)
+        check_mpi_ranks = amrex::ParallelDescriptor::NProcs();
+    else
+        no_simulation = true;
 
-    amrex::ParmParse pp_input("input");
-    pp_input.query("restart", restart_sim);
-    pp_input.query("get_box_layout_nodes", get_box_layout_nodes);
+    utils::ErrorState validity =
+            (utils::ErrorState)utils::IsPowerOfTwo(check_mpi_ranks);
+    std::string param_name  = "#MPI ranks";
+    std::string error_msg   = param_name + " needs to be a power of 2!";
+    std::string warning_msg = "";
+    utils::AssessParam(validity, param_name, check_mpi_ranks, error_msg,
+                       warning_msg, nerrors, do_thorough_checks);
+
+    param_name = "input.restart";
+    pp.query(param_name.c_str(), restart_sim);
+    utils::AssessParamOK(param_name, restart_sim, do_thorough_checks);
+
+    param_name  = "input.get_box_layout_nodes";
+    pp.query(param_name.c_str(), get_box_layout_nodes);
+    validity    = (utils::ErrorState)(
+            utils::IsPowerOfTwo(get_box_layout_nodes) ||
+            get_box_layout_nodes == 0);
+    error_msg   = param_name + " needs to be a power of 2!";
+    warning_msg = "";
+    utils::AssessParam(validity, param_name, get_box_layout_nodes, error_msg,
+                       warning_msg, nerrors, do_thorough_checks);
+
+    param_name = "amr.nghost";
+    pp.query(param_name.c_str(), nghost);
+    validity = utils::ErrorState::OK;
+    for (int lev = 0; lev < max_level; ++lev) {
+        if (nghost < 0 || nghost >= blocking_factor[lev][0]) {
+            validity = utils::ErrorState::ERROR;
+            break;
+        }
+    }
+    error_msg   = param_name + " needs to be >= 0 and < amr.blocking_factor!";
+    warning_msg = "";
+    utils::AssessParam(validity, param_name, nghost, error_msg,
+                       warning_msg, nerrors, do_thorough_checks);
+
+    param_name = "amr.tagging_on_gpu";
+    pp.query(param_name.c_str(), tagging_on_gpu);
+    utils::AssessParamOK(param_name, tagging_on_gpu, do_thorough_checks);
+
+    param_name = "amr.coarse_level_grid_size";
+    pp.query(param_name.c_str(), coarse_level_grid_size);
+    validity = (utils::ErrorState)utils::IsPowerOfTwo(coarse_level_grid_size);
+    error_msg   = param_name + " needs to be a power of 2!";
+    warning_msg = "";
+    utils::AssessParam(validity, param_name, coarse_level_grid_size, error_msg,
+                       warning_msg, nerrors, do_thorough_checks);
+
+    param_name = "amr.increase_coarse_level_resolution";
+    pp.query(param_name.c_str(), increase_coarse_level_resolution);
+    validity = increase_coarse_level_resolution ?
+                utils::ErrorState::WARNING : utils::ErrorState::OK;
+    warning_msg = "Will increase coarse level resolution at the beginning.";
+    utils::AssessParam(validity, param_name, increase_coarse_level_resolution,
+                       "", warning_msg, nerrors, do_thorough_checks);
+
+    param_name = "sim.t_start";
+    pp.get(param_name.c_str(), t_start);
+    utils::AssessParamOK(param_name, t_start, do_thorough_checks);
+
+    param_name = "sim.t_end";
+    pp.get(param_name.c_str(), t_end);
+    utils::AssessParamOK(param_name, t_end, do_thorough_checks);
+
+    param_name = "sim.L";
+    pp.get(param_name.c_str(), L);
+    utils::AssessParamOK(param_name, L, do_thorough_checks);
+
+    param_name = "sim.cfl";
+    pp.get(param_name.c_str(), cfl);
+    utils::AssessParamOK(param_name, cfl, do_thorough_checks);
+
+    param_name = "sim.gravitational_waves";
+    pp.query(param_name.c_str(), with_gravitational_waves);
+    utils::AssessParamOK(param_name, with_gravitational_waves,
+                         do_thorough_checks);
 }
 
 void Sledgehamr::ParseInputScalars() {
@@ -317,14 +392,26 @@ void Sledgehamr::ParseInputScalars() {
     te_crit.resize( scalar_fields.size() );
     double te_crit_default = DBL_MAX;
 
-    amrex::ParmParse pp_amr("amr");
-    pp_amr.query("te_crit", te_crit_default);
+    amrex::ParmParse pp("");
+    std::string param_name  = "amr.te_crit";
+    pp.query(param_name.c_str(), te_crit_default);
+    utils::ErrorState validity = (utils::ErrorState)(te_crit_default > 0);
+    std::string error_msg   = param_name + " needs to be > 0!";
+    std::string warning_msg = "";
+    utils::AssessParam(validity, param_name, te_crit_default, error_msg,
+                       warning_msg, nerrors, do_thorough_checks);
 
     shadow_hierarchy = false;
     for (int n=0; n<scalar_fields.size(); ++n) {
         te_crit[n] = te_crit_default;
-        std::string ident = "te_crit_" + scalar_fields[n]->name;
-        pp_amr.query(ident.c_str(), te_crit[n]);
+
+        param_name = "amr.te_crit_" + scalar_fields[n]->name;
+        pp.query(param_name.c_str(), te_crit[n]);
+        validity = (utils::ErrorState)(te_crit[n] > 0);
+        error_msg   = param_name + " needs to be > 0!";
+        warning_msg = "";
+        utils::AssessParam(validity, param_name, te_crit[n], error_msg,
+                           warning_msg, nerrors, do_thorough_checks);
 
         if (te_crit[n] != DBL_MAX)
             shadow_hierarchy = true;
@@ -334,13 +421,25 @@ void Sledgehamr::ParseInputScalars() {
     dissipation_strength.resize( scalar_fields.size() );
     double dissipation_default = 0;
 
-    amrex::ParmParse pp_sim("sim");
-    pp_sim.query("dissipation_strength", dissipation_default);
+    param_name = "sim.dissipation_strength";
+    pp.query(param_name.c_str(), dissipation_default);
+    validity = (utils::ErrorState)(dissipation_default >= 0);
+    error_msg   = param_name + " needs to be >= 0!";
+    warning_msg = "";
+    utils::AssessParam(validity, param_name, dissipation_default, error_msg,
+                       warning_msg, nerrors, do_thorough_checks);
+
     with_dissipation = false;
     for (int n=0; n<scalar_fields.size(); ++n) {
         dissipation_strength[n] = dissipation_default;
-        std::string ident = "dissipation_strength_" + scalar_fields[n]->name;
-        pp_sim.query(ident.c_str(), dissipation_strength[n]);
+
+        param_name = "sim.dissipation_strength_" + scalar_fields[n]->name;
+        pp.query(param_name.c_str(), dissipation_strength[n]);
+        validity = (utils::ErrorState)(dissipation_strength[n] >= 0);
+        error_msg   = param_name + " needs to be >= 0!";
+        warning_msg = "";
+        utils::AssessParam(validity, param_name, dissipation_strength[n],
+                           error_msg, warning_msg, nerrors, do_thorough_checks);
 
         if (dissipation_strength[n] > 0)
             with_dissipation = true;
@@ -348,22 +447,15 @@ void Sledgehamr::ParseInputScalars() {
 
     if (with_dissipation) {
         dissipation_order = nghost;
-        pp_sim.query("dissipation_order", dissipation_order);
 
-        if (dissipation_order < 2) {
-            amrex::Print() << "#WARNING: Dissipation order "
-                           << dissipation_order
-                           << " not supported! Dissipation disabled."
-                           << std::endl;
-        }
-
-        if (dissipation_order > 3) {
-            amrex::Print() << "#WARNING: Dissipation order "
-                           << dissipation_order
-                           << " not supported! Dissipation defaults to order=3."
-                           << std::endl;
-            dissipation_order = 3;
-        }
+        param_name = "sim.dissipation_order";
+        pp.query(param_name.c_str(), dissipation_order);
+        validity = (utils::ErrorState)(dissipation_order == 2 ||
+                                       dissipation_order == 3);
+        error_msg   = "Currently only " + param_name + " = 2 or 3 supported!";
+        warning_msg = "";
+        utils::AssessParam(validity, param_name, dissipation_order,
+                           error_msg, warning_msg, nerrors, do_thorough_checks);
     }
 }
 

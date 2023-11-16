@@ -1,4 +1,5 @@
 #include "rkn.h"
+#include "sledgehamr_utils.h"
 
 namespace sledgehamr {
 
@@ -121,7 +122,7 @@ void IntegratorRkn::SetButcherTableau() {
                        {0.0,   0.5, 0.0}};
             weights_bar_b = {1./6., 1./3., 0.0};
             weights_b     = {1./6., 4./6., 1./6.};
-            break; 
+            break;
 
         case Rkn5:
             nodes = {0.0,
@@ -133,7 +134,7 @@ void IntegratorRkn::SetButcherTableau() {
                        {-1./27., 7./27., 0.0},
                        {3./10., -2./35., 9./35., 0.0}};
             weights_bar_b = {14./336., 100./336., 54./336., 0.0};
-            weights_b = {14./336., 125./336., 162./336., 35./336.}; 
+            weights_b = {14./336., 125./336., 162./336., 35./336.};
             break;
     }
 

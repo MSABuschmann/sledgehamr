@@ -1,13 +1,17 @@
 #include "fill_level.h"
 #include "hdf5_utils.h"
+#include "sledgehamr_utils.h"
 #include "checkpoint.h"
 
 namespace sledgehamr {
 
 void FillLevel::FromInitialStateFile() {
-    amrex::ParmParse pp("input");
+    amrex::ParmParse pp("");
     std::string initial_state_file = "";
-    pp.query("initial_state", initial_state_file);
+    std::string param_name = "input.initial_state"; 
+    pp.query(param_name.c_str(), initial_state_file);
+    utils::AssessParamOK(param_name, initial_state_file,
+                         sim->do_thorough_checks);
 
     if (amrex::FileExists(initial_state_file + "/Meta.hdf5")) {
         FromCheckpointFile(initial_state_file);
@@ -21,8 +25,8 @@ void FillLevel::FromCheckpointFile(std::string folder) {
     chk.Read();
 
     bool delete_restart_checkpoint = false;
-    amrex::ParmParse pp("input");
-    pp.query("delete_restart_checkpoint", delete_restart_checkpoint);
+    amrex::ParmParse pp("");
+    pp.query("input.delete_restart_checkpoint", delete_restart_checkpoint);
 
     if (delete_restart_checkpoint)  {
         sim->io_module->old_checkpoint = folder;

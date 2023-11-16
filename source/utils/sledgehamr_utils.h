@@ -213,6 +213,45 @@ static bool ApproxEqual(double a, double b, double eps = 1e-8) {
     return (fabs(a - b) < a*eps);
 }
 
+enum ErrorState {
+    ERROR = 0,
+    OK = 1,
+    WARNING = 2
+};
+
+template <typename T>
+static void PrintParamState(std::string param_name, T val, std::string state) {
+    amrex::Print() << param_name << " = " << val << " : " << state << std::endl;
+}
+
+template <typename T> 
+static void AssessParam(ErrorState validity, std::string param_name, T val,
+                std::string errror_msg, std::string warning_msg, int& nerrors,
+                bool do_thorough_checks) {
+    switch (validity) {
+        case OK:
+            if (do_thorough_checks) {
+                PrintParamState(param_name, val, "OK"); 
+            }
+            break;
+        case WARNING:
+            PrintParamState(param_name, val, "WARNING: " + warning_msg);
+            break;
+        case ERROR:
+            PrintParamState(param_name, val, "ERROR: " + errror_msg);
+            nerrors++;
+            break;
+    }
+}
+
+template <typename T> 
+static void AssessParamOK(std::string param_name, T val,
+                          bool do_thorough_checks) {
+    int tmp = 0;
+    AssessParam(ErrorState::OK, param_name, val, "", "", tmp,
+                do_thorough_checks);
+}
+
 }; // namespace utils
 }; // namespace sledgehamr
 

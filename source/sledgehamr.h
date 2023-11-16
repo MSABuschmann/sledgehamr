@@ -146,6 +146,10 @@ class Sledgehamr : public amrex::AmrCore {
 
     bool with_gravitational_waves = false;
 
+    bool do_thorough_checks = false;
+    int check_mpi_ranks = 0; 
+    int nerrors = 0;
+
   protected:
     /** @brief Make a new level from scratch using provided BoxArray and
      *         DistributionMapping. Only used during initialization. Overrides

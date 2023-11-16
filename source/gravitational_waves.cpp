@@ -1,5 +1,6 @@
 #include "gravitational_waves.h"
 #include "hdf5_utils.h"
+#include "sledgehamr_utils.h"
 #include "fft.h"
 
 namespace sledgehamr {
@@ -21,8 +22,15 @@ GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
     ScalarField* du_xz = new ScalarField("du_xz", sim->scalar_fields, true);
     ScalarField* du_yz = new ScalarField("du_yz", sim->scalar_fields, true);
 
-    amrex::ParmParse pp("output.gw_spectra");
-    pp.query("projection_type", projection_type);
+    amrex::ParmParse pp("");
+    std::string param_name = "output.gw_spectra.projection_type";
+    pp.query(param_name.c_str(), projection_type);
+    utils::ErrorState validity = (utils::ErrorState)(projection_type == 2 ||
+                                                     projection_type == 3); 
+    std::string error_msg = "Currently only " + param_name + " = 2 or 3 "
+                            "implemented!";
+    utils::AssessParam(validity, param_name, projection_type, error_msg, "",
+                       sim->nerrors, sim->do_thorough_checks);
 }
 
 void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
