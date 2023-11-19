@@ -23,6 +23,9 @@ class FirstOrderPhaseTransition : public sledgehamr::Sledgehamr {
     void Init() override;
     void SetParamsRhs(std::vector<double>& params, const double time,
                       const int lev) override;
+    void SetParamsTruncationModifier(
+            std::vector<double>& params, const double time,
+            const int lev) override;
     void BeforeTimestep(const double time) override;
 
   private:
@@ -44,6 +47,10 @@ class FirstOrderPhaseTransition : public sledgehamr::Sledgehamr {
     int next_bubble = 0;
     int idx_perfmon_add_bubbles;
     std::vector<int> bubbles_to_inject;
+
+    std::vector<double> field_maxima;
+    amrex::Vector<int> comp_vector;
+    double maxima_time  = -DBL_MAX;
 };
 
 }; // namespace FirstOrderPhaseTransition

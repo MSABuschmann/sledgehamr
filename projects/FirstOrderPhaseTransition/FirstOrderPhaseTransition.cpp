@@ -31,13 +31,38 @@ void FirstOrderPhaseTransition::ParseVariables() {
     pp_prj.queryarr("bubbles_to_inject", bubbles_to_inject);
 }
 
-
 void FirstOrderPhaseTransition::SetParamsRhs(
         std::vector<double>& params, const double time, const int lev) {
     params.resize(3);
     params[0] = quadratic;
     params[1] = cubic;
     params[2] = quartic;
+}
+
+void FirstOrderPhaseTransition::SetParamsTruncationModifier(
+        std::vector<double>& params, const double time, const int lev) {
+    if (maxima_time != time) {
+        sledgehamr::LevelData& ld = grid_new[0];
+        const int ncomp = ld.nComp();
+
+        if (field_maxima.size() != ncomp) {
+            field_maxima.resize(ncomp);
+            comp_vector.resize(ncomp);
+            for (int c = 0; c < ncomp; ++c) {
+                comp_vector[c] = c;
+            }
+        }
+
+        field_maxima = ld.norm0(comp_vector);
+        maxima_time = time;
+
+        for (int c = 0; c < ncomp; ++c) {
+            amrex::Print() << "Maximum field value of " << GetScalarFieldName(c)
+                           << ": " << field_maxima[c] << std::endl;
+        }
+    }
+
+    params = field_maxima;
 }
 
 void FirstOrderPhaseTransition::BeforeTimestep(const double time) {
