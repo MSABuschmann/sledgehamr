@@ -23,13 +23,25 @@ IOModule::IOModule(Sledgehamr* owner) : sim(owner) {
 }
 
 void IOModule::ParseParams() {
-    amrex::ParmParse pp("output");
-    pp.get("output_folder", output_folder);
-    pp.query("alternative_output_folder", alternative_output_folder);
-    pp.query("checkpoints.rolling", rolling_checkpoints);
+    amrex::ParmParse pp("");
+    pp.get("output.output_folder", output_folder);
+    pp.query("output.alternative_output_folder", alternative_output_folder);
 
-    amrex::ParmParse pp_input("input");
-    pp_input.query("delete_restart_checkpoint", delete_restart_checkpoint);
+    std::string param_name = "output.checkpoints.rolling";
+    pp.query(param_name.c_str(), rolling_checkpoints);
+    utils::ErrorState validity = rolling_checkpoints ?
+                utils::ErrorState::WARNING : utils::ErrorState::OK;
+    std::string warning_msg = "Only the latest checkpoint will be kept.";
+    utils::AssessParam(validity, param_name, rolling_checkpoints,
+                       "", warning_msg, sim->nerrors, sim->do_thorough_checks);
+
+    param_name = "input.delete_restart_checkpoint";
+    pp.query(param_name.c_str(), delete_restart_checkpoint);
+    validity = delete_restart_checkpoint ?
+                utils::ErrorState::WARNING : utils::ErrorState::OK;
+    warning_msg = "Restart checkpoint will be deleted!";
+    utils::AssessParam(validity, param_name, delete_restart_checkpoint,
+                       "", warning_msg, sim->nerrors, sim->do_thorough_checks);
 }
 
 void IOModule::AddOutputModules() {
@@ -73,8 +85,10 @@ void IOModule::AddOutputModules() {
     output.emplace_back("checkpoints", OUTPUT_FCT(IOModule::WriteCheckpoint));
 
     bool write_at_start = false;
-    amrex::ParmParse pp("output");
-    pp.query("write_at_start", write_at_start);
+    amrex::ParmParse pp("");
+    std::string param_name = "output.write_at_start";
+    pp.query(param_name.c_str(), write_at_start);
+    utils::AssessParamOK(param_name, write_at_start, sim->do_thorough_checks);
     if (!write_at_start) {
         for (OutputModule& out : output) {
             out.SetLastTimeWritten( sim->t_start );
@@ -88,20 +102,23 @@ void IOModule::CheckIfOutputAlreadyExists(std::string folder) {
 
     // Determine and create output folder.
     bool rename_old = false;
-    amrex::ParmParse pp("output");
-    pp.query("rename_old_output", rename_old);
+    amrex::ParmParse pp("");
+    std::string param_name = "output.rename_old_output";
+    pp.query(param_name.c_str(), rename_old);
 
-    if (amrex::FileExists(folder) && !sim->restart_sim &&
-        amrex::ParallelDescriptor::IOProcessor() && !rename_old)  {
-        std::string msg =
-                "sledgehamr::IOModule: Output folder " + folder + " "
-                "already exists!\n"
+    utils::ErrorState validity = (utils::ErrorState)(
+            !(amrex::FileExists(folder) &&
+              !sim->restart_sim &&
+              amrex::ParallelDescriptor::IOProcessor() &&
+              !rename_old));
+    std::string error_msg =
+                "Output folder " + folder + " already exists! "
                 "If you intended to restart the simulation from the latest "
                 "checkpoint within this folder please add 'sim.restart = 1' "
-                "to your input file.\nOtherwise please chose a different "
-                "directory.";
-        amrex::Abort(msg);
-    }
+                "to your input file. Otherwise please choose a different "
+                "directory or set output.rename_old_output = 1";
+    utils::AssessParam(validity, param_name, rename_old, error_msg, "",
+                       sim->nerrors, sim->do_thorough_checks);
 }
 
 void IOModule::CreateOutputFolder(std::string folder) {
