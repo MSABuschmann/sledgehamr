@@ -75,14 +75,20 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
 
                 if (!utils::hdf5::Read(initial_state_file_component,
                         {scalar_name, "data"}, input_data)) {
-                    std::string msg =
-                               "Sledgehamr::IOModule::FillLevelFromHdf5File: "
-                               "Could not find initial state data for "
-                             + scalar_name + "!";
-                    amrex::Abort(msg);
+                    //std::string msg =
+                    //           "Sledgehamr::IOModule::FillLevelFromHdf5File: "
+                    //           "Could not find initial state data for "
+                    //         + scalar_name + "!";
+                    //amrex::Abort(msg);
+                    const int constant = 0;
+                    amrex::Print() << "Dataset not found for " << scalar_name
+                                   << ". Will initialize to " << constant
+                                   << "." << std::endl;
+                    FromConst(f2, constant);
+                } else {
+                    FromArray(f2, input_data, dimN);
                 }
 
-                FromArray(f2, input_data, dimN);
                 delete[] input_data;
             } else {
                 amrex::Box bx = sim->GetLevelData(lev).boxArray()[lr];
