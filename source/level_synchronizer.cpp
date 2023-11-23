@@ -8,9 +8,7 @@
 
 namespace sledgehamr{
 
-LevelSynchronizer::LevelSynchronizer(Sledgehamr* owner) {
-    sim = owner;
-
+LevelSynchronizer::LevelSynchronizer(Sledgehamr* owner) : sim(owner) {
     const int ncomp = sim->scalar_fields.size();
 
     // Boundary conditions

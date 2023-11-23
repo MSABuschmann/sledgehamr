@@ -55,8 +55,6 @@ class Sledgehamr : public amrex::AmrCore {
      */
     Sledgehamr();
 
-    virtual ~Sledgehamr();
-
     /** @brief Initalizes data from scratch or from checkpoint file.
      */
     void InitSledgehamr();
@@ -141,8 +139,9 @@ class Sledgehamr : public amrex::AmrCore {
 
     /** @brief Pointer to synchronization module.
      */
-    LevelSynchronizer* level_synchronizer;
-    IOModule* io_module;
+    //LevelSynchronizer* level_synchronizer;
+    std::unique_ptr<LevelSynchronizer> level_synchronizer;
+    std::unique_ptr<IOModule> io_module;
 
     /** @brief Number of ghost cells.
      */
@@ -295,9 +294,9 @@ class Sledgehamr : public amrex::AmrCore {
 
     /** @brief Pointer to sub-modules.
      */
-    TimeStepper* time_stepper;
-    GravitationalWaves* gravitational_waves;
-    PerformanceMonitor* performance_monitor;
+    std::unique_ptr<TimeStepper> time_stepper;
+    std::unique_ptr<GravitationalWaves> gravitational_waves;
+    std::unique_ptr<PerformanceMonitor> performance_monitor;
 
     /** @brief Holds the actual simulation data for all levels at two different
      *         states in time.
@@ -310,7 +309,9 @@ class Sledgehamr : public amrex::AmrCore {
     LevelData shadow_level, shadow_level_tmp;
     amrex::Geometry shadow_level_geom;
 
-    /** @brief Holds pointers to all simulated scalar fields.
+    /** @brief Holds pointers to all simulated scalar fields. We assume
+     *         ownership of all objects within this vector - one day we upgrade
+     *         to a smart pointer.
      */
     std::vector<ScalarField*> scalar_fields;
 

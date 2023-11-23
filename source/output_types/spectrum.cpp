@@ -51,7 +51,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     const int kmax = ks.size();
     constexpr int NTHREADS = 16;
     const unsigned long SpecLen = kmax*NTHREADS;
-    double* spectrum = new double [SpecLen] ();
+    std::unique_ptr<double[]> spectrum(new double[SpecLen]);
 
 #pragma omp parallel num_threads(std::min(NTHREADS, omp_get_max_threads()))
     for (amrex::MFIter mfi(field_fft, true); mfi.isValid(); ++mfi) {
@@ -89,7 +89,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
         }
     }
 
-    amrex::ParallelDescriptor::ReduceRealSum(spectrum, kmax,
+    amrex::ParallelDescriptor::ReduceRealSum(spectrum.get(), kmax,
             amrex::ParallelDescriptor::IOProcessorNumber());
 
     if (amrex::ParallelDescriptor::IOProcessor()) {
@@ -101,10 +101,8 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
             utils::hdf5::Write(file_id, "k_sq", &(ks[0]), kmax);
         }
 
-        utils::hdf5::Write(file_id, ident, spectrum, kmax);
+        utils::hdf5::Write(file_id, ident, spectrum.get(), kmax);
     }
-
-    delete[] spectrum;
 }
 
 }; // namespace sledgehamr

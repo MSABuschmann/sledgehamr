@@ -9,8 +9,8 @@ namespace sledgehamr {
 
 TimeStepper::TimeStepper(Sledgehamr* owner) {
     sim = owner;
-    local_regrid = new LocalRegrid(sim);
-    scheduler = new RegridScheduler();
+    local_regrid = std::make_unique<LocalRegrid>(sim);
+    scheduler = std::make_unique<RegridScheduler>();
 
     // Initialize the correct integrator.
     amrex::ParmParse pp_inte("integrator");
@@ -32,17 +32,17 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
         case AmrexSsprk3:
             //[[fallthrough]];
         case AmrexRk4:
-            integrator = new IntegratorAMReX(sim);
+            integrator = std::make_unique<IntegratorAMReX>(sim);
             break;
         case Lsssprk3:
-            integrator = new IntegratorLsssprk3(sim);
+            integrator = std::make_unique<IntegratorLsssprk3>(sim);
             break;
         case RknButcherTableau:
             //[[fallthrough]]; 
         case Rkn4:
             //[[fallthrough]];
         case Rkn5:
-            integrator = new IntegratorRkn(sim, integrator_type);
+            integrator = std::make_unique<IntegratorRkn>(sim, integrator_type);
             break;
         default:
             amrex::Abort("#error: Unknown integration type: "
@@ -63,12 +63,6 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
 
     amrex::ParmParse pp_out("output");
     pp_out.query("output_of_initial_state", output_of_initial_state);
-}
-
-TimeStepper::~TimeStepper() {
-    delete integrator;
-    delete local_regrid;
-    delete scheduler;
 }
 
 void TimeStepper::Advance(int lev) {

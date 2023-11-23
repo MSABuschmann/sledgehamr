@@ -76,7 +76,7 @@ void Slices::WriteSingleSlice(const LevelData* state, int lev, hid_t file_id,
             // Copy data into flattened array for each scalar field.
             long len = dim1 * dim2;
             // TODO Adjust output type.
-            float *output_arr = new float[len]();
+            std::unique_ptr<float[]> output_arr(new float[len]);
             for (int f=0; f<state->nComp(); ++f) {
                 for (int j=l2; j<h2; ++j) {
                     for (int i=l1; i<h1; ++i) {
@@ -98,10 +98,8 @@ void Slices::WriteSingleSlice(const LevelData* state, int lev, hid_t file_id,
                 std::string dset_name = sim->GetScalarFieldName(f)
                                       + "_" + ident
                                       + "_" + std::to_string(le1.size());
-                utils::hdf5::Write(file_id, dset_name, output_arr, len);
+                utils::hdf5::Write(file_id, dset_name, output_arr.get(), len);
             }
-
-            delete[] output_arr;
         }
     }
 
@@ -116,9 +114,9 @@ void Slices::WriteSingleSlice(const LevelData* state, int lev, hid_t file_id,
     utils::hdf5::Write(file_id, "Header_"+ident, header_data, nparams);
 
     // Write box dimensions so we can reassemble slice.
-    if (le1.size() == 0) 
+    if (le1.size() == 0)
         return;
-    
+
     utils::hdf5::Write(file_id, "le1_"+ident, (int*)&(le1[0]), le1.size());
     utils::hdf5::Write(file_id, "le2_"+ident, (int*)&(le2[0]), le2.size());
     utils::hdf5::Write(file_id, "he1_"+ident, (int*)&(he1[0]), he1.size());

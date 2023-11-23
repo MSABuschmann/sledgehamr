@@ -71,10 +71,10 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
             if (existing_chunk == "") {
                 const int dimN = sim->GetDimN(lev);
                 const long long dsetsize = dimN*dimN*dimN;
-                double* input_data = new double [dsetsize] ();
+                std::unique_ptr<double[]> input_data(new double[dsetsize]);
 
                 if (!utils::hdf5::Read(initial_state_file_component,
-                        {scalar_name, "data"}, input_data)) {
+                        {scalar_name, "data"}, input_data.get())) {
                     //std::string msg =
                     //           "Sledgehamr::IOModule::FillLevelFromHdf5File: "
                     //           "Could not find initial state data for "
@@ -86,17 +86,15 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
                                    << "." << std::endl;
                     FromConst(f2, constant);
                 } else {
-                    FromArray(f2, input_data, dimN);
+                    FromArray(f2, input_data.get(), dimN);
                 }
-
-                delete[] input_data;
             } else {
                 amrex::Box bx = sim->GetLevelData(lev).boxArray()[lr];
                 const long long dsetsize= bx.numPts();
-                double* input_data = new double [dsetsize] ();
+                std::unique_ptr<double[]> input_data(new double[dsetsize]);
 
                if (!utils::hdf5::Read(initial_state_file_component,
-                        {chunk1, chunk2}, input_data)) {
+                        {chunk1, chunk2}, input_data.get())) {
                     std::string msg =
                                "Sledgehamr::IOModule::FillLevelFromHdf5File: "
                                "Could not find initial state chunk "
@@ -104,8 +102,7 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
                     amrex::Abort(msg);
                 }
 
-                FromArrayChunks(f2, input_data);
-                delete[] input_data;
+                FromArrayChunks(f2, input_data.get());
             }
         }
     }

@@ -19,7 +19,6 @@ class RegridScheduler;
 class TimeStepper {
   public:
     TimeStepper(Sledgehamr* owner);
-    ~TimeStepper ();
 
     /** @brief Recursive function and the core of the sub-cycling in time
      *         algorithm. Advances a given level by dt[level].
@@ -33,10 +32,10 @@ class TimeStepper {
 
     /** @brief Pointer to integration module.
      */
-    Integrator* integrator;
-    LocalRegrid* local_regrid;
-    RegridScheduler* scheduler;
- 
+    std::unique_ptr<Integrator> integrator;
+    std::unique_ptr<LocalRegrid> local_regrid;
+    std::unique_ptr<RegridScheduler> scheduler;
+
 private:
     /** @brief Synchronizes two levels by averaging down. Computes truncation
      *         errors if regrid is scheduled.

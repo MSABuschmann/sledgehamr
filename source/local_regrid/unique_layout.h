@@ -120,7 +120,7 @@ class UniqueLayout {
 
     /** Array of Np planes.
      */
-    plane* p;
+    std::unique_ptr<plane[]> p;
 
     /** Number of nodes.
      */

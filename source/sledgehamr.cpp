@@ -16,8 +16,8 @@ Sledgehamr::Sledgehamr () {
     ParseInput();
 
     // Initialize modules.
-    time_stepper = new TimeStepper(this);
-    io_module = new IOModule(this);
+    time_stepper = std::make_unique<TimeStepper>(this);
+    io_module = std::make_unique<IOModule>(this);
 
     grid_new.resize(max_level+1);
     grid_old.resize(max_level+1);
@@ -31,21 +31,15 @@ Sledgehamr::Sledgehamr () {
     DoPrerunChecks();
 }
 
-Sledgehamr::~Sledgehamr() {
-    delete level_synchronizer;
-    delete time_stepper;
-    delete io_module;
-}
-
 void Sledgehamr::InitSledgehamr() {
     if (with_gravitational_waves)
-        gravitational_waves = new GravitationalWaves(this);
+        gravitational_waves = std::make_unique<GravitationalWaves>(this);
 
     // Initialize here and not in the SledgeHAMR constructor such that it knows
     // about the number of scalar fields during construction. Necessary so it
     // can initialize boundary conditions.
-    level_synchronizer = new LevelSynchronizer(this);
-    performance_monitor = new PerformanceMonitor(this);
+    level_synchronizer = std::make_unique<LevelSynchronizer>(this);
+    performance_monitor = std::make_unique<PerformanceMonitor>(this);
 
     ParseInputScalars();
 

@@ -5,7 +5,7 @@ namespace sledgehamr {
 UniqueLayout::UniqueLayout(LocalRegrid* local_regrid, const int N)
     : Np(N), lr(local_regrid), mpi_n(amrex::ParallelDescriptor::NProcs()),
       mpi_mp(amrex::ParallelDescriptor::MyProc()) {
-    p = new plane[Np];
+    p = std::make_unique<plane[]>(Np);
     uit Npn = mpi_n > Np ? 0 : Np/mpi_n;
 
     // Figure out who owns what.
@@ -22,7 +22,7 @@ UniqueLayout::UniqueLayout(LocalRegrid* local_regrid, const int N)
 }
 
 UniqueLayout::~UniqueLayout() {
-    delete[] p;
+    //delete[] p;
 }
 
 void UniqueLayout::Add(const uit i, const uit j, const uit k) const {

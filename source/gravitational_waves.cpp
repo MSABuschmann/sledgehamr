@@ -9,6 +9,8 @@ GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
     sim = owner;
     idx_offset = sim->scalar_fields.size();
 
+    // Don't assume ownership of pointer, it is transferred to
+    // sim->scalar_fields.
     ScalarField* u_xx = new ScalarField("u_xx", sim->scalar_fields, false);
     ScalarField* u_yy = new ScalarField("u_yy", sim->scalar_fields, false);
     ScalarField* u_zz = new ScalarField("u_zz", sim->scalar_fields, false);
@@ -60,7 +62,7 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
     const int kmax = ks.size();
     constexpr int NTHREADS = 16;
     const unsigned long SpecLen = kmax*NTHREADS;
-    double* gw_spectrum = new double [SpecLen] ();
+    std::unique_ptr<double[]> gw_spectrum(new double [SpecLen]);
 
     // Non-trivial load-balancing here. Not sure what wins.
 #pragma omp parallel num_threads(std::min(NTHREADS, omp_get_max_threads()))
@@ -130,7 +132,7 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
         }
     }
 
-    amrex::ParallelDescriptor::ReduceRealSum(gw_spectrum, kmax,
+    amrex::ParallelDescriptor::ReduceRealSum(gw_spectrum.get(), kmax,
             amrex::ParallelDescriptor::IOProcessorNumber());
 
 #pragma omp parallel for
@@ -143,10 +145,8 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
         double header_data[nparams] = {ld.t, (double)dimN, (double)kmax};
         utils::hdf5::Write(file_id, "Header", header_data, nparams);
         utils::hdf5::Write(file_id, "k", &(ks[0]), kmax);
-        utils::hdf5::Write(file_id, "Spectrum", gw_spectrum, kmax);
+        utils::hdf5::Write(file_id, "Spectrum", gw_spectrum.get(), kmax);
     }
-
-    delete[] gw_spectrum;
 }
 
 inline double GravitationalWaves::IndexToK(int a, int N) {
