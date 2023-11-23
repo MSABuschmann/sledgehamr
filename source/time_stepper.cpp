@@ -191,19 +191,25 @@ void TimeStepper::ScheduleRegrid(int lev) {
     if (lev >= sim->max_level) return;
 
     // Do not regrid at the end of even time steps as we cannot compute
-    // truncation errors otherwise.
-    if (istep%2 == 0) return;
+    // truncation errors otherwise. Not relevant for coarse level as we
+    // can create shadow level whenever.
+    if (istep%2 == 0 && lev > 0) return;
+
+    // Again, since we can create shadow levels whenever we could regrid
+    // earlier for coarse level.
+    double time_next_opportunity = lev > 0 ? time + 3.*sim->dt[lev] :
+                                             time + 2.*sim->dt[lev];
 
     // Check user requirement if we want to invoke a new level. Pass it the
     // level to be created and the time by which the next regrid could be
     // performed if we were to skip this regrid.
-    if (!sim->DoCreateLevelIf(lev+1, time + 3.*sim->dt[lev])) return;
+    if (!sim->DoCreateLevelIf(lev+1, time_next_opportunity)) return;
 
     // Check if enough time since last regrid has passed. We add 3*dt[lev] since
     // we do not want to violate this criteria next time around in case we skip
     // this regrid. Only relevant if local regrid module has not requested an
     // early global regrid.
-    if (time + 3.*sim->dt[lev] <= last_regrid_time[lev] + regrid_dt[lev] &&
+    if (time_next_opportunity <= last_regrid_time[lev] + regrid_dt[lev] &&
         !local_regrid->do_global_regrid[lev]) return;
 
     // This is to avoid regridding on coarse right after restarting from a
