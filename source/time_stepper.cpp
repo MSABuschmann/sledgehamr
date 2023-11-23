@@ -7,11 +7,14 @@
 
 namespace sledgehamr {
 
-TimeStepper::TimeStepper(Sledgehamr* owner) {
-    sim = owner;
+TimeStepper::TimeStepper(Sledgehamr* owner) : sim(owner) {
     local_regrid = std::make_unique<LocalRegrid>(sim);
     scheduler = std::make_unique<RegridScheduler>();
+    ParseParams();
+    SetIntegrator();
+}
 
+void TimeStepper::SetIntegrator() {
     // Initialize the correct integrator.
     amrex::ParmParse pp_inte("integrator");
     int inte_type;
@@ -38,7 +41,7 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
             integrator = std::make_unique<IntegratorLsssprk3>(sim);
             break;
         case RknButcherTableau:
-            //[[fallthrough]]; 
+            //[[fallthrough]];
         case Rkn4:
             //[[fallthrough]];
         case Rkn5:
@@ -49,12 +52,15 @@ TimeStepper::TimeStepper(Sledgehamr* owner) {
                         + std::to_string(inte_type));
             break;
     }
+}
 
+void TimeStepper::ParseParams() {
     // Set regridding intervals.
     amrex::ParmParse pp_amr("amr");
 
     double reg_dt = 1e99;
     pp_amr.query("regrid_dt", reg_dt);
+    pp_amr.query("semistatic_sim", semistatic_sim);
 
     for (int lev=0; lev<=sim->max_level; ++lev) {
         regrid_dt.push_back( reg_dt / pow(2, lev) );
@@ -178,8 +184,6 @@ void TimeStepper::ScheduleRegrid(int lev) {
     int    istep = sim->grid_new[lev].istep;
 
     // Check if a future regrid has already been scheduled by a coarser level.
-    //int index = GetIndexOfScheduledRegrid(scheduled_regrids[lev], istep + 1);
-    //if (index != -1) return;
     if (scheduler->DoRegrid(lev, time + sim->dt[lev]))
         return;
 
@@ -204,7 +208,7 @@ void TimeStepper::ScheduleRegrid(int lev) {
 
     // This is to avoid regridding on coarse right after restarting from a
     // checkpoint. We do not have a valid grid_old yet to evolve the needed
-    // shadow level. 
+    // shadow level.
     if (lev == 0 && sim->grid_new[lev].t == sim->grid_old[lev].t)
         return;
 
@@ -244,28 +248,34 @@ void TimeStepper::DoRegridIfScheduled(int lev) {
 void TimeStepper::NoShadowRegrid(int lev) {
     double time = sim->grid_new[lev].t;
 
-    // TODO: Implement semi-static case.
-
     // Regrid changes level "lev+1" so we don't regrid on max_level.
-    if (lev >= sim->max_level) return;
+    if (lev >= sim->max_level && !semistatic_sim)
+        return;
 
     // Check if enough time since last regrid has passed. We add dt[lev] since
     // we do not want to violate this criteria next time around in case we skip
     // this regrid. Only relevant if local regrid module has not requested an
     // early global regrid.
     if (time + sim->dt[lev] <= last_regrid_time[lev] + regrid_dt[lev] &&
-        !local_regrid->do_global_regrid[lev]) return;
+        !local_regrid->do_global_regrid[lev])
+        return;
 
     // Check user requirement if we want to invoke a new level. Pass it the
     // level to be created and the time by which the next regrid could be
     // performed if we were to skip this regrid.
-    if (!sim->DoCreateLevelIf(lev+1, time + sim->dt[lev])) return;
+    if (!sim->DoCreateLevelIf(lev+1, time + sim->dt[lev]))
+        return;
 
     // Actually do regrid if we made it this far.
     DoRegrid(lev, time);
 }
 
 void TimeStepper::DoRegrid(int lev, double time) {
+    if (semistatic_sim) {
+        sim->level_synchronizer->IncreaseCoarseLevelResolution();
+        return;
+    }
+
     // Before regridding we want to attempt to write output to allow for
     // truncation errors estimates to be written to file. Those would be
     // corrupted or non-exist at any other stage of the simulation.

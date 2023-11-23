@@ -82,11 +82,15 @@ private:
      */
     void DoRegrid(int lev, double time);
 
+    void ParseParams();
+    void SetIntegrator();
+
     /** @brief Vector of times at which a given level has been regridded last.
      */
     std::vector<double> last_regrid_time;
 
     bool output_of_initial_state = true;
+    bool semistatic_sim = false;
 
     /** @brief Pointer to other modules.
      */
