@@ -3,6 +3,10 @@
 
 #include <AMReX_AmrCore.H>
 
+#ifdef AMREX_MEM_PROFILING
+#include <AMReX_MemProfiler.H>
+#endif
+
 #include "kernels.h"
 #include "macros.h"
 #include "level_data.h"

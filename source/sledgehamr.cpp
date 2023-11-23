@@ -90,6 +90,12 @@ void Sledgehamr::Evolve() {
         // Write any output if requested.
         amrex::Print() << std::endl;
         io_module->Write();
+
+#ifdef AMREX_MEM_PROFILING
+        std::ostringstream ss;
+        ss << "[COARSE STEP " << grid_new[0].istep << "]";
+        amrex::MemProfiler::report(ss.str());
+#endif
     }
 
     // Force write at the end of simulation.
