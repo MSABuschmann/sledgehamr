@@ -109,7 +109,6 @@ void IOModule::CheckIfOutputAlreadyExists(std::string folder) {
     utils::ErrorState validity = (utils::ErrorState)(
             !(amrex::FileExists(folder) &&
               !sim->restart_sim &&
-              amrex::ParallelDescriptor::IOProcessor() &&
               !rename_old));
     std::string error_msg =
                 "Output folder " + folder + " already exists! "
@@ -119,10 +118,15 @@ void IOModule::CheckIfOutputAlreadyExists(std::string folder) {
                 "directory or set output.rename_old_output = 1";
     utils::AssessParam(validity, param_name, rename_old, error_msg, "",
                        sim->nerrors, sim->do_thorough_checks);
+
+    if (validity == utils::ErrorState::ERROR &&
+        !sim->do_thorough_checks) {
+        amrex::Abort();
+    }
 }
 
 void IOModule::CreateOutputFolder(std::string folder) {
-    if (folder=="")
+    if (folder == "" || sim->do_thorough_checks)
         return;
 
     if (!sim->restart_sim) {
