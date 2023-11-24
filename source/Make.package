@@ -24,9 +24,6 @@ CEXE_sources += io_module.cpp
 CEXE_headers += fill_level.h
 CEXE_sources += fill_level.cpp
 
-CEXE_headers += output_module.h
-CEXE_sources += output_module.cpp
-
 CEXE_headers += performance_monitor.h
 CEXE_sources += performance_monitor.cpp
 

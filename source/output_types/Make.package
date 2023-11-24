@@ -1,3 +1,6 @@
+CEXE_headers += output_module.h
+CEXE_sources += output_module.cpp
+
 CEXE_headers += slices.h
 CEXE_sources += slices.cpp
 
