@@ -2,6 +2,7 @@
 #define SLEDGEHAMR_MACROS_H_
 
 #include "kernels.h"
+#include "sledgehamr_utils.h"
 
 /** Yes, I know this file is disgusting. This is what we get for not 
  *  wanting everyone to write a bunch of complicated boilerplate every single

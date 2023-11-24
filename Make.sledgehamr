@@ -24,12 +24,12 @@ INCLUDE_LOCATIONS += $(SRC)/utils
 include $(SRC)/utils/Make.package
 
 # Projects
-pdir = $(SLEDGEHAMR_HOME_ABS)/projects
-PROJECTS = $(shell ls $(pdir)/)
-VPATH_LOCATIONS   += $(foreach dir, $(PROJECTS), $(pdir)/$(dir))
-INCLUDE_LOCATIONS += $(foreach dir, $(PROJECTS), $(pdir)/$(dir))
-CEXE_sources += $(shell ls $(pdir)/*/*.cpp | xargs -n 1 basename )
-CEXE_headers += $(shell ls $(pdir)/*/*.h | xargs -n 1 basename)
+SLEDGEHAMR_PROJECT_PATH ?= $(SLEDGEHAMR_HOME_ABS)/projects
+PROJECTS = $(shell ls $(SLEDGEHAMR_PROJECT_PATH)/)
+VPATH_LOCATIONS   += $(foreach dir, $(PROJECTS), $(SLEDGEHAMR_PROJECT_PATH)/$(dir))
+INCLUDE_LOCATIONS += $(foreach dir, $(PROJECTS), $(SLEDGEHAMR_PROJECT_PATH)/$(dir))
+CEXE_sources += $(shell ls $(SLEDGEHAMR_PROJECT_PATH)/*/*.cpp | xargs -n 1 basename)
+CEXE_headers += $(shell ls $(SLEDGEHAMR_PROJECT_PATH)/*/*.h | xargs -n 1 basename)
 
 include $(SLEDGEHAMR_HOME_ABS)/Make.projects
 
