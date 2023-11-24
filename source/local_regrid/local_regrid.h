@@ -121,8 +121,8 @@ class LocalRegrid {
     /** @brief Strong and weak threshold that decide whether we want to do a
      *         local or global regrid.
      */
-    double volume_threshold_strong = 1.1;
-    double volume_threshold_weak = 1.05;
+    double volume_threshold_accumulated = 1.1;
+    double volume_threshold_single      = 1.05;
 
     /** @brief Lowest level that would rather do a global regrid than a local.
      */

@@ -76,7 +76,7 @@ bool LocalRegrid::Prechecks(const int lev) {
     }
 
     // Veto if volume threshold such that it disables local regrid.
-    if (volume_threshold_strong <= 1. ) {
+    if (volume_threshold_accumulated <= 1. ) {
         amrex::Print() << "Local regrid disabled." << std::endl;
         veto_level = lev - 1;
         return false;
@@ -171,12 +171,12 @@ bool LocalRegrid::CheckThresholds(const int lev, amrex::BoxArray& ba) {
     double fV = (Nb+Nc) / Nr;
 
     // This level exceeds strong threshold so we veto.
-    if (fV > volume_threshold_strong)
+    if (fV > volume_threshold_accumulated)
         veto = true;
 
     // In case any level vetos the local regrid, this is the level on which
     // we want to perform the global regrid.
-    if( fV > volume_threshold_weak && veto_level == -1 )
+    if( fV > volume_threshold_single && veto_level == -1 )
         veto_level = lev - 1;
 
     amrex::Print() << "  Additional boxes on level " << lev << " required: "
@@ -184,7 +184,7 @@ bool LocalRegrid::CheckThresholds(const int lev, amrex::BoxArray& ba) {
                    << "    Instantanous volume increase: " << dV
                    << std::endl
                    << "    Volume increase since last global regrid: "
-                   << fV << ". Threshold: " << volume_threshold_strong
+                   << fV << ". Threshold: " << volume_threshold_accumulated
                    << std::endl;
 
     return veto;
@@ -328,6 +328,8 @@ void LocalRegrid::ParseInput() {
                   force_global_regrid_at_restart);
     pp_amr.query("n_error_buf", n_error_buf);
     pp_amr.query("max_local_regrids", max_local_regrids);
+    pp_amr.query("volume_threshold_single", volume_threshold_single);
+    pp_amr.query("volume_threshold_accumulated", volume_threshold_accumulated);
 }
 
 void LocalRegrid::CreateCommMatrix() {
