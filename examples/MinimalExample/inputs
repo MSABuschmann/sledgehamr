@@ -1,0 +1,142 @@
+# -------------------------------------------------- Select project
+project.name                    = MinimalExample
+
+# -------------------------------------------------- Simulation parameters
+sim.t_start             = 0.1
+sim.t_end               = 7
+sim.L                   = 15
+sim.cfl                 = 0.3
+sim.gravitational_waves = 0
+
+#sim.dissipation_strength    = 0
+#sim.dissipation_order       = 2
+
+# -------------------------------------------------- Integrator
+### 0 = AMReX - User-specified Butcher Tableau
+### 1 = AMReX - Forward Euler
+### 2 = AMReX - Trapezoid Method
+### 3 = AMReX - SSPRK3 Method
+### 4 = AMReX - RK4 Method
+### 10 = Low-storage SSPRK3 Method
+### 20 = RKN - User-specified Butcher Tableau
+### 21 = RKN-4
+### 22 = RKN-5
+integrator.type = 10
+
+# -------------------------------------------------- AMR parameters
+amr.coarse_level_grid_size  = 256
+amr.max_refinement_levels   = 2
+amr.nghost                  = 2
+
+### 0 = Piece-wise constant interpolation
+### 1 = Linear conservative interpolation
+### 2 = Quadratic polynomial interpolation
+### 4 = Quartic polynomial conservative interpolation
+amr.interpolation_type  = 4
+
+amr.max_grid_size       = 512
+amr.blocking_factor     = 8
+
+amr.n_error_buf         = 5
+amr.regrid_dt           = 0.3
+
+#amr.force_global_regrid_at_restart = 0
+#amr.tagging_on_gpu      = 0
+amr.max_local_regrids   = 8
+
+amr.te_crit_Psi1             = 1e-3
+amr.te_crit_Psi2             = 1e-3
+amr.te_crit_Pi1             = 1e-2
+amr.te_crit_Pi2             = 1e-2
+
+#amr.increase_coarse_level_resolution = 0
+#amr.semistatic_sim          = 0
+
+# -------------------------------------------------- Input parameters
+input.initial_state = initial_state_256.hdf5
+input.restart                     = 0
+#input.select_checkpoint           = -1
+#input.delete_restart_checkpoint   = 1
+#input.get_box_layout_nodes        = 0
+#input.do_parameter_check_for_n_mpi_ranks = 0
+
+# -------------------------------------------------- Output settings
+### General settings
+output.output_folder                = output
+#output.alternative_output_folder    = output_alt
+output.rename_old_output            = 1
+output.output_of_initial_state      = 0
+output.write_at_start               = 1
+
+### Checkpoint files
+output.checkpoints.interval  = 0.5
+output.checkpoints.alternate = 0
+output.checkpoints.rolling   = 0
+#output.checkpoints.min_t     =
+#output.checkpoints.max_t     =
+
+### Slices through the field
+output.slices.interval   = 0.5
+output.slices.alternate  = 0
+#output.slices.min_t      =
+#output.slcies.max_t      =
+
+### Coarse level box
+output.coarse_box.interval   = 0.5
+#output.coarse_box.alternate  =
+#output.coarse_box.min_t      =
+#output.coarse_box.max_t      =
+output.coarse_box.downsample_factor = 1
+
+### Full box (all levels)
+output.full_box.interval   = 0.5
+#output.full_box.alternate  =
+#output.full_box.min_t      =
+#output.full_box.max_t      =
+output.full_box.downsample_factor = 2
+
+### Slices of truncation error estimates
+output.slices_truncation_error.interval   = 0.1
+#output.slices_truncation_error.alternate  =
+#output.slices_truncation_error.min_t      =
+#output.slices_truncation_error.max_t      =
+
+### Coarse level box of truncation error estimates
+output.coarse_box_truncation_error.interval   = -1
+#output.coarse_box_truncation_error.alternate  =
+#output.coarse_box_truncation_error.min_t      =
+#output.coarse_box_truncation_error.max_t      =
+output.coarse_box_truncation_error.downsample_factor = 1
+
+### Full box (all levels) of truncation error estimates
+output.full_box_truncation_error.interval   = -1
+#output.full_box_truncation_error.alternate  =
+#output.full_box_truncation_error.min_t      =
+#output.full_box_truncation_error.max_t      =
+output.full_box_truncation_error.downsample_factor = 2
+
+### Projections
+output.projections.interval   = 1.5
+output.projections.max_level   = 2
+#output.projections.alternate  =
+#output.projections.min_t      =
+#output.projections.max_t      =
+
+### Spectra
+output.spectra.interval   = 0.2
+#output.spectra.alternate  =
+output.spectra.min_t      = 2
+#output.spectra.max_t      =
+
+### Gravitational wave spectra
+output.gw_spectra.interval   = 1.5
+output.gw_spectra.projection_type = 2
+#output.gw_spectra.alternate  =
+#output.gw_spectra.min_t      =
+#output.gw_spectra.max_t      =
+
+### Performance monitor
+output.performance_monitor.interval   = 0.5
+#output.performance_monitor.alternate  =
+#output.performance_monitor.min_t      =
+#output.performance_monitor.max_t      =
