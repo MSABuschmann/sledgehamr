@@ -113,7 +113,7 @@ void IOModule::CheckIfOutputAlreadyExists(std::string folder) {
     std::string error_msg =
                 "Output folder " + folder + " already exists! "
                 "If you intended to restart the simulation from the latest "
-                "checkpoint within this folder please add 'sim.restart = 1' "
+                "checkpoint within this folder please add 'input.restart = 1' "
                 "to your input file. Otherwise please choose a different "
                 "directory or set output.rename_old_output = 1";
     utils::AssessParam(validity, param_name, rename_old, error_msg, "",
