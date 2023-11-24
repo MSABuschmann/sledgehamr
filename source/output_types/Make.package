@@ -15,3 +15,6 @@ CEXE_sources += spectrum.cpp
 
 CEXE_headers += checkpoint.h
 CEXE_sources += checkpoint.cpp
+
+CEXE_headers += amrex_plotfile.h
+CEXE_sources += amrex_plotfile.cpp

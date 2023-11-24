@@ -121,6 +121,10 @@ class Sledgehamr : public amrex::AmrCore {
         return finest_level;
     }
 
+    amrex::Vector<amrex::Geometry>& GetGeometry() {
+        return geom;
+    }
+
     LevelData& GetLevelData(const int lev) {
         return grid_new[lev];
     }

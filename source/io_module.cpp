@@ -7,8 +7,9 @@
 #include "io_module.h"
 #include "hdf5_utils.h"
 #include "sledgehamr_utils.h"
-#include "output_types/slices.h"
-#include "output_types/level_writer.h"
+#include "slices.h"
+#include "level_writer.h"
+#include "amrex_plotfile.h"
 
 namespace sledgehamr {
 
@@ -79,6 +80,10 @@ void IOModule::AddOutputModules() {
     idx_performance_monitor = output.size();
     output.emplace_back("performance_monitor",
                         OUTPUT_FCT(IOModule::WritePerformanceMonitor));
+
+    idx_amrex_plotfile = output.size();
+    output.emplace_back("amrex_plotfile",
+                        OUTPUT_FCT(IOModule::WriteAmrexPlotFile));
 
     // Checkpoint. Always add checkpoints last.
     idx_checkpoints = output.size();
@@ -204,6 +209,12 @@ bool IOModule::WriteFullBoxTruncationError(double time, std::string prefix) {
         return false;
 
     LevelWriter writer(sim, prefix, idx_full_box_truncation_error);
+    writer.Write();
+    return true;
+}
+
+bool IOModule::WriteAmrexPlotFile(double time, std::string prefix) {
+    AmrexPlotFile writer(sim, prefix);
     writer.Write();
     return true;
 }

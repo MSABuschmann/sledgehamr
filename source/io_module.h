@@ -47,6 +47,7 @@ class IOModule {
     int idx_spectra = -1;
     int idx_gw_spectra = -1;
     int idx_performance_monitor = -1;
+    int idx_amrex_plotfile = -1;
     int idx_checkpoints = -1;
 
     /** @brief Vector of output modules
@@ -68,6 +69,7 @@ class IOModule {
     bool WriteSpectra(double time, std::string prefix);
     bool WriteGravitationalWaveSpectrum(double time, std::string prefix);
     bool WritePerformanceMonitor(double time, std::string prefix);
+    bool WriteAmrexPlotFile(double time, std::string prefix);
     bool WriteCheckpoint(double time, std::string prefix);
     int FindLatestCheckpoint(std::string folder);
 
