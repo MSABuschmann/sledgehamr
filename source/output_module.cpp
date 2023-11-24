@@ -28,6 +28,13 @@ void OutputModule::ParseParams() {
     pp.query("alternate", alternate);
     pp.query("min_t", t_min);
     pp.query("max_t", t_max);
+
+    if (alternate && alternative_output_folder == "") {
+        std::string msg = "sledgehamr::OutputModule::ParseParams: "
+                          "Alternating checkpoints selected but no alternative "
+                          "output folder given";
+        amrex::Abort(msg);
+    }
 }
 
 void OutputModule::CreateParentFolder(std::string this_prefix) {
