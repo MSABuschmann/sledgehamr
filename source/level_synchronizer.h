@@ -81,6 +81,9 @@ class LevelSynchronizer {
 
     void IncreaseCoarseLevelResolution();
 
+    void ChangeNGhost(int new_nghost);
+    void RegridCoarse();
+
     /** @brief Integer array containing the type of boundary condition at each
      *         boundary edge. Needs to be amrex::Vector not std::vector.
      */

@@ -403,4 +403,69 @@ void LevelSynchronizer::IncreaseCoarseLevelResolution() {
     sim->ReadSpectrumKs(true);
 }
 
+void LevelSynchronizer::ChangeNGhost(int new_nghost) {
+    // Create new LevelData.
+    const int lev                        = 0;
+    LevelData& ld_old                    = sim->grid_new[lev];
+    const amrex::BoxArray& ba            = ld_old.boxArray();
+    const amrex::DistributionMapping& dm = ld_old.DistributionMap();
+    const int ncomp                      = ld_old.nComp();
+    const double time                    = ld_old.t;
+    const amrex::Geometry& geom          = sim->geom[lev];
+
+    // Allocate and fill.
+    LevelData ld_new(ba, dm, ncomp, new_nghost, time);
+
+    amrex::CpuBndryFuncFab bndry_func(nullptr);
+    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> physbc(
+            geom, sim->level_synchronizer->bcs, bndry_func);
+
+    amrex::Vector<amrex::MultiFab*> smf{static_cast<amrex::MultiFab*>(&ld_old)};
+    amrex::Vector<double> stime{time};
+    amrex::MultiFab& mf = ld_new;
+
+    amrex::FillPatchSingleLevel(mf, time, smf, stime, 0, 0, ncomp, geom,
+                                physbc, 0);
+
+    // Swap and update.
+    std::swap(sim->grid_new[lev], ld_new);
+    sim->nghost = new_nghost;
+}
+
+void LevelSynchronizer::RegridCoarse() {
+    const int lev               = 0;
+    LevelData& ld_old           = sim->grid_new[lev];
+    const int ncomp             = ld_old.nComp();
+    const double time           = ld_old.t;
+    const amrex::Geometry& geom = sim->geom[lev];
+
+    sim->grid_old[lev].clear();
+
+    // New layout.
+    amrex::BoxArray ba = ld_old.boxArray();
+    amrex::Box bx = ba.minimalBox();
+    ba = amrex::BoxArray(bx);
+    sim->ChopGrids(lev, ba, amrex::ParallelDescriptor::NProcs());
+    amrex::DistributionMapping dm(ba, amrex::ParallelDescriptor::NProcs());
+
+    // Allocate and fill.
+    LevelData ld_new(ba, dm, ncomp, sim->nghost, time);
+
+    amrex::CpuBndryFuncFab bndry_func(nullptr);
+    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> physbc(
+            geom, sim->level_synchronizer->bcs, bndry_func);
+
+    amrex::Vector<amrex::MultiFab*> smf{static_cast<amrex::MultiFab*>(&ld_old)};
+    amrex::Vector<double> stime{time};
+    amrex::MultiFab& mf = ld_new;
+
+    amrex::FillPatchSingleLevel(mf, time, smf, stime, 0, 0, ncomp, geom,
+                                physbc, 0);
+
+    std::swap(sim->grid_new[lev], ld_new);
+    sim->grid_old[lev] = LevelData(ba, dm, ncomp, sim->nghost, time);
+    sim->SetBoxArray(lev, ba);
+    sim->SetDistributionMap(lev, dm);
+}
+
 }; // namespace sledgehamr
