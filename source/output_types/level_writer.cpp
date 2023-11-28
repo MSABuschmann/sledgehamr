@@ -69,8 +69,6 @@ void LevelWriter::CheckDownsampleFactor() {
 }
 
 void LevelWriter::Write() {
-    amrex::Print() << "Write " << info << ": " << folder << std::endl;
-
     for (int lev = level_min; lev <= level_max; ++lev) {
         // Create folder and file.
         std::string subfolder = folder + "/Level_" + std::to_string(lev);

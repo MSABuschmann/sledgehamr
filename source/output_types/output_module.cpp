@@ -65,10 +65,12 @@ void OutputModule::Write(double time, bool force) {
     amrex::UtilCreateCleanDirectory(folder, true);
     folder += "/";
 
+
     // Attempt to write.
     if (fct(time, folder)) {
         next_id++;
         last_written = time;
+        amrex::Print() << "Wrote " << name <<  ": " << folder << std::endl;
     } else {
         std::filesystem::remove(folder);
     }

@@ -5,8 +5,6 @@
 namespace sledgehamr {
 
 void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
-    amrex::Print() << "Compute Spectrum: " << ident << std::endl;
-
     const int lev = 0;
     const int dimN = sim->dimN[lev];
     const double dx = sim->dx[lev];

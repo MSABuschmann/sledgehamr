@@ -4,13 +4,6 @@
 namespace sledgehamr {
 
 void Slices::Write() {
-    if (with_truncation_errors) {
-        amrex::Print() << "Write slices of truncation error estimates: "
-                       << folder << std::endl;
-    } else {
-        amrex::Print() << "Write slices: " << folder << std::endl;
-    }
-
     for (int lev = 0; lev <= sim->GetFinestLevel(); ++lev) {
         // Create folder and file.
         std::string subfolder = folder + "/Level_" + std::to_string(lev);

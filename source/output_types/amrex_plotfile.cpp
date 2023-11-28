@@ -4,8 +4,6 @@
 namespace sledgehamr {
 
 void AmrexPlotFile::Write() {
-    amrex::Print() << "Write AMReX plotfile: " << folder << std::endl;
-
     std::string plotfilename = folder + "/output";
     int nlevels = sim->GetFinestLevel() + 1;
 

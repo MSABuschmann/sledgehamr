@@ -74,6 +74,8 @@ void Sledgehamr::InitSledgehamr() {
 void Sledgehamr::Evolve() {
     if (no_simulation) return;
 
+    amrex::Print() << "Starting evolution!" << std::endl;
+
     // Main loop over time.
     while (!StopRunning(grid_new[0].t)) {
         // Advance all levels starting at lev=0. This performs an entire

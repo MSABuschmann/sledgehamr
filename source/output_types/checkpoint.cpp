@@ -14,8 +14,6 @@
 namespace sledgehamr {
 
 void Checkpoint::Write() {
-    amrex::Print() << "Writing checkpoint " << folder << std::endl;
-
     const int nlevels = sim->finest_level + 1;
     const int noutput = sim->io_module->output.size();
 

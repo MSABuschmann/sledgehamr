@@ -223,8 +223,6 @@ bool IOModule::WriteProjections(double time, std::string prefix) {
     if (projections.empty())
         return false;
 
-    amrex::Print() << "Write projections: " << prefix << std::endl;
-
     hid_t file_id;
     if (amrex::ParallelDescriptor::IOProcessor()) {
         std::string filename = prefix + "/projections.hdf5";
@@ -244,8 +242,6 @@ bool IOModule::WriteProjections(double time, std::string prefix) {
 bool IOModule::WriteSpectra(double time, std::string prefix) {
     if (spectra.empty())
         return false;
-
-    amrex::Print() << "Compute spectra: " << prefix << std::endl;
 
     sim->ReadSpectrumKs();
 
@@ -268,9 +264,6 @@ bool IOModule::WriteSpectra(double time, std::string prefix) {
 bool IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
     if (!sim->with_gravitational_waves)
         return false;
-
-    amrex::Print() << "Compute gravitational wave spectrum: " << prefix
-                   << std::endl;
 
     sim->ReadSpectrumKs();
 
