@@ -79,10 +79,13 @@ void Sledgehamr::Evolve() {
         // Advance all levels starting at lev=0. This performs an entire
         // shadow/coarse level time step.
         amrex::Print() << std::endl;
+        utils::sctp timer = utils::StartTimer();
+
         time_stepper->Advance(0);
 
         // Write any output if requested.
-        amrex::Print() << std::endl;
+        amrex::Print() << "Full step took " << utils::DurationSeconds(timer)
+                       << "s.\n" << std::endl;
         io_module->Write();
 
 #ifdef AMREX_MEM_PROFILING
