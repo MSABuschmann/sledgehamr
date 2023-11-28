@@ -129,7 +129,7 @@ class Output:
         downsample = int(self._coarse_box_headers[i,4])
 
         dim = int(dim0 / downsample)
-        folder = self._prefix + '/coarse_box/' + str(i)
+        folder = self._prefix + '/coarse_box/' + str(i) + '/Level_0/'
 
         # Start dictionary
         d = dict();
@@ -152,7 +152,8 @@ class Output:
         downsample = int(self._coarse_box_truncation_error_headers[i,4])
 
         dim = int(dim0 / downsample) // 2
-        folder = self._prefix + '/coarse_box_truncation_error/' + str(i)
+        folder = self._prefix + '/coarse_box_truncation_error/' + str(i) \
+               + '/Level_0/'
 
         # Start dictionary
         d = dict();
@@ -381,7 +382,7 @@ class Output:
 
         # iterate over batches and read header of first files
         while True:
-            file = folder + str(i) + '/0.hdf5'
+            file = folder + str(i) + '/Level_0/0.hdf5'
             if not path.exists( file ):
                 break
             fin = h5py.File(file,'r')
@@ -440,7 +441,7 @@ class Output:
 
         # iterate over batches and read header of first files
         while True:
-            file = folder + str(i) + '/0.hdf5'
+            file = folder + str(i) + '/Level_0/0.hdf5'
             if not path.exists( file ):
                 break
             fin = h5py.File(file,'r')

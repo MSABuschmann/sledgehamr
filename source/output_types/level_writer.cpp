@@ -133,6 +133,7 @@ void LevelWriter::WriteSingleLevel(
         // TODO Adjust output type.
         for (int f=0; f<state->nComp(); ++f) {
             std::unique_ptr<float[]> output_arr(new float[len]);
+            std::fill_n(output_arr.get(), len, 0.0f);
             for (int k=lz; k<hz; ++k) {
                 for (int j=ly; j<hy; ++j) {
                     for (int i=lx; i<hx; ++i) {
@@ -144,12 +145,13 @@ void LevelWriter::WriteSingleLevel(
                                 + (j-ly)/grid_density*dimz
                                 + (k-lz)/grid_density;
 
-                        if (is_truncation_error)
+                        if (is_truncation_error) {
                             output_arr[ind] = std::max(
                                     static_cast<float>(state_arr(i,j,k,f)),
                                     output_arr[ind]);
-                        else
+                        } else {
                             output_arr[ind] += state_arr(i,j,k,f) * volfac;
+                        }
                     }
                 }
             }
@@ -180,6 +182,7 @@ void LevelWriter::WriteSingleLevel(
     utils::hdf5::Write(file_id, "lez_"+ident, (int*)&(lez[0]), lez.size());
     utils::hdf5::Write(file_id, "hex_"+ident, (int*)&(hex[0]), hex.size());
     utils::hdf5::Write(file_id, "hey_"+ident, (int*)&(hey[0]), hey.size());
+    utils::hdf5::Write(file_id, "hez_"+ident, (int*)&(hez[0]), hez.size());
 }
 
 }; // namespace sledgehamr
