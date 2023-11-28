@@ -63,6 +63,7 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
     constexpr int NTHREADS = 16;
     const unsigned long SpecLen = kmax*NTHREADS;
     std::unique_ptr<double[]> gw_spectrum(new double [SpecLen]);
+    std::fill_n(gw_spectrum.get(), SpecLen, 0.0);
 
     // Non-trivial load-balancing here. Not sure what wins.
 #pragma omp parallel num_threads(std::min(NTHREADS, omp_get_max_threads()))

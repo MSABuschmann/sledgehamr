@@ -134,6 +134,7 @@ void LevelWriter::WriteSingleLevel(
         for (int f=0; f<state->nComp(); ++f) {
             std::unique_ptr<float[]> output_arr(new float[len]);
             std::fill_n(output_arr.get(), len, 0.0f);
+
             for (int k=lz; k<hz; ++k) {
                 for (int j=ly; j<hy; ++j) {
                     for (int i=lx; i<hx; ++i) {

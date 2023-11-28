@@ -77,6 +77,8 @@ void Slices::WriteSingleSlice(const LevelData* state, int lev, hid_t file_id,
             long len = dim1 * dim2;
             // TODO Adjust output type.
             std::unique_ptr<float[]> output_arr(new float[len]);
+            std::fill_n(output_arr.get(), len, 0.0f);
+
             for (int f=0; f<state->nComp(); ++f) {
                 for (int j=l2; j<h2; ++j) {
                     for (int i=l1; i<h1; ++i) {

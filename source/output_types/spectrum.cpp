@@ -52,6 +52,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     constexpr int NTHREADS = 16;
     const unsigned long SpecLen = kmax*NTHREADS;
     std::unique_ptr<double[]> spectrum(new double[SpecLen]);
+    std::fill_n(spectrum.get(), SpecLen, 0.0);
 
 #pragma omp parallel num_threads(std::min(NTHREADS, omp_get_max_threads()))
     for (amrex::MFIter mfi(field_fft, true); mfi.isValid(); ++mfi) {
