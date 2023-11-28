@@ -1,0 +1,153 @@
+\hypertarget{classsledgehamr_1_1LevelSynchronizer}{}\section{sledgehamr\+:\+:Level\+Synchronizer Class Reference}
+\label{classsledgehamr_1_1LevelSynchronizer}\index{sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}}
+
+
+This class handles all operations between two levels such as averaging down, interpolation to fine, filling of ghost cells, etc. Class is friend of Sledge\+H\+A\+MR.  
+
+
+
+
+{\ttfamily \#include $<$level\+\_\+synchronizer.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_a28eb74d8fe0c22d97483543350c6eb2a}\label{classsledgehamr_1_1LevelSynchronizer_a28eb74d8fe0c22d97483543350c6eb2a}} 
+{\bfseries Level\+Synchronizer} (\mbox{\hyperlink{classsledgehamr_1_1Sledgehamr}{Sledgehamr}} $\ast$owner)
+\item 
+void \mbox{\hyperlink{classsledgehamr_1_1LevelSynchronizer_ab7b774c45a02b121bb6d6cb796875805}{Fill\+Coarse\+Patch}} (const int lev, const double time, amrex\+::\+Multi\+Fab \&ld)
+\begin{DoxyCompactList}\small\item\em Fills \mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} with information from a coarse level. This is used e.\+g. when a new level of refinement is added. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classsledgehamr_1_1LevelSynchronizer_a54ddd443981e5849456ac1c945aebede}{Fill\+Patch}} (const int lev, const double time, amrex\+::\+Multi\+Fab \&mf, const int scomp=0, const int dcomp=0, int ncomp=-\/1)
+\begin{DoxyCompactList}\small\item\em Fills Multi\+Fab with data from valid regions and fills ghost cells. Works for single level and 2-\/level cases (interpolating from coarse). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classsledgehamr_1_1LevelSynchronizer_a8fc4c9b24c2f1c6107e456e76a1cf28d}{Fill\+Intermediate\+Patch}} (const int lev, const double time, amrex\+::\+Multi\+Fab \&mf, const int scomp=0, const int dcomp=0, const int ncomp=-\/1)
+\begin{DoxyCompactList}\small\item\em Fills Multi\+Fab with data from valid regions and fills ghost cells during intermediate time steps. Works for single level and 2-\/level cases (interpolating from coarse). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classsledgehamr_1_1LevelSynchronizer_a8242eca3f0b55a87c5ea68b6d7ac6fdb}{Average\+Down\+To}} (const int lev)
+\begin{DoxyCompactList}\small\item\em Average down fine level (lev+1) onto coarse level (lev). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classsledgehamr_1_1LevelSynchronizer_a4798ce7632bccf7ad0f85818821510e5}{Compute\+Truncation\+Errors}} (const int lev)
+\begin{DoxyCompactList}\small\item\em Compute truncation errors for level lev and saves them in sim-\/$>$grid\+\_\+old\mbox{[}lev\mbox{]}. Also averages down lev onto lev-\/1 at the same time. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_a5aa6cfaef9320be425e5a277e8b53347}\label{classsledgehamr_1_1LevelSynchronizer_a5aa6cfaef9320be425e5a277e8b53347}} 
+void {\bfseries Increase\+Coarse\+Level\+Resolution} ()
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_aeb187b4ec4d11418262719b8b795920b}\label{classsledgehamr_1_1LevelSynchronizer_aeb187b4ec4d11418262719b8b795920b}} 
+void {\bfseries Change\+N\+Ghost} (int new\+\_\+nghost)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_a1fa60835bbe73c27b23c24227921515c}\label{classsledgehamr_1_1LevelSynchronizer_a1fa60835bbe73c27b23c24227921515c}} 
+void {\bfseries Regrid\+Coarse} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_ae842540f1dba4f74c6ab6444fc7838d7}\label{classsledgehamr_1_1LevelSynchronizer_ae842540f1dba4f74c6ab6444fc7838d7}} 
+amrex\+::\+Vector$<$ amrex\+::\+B\+C\+Rec $>$ \mbox{\hyperlink{classsledgehamr_1_1LevelSynchronizer_ae842540f1dba4f74c6ab6444fc7838d7}{bcs}}
+\begin{DoxyCompactList}\small\item\em Integer array containing the type of boundary condition at each boundary edge. Needs to be amrex\+::\+Vector not std\+::vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class handles all operations between two levels such as averaging down, interpolation to fine, filling of ghost cells, etc. Class is friend of Sledge\+H\+A\+MR. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_a8242eca3f0b55a87c5ea68b6d7ac6fdb}\label{classsledgehamr_1_1LevelSynchronizer_a8242eca3f0b55a87c5ea68b6d7ac6fdb}} 
+\index{sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}!Average\+Down\+To@{Average\+Down\+To}}
+\index{Average\+Down\+To@{Average\+Down\+To}!sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}}
+\subsubsection{\texorpdfstring{Average\+Down\+To()}{AverageDownTo()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Level\+Synchronizer\+::\+Average\+Down\+To (\begin{DoxyParamCaption}\item[{const int}]{lev }\end{DoxyParamCaption})}
+
+
+
+Average down fine level (lev+1) onto coarse level (lev). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & Coarse Level onto which to be averaged down. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_a4798ce7632bccf7ad0f85818821510e5}\label{classsledgehamr_1_1LevelSynchronizer_a4798ce7632bccf7ad0f85818821510e5}} 
+\index{sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}!Compute\+Truncation\+Errors@{Compute\+Truncation\+Errors}}
+\index{Compute\+Truncation\+Errors@{Compute\+Truncation\+Errors}!sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}}
+\subsubsection{\texorpdfstring{Compute\+Truncation\+Errors()}{ComputeTruncationErrors()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Level\+Synchronizer\+::\+Compute\+Truncation\+Errors (\begin{DoxyParamCaption}\item[{const int}]{lev }\end{DoxyParamCaption})}
+
+
+
+Compute truncation errors for level lev and saves them in sim-\/$>$grid\+\_\+old\mbox{[}lev\mbox{]}. Also averages down lev onto lev-\/1 at the same time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & Level for which truncation errors are to be computed. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_ab7b774c45a02b121bb6d6cb796875805}\label{classsledgehamr_1_1LevelSynchronizer_ab7b774c45a02b121bb6d6cb796875805}} 
+\index{sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}!Fill\+Coarse\+Patch@{Fill\+Coarse\+Patch}}
+\index{Fill\+Coarse\+Patch@{Fill\+Coarse\+Patch}!sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}}
+\subsubsection{\texorpdfstring{Fill\+Coarse\+Patch()}{FillCoarsePatch()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Level\+Synchronizer\+::\+Fill\+Coarse\+Patch (\begin{DoxyParamCaption}\item[{const int}]{lev,  }\item[{const double}]{time,  }\item[{amrex\+::\+Multi\+Fab \&}]{ld }\end{DoxyParamCaption})}
+
+
+
+Fills \mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} with information from a coarse level. This is used e.\+g. when a new level of refinement is added. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & New level to be filled with data from lev=1. \\
+\hline
+{\em time} & Time of new level. \\
+\hline
+{\em ld} & New level data. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_a8fc4c9b24c2f1c6107e456e76a1cf28d}\label{classsledgehamr_1_1LevelSynchronizer_a8fc4c9b24c2f1c6107e456e76a1cf28d}} 
+\index{sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}!Fill\+Intermediate\+Patch@{Fill\+Intermediate\+Patch}}
+\index{Fill\+Intermediate\+Patch@{Fill\+Intermediate\+Patch}!sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}}
+\subsubsection{\texorpdfstring{Fill\+Intermediate\+Patch()}{FillIntermediatePatch()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Level\+Synchronizer\+::\+Fill\+Intermediate\+Patch (\begin{DoxyParamCaption}\item[{const int}]{lev,  }\item[{const double}]{time,  }\item[{amrex\+::\+Multi\+Fab \&}]{mf,  }\item[{const int}]{scomp = {\ttfamily 0},  }\item[{const int}]{dcomp = {\ttfamily 0},  }\item[{const int}]{ncomp = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Fills Multi\+Fab with data from valid regions and fills ghost cells during intermediate time steps. Works for single level and 2-\/level cases (interpolating from coarse). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & (Fine) Level to be filled. \\
+\hline
+{\em time} & Time of level. \\
+\hline
+{\em mf} & Multi\+Fab to be filled. \\
+\hline
+{\em scomp} & Starting component of source. \\
+\hline
+{\em scomp} & Starting component of destination. \\
+\hline
+{\em ncomp} & Total number of components. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1LevelSynchronizer_a54ddd443981e5849456ac1c945aebede}\label{classsledgehamr_1_1LevelSynchronizer_a54ddd443981e5849456ac1c945aebede}} 
+\index{sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}!Fill\+Patch@{Fill\+Patch}}
+\index{Fill\+Patch@{Fill\+Patch}!sledgehamr\+::\+Level\+Synchronizer@{sledgehamr\+::\+Level\+Synchronizer}}
+\subsubsection{\texorpdfstring{Fill\+Patch()}{FillPatch()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Level\+Synchronizer\+::\+Fill\+Patch (\begin{DoxyParamCaption}\item[{const int}]{lev,  }\item[{const double}]{time,  }\item[{amrex\+::\+Multi\+Fab \&}]{mf,  }\item[{const int}]{scomp = {\ttfamily 0},  }\item[{const int}]{dcomp = {\ttfamily 0},  }\item[{int}]{ncomp = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Fills Multi\+Fab with data from valid regions and fills ghost cells. Works for single level and 2-\/level cases (interpolating from coarse). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & (Fine) Level to be filled. \\
+\hline
+{\em time} & Time of level. \\
+\hline
+{\em mf} & Multi\+Fab to be filled. \\
+\hline
+{\em scomp} & Starting component of source. \\
+\hline
+{\em scomp} & Starting component of destination. \\
+\hline
+{\em ncomp} & Total number of components. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/level\+\_\+synchronizer.\+h\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/level\+\_\+synchronizer.\+cpp\end{DoxyCompactItemize}

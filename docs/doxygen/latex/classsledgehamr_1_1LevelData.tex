@@ -1,0 +1,119 @@
+\hypertarget{classsledgehamr_1_1LevelData}{}\section{sledgehamr\+:\+:Level\+Data Class Reference}
+\label{classsledgehamr_1_1LevelData}\index{sledgehamr\+::\+Level\+Data@{sledgehamr\+::\+Level\+Data}}
+
+
+Class that holds the Multi\+Fab data while also keeping track of time and step numbers.  
+
+
+
+
+{\ttfamily \#include $<$level\+\_\+data.\+h$>$}
+
+Inheritance diagram for sledgehamr\+:\+:Level\+Data\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classsledgehamr_1_1LevelData}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classsledgehamr_1_1LevelData_aa3e83b8e4d23e14648c511f80b6bfd39}{Level\+Data}} (amrex\+::\+Box\+Array ba, amrex\+::\+Distribution\+Mapping dm, int ncomp, int nghost, double time=0)
+\begin{DoxyCompactList}\small\item\em Construct data using the given grid layout. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classsledgehamr_1_1LevelData_a5acdbd9ec718975bbf6c8c41f7a73b1a}{define}} (amrex\+::\+Box\+Array ba, amrex\+::\+Distribution\+Mapping dm, int ncomp, int nghost, double time)
+\begin{DoxyCompactList}\small\item\em Overload amrex\+::\+Multi\+Fab\+::define function to include time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static amrex\+::\+Vector$<$ double $>$ \mbox{\hyperlink{classsledgehamr_1_1LevelData_a852bf27c741978378a87ce043cce3b24}{get\+Times}} (std\+::vector$<$ amrex\+::\+Multi\+Fab $\ast$$>$ \&mfs)
+\begin{DoxyCompactList}\small\item\em Static method that returns vector of times from a given \mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1LevelData_a9bc416cbd6054f0adb499ffd64144860}\label{classsledgehamr_1_1LevelData_a9bc416cbd6054f0adb499ffd64144860}} 
+double \mbox{\hyperlink{classsledgehamr_1_1LevelData_a9bc416cbd6054f0adb499ffd64144860}{t}} = 0.
+\begin{DoxyCompactList}\small\item\em Time corresponding to amrex\+::\+Multi\+Fab data. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1LevelData_a1fc20b81bee0349d0cc24a8407a42e3a}\label{classsledgehamr_1_1LevelData_a1fc20b81bee0349d0cc24a8407a42e3a}} 
+int \mbox{\hyperlink{classsledgehamr_1_1LevelData_a1fc20b81bee0349d0cc24a8407a42e3a}{istep}} = 0
+\begin{DoxyCompactList}\small\item\em How often this level has been advanced. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1LevelData_af4bc919d70ab9353c53c8e70e795777d}\label{classsledgehamr_1_1LevelData_af4bc919d70ab9353c53c8e70e795777d}} 
+bool \mbox{\hyperlink{classsledgehamr_1_1LevelData_af4bc919d70ab9353c53c8e70e795777d}{contains\+\_\+truncation\+\_\+errors}} = false
+\begin{DoxyCompactList}\small\item\em Flag as to whether the Mutli\+Fab has truncation errors encoded into it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class that holds the Multi\+Fab data while also keeping track of time and step numbers. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classsledgehamr_1_1LevelData_aa3e83b8e4d23e14648c511f80b6bfd39}\label{classsledgehamr_1_1LevelData_aa3e83b8e4d23e14648c511f80b6bfd39}} 
+\index{sledgehamr\+::\+Level\+Data@{sledgehamr\+::\+Level\+Data}!Level\+Data@{Level\+Data}}
+\index{Level\+Data@{Level\+Data}!sledgehamr\+::\+Level\+Data@{sledgehamr\+::\+Level\+Data}}
+\subsubsection{\texorpdfstring{Level\+Data()}{LevelData()}}
+{\footnotesize\ttfamily sledgehamr\+::\+Level\+Data\+::\+Level\+Data (\begin{DoxyParamCaption}\item[{amrex\+::\+Box\+Array}]{ba,  }\item[{amrex\+::\+Distribution\+Mapping}]{dm,  }\item[{int}]{ncomp,  }\item[{int}]{nghost,  }\item[{double}]{time = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct data using the given grid layout. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ba} & Box\+Array. \\
+\hline
+{\em dm} & Distribution\+Mapping. \\
+\hline
+{\em ncomp} & Total number of scalar fields components. \\
+\hline
+{\em nghost} & Number of ghost cells. \\
+\hline
+{\em time} & Time. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classsledgehamr_1_1LevelData_a5acdbd9ec718975bbf6c8c41f7a73b1a}\label{classsledgehamr_1_1LevelData_a5acdbd9ec718975bbf6c8c41f7a73b1a}} 
+\index{sledgehamr\+::\+Level\+Data@{sledgehamr\+::\+Level\+Data}!define@{define}}
+\index{define@{define}!sledgehamr\+::\+Level\+Data@{sledgehamr\+::\+Level\+Data}}
+\subsubsection{\texorpdfstring{define()}{define()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Level\+Data\+::define (\begin{DoxyParamCaption}\item[{amrex\+::\+Box\+Array}]{ba,  }\item[{amrex\+::\+Distribution\+Mapping}]{dm,  }\item[{int}]{ncomp,  }\item[{int}]{nghost,  }\item[{double}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Overload amrex\+::\+Multi\+Fab\+::define function to include time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ba} & Box\+Array. \\
+\hline
+{\em dm} & Distribution\+Mapping. \\
+\hline
+{\em ncomp} & Total number of scalar components. \\
+\hline
+{\em nghost} & Number of ghost cells. \\
+\hline
+{\em time} & Time. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1LevelData_a852bf27c741978378a87ce043cce3b24}\label{classsledgehamr_1_1LevelData_a852bf27c741978378a87ce043cce3b24}} 
+\index{sledgehamr\+::\+Level\+Data@{sledgehamr\+::\+Level\+Data}!get\+Times@{get\+Times}}
+\index{get\+Times@{get\+Times}!sledgehamr\+::\+Level\+Data@{sledgehamr\+::\+Level\+Data}}
+\subsubsection{\texorpdfstring{get\+Times()}{getTimes()}}
+{\footnotesize\ttfamily static amrex\+::\+Vector$<$double$>$ sledgehamr\+::\+Level\+Data\+::get\+Times (\begin{DoxyParamCaption}\item[{std\+::vector$<$ amrex\+::\+Multi\+Fab $\ast$$>$ \&}]{mfs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Static method that returns vector of times from a given \mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mfs} & Vector of pointers to Multi\+Fab objects. Multi\+Fab needs to be castable to \mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector of times. Needs to be amrex\+::\+Vector to be usable with e.\+g. amrex\+::\+Fill\+Patch\+Two\+Levels. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/level\+\_\+data.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,95 @@
+\hypertarget{classsledgehamr_1_1IOModule}{}\section{sledgehamr\+:\+:I\+O\+Module Class Reference}
+\label{classsledgehamr_1_1IOModule}\index{sledgehamr\+::\+I\+O\+Module@{sledgehamr\+::\+I\+O\+Module}}
+
+
+Class that handles all I/O operations besides parsing the inputs file.  
+
+
+
+
+{\ttfamily \#include $<$io\+\_\+module.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_aad737766170b477c2de5a30559798c07}\label{classsledgehamr_1_1IOModule_aad737766170b477c2de5a30559798c07}} 
+{\bfseries I\+O\+Module} (\mbox{\hyperlink{classsledgehamr_1_1Sledgehamr}{Sledgehamr}} $\ast$owner)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a00c504dbc9915e3fd10a0983cad67c5d}\label{classsledgehamr_1_1IOModule_a00c504dbc9915e3fd10a0983cad67c5d}} 
+void \mbox{\hyperlink{classsledgehamr_1_1IOModule_a00c504dbc9915e3fd10a0983cad67c5d}{Write}} (bool force=false)
+\begin{DoxyCompactList}\small\item\em Writes output if requested. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a6d40375399219df406fce38a63ce1ffb}\label{classsledgehamr_1_1IOModule_a6d40375399219df406fce38a63ce1ffb}} 
+void {\bfseries Restart\+Sim} ()
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a716cbe1da6249ecaaa4023d70ce2f2cc}\label{classsledgehamr_1_1IOModule_a716cbe1da6249ecaaa4023d70ce2f2cc}} 
+void {\bfseries Update\+Output\+Modules} ()
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a2d235a92fd8afd2e35586b2c5da6e72f}\label{classsledgehamr_1_1IOModule_a2d235a92fd8afd2e35586b2c5da6e72f}} 
+void {\bfseries Write\+Box\+Array} (amrex\+::\+Box\+Array \&ba)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_acf047b35679a313d50a8ca42be6c8956}\label{classsledgehamr_1_1IOModule_acf047b35679a313d50a8ca42be6c8956}} 
+std\+::vector$<$ Projection $>$ \mbox{\hyperlink{classsledgehamr_1_1IOModule_acf047b35679a313d50a8ca42be6c8956}{projections}}
+\begin{DoxyCompactList}\small\item\em Vectors containing instructions for projections and spectra. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a0d5e66413be2b95f3873eaa3fd55f8b9}\label{classsledgehamr_1_1IOModule_a0d5e66413be2b95f3873eaa3fd55f8b9}} 
+std\+::vector$<$ Spectrum $>$ {\bfseries spectra}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_aa6af01cdd296efb0893eca1ef85bfbd0}\label{classsledgehamr_1_1IOModule_aa6af01cdd296efb0893eca1ef85bfbd0}} 
+int \mbox{\hyperlink{classsledgehamr_1_1IOModule_aa6af01cdd296efb0893eca1ef85bfbd0}{idx\+\_\+slices}} = -\/1
+\begin{DoxyCompactList}\small\item\em Easy access pointers for user-\/modifications. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a99784bd378acf2b2efabb7beb4315dbb}\label{classsledgehamr_1_1IOModule_a99784bd378acf2b2efabb7beb4315dbb}} 
+int {\bfseries idx\+\_\+coarse\+\_\+box} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a6551a072168dbcdd788f892e27530173}\label{classsledgehamr_1_1IOModule_a6551a072168dbcdd788f892e27530173}} 
+int {\bfseries idx\+\_\+full\+\_\+box} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a3c61a64fa45ddd8eced004a242db0e85}\label{classsledgehamr_1_1IOModule_a3c61a64fa45ddd8eced004a242db0e85}} 
+int {\bfseries idx\+\_\+slices\+\_\+truncation\+\_\+error} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_aace81c8a6d11eed4316b8021820dc39f}\label{classsledgehamr_1_1IOModule_aace81c8a6d11eed4316b8021820dc39f}} 
+int {\bfseries idx\+\_\+coarse\+\_\+box\+\_\+truncation\+\_\+error} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a5ebafa73fe91df300dc49ff70b4a5649}\label{classsledgehamr_1_1IOModule_a5ebafa73fe91df300dc49ff70b4a5649}} 
+int {\bfseries idx\+\_\+full\+\_\+box\+\_\+truncation\+\_\+error} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a6cfb269f85360b95e327cac02047e0fb}\label{classsledgehamr_1_1IOModule_a6cfb269f85360b95e327cac02047e0fb}} 
+int {\bfseries idx\+\_\+projections} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a42ffd4132329490dc08f270952276a30}\label{classsledgehamr_1_1IOModule_a42ffd4132329490dc08f270952276a30}} 
+int {\bfseries idx\+\_\+spectra} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a1dd7a15ede103d89d189120ac9a14dbd}\label{classsledgehamr_1_1IOModule_a1dd7a15ede103d89d189120ac9a14dbd}} 
+int {\bfseries idx\+\_\+gw\+\_\+spectra} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a0b9a5b302433e479e6e6bcbb41739321}\label{classsledgehamr_1_1IOModule_a0b9a5b302433e479e6e6bcbb41739321}} 
+int {\bfseries idx\+\_\+performance\+\_\+monitor} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_af5434bf69e451f69064379b33a355634}\label{classsledgehamr_1_1IOModule_af5434bf69e451f69064379b33a355634}} 
+int {\bfseries idx\+\_\+amrex\+\_\+plotfile} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_adfb278d2d5b82d812b72d0cd6988b186}\label{classsledgehamr_1_1IOModule_adfb278d2d5b82d812b72d0cd6988b186}} 
+int {\bfseries idx\+\_\+checkpoints} = -\/1
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_ab093c90582020e1f9b7d8af3814e833a}\label{classsledgehamr_1_1IOModule_ab093c90582020e1f9b7d8af3814e833a}} 
+std\+::vector$<$ Output\+Module $>$ \mbox{\hyperlink{classsledgehamr_1_1IOModule_ab093c90582020e1f9b7d8af3814e833a}{output}}
+\begin{DoxyCompactList}\small\item\em Vector of output modules. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a411357720a9bfbb0f5dc6548090814dc}\label{classsledgehamr_1_1IOModule_a411357720a9bfbb0f5dc6548090814dc}} 
+std\+::string {\bfseries output\+\_\+folder}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_af7545db0fa7ab4c5f6ffaaefcab579d2}\label{classsledgehamr_1_1IOModule_af7545db0fa7ab4c5f6ffaaefcab579d2}} 
+std\+::string {\bfseries alternative\+\_\+output\+\_\+folder} = \char`\"{}\char`\"{}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1IOModule_a9d75926888e4337742708c73db652bbb}\label{classsledgehamr_1_1IOModule_a9d75926888e4337742708c73db652bbb}} 
+std\+::string {\bfseries old\+\_\+checkpoint} = \char`\"{}\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class that handles all I/O operations besides parsing the inputs file. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/io\+\_\+module.\+h\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/io\+\_\+module.\+cpp\end{DoxyCompactItemize}

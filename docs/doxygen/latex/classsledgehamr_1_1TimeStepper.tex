@@ -1,0 +1,61 @@
+\hypertarget{classsledgehamr_1_1TimeStepper}{}\section{sledgehamr\+:\+:Time\+Stepper Class Reference}
+\label{classsledgehamr_1_1TimeStepper}\index{sledgehamr\+::\+Time\+Stepper@{sledgehamr\+::\+Time\+Stepper}}
+
+
+Class that takes care of the sub-\/cycling in time algorithm as well as the scheduling regrids.  
+
+
+
+
+{\ttfamily \#include $<$time\+\_\+stepper.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1TimeStepper_a3e07dcb8a5a92cd4a10b8e3e34f5ce57}\label{classsledgehamr_1_1TimeStepper_a3e07dcb8a5a92cd4a10b8e3e34f5ce57}} 
+{\bfseries Time\+Stepper} (\mbox{\hyperlink{classsledgehamr_1_1Sledgehamr}{Sledgehamr}} $\ast$owner)
+\item 
+void \mbox{\hyperlink{classsledgehamr_1_1TimeStepper_a029f92dcddadc58f020a528cd93da35d}{Advance}} (int lev)
+\begin{DoxyCompactList}\small\item\em Recursive function and the core of the sub-\/cycling in time algorithm. Advances a given level by dt\mbox{[}level\mbox{]}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1TimeStepper_a5bf9f74cdd6c280390417bf5c202b824}\label{classsledgehamr_1_1TimeStepper_a5bf9f74cdd6c280390417bf5c202b824}} 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classsledgehamr_1_1TimeStepper_a5bf9f74cdd6c280390417bf5c202b824}{regrid\+\_\+dt}}
+\begin{DoxyCompactList}\small\item\em Vector of regridding intervals at each level. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1TimeStepper_ad6770cb1fe15aac86e1d3177871e3a59}\label{classsledgehamr_1_1TimeStepper_ad6770cb1fe15aac86e1d3177871e3a59}} 
+std\+::unique\+\_\+ptr$<$ Integrator $>$ \mbox{\hyperlink{classsledgehamr_1_1TimeStepper_ad6770cb1fe15aac86e1d3177871e3a59}{integrator}}
+\begin{DoxyCompactList}\small\item\em Pointer to integration module. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1TimeStepper_a72c737467fbb1dd826d088256708d652}\label{classsledgehamr_1_1TimeStepper_a72c737467fbb1dd826d088256708d652}} 
+std\+::unique\+\_\+ptr$<$ Local\+Regrid $>$ {\bfseries local\+\_\+regrid}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1TimeStepper_aa8f91c75fad99d45941504c7694198a8}\label{classsledgehamr_1_1TimeStepper_aa8f91c75fad99d45941504c7694198a8}} 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classsledgehamr_1_1RegridScheduler}{Regrid\+Scheduler}} $>$ {\bfseries scheduler}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class that takes care of the sub-\/cycling in time algorithm as well as the scheduling regrids. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classsledgehamr_1_1TimeStepper_a029f92dcddadc58f020a528cd93da35d}\label{classsledgehamr_1_1TimeStepper_a029f92dcddadc58f020a528cd93da35d}} 
+\index{sledgehamr\+::\+Time\+Stepper@{sledgehamr\+::\+Time\+Stepper}!Advance@{Advance}}
+\index{Advance@{Advance}!sledgehamr\+::\+Time\+Stepper@{sledgehamr\+::\+Time\+Stepper}}
+\subsubsection{\texorpdfstring{Advance()}{Advance()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Time\+Stepper\+::\+Advance (\begin{DoxyParamCaption}\item[{int}]{lev }\end{DoxyParamCaption})}
+
+
+
+Recursive function and the core of the sub-\/cycling in time algorithm. Advances a given level by dt\mbox{[}level\mbox{]}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & Level to be advanced. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/time\+\_\+stepper.\+h\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/time\+\_\+stepper.\+cpp\end{DoxyCompactItemize}

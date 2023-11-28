@@ -1,0 +1,59 @@
+\hypertarget{classsledgehamr_1_1ScalarField}{}\section{sledgehamr\+:\+:Scalar\+Field Class Reference}
+\label{classsledgehamr_1_1ScalarField}\index{sledgehamr\+::\+Scalar\+Field@{sledgehamr\+::\+Scalar\+Field}}
+
+
+Class to keep track of scalar fields.  
+
+
+
+
+{\ttfamily \#include $<$scalars.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classsledgehamr_1_1ScalarField_a3861e15fde648101e465c97aec2050cb}{Scalar\+Field}} (std\+::string str, std\+::vector$<$ \mbox{\hyperlink{classsledgehamr_1_1ScalarField}{Scalar\+Field}} $\ast$$>$ \&sfv, bool is\+\_\+momentum)
+\begin{DoxyCompactList}\small\item\em Upon construction this class will automatically add itself to a scalar field vector sfv in order to be simulated by the code. It will store its amrex\+::\+Multi\+Fab component number as id. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1ScalarField_a5897ea45641e16e6b9200621cb4444d9}\label{classsledgehamr_1_1ScalarField_a5897ea45641e16e6b9200621cb4444d9}} 
+\mbox{\hyperlink{classsledgehamr_1_1ScalarField_a5897ea45641e16e6b9200621cb4444d9}{operator int}} () const
+\begin{DoxyCompactList}\small\item\em Convenient operator to return internal id. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1ScalarField_aced45432f3745af8676420de16d85858}\label{classsledgehamr_1_1ScalarField_aced45432f3745af8676420de16d85858}} 
+std\+::string \mbox{\hyperlink{classsledgehamr_1_1ScalarField_aced45432f3745af8676420de16d85858}{name}}
+\begin{DoxyCompactList}\small\item\em Name of field by which it will be referred to in any input and output. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1ScalarField_a633efe8b5d6d2af646a323fd7ac26d14}\label{classsledgehamr_1_1ScalarField_a633efe8b5d6d2af646a323fd7ac26d14}} 
+const int \mbox{\hyperlink{classsledgehamr_1_1ScalarField_a633efe8b5d6d2af646a323fd7ac26d14}{id}}
+\begin{DoxyCompactList}\small\item\em Internal id. Corresponds to component in amrex\+::\+Multifab. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1ScalarField_ac1315cb5d5e098799b4c4d9788f5d8eb}\label{classsledgehamr_1_1ScalarField_ac1315cb5d5e098799b4c4d9788f5d8eb}} 
+bool {\bfseries is\+\_\+conjugate\+\_\+momentum}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class to keep track of scalar fields. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classsledgehamr_1_1ScalarField_a3861e15fde648101e465c97aec2050cb}\label{classsledgehamr_1_1ScalarField_a3861e15fde648101e465c97aec2050cb}} 
+\index{sledgehamr\+::\+Scalar\+Field@{sledgehamr\+::\+Scalar\+Field}!Scalar\+Field@{Scalar\+Field}}
+\index{Scalar\+Field@{Scalar\+Field}!sledgehamr\+::\+Scalar\+Field@{sledgehamr\+::\+Scalar\+Field}}
+\subsubsection{\texorpdfstring{Scalar\+Field()}{ScalarField()}}
+{\footnotesize\ttfamily sledgehamr\+::\+Scalar\+Field\+::\+Scalar\+Field (\begin{DoxyParamCaption}\item[{std\+::string}]{str,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classsledgehamr_1_1ScalarField}{Scalar\+Field}} $\ast$$>$ \&}]{sfv,  }\item[{bool}]{is\+\_\+momentum }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Upon construction this class will automatically add itself to a scalar field vector sfv in order to be simulated by the code. It will store its amrex\+::\+Multi\+Fab component number as id. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & Name of scalar field. \\
+\hline
+{\em sfv} & Vector of scalar fields to which this field will be added. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/scalars.\+h\end{DoxyCompactItemize}

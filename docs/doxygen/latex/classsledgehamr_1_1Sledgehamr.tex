@@ -1,0 +1,472 @@
+\hypertarget{classsledgehamr_1_1Sledgehamr}{}\section{sledgehamr\+:\+:Sledgehamr Class Reference}
+\label{classsledgehamr_1_1Sledgehamr}\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+
+
+Base class for all derived projects. Combines all the ingredients to make this code work.  
+
+
+
+
+{\ttfamily \#include $<$sledgehamr.\+h$>$}
+
+Inheritance diagram for sledgehamr\+:\+:Sledgehamr\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classsledgehamr_1_1Sledgehamr}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_aa79a7ecd89061020a65f5259a286bc3a}\label{classsledgehamr_1_1Sledgehamr_aa79a7ecd89061020a65f5259a286bc3a}} 
+\mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_aa79a7ecd89061020a65f5259a286bc3a}{Sledgehamr}} ()
+\begin{DoxyCompactList}\small\item\em Creates instances of submodules and reads input parameters. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ac68165a48b6802a8910c19c89524975d}\label{classsledgehamr_1_1Sledgehamr_ac68165a48b6802a8910c19c89524975d}} 
+void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_ac68165a48b6802a8910c19c89524975d}{Init\+Sledgehamr}} ()
+\begin{DoxyCompactList}\small\item\em Initalizes data from scratch or from checkpoint file. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a356dc1022d4a792e67ee5af0bab4854c}\label{classsledgehamr_1_1Sledgehamr_a356dc1022d4a792e67ee5af0bab4854c}} 
+void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a356dc1022d4a792e67ee5af0bab4854c}{Evolve}} ()
+\begin{DoxyCompactList}\small\item\em Starts the evolution. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_acf3cdcc305af82ca3ce9efa61c9fc318}{Fill\+Rhs}} (amrex\+::\+Multi\+Fab \&rhs\+\_\+mf, const amrex\+::\+Multi\+Fab \&state\+\_\+mf, const double time, const int lev, const double \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a9239f0c77e572cc155e33f602c19b8dc}{dt}}, const double dx)=0
+\begin{DoxyCompactList}\small\item\em Virtual function that loops over a state to fill the R\+HS. Has to be defined by derived project class, though this will be hidden from the user. Reason for this is so that the R\+HS function, declared also by the project class, can be inlined within this function, which it otherwise couldn\textquotesingle{}t as it is not clear at compile time which project will be run. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a61bd3ef11742f97b3588aded1c21a688}{Fill\+Add\+Rhs}} (amrex\+::\+Multi\+Fab \&rhs\+\_\+mf, const amrex\+::\+Multi\+Fab \&state\+\_\+mf, const double time, const int lev, const double \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a9239f0c77e572cc155e33f602c19b8dc}{dt}}, const double dx, const double weight)=0
+\begin{DoxyCompactList}\small\item\em Like Fill\+Rhs but the result will be added to rhs\+\_\+mf rather than set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a615719ce6ad99823f3007471a0401eee}\label{classsledgehamr_1_1Sledgehamr_a615719ce6ad99823f3007471a0401eee}} 
+double {\bfseries GetL} () const
+\item 
+double \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_ae041be553a87d5da3eda5c6dc143c8b8}{Get\+Dx}} (const int lev) const
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ad0184437c39c28d57533f127ffb0f58d}\label{classsledgehamr_1_1Sledgehamr_ad0184437c39c28d57533f127ffb0f58d}} 
+double {\bfseries Get\+Dt} (const int lev) const
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_abc83d3b80945e15dcb9e68c4ec38da46}\label{classsledgehamr_1_1Sledgehamr_abc83d3b80945e15dcb9e68c4ec38da46}} 
+int {\bfseries Get\+DimN} (const int lev) const
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a8233248303597d2e5e9945d5499c6dd6}\label{classsledgehamr_1_1Sledgehamr_a8233248303597d2e5e9945d5499c6dd6}} 
+int {\bfseries Get\+Max\+Level} () const
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a4f26822420530e092da46245a25f2d84}\label{classsledgehamr_1_1Sledgehamr_a4f26822420530e092da46245a25f2d84}} 
+int {\bfseries Get\+Finest\+Level} () const
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_aa9e307f7e4247731a24ca3dddb60e02c}\label{classsledgehamr_1_1Sledgehamr_aa9e307f7e4247731a24ca3dddb60e02c}} 
+amrex\+::\+Vector$<$ amrex\+::\+Geometry $>$ \& {\bfseries Get\+Geometry} ()
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ac08726e6e883efe235b9f52d80535b5e}\label{classsledgehamr_1_1Sledgehamr_ac08726e6e883efe235b9f52d80535b5e}} 
+\mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} \& {\bfseries Get\+Level\+Data} (const int lev)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ab647eb1ffc9e0c53654b943239ee6c7d}\label{classsledgehamr_1_1Sledgehamr_ab647eb1ffc9e0c53654b943239ee6c7d}} 
+\mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} \& {\bfseries Get\+Old\+Level\+Data} (const int lev)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a7350c88f5fbac3293f0d616bd2210084}\label{classsledgehamr_1_1Sledgehamr_a7350c88f5fbac3293f0d616bd2210084}} 
+int {\bfseries Get\+Blocking\+Factor} (const int lev) const
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_aaf7975f1af5492e12a5e0eae9faa53ed}\label{classsledgehamr_1_1Sledgehamr_aaf7975f1af5492e12a5e0eae9faa53ed}} 
+std\+::string {\bfseries Get\+Scalar\+Field\+Name} (const int comp) const
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a08088a5d33fc94d5aff24ae0facae9d3}\label{classsledgehamr_1_1Sledgehamr_a08088a5d33fc94d5aff24ae0facae9d3}} 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classsledgehamr_1_1LevelSynchronizer}{Level\+Synchronizer}} $>$ \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a08088a5d33fc94d5aff24ae0facae9d3}{level\+\_\+synchronizer}}
+\begin{DoxyCompactList}\small\item\em Pointer to synchronization module. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_af8c1d908670c8e7a86039634003ca9d2}\label{classsledgehamr_1_1Sledgehamr_af8c1d908670c8e7a86039634003ca9d2}} 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classsledgehamr_1_1IOModule}{I\+O\+Module}} $>$ {\bfseries io\+\_\+module}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a8b820992141c3e1fc4581b39b86fc8a1}\label{classsledgehamr_1_1Sledgehamr_a8b820992141c3e1fc4581b39b86fc8a1}} 
+int \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a8b820992141c3e1fc4581b39b86fc8a1}{nghost}} = 0
+\begin{DoxyCompactList}\small\item\em Number of ghost cells. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_affbe4047a4e7222e61195b4241ff4bb1}\label{classsledgehamr_1_1Sledgehamr_affbe4047a4e7222e61195b4241ff4bb1}} 
+bool {\bfseries with\+\_\+gravitational\+\_\+waves} = false
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a6a06d1bf6d7436d39e8f0a809b8293a2}\label{classsledgehamr_1_1Sledgehamr_a6a06d1bf6d7436d39e8f0a809b8293a2}} 
+bool {\bfseries do\+\_\+thorough\+\_\+checks} = false
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ad2185aafc7053f34e7325584ff808eb3}\label{classsledgehamr_1_1Sledgehamr_ad2185aafc7053f34e7325584ff808eb3}} 
+int {\bfseries check\+\_\+mpi\+\_\+ranks} = 0
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_abec8e744b285c224cc3cba2f23dda06d}\label{classsledgehamr_1_1Sledgehamr_abec8e744b285c224cc3cba2f23dda06d}} 
+int {\bfseries nerrors} = 0
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a29f2cfdb24f159a165d177012ca7f219}{Make\+New\+Level\+From\+Scratch}} (int lev, amrex\+::\+Real time, const amrex\+::\+Box\+Array \&ba, const amrex\+::\+Distribution\+Mapping \&dm) override
+\begin{DoxyCompactList}\small\item\em Make a new level from scratch using provided Box\+Array and Distribution\+Mapping. Only used during initialization. Overrides the pure virtual function in amrex\+::\+Amr\+Core. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_ae6cc40f77442f989b46196439ca1310e}{Make\+New\+Level\+From\+Coarse}} (int lev, amrex\+::\+Real time, const amrex\+::\+Box\+Array \&ba, const amrex\+::\+Distribution\+Mapping \&dm) override
+\begin{DoxyCompactList}\small\item\em Make a new level using provided Box\+Array and Distribution\+Mapping, and fills it with interpolated coarse level data. Overrides the pure virtual function in amrex\+::\+Amr\+Core. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a66eafb81586abbd98cea7eb7e99db338}{Remake\+Level}} (int lev, amrex\+::\+Real time, const amrex\+::\+Box\+Array \&ba, const amrex\+::\+Distribution\+Mapping \&dm) override
+\begin{DoxyCompactList}\small\item\em Remake a new level using provided Box\+Array and Distribution\+Mapping, and fills it with interpolated coarse level data. Overrides the pure virtual function in amrex\+::\+Amr\+Core. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a767607bce4ba621f509c6279faa7195f}{Clear\+Level}} (int lev) override
+\begin{DoxyCompactList}\small\item\em Delete level data. Overrides the pure virtual function in amrex\+::\+Amr\+Core. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_ae0a4a4db58d14e9bb4ef38ebc6edadb7}{Error\+Est}} (int lev, amrex\+::\+Tag\+Box\+Array \&tags, amrex\+::\+Real time, int ngrow) override
+\begin{DoxyCompactList}\small\item\em Tag cells for refinement. Overrides the pure virtual function in amrex\+::\+Amr\+Core. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a14510bc01e24329a95ec7aa2d86ab569}{Tag\+With\+Truncation\+Cpu}} (const amrex\+::\+Array4$<$ const double $>$ \&state\+\_\+fab, const amrex\+::\+Array4$<$ const double $>$ \&state\+\_\+fab\+\_\+te, const amrex\+::\+Array4$<$ char $>$ \&tagarr, const amrex\+::\+Box \&tilebox, double time, int lev, int $\ast$ntags\+\_\+total, int $\ast$ntags\+\_\+user, int $\ast$ntags\+\_\+trunc, const std\+::vector$<$ double $>$ \&params\+\_\+tag, const std\+::vector$<$ double $>$ \&params\+\_\+mod)=0
+\begin{DoxyCompactList}\small\item\em Virtual function that loop over a state to tags cells for refinement. Includes user-\/defined tags and truncation error tags. Will automatically be overriden by the project class. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_af8129bf33797b5d3e64d415e7f9876a5}\label{classsledgehamr_1_1Sledgehamr_af8129bf33797b5d3e64d415e7f9876a5}} 
+virtual void {\bfseries Tag\+With\+Truncation\+Gpu} (const amrex\+::\+Array4$<$ const double $>$ \&state\+\_\+fab, const amrex\+::\+Array4$<$ const double $>$ \&state\+\_\+fab\+\_\+te, const amrex\+::\+Array4$<$ char $>$ \&tagarr, const amrex\+::\+Box \&tilebox, double time, int lev, const std\+::vector$<$ double $>$ \&params\+\_\+tag, const std\+::vector$<$ double $>$ \&params\+\_\+mod)=0
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a72376b1fc0e22a68c8449bccc6518897}\label{classsledgehamr_1_1Sledgehamr_a72376b1fc0e22a68c8449bccc6518897}} 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a72376b1fc0e22a68c8449bccc6518897}{Tag\+Without\+Truncation\+Cpu}} (const amrex\+::\+Array4$<$ const double $>$ \&state\+\_\+fab, const amrex\+::\+Array4$<$ char $>$ \&tagarr, const amrex\+::\+Box \&tilebox, double time, int lev, int $\ast$ntags\+\_\+total, const std\+::vector$<$ double $>$ \&params)=0
+\begin{DoxyCompactList}\small\item\em Same as Tag\+With\+Truncation but does not include truncation error tags. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_acd89d0e95abb1c601a4622c400893c97}\label{classsledgehamr_1_1Sledgehamr_acd89d0e95abb1c601a4622c400893c97}} 
+virtual void {\bfseries Tag\+Without\+Truncation\+Gpu} (const amrex\+::\+Array4$<$ const double $>$ \&state\+\_\+fab, const amrex\+::\+Array4$<$ char $>$ \&tagarr, const amrex\+::\+Box \&tilebox, double time, int lev, const std\+::vector$<$ double $>$ \&params)=0
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a9c1605a42a34853ce9efb99f7be43a2a}\label{classsledgehamr_1_1Sledgehamr_a9c1605a42a34853ce9efb99f7be43a2a}} 
+virtual void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a9c1605a42a34853ce9efb99f7be43a2a}{Init}} ()
+\begin{DoxyCompactList}\small\item\em Initialize project specific details. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a55951d4d585f60943a265c02666a38c0}{Do\+Create\+Level\+If}} (const int lev, const double time)
+\begin{DoxyCompactList}\small\item\em Function to check whether a given level is allowed to be created by a given time. Can be overridden by the project class. Will always allow a level to be created by default. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ac018ba7412bd5e0eebb4be64736aabba}\label{classsledgehamr_1_1Sledgehamr_ac018ba7412bd5e0eebb4be64736aabba}} 
+virtual bool {\bfseries Create\+Level\+If} (const int lev, const double time)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a72dbd6348ab3dd777f80f005dada9d56}\label{classsledgehamr_1_1Sledgehamr_a72dbd6348ab3dd777f80f005dada9d56}} 
+virtual bool {\bfseries Stop\+Running} (const double time)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a1fc21e49b69617b209794eb3aa7399d9}\label{classsledgehamr_1_1Sledgehamr_a1fc21e49b69617b209794eb3aa7399d9}} 
+virtual void {\bfseries Set\+Params\+Rhs} (std\+::vector$<$ double $>$ \&params, const double time, const int lev)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ac17889590166ddca3944bfd28234ee99}\label{classsledgehamr_1_1Sledgehamr_ac17889590166ddca3944bfd28234ee99}} 
+virtual void {\bfseries Set\+Params\+Gravitational\+Wave\+Rhs} (std\+::vector$<$ double $>$ \&params, const double time, const int lev)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ad38a472702a9bb491988bdc7ead8f27b}\label{classsledgehamr_1_1Sledgehamr_ad38a472702a9bb491988bdc7ead8f27b}} 
+virtual void {\bfseries Set\+Params\+Tag\+Cell\+For\+Refinement} (std\+::vector$<$ double $>$ \&params, const double time, const int lev)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_aaf352778e8706f7352bc1909e6bdd2aa}\label{classsledgehamr_1_1Sledgehamr_aaf352778e8706f7352bc1909e6bdd2aa}} 
+virtual void {\bfseries Set\+Params\+Truncation\+Modifier} (std\+::vector$<$ double $>$ \&params, const double time, const int lev)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_aa19c6b1f0bb4ff23df49baa8c3725d60}\label{classsledgehamr_1_1Sledgehamr_aa19c6b1f0bb4ff23df49baa8c3725d60}} 
+virtual void {\bfseries Set\+Params\+Spectra} (std\+::vector$<$ double $>$ \&params, const double time)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ad11ee726fd88f667a6da0a103f42563a}\label{classsledgehamr_1_1Sledgehamr_ad11ee726fd88f667a6da0a103f42563a}} 
+virtual void {\bfseries Set\+Params\+Projections} (std\+::vector$<$ double $>$ \&params, const double time)
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a203fe3b2f9001a0c5572b3a5d55bbec3}\label{classsledgehamr_1_1Sledgehamr_a203fe3b2f9001a0c5572b3a5d55bbec3}} 
+void \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a203fe3b2f9001a0c5572b3a5d55bbec3}{Create\+Shadow\+Level}} ()
+\begin{DoxyCompactList}\small\item\em Creates a shadow level and evolves it by one time step. Needed to compute truncation errors on the coarse level. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a4625543f3cf36f29e1b7daaa05e8c668}\label{classsledgehamr_1_1Sledgehamr_a4625543f3cf36f29e1b7daaa05e8c668}} 
+virtual void {\bfseries Before\+Timestep} (const double time)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_aa2e845b6090d41759cc34caa18fe1739}\label{classsledgehamr_1_1Sledgehamr_aa2e845b6090d41759cc34caa18fe1739}} 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classsledgehamr_1_1TimeStepper}{Time\+Stepper}} $>$ \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_aa2e845b6090d41759cc34caa18fe1739}{time\+\_\+stepper}}
+\begin{DoxyCompactList}\small\item\em Pointer to sub-\/modules. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a9aaf5367722a908a86e99393f6fc5aa5}\label{classsledgehamr_1_1Sledgehamr_a9aaf5367722a908a86e99393f6fc5aa5}} 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classsledgehamr_1_1GravitationalWaves}{Gravitational\+Waves}} $>$ {\bfseries gravitational\+\_\+waves}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a6b6f544d51bc9f4b8e8ca4f4ed58d368}\label{classsledgehamr_1_1Sledgehamr_a6b6f544d51bc9f4b8e8ca4f4ed58d368}} 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classsledgehamr_1_1PerformanceMonitor}{Performance\+Monitor}} $>$ {\bfseries performance\+\_\+monitor}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ab90902175e4d8af5dc39112b136642be}\label{classsledgehamr_1_1Sledgehamr_ab90902175e4d8af5dc39112b136642be}} 
+std\+::vector$<$ \mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} $>$ \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_ab90902175e4d8af5dc39112b136642be}{grid\+\_\+old}}
+\begin{DoxyCompactList}\small\item\em Holds the actual simulation data for all levels at two different states in time. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a677eb6121cd9161e9c1ba976d89b694f}\label{classsledgehamr_1_1Sledgehamr_a677eb6121cd9161e9c1ba976d89b694f}} 
+std\+::vector$<$ \mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} $>$ {\bfseries grid\+\_\+new}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a0f4b66c05d9b5b7f5f4acb5fc5dfd84b}\label{classsledgehamr_1_1Sledgehamr_a0f4b66c05d9b5b7f5f4acb5fc5dfd84b}} 
+bool \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a0f4b66c05d9b5b7f5f4acb5fc5dfd84b}{shadow\+\_\+hierarchy}} = false
+\begin{DoxyCompactList}\small\item\em Shadow level in case we need it. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ada6b4c3b50b154743da391ed7a5be79c}\label{classsledgehamr_1_1Sledgehamr_ada6b4c3b50b154743da391ed7a5be79c}} 
+\mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} {\bfseries shadow\+\_\+level}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a9107cfee4ed83f1e8a8478adb5beb496}\label{classsledgehamr_1_1Sledgehamr_a9107cfee4ed83f1e8a8478adb5beb496}} 
+\mbox{\hyperlink{classsledgehamr_1_1LevelData}{Level\+Data}} {\bfseries shadow\+\_\+level\+\_\+tmp}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a87fd1439441652a76e34441ac9bc6bde}\label{classsledgehamr_1_1Sledgehamr_a87fd1439441652a76e34441ac9bc6bde}} 
+amrex\+::\+Geometry {\bfseries shadow\+\_\+level\+\_\+geom}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_adf5dfa6bf28cbd2a7c3acf5928495222}\label{classsledgehamr_1_1Sledgehamr_adf5dfa6bf28cbd2a7c3acf5928495222}} 
+std\+::vector$<$ \mbox{\hyperlink{classsledgehamr_1_1ScalarField}{Scalar\+Field}} $\ast$ $>$ \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_adf5dfa6bf28cbd2a7c3acf5928495222}{scalar\+\_\+fields}}
+\begin{DoxyCompactList}\small\item\em Holds pointers to all simulated scalar fields. We assume ownership of all objects within this vector -\/ one day we upgrade to a smart pointer. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ab39530956a51008b7eeb2d61f4eb14f5}\label{classsledgehamr_1_1Sledgehamr_ab39530956a51008b7eeb2d61f4eb14f5}} 
+double \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_ab39530956a51008b7eeb2d61f4eb14f5}{t\+\_\+start}}
+\begin{DoxyCompactList}\small\item\em Start and end times of the simulation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a307c02ed0980a082fafb88578121df9d}\label{classsledgehamr_1_1Sledgehamr_a307c02ed0980a082fafb88578121df9d}} 
+double {\bfseries t\+\_\+end}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a9239f0c77e572cc155e33f602c19b8dc}\label{classsledgehamr_1_1Sledgehamr_a9239f0c77e572cc155e33f602c19b8dc}} 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a9239f0c77e572cc155e33f602c19b8dc}{dt}}
+\begin{DoxyCompactList}\small\item\em Time step size and grid spacing at each level. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a50a57ffa146126e84ebe8c3786e7e162}\label{classsledgehamr_1_1Sledgehamr_a50a57ffa146126e84ebe8c3786e7e162}} 
+std\+::vector$<$ double $>$ {\bfseries dx}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ae63f7440e3ecaac50023872f8aa23d80}\label{classsledgehamr_1_1Sledgehamr_ae63f7440e3ecaac50023872f8aa23d80}} 
+double \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_ae63f7440e3ecaac50023872f8aa23d80}{cfl}}
+\begin{DoxyCompactList}\small\item\em C\+FL criteria. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a3b6cac62b23df3148a59a516f4aab93b}\label{classsledgehamr_1_1Sledgehamr_a3b6cac62b23df3148a59a516f4aab93b}} 
+double \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a3b6cac62b23df3148a59a516f4aab93b}{L}}
+\begin{DoxyCompactList}\small\item\em Box length. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a7cd2ed06ec7cffa965017fc3858948e3}\label{classsledgehamr_1_1Sledgehamr_a7cd2ed06ec7cffa965017fc3858948e3}} 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a7cd2ed06ec7cffa965017fc3858948e3}{dimN}}
+\begin{DoxyCompactList}\small\item\em Number of cells in each direction for each level. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a67d75bdf0fb15f5cfba92a081e694e2b}\label{classsledgehamr_1_1Sledgehamr_a67d75bdf0fb15f5cfba92a081e694e2b}} 
+int \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a67d75bdf0fb15f5cfba92a081e694e2b}{coarse\+\_\+level\+\_\+grid\+\_\+size}}
+\begin{DoxyCompactList}\small\item\em Number of coarse level cells in each direction. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a1d32f49c7150d593c48e2952f27f6da9}\label{classsledgehamr_1_1Sledgehamr_a1d32f49c7150d593c48e2952f27f6da9}} 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_a1d32f49c7150d593c48e2952f27f6da9}{te\+\_\+crit}}
+\begin{DoxyCompactList}\small\item\em Truncation error thresholds. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ab7a2e0686f9fba4e696c0d8988afc853}\label{classsledgehamr_1_1Sledgehamr_ab7a2e0686f9fba4e696c0d8988afc853}} 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{classsledgehamr_1_1Sledgehamr_ab7a2e0686f9fba4e696c0d8988afc853}{spectrum\+\_\+ks}}
+\begin{DoxyCompactList}\small\item\em T\+O\+DO. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a74c116d587474586db4f44ebe5512740}\label{classsledgehamr_1_1Sledgehamr_a74c116d587474586db4f44ebe5512740}} 
+std\+::vector$<$ double $>$ {\bfseries dissipation\+\_\+strength}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a355e94b7c7910b4291356530ce2d240a}\label{classsledgehamr_1_1Sledgehamr_a355e94b7c7910b4291356530ce2d240a}} 
+bool {\bfseries with\+\_\+dissipation} = false
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_adccd9747c433c6d79d7393311b58073b}\label{classsledgehamr_1_1Sledgehamr_adccd9747c433c6d79d7393311b58073b}} 
+int {\bfseries dissipation\+\_\+order} = 0
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ae2c994a4b05f9e29a965d02ab4e1557b}\label{classsledgehamr_1_1Sledgehamr_ae2c994a4b05f9e29a965d02ab4e1557b}} 
+bool {\bfseries restart\+\_\+sim} = false
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a0ccb1826a0bd0e46961f29854b9bdba2}\label{classsledgehamr_1_1Sledgehamr_a0ccb1826a0bd0e46961f29854b9bdba2}} 
+class {\bfseries Level\+Synchronizer}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ad6cb20f04842bddcd2f1169b48a7c124}\label{classsledgehamr_1_1Sledgehamr_ad6cb20f04842bddcd2f1169b48a7c124}} 
+class {\bfseries Local\+Regrid}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ae9cfda6f93e5c3d6dc8ae780872aad17}\label{classsledgehamr_1_1Sledgehamr_ae9cfda6f93e5c3d6dc8ae780872aad17}} 
+class {\bfseries Time\+Stepper}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ace5bb0fe4232b9b0ced67ff743994e71}\label{classsledgehamr_1_1Sledgehamr_ace5bb0fe4232b9b0ced67ff743994e71}} 
+class {\bfseries Integrator}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_aefaf6a5e23c7e41338945f20d82a4401}\label{classsledgehamr_1_1Sledgehamr_aefaf6a5e23c7e41338945f20d82a4401}} 
+class {\bfseries I\+O\+Module}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a8e87a92be27fc974044d80e742df6879}\label{classsledgehamr_1_1Sledgehamr_a8e87a92be27fc974044d80e742df6879}} 
+class {\bfseries Projection}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ac2ea35640432a8a1420bd335b9d2abef}\label{classsledgehamr_1_1Sledgehamr_ac2ea35640432a8a1420bd335b9d2abef}} 
+class {\bfseries Spectrum}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ac3267263ae1fe19fb384924d56ee507b}\label{classsledgehamr_1_1Sledgehamr_ac3267263ae1fe19fb384924d56ee507b}} 
+class {\bfseries Gravitational\+Waves}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a91368e0e09c8602b0d1df10a13a3fb81}\label{classsledgehamr_1_1Sledgehamr_a91368e0e09c8602b0d1df10a13a3fb81}} 
+class {\bfseries Checkpoint}
+\item 
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_aa661d765552bf44ea4e4e9878c1ab1ea}\label{classsledgehamr_1_1Sledgehamr_aa661d765552bf44ea4e4e9878c1ab1ea}} 
+class {\bfseries Performance\+Monitor}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Base class for all derived projects. Combines all the ingredients to make this code work. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a767607bce4ba621f509c6279faa7195f}\label{classsledgehamr_1_1Sledgehamr_a767607bce4ba621f509c6279faa7195f}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Clear\+Level@{Clear\+Level}}
+\index{Clear\+Level@{Clear\+Level}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Clear\+Level()}{ClearLevel()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Sledgehamr\+::\+Clear\+Level (\begin{DoxyParamCaption}\item[{int}]{lev }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Delete level data. Overrides the pure virtual function in amrex\+::\+Amr\+Core. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & Level to be deleted. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a55951d4d585f60943a265c02666a38c0}\label{classsledgehamr_1_1Sledgehamr_a55951d4d585f60943a265c02666a38c0}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Do\+Create\+Level\+If@{Do\+Create\+Level\+If}}
+\index{Do\+Create\+Level\+If@{Do\+Create\+Level\+If}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Do\+Create\+Level\+If()}{DoCreateLevelIf()}}
+{\footnotesize\ttfamily bool sledgehamr\+::\+Sledgehamr\+::\+Do\+Create\+Level\+If (\begin{DoxyParamCaption}\item[{const int}]{lev,  }\item[{const double}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Function to check whether a given level is allowed to be created by a given time. Can be overridden by the project class. Will always allow a level to be created by default. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & Level to be created. \\
+\hline
+{\em time} & Time before which the level would be created. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+If the given level is allowed to be created. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ae0a4a4db58d14e9bb4ef38ebc6edadb7}\label{classsledgehamr_1_1Sledgehamr_ae0a4a4db58d14e9bb4ef38ebc6edadb7}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Error\+Est@{Error\+Est}}
+\index{Error\+Est@{Error\+Est}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Error\+Est()}{ErrorEst()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Sledgehamr\+::\+Error\+Est (\begin{DoxyParamCaption}\item[{int}]{lev,  }\item[{amrex\+::\+Tag\+Box\+Array \&}]{tags,  }\item[{amrex\+::\+Real}]{time,  }\item[{int}]{ngrow }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Tag cells for refinement. Overrides the pure virtual function in amrex\+::\+Amr\+Core. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & Level on which cells are tagged. \\
+\hline
+{\em time} & Time of said level. \\
+\hline
+{\em ngrow} & Grid growth factor. \\
+\hline
+{\em ntags\+\_\+user} & Counts number of user-\/defined tags. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a61bd3ef11742f97b3588aded1c21a688}\label{classsledgehamr_1_1Sledgehamr_a61bd3ef11742f97b3588aded1c21a688}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Fill\+Add\+Rhs@{Fill\+Add\+Rhs}}
+\index{Fill\+Add\+Rhs@{Fill\+Add\+Rhs}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Fill\+Add\+Rhs()}{FillAddRhs()}}
+{\footnotesize\ttfamily virtual void sledgehamr\+::\+Sledgehamr\+::\+Fill\+Add\+Rhs (\begin{DoxyParamCaption}\item[{amrex\+::\+Multi\+Fab \&}]{rhs\+\_\+mf,  }\item[{const amrex\+::\+Multi\+Fab \&}]{state\+\_\+mf,  }\item[{const double}]{time,  }\item[{const int}]{lev,  }\item[{const double}]{dt,  }\item[{const double}]{dx,  }\item[{const double}]{weight }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Like Fill\+Rhs but the result will be added to rhs\+\_\+mf rather than set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rhs\+\_\+mf} & Empty Multi\+Fab to be filled with R\+HS. \\
+\hline
+{\em state\+\_\+mf} & State from which the R\+HS is to be computed. \\
+\hline
+{\em time} & Current time. \\
+\hline
+{\em lev} & Currently level. \\
+\hline
+{\em dt} & Time step size. \\
+\hline
+{\em dx} & Grid spacing. \\
+\hline
+{\em weight} & rhs = weight$\ast$rhs + ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_acf3cdcc305af82ca3ce9efa61c9fc318}\label{classsledgehamr_1_1Sledgehamr_acf3cdcc305af82ca3ce9efa61c9fc318}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Fill\+Rhs@{Fill\+Rhs}}
+\index{Fill\+Rhs@{Fill\+Rhs}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Fill\+Rhs()}{FillRhs()}}
+{\footnotesize\ttfamily virtual void sledgehamr\+::\+Sledgehamr\+::\+Fill\+Rhs (\begin{DoxyParamCaption}\item[{amrex\+::\+Multi\+Fab \&}]{rhs\+\_\+mf,  }\item[{const amrex\+::\+Multi\+Fab \&}]{state\+\_\+mf,  }\item[{const double}]{time,  }\item[{const int}]{lev,  }\item[{const double}]{dt,  }\item[{const double}]{dx }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Virtual function that loops over a state to fill the R\+HS. Has to be defined by derived project class, though this will be hidden from the user. Reason for this is so that the R\+HS function, declared also by the project class, can be inlined within this function, which it otherwise couldn\textquotesingle{}t as it is not clear at compile time which project will be run. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rhs\+\_\+mf} & Empty Multi\+Fab to be filled with R\+HS. \\
+\hline
+{\em state\+\_\+mf} & State from which the R\+HS is to be computed. \\
+\hline
+{\em time} & Current time. \\
+\hline
+{\em lev} & Currently level. \\
+\hline
+{\em dt} & Time step size. \\
+\hline
+{\em dx} & Grid spacing. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ae041be553a87d5da3eda5c6dc143c8b8}\label{classsledgehamr_1_1Sledgehamr_ae041be553a87d5da3eda5c6dc143c8b8}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Get\+Dx@{Get\+Dx}}
+\index{Get\+Dx@{Get\+Dx}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Get\+Dx()}{GetDx()}}
+{\footnotesize\ttfamily double sledgehamr\+::\+Sledgehamr\+::\+Get\+Dx (\begin{DoxyParamCaption}\item[{const int}]{lev }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+T\+O\+DO\+: Add max lev check and other methods. \mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_ae6cc40f77442f989b46196439ca1310e}\label{classsledgehamr_1_1Sledgehamr_ae6cc40f77442f989b46196439ca1310e}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Make\+New\+Level\+From\+Coarse@{Make\+New\+Level\+From\+Coarse}}
+\index{Make\+New\+Level\+From\+Coarse@{Make\+New\+Level\+From\+Coarse}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Make\+New\+Level\+From\+Coarse()}{MakeNewLevelFromCoarse()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Sledgehamr\+::\+Make\+New\+Level\+From\+Coarse (\begin{DoxyParamCaption}\item[{int}]{lev,  }\item[{amrex\+::\+Real}]{time,  }\item[{const amrex\+::\+Box\+Array \&}]{ba,  }\item[{const amrex\+::\+Distribution\+Mapping \&}]{dm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Make a new level using provided Box\+Array and Distribution\+Mapping, and fills it with interpolated coarse level data. Overrides the pure virtual function in amrex\+::\+Amr\+Core. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & Level to be created. \\
+\hline
+{\em time} & Time of new grid. \\
+\hline
+{\em ba} & New amrex\+::\+Box\+Array. \\
+\hline
+{\em dm} & New amrex\+::\+Distribution\+Mapping. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a29f2cfdb24f159a165d177012ca7f219}\label{classsledgehamr_1_1Sledgehamr_a29f2cfdb24f159a165d177012ca7f219}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Make\+New\+Level\+From\+Scratch@{Make\+New\+Level\+From\+Scratch}}
+\index{Make\+New\+Level\+From\+Scratch@{Make\+New\+Level\+From\+Scratch}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Make\+New\+Level\+From\+Scratch()}{MakeNewLevelFromScratch()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Sledgehamr\+::\+Make\+New\+Level\+From\+Scratch (\begin{DoxyParamCaption}\item[{int}]{lev,  }\item[{amrex\+::\+Real}]{time,  }\item[{const amrex\+::\+Box\+Array \&}]{ba,  }\item[{const amrex\+::\+Distribution\+Mapping \&}]{dm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Make a new level from scratch using provided Box\+Array and Distribution\+Mapping. Only used during initialization. Overrides the pure virtual function in amrex\+::\+Amr\+Core. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & Level to be created. \\
+\hline
+{\em time} & Time of new grid. \\
+\hline
+{\em ba} & New amrex\+::\+Box\+Array. \\
+\hline
+{\em dm} & New amrex\+::\+Distribution\+Mapping. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a66eafb81586abbd98cea7eb7e99db338}\label{classsledgehamr_1_1Sledgehamr_a66eafb81586abbd98cea7eb7e99db338}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Remake\+Level@{Remake\+Level}}
+\index{Remake\+Level@{Remake\+Level}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Remake\+Level()}{RemakeLevel()}}
+{\footnotesize\ttfamily void sledgehamr\+::\+Sledgehamr\+::\+Remake\+Level (\begin{DoxyParamCaption}\item[{int}]{lev,  }\item[{amrex\+::\+Real}]{time,  }\item[{const amrex\+::\+Box\+Array \&}]{ba,  }\item[{const amrex\+::\+Distribution\+Mapping \&}]{dm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Remake a new level using provided Box\+Array and Distribution\+Mapping, and fills it with interpolated coarse level data. Overrides the pure virtual function in amrex\+::\+Amr\+Core. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lev} & Level to be remade. \\
+\hline
+{\em time} & Time of new grid. \\
+\hline
+{\em ba} & New amrex\+::\+Box\+Array. \\
+\hline
+{\em dm} & New amrex\+::\+Distribution\+Mapping. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classsledgehamr_1_1Sledgehamr_a14510bc01e24329a95ec7aa2d86ab569}\label{classsledgehamr_1_1Sledgehamr_a14510bc01e24329a95ec7aa2d86ab569}} 
+\index{sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}!Tag\+With\+Truncation\+Cpu@{Tag\+With\+Truncation\+Cpu}}
+\index{Tag\+With\+Truncation\+Cpu@{Tag\+With\+Truncation\+Cpu}!sledgehamr\+::\+Sledgehamr@{sledgehamr\+::\+Sledgehamr}}
+\subsubsection{\texorpdfstring{Tag\+With\+Truncation\+Cpu()}{TagWithTruncationCpu()}}
+{\footnotesize\ttfamily virtual void sledgehamr\+::\+Sledgehamr\+::\+Tag\+With\+Truncation\+Cpu (\begin{DoxyParamCaption}\item[{const amrex\+::\+Array4$<$ const double $>$ \&}]{state\+\_\+fab,  }\item[{const amrex\+::\+Array4$<$ const double $>$ \&}]{state\+\_\+fab\+\_\+te,  }\item[{const amrex\+::\+Array4$<$ char $>$ \&}]{tagarr,  }\item[{const amrex\+::\+Box \&}]{tilebox,  }\item[{double}]{time,  }\item[{int}]{lev,  }\item[{int $\ast$}]{ntags\+\_\+total,  }\item[{int $\ast$}]{ntags\+\_\+user,  }\item[{int $\ast$}]{ntags\+\_\+trunc,  }\item[{const std\+::vector$<$ double $>$ \&}]{params\+\_\+tag,  }\item[{const std\+::vector$<$ double $>$ \&}]{params\+\_\+mod }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Virtual function that loop over a state to tags cells for refinement. Includes user-\/defined tags and truncation error tags. Will automatically be overriden by the project class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em state\+\_\+fab} & Data. \\
+\hline
+{\em state\+\_\+fab\+\_\+te} & Truncation errors. \\
+\hline
+{\em tagarr} & Tag status. \\
+\hline
+{\em tilebox} & Current (tile)box. \\
+\hline
+{\em time} & Current time. \\
+\hline
+{\em lev} & Current level. \\
+\hline
+{\em ntags\+\_\+user} & Counts number of user-\/defined tags. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/sledgehamr.\+h\item 
+/global/cfs/cdirs/m3166/buschman/sledgehamr/source/sledgehamr.\+cpp\end{DoxyCompactItemize}
