@@ -77,13 +77,13 @@ void IOModule::AddOutputModules() {
     output.emplace_back("gw_spectra",
                         OUTPUT_FCT(IOModule::WriteGravitationalWaveSpectrum));
 
-    idx_performance_monitor = output.size();
-    output.emplace_back("performance_monitor",
-                        OUTPUT_FCT(IOModule::WritePerformanceMonitor));
-
     idx_amrex_plotfile = output.size();
     output.emplace_back("amrex_plotfile",
                         OUTPUT_FCT(IOModule::WriteAmrexPlotFile));
+
+    idx_performance_monitor = output.size();
+    output.emplace_back("performance_monitor",
+                        OUTPUT_FCT(IOModule::WritePerformanceMonitor));
 
     // Checkpoint. Always add checkpoints last.
     idx_checkpoints = output.size();
