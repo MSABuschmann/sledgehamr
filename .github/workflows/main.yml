@@ -22,9 +22,9 @@ jobs:
       uses: mattnotmitt/doxygen-action@v1.1.0
       with:
         # Path to Doxyfile
-        doxyfile-path: "../../docs/doxygen/doxygen.conf"
+        doxyfile-path: "./docs/doxygen/doxygen.conf"
         # Working directory
-        working-directory: "."
+        working-directory: "./docs/doxygen"
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
