@@ -109,7 +109,7 @@ std::vector<int> PerformanceMonitor::TimerArgsort(std::vector<Timer> timers) {
 void PerformanceMonitor::Log(hid_t file_id) {
     std::vector<int> idx = TimerArgsort(timer);
 
-    amrex::Print() << " ------------ PERFORMANCE ------------\n";
+    amrex::Print() << " ------------------------ PERFORMANCE ------------------------------------\n";
     for(int i : idx) {
         double d = timer[i].GetTotalTimeSeconds();
         if (d != 0) {
@@ -117,7 +117,7 @@ void PerformanceMonitor::Log(hid_t file_id) {
                            << d << "s\n";
         }
     }
-    amrex::Print() << "--------------------------------------" << std::endl;
+    amrex::Print() << " -------------------------------------------------------------------------" << std::endl;
 }
 
 }; // namespace sledgehamr
