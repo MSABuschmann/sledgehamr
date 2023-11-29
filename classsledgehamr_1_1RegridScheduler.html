@@ -76,32 +76,44 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>A class that helps us keep track of when and on what levels we want to regrid. That way we can adjust our workflow accordingly by e.g. computing truncation error estimates ahead of time or creating shadow level.  
+ <a href="classsledgehamr_1_1RegridScheduler.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="regrid__scheduler_8h_source.html">regrid_scheduler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3105fd6453faa0b9ceab0d7baccc8aa6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a3105fd6453faa0b9ceab0d7baccc8aa6">RegridScheduler</a> ()</td></tr>
+<tr class="memdesc:a3105fd6453faa0b9ceab0d7baccc8aa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does nothing.  <a href="classsledgehamr_1_1RegridScheduler.html#a3105fd6453faa0b9ceab0d7baccc8aa6">More...</a><br /></td></tr>
 <tr class="separator:a3105fd6453faa0b9ceab0d7baccc8aa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5caf3673568ad9a7bfe3bc1d471e69d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#ae5caf3673568ad9a7bfe3bc1d471e69d">Schedule</a> (int lev, double t)</td></tr>
+<tr class="memdesc:ae5caf3673568ad9a7bfe3bc1d471e69d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Schedules a regrid.  <a href="classsledgehamr_1_1RegridScheduler.html#ae5caf3673568ad9a7bfe3bc1d471e69d">More...</a><br /></td></tr>
 <tr class="separator:ae5caf3673568ad9a7bfe3bc1d471e69d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d92eb153ff6fbd334c39c22bef57da0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a9d92eb153ff6fbd334c39c22bef57da0">DoRegrid</a> (int lev, double t) const</td></tr>
+<tr class="memdesc:a9d92eb153ff6fbd334c39c22bef57da0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether we have scheduled a regrid for this level and time.  <a href="classsledgehamr_1_1RegridScheduler.html#a9d92eb153ff6fbd334c39c22bef57da0">More...</a><br /></td></tr>
 <tr class="separator:a9d92eb153ff6fbd334c39c22bef57da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a49110b83beb48474b92d596d7bd2d5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a0a49110b83beb48474b92d596d7bd2d5">NeedTruncationError</a> (int lev, double t) const</td></tr>
+<tr class="memdesc:a0a49110b83beb48474b92d596d7bd2d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether we have scheduled a regrid for this level and time and need to compute truncation errors.  <a href="classsledgehamr_1_1RegridScheduler.html#a0a49110b83beb48474b92d596d7bd2d5">More...</a><br /></td></tr>
 <tr class="separator:a0a49110b83beb48474b92d596d7bd2d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26b2584d874cdb4108f852be9fafee7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a26b2584d874cdb4108f852be9fafee7c">DidRegrid</a> (double t)</td></tr>
+<tr class="memdesc:a26b2584d874cdb4108f852be9fafee7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all scheduled regrids at the given time.  <a href="classsledgehamr_1_1RegridScheduler.html#a26b2584d874cdb4108f852be9fafee7c">More...</a><br /></td></tr>
 <tr class="separator:a26b2584d874cdb4108f852be9fafee7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a9c8261efd3220ee252abc49e7ab1d041"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a9c8261efd3220ee252abc49e7ab1d041">FindSchedule</a> (double t) const</td></tr>
+<tr class="memdesc:a9c8261efd3220ee252abc49e7ab1d041"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the internal ID of a regrid scheduled at the given time.  <a href="classsledgehamr_1_1RegridScheduler.html#a9c8261efd3220ee252abc49e7ab1d041">More...</a><br /></td></tr>
 <tr class="separator:a9c8261efd3220ee252abc49e7ab1d041"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aea3e741ec912ca69c74cf2bdbc0b8239"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classsledgehamr_1_1ScheduledRegrid.html">ScheduledRegrid</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#aea3e741ec912ca69c74cf2bdbc0b8239">schedule</a></td></tr>
+<tr class="memdesc:aea3e741ec912ca69c74cf2bdbc0b8239"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector containing all scheduled regrids.  <a href="classsledgehamr_1_1RegridScheduler.html#aea3e741ec912ca69c74cf2bdbc0b8239">More...</a><br /></td></tr>
 <tr class="separator:aea3e741ec912ca69c74cf2bdbc0b8239"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A class that helps us keep track of when and on what levels we want to regrid. That way we can adjust our workflow accordingly by e.g. computing truncation error estimates ahead of time or creating shadow level. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3105fd6453faa0b9ceab0d7baccc8aa6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3105fd6453faa0b9ceab0d7baccc8aa6">&#9670;&nbsp;</a></span>RegridScheduler()</h2>
 
@@ -125,6 +137,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Does nothing. </p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -143,6 +157,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Removes all scheduled regrids at the given time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>Time. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -172,6 +194,16 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Whether we have scheduled a regrid for this level and time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level. </td></tr>
+    <tr><td class="paramname">t</td><td>Time. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether it has been scheduled or not. </dd></dl>
+
 </div>
 </div>
 <a id="a9c8261efd3220ee252abc49e7ab1d041"></a>
@@ -197,6 +229,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Finds the internal ID of a regrid scheduled at the given time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>Time. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Internal ID of scheduled regrid. Returns -1 if none is found. </dd></dl>
 
 </div>
 </div>
@@ -226,6 +267,16 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Whether we have scheduled a regrid for this level and time and need to compute truncation errors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level. </td></tr>
+    <tr><td class="paramname">t</td><td>Time. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether it has been scheduled or not. </dd></dl>
+
 </div>
 </div>
 <a id="ae5caf3673568ad9a7bfe3bc1d471e69d"></a>
@@ -254,6 +305,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Schedules a regrid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Lowest level to be regridded. </td></tr>
+    <tr><td class="paramname">t</td><td>Regrid time. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -276,6 +336,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Vector containing all scheduled regrids. </p>
 
 </div>
 </div>

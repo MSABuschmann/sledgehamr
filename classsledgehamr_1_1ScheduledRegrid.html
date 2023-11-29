@@ -75,23 +75,32 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Simple class that holds a single scheduled regrid. This is used by the <a class="el" href="classsledgehamr_1_1RegridScheduler.html" title="A class that helps us keep track of when and on what levels we want to regrid. That way we can adjust...">RegridScheduler</a>.  
+ <a href="classsledgehamr_1_1ScheduledRegrid.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="regrid__scheduler_8h_source.html">regrid_scheduler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a8ad23af8d513b2b07dac6d3faeeb0a5c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1ScheduledRegrid.html#a8ad23af8d513b2b07dac6d3faeeb0a5c">ScheduledRegrid</a> (int lev, double t_regrid)</td></tr>
+<tr class="memdesc:a8ad23af8d513b2b07dac6d3faeeb0a5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does nothing but fetch meta data.  <a href="classsledgehamr_1_1ScheduledRegrid.html#a8ad23af8d513b2b07dac6d3faeeb0a5c">More...</a><br /></td></tr>
 <tr class="separator:a8ad23af8d513b2b07dac6d3faeeb0a5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a687cc3616f456465240e0c8605ae2bb5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1ScheduledRegrid.html#a687cc3616f456465240e0c8605ae2bb5">operator==</a> (const double time) const</td></tr>
+<tr class="memdesc:a687cc3616f456465240e0c8605ae2bb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether this regrid has been scheduled at a given time.  <a href="classsledgehamr_1_1ScheduledRegrid.html#a687cc3616f456465240e0c8605ae2bb5">More...</a><br /></td></tr>
 <tr class="separator:a687cc3616f456465240e0c8605ae2bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a1553e76dca9982e2a4be902d2487d85a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1ScheduledRegrid.html#a1553e76dca9982e2a4be902d2487d85a">lowest_level</a></td></tr>
+<tr class="memdesc:a1553e76dca9982e2a4be902d2487d85a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lowest level to be regridded.  <a href="classsledgehamr_1_1ScheduledRegrid.html#a1553e76dca9982e2a4be902d2487d85a">More...</a><br /></td></tr>
 <tr class="separator:a1553e76dca9982e2a4be902d2487d85a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ae064ee9de82202c28e786b89687bf5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1ScheduledRegrid.html#a0ae064ee9de82202c28e786b89687bf5">t</a></td></tr>
+<tr class="memdesc:a0ae064ee9de82202c28e786b89687bf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Regrid time.  <a href="classsledgehamr_1_1ScheduledRegrid.html#a0ae064ee9de82202c28e786b89687bf5">More...</a><br /></td></tr>
 <tr class="separator:a0ae064ee9de82202c28e786b89687bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Simple class that holds a single scheduled regrid. This is used by the <a class="el" href="classsledgehamr_1_1RegridScheduler.html" title="A class that helps us keep track of when and on what levels we want to regrid. That way we can adjust...">RegridScheduler</a>. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8ad23af8d513b2b07dac6d3faeeb0a5c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8ad23af8d513b2b07dac6d3faeeb0a5c">&#9670;&nbsp;</a></span>ScheduledRegrid()</h2>
 
@@ -126,6 +135,15 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Does nothing but fetch meta data. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Lowest level to be regridded. </td></tr>
+    <tr><td class="paramname">t_regrid</td><td>Time at which we want to regrid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -153,6 +171,15 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks whether this regrid has been scheduled at a given time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Time to match. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether times match. </dd></dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -168,6 +195,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Lowest level to be regridded. </p>
+
 </div>
 </div>
 <a id="a0ae064ee9de82202c28e786b89687bf5"></a>
@@ -181,6 +210,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Regrid time. </p>
 
 </div>
 </div>

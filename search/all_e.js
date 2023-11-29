@@ -1,8 +1,8 @@
 var searchData=
 [
   ['n_5ferror_5fbuf_418',['n_error_buf',['../classsledgehamr_1_1LocalRegrid.html#a8403a32f1028bda506f2e2f4ea7e7eef',1,'sledgehamr::LocalRegrid']]],
-  ['name_419',['name',['../classsledgehamr_1_1LevelWriter.html#a2274635898326994939f191c9b2585fc',1,'sledgehamr::LevelWriter::name()'],['../classsledgehamr_1_1OutputModule.html#a13d3dd2fe747f9916ca4e06dc1933e8c',1,'sledgehamr::OutputModule::name()'],['../classsledgehamr_1_1ScalarField.html#aced45432f3745af8676420de16d85858',1,'sledgehamr::ScalarField::name()'],['../classsledgehamr_1_1Timer.html#a6c3796f78cc02e99aa0d9d5779818536',1,'sledgehamr::Timer::name()']]],
-  ['name_420',['Name',['../classsledgehamr_1_1Integrator.html#ae61eb914c8d9303f5731e2f019ac24c0',1,'sledgehamr::Integrator']]],
+  ['name_419',['Name',['../classsledgehamr_1_1Integrator.html#ae61eb914c8d9303f5731e2f019ac24c0',1,'sledgehamr::Integrator']]],
+  ['name_420',['name',['../classsledgehamr_1_1LevelWriter.html#a2274635898326994939f191c9b2585fc',1,'sledgehamr::LevelWriter::name()'],['../classsledgehamr_1_1OutputModule.html#a13d3dd2fe747f9916ca4e06dc1933e8c',1,'sledgehamr::OutputModule::name()'],['../classsledgehamr_1_1ScalarField.html#aced45432f3745af8676420de16d85858',1,'sledgehamr::ScalarField::name()'],['../classsledgehamr_1_1Timer.html#a6c3796f78cc02e99aa0d9d5779818536',1,'sledgehamr::Timer::name()']]],
   ['needtruncationerror_421',['NeedTruncationError',['../classsledgehamr_1_1RegridScheduler.html#a0a49110b83beb48474b92d596d7bd2d5',1,'sledgehamr::RegridScheduler']]],
   ['nerrors_422',['nerrors',['../classsledgehamr_1_1Sledgehamr.html#abec8e744b285c224cc3cba2f23dda06d',1,'sledgehamr::Sledgehamr']]],
   ['next_5fbubble_423',['next_bubble',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#ae8da22a14c5f888d836c2c505e30a8f7',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
