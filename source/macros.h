@@ -4,14 +4,15 @@
 #include "kernels.h"
 #include "sledgehamr_utils.h"
 
-/** Yes, I know this file is disgusting. This is what we get for not 
+/** Yes, I know this file is disgusting. This is what we get for not
  *  wanting everyone to write a bunch of complicated boilerplate every single
  *  time but also want to avoid all this function overhead for performance ...
  */
 
 namespace sledgehamr {
 
-// Force boost to define variadics.
+/* @brief Force boost to define variadics.
+ */
 #define BOOST_PP_VARIADICS 1
 #include <boost/preprocessor.hpp>
 
@@ -22,10 +23,11 @@ namespace sledgehamr {
                        omp_out.begin(), std::plus<int>())) \
         initializer(omp_priv = omp_orig)
 
+/** @brief Expand OMP #pragma statement.
+ */
 #define SLEDGEHAMR_DO_PRAGMA(x) _Pragma(#x)
 
-/** @brief Macros to declare and initialize scalar fields within project
- *         namespace.
+/** @brief Declare and initialize single scalar field within project namespace.
  */
 #define SLEDGEHAMR_ADD_SCALAR(field) \
     static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
@@ -34,8 +36,13 @@ namespace sledgehamr {
         constexpr int field = _Scalar::field; \
     };
 
+/** @brief Expand single scalar field.
+ */
 #define SLEDGEHAMR_EXPAND_SCALARS(r, data, field) SLEDGEHAMR_ADD_SCALAR(field)
 
+/** @brief Declare and initialize single momentum field within project
+ *         namespace.
+ */
 #define SLEDGEHAMR_ADD_MOMENTUM(field) \
     static sledgehamr::ScalarField BOOST_PP_CAT(_s_, field)  = \
             {#field, l_scalar_fields, true}; \
@@ -43,13 +50,17 @@ namespace sledgehamr {
         constexpr int field = _Momentum::field + _Scalar::NScalarFields; \
     };
 
+/** @brief Expand single momnetum field.
+ */
 #define SLEDGEHAMR_EXPAND_MOMENTA(r, data, field) SLEDGEHAMR_ADD_MOMENTUM(field)
 
-/** @brief Macros to create enum of fields for fast and convinient component
- *         access within the project namespace.
+/** @brief Expand enum element.
  */
 #define SLEDGEHAMR_SCALAR_ENUM_VALUE(r, data, elem) elem,
 
+/** @brief Macros to create enum of scalar fields for fast and convinient
+ *         component access within the project namespace.
+ */
 #define SLEDGEHAMR_SCALAR_ENUM(...) \
     enum _Scalar { \
         BOOST_PP_SEQ_FOR_EACH( SLEDGEHAMR_SCALAR_ENUM_VALUE, _, \
@@ -57,6 +68,8 @@ namespace sledgehamr {
         NScalarFields \
     };
 
+/** @brief Same as SLEDGEHAMR_SCALAR_ENUM but for momentum fields.
+ */
 #define SLEDGEHAMR_MOMENTUM_ENUM(...) \
     enum _Momentum { \
         BOOST_PP_SEQ_FOR_EACH( SLEDGEHAMR_SCALAR_ENUM_VALUE, _, \
@@ -64,6 +77,9 @@ namespace sledgehamr {
         NMomentumFields \
     };
 
+/** @brief Same as SLEDGEHAMR_SCALAR_ENUM but for gravitational wave tensor
+ *         components.
+ */
 #define SLEDGEHAMR_GW_ENUM \
     enum Gw { \
         u_xx = Scalar::NScalars, u_yy, u_zz, u_xy, u_xz, u_yz, du_xx, du_yy, \
@@ -96,7 +112,8 @@ namespace sledgehamr {
         return false; \
     };
 
-/* brief TODO
+/* @brief Template declaration for procedure that computes the Rhs of the
+ *        gravitational wave tensor components.
  */
 #define SLEDGEHAMR_GRAVITATIONAL_WAVES_RHS template<bool> \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
@@ -106,7 +123,8 @@ namespace sledgehamr {
             const double dt, const double dx, const double* params) { \
     };
 
-/* brief TODO
+/* @brief Template declaration for computing the backreaction of the
+ *        gravitational tensor onto our scalar fields.
  */
 #define SLEDGEHAMR_GRAVITATIONAL_WAVES_BACKREACTION template<bool> \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \
@@ -126,6 +144,8 @@ namespace sledgehamr {
     BOOST_PP_SEQ_FOR_EACH(SLEDGEHAMR_EXPAND_SCALARS, _, \
                           BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__))
 
+/** @brief Same as SLEDGEHAMR_ADD_SCALARS but for momentum fields.
+ */
 #define SLEDGEHAMR_ADD_CONJUGATE_MOMENTA(...) \
     SLEDGEHAMR_MOMENTUM_ENUM(__VA_ARGS__) \
     BOOST_PP_SEQ_FOR_EACH(SLEDGEHAMR_EXPAND_MOMENTA, _, \
@@ -153,6 +173,7 @@ namespace sledgehamr {
  * @param   dx          Grid spacing.
  * @param   te_crit     Array containing truncation error thresholds.
  * @param   ntags_trunc Counts number of tags.
+ * @param   params      User-defined parameter.
  * @return  If truncation error threshold has been exceeded.
  */
 #define SLEDGEHAMR_TRUNCATION_ERROR_TAG_CPU template<int NScalars> \
@@ -215,6 +236,8 @@ namespace sledgehamr {
         amrex::Print() << std::endl; \
     };
 
+/** @brief Initializes async arrays for Kreiss-Oliger meta data.
+ */
 #define SLEDGEHAMR_KO_LOCAL_SETUP amrex::Gpu::AsyncArray<double> \
         async_dissipation_strength(dissipation_strength.data(), \
                                    dissipation_strength.size()); \
@@ -222,12 +245,17 @@ namespace sledgehamr {
         const int l_dissipation_order = dissipation_order; \
         const bool l_with_dissipation = with_dissipation;
 
+/** @brief Initializes async arrays for meta data needed by Rhs computation.
+ */
 #define SLEDGEHAMR_RHS_PARAMS_LOCAL_SETUP std::vector<double> params_rhs; \
         SetParamsRhs(params_rhs, time, lev); \
         amrex::Gpu::AsyncArray<double> async_params_rhs( \
                 params_rhs.data(), params_rhs.size()); \
         double* l_params_rhs = async_params_rhs.data();
 
+/** @brief Initializes async arrays for meta data needed by Rhs computation of
+ *         gravitational waves.
+ */
 #define SLEDGEHAMR_RHS_GW_PARAMS_LOCAL_SETUP std::vector<double> params_gw_rhs; \
         if (with_gravitational_waves) \
             SetParamsGravitationalWaveRhs(params_rhs, time, lev); \
@@ -235,7 +263,7 @@ namespace sledgehamr {
                 params_gw_rhs.data(), params_gw_rhs.size()); \
         double* l_params_gw_rhs = async_params_rhs.data();
 
-/** @brief Computes Rhs for the entire grid.
+/** @brief Computes Rhs for the entire level.
  * @param   rhs_mf      Container to fill the Rhs with.
  * @param   state_mf    Current grid.
  * @param   time        Current time.
@@ -320,7 +348,17 @@ namespace sledgehamr {
         } \
         performance_monitor->Stop(performance_monitor->idx_rhs, lev); \
     };
-/** @brief
+
+/** @brief Computes Rhs for the entire level and adds it weighted to the
+ *         existing values stored in the rhs_mf, rhs_mf += weight*rhs, instead
+ *         of overwriting them as SLEDGEHAMR_PRJ_FILL_RHS does.
+ * @param   rhs_mf      Container to fill the Rhs with.
+ * @param   state_mf    Current grid.
+ * @param   time        Current time.
+ * @param   lev         Current level.
+ * @param   dt          Time step size.
+ * @param   dx          Grid spacing.
+ * @param   weight      Relative weight between values of rhs_mf and rhs.
  */
 #define SLEDGEHAMR_PRJ_FILL_ADD_RHS virtual void \
     FillAddRhs(amrex::MultiFab& rhs_mf, \
@@ -421,7 +459,7 @@ namespace sledgehamr {
         performance_monitor->Stop(performance_monitor->idx_rhs, lev); \
     };
 
-/** @brief Overrides function in project class.
+/** @brief Overrides function in project class. Does tagging on CPUs.
  */
 #define SLEDGEHAMR_PRJ_TAG_WITH_TRUNCATION_CPU virtual void \
     TagWithTruncationCpu( \
@@ -502,7 +540,7 @@ namespace sledgehamr {
         } \
     };
 
-/** @brief Overrides function in project class.
+/** @brief Overrides function in project class. Does tagging on GPUs.
  */
 #define SLEDGEHAMR_PRJ_TAG_WITH_TRUNCATION_GPU virtual void \
     TagWithTruncationGpu( \
@@ -571,7 +609,8 @@ namespace sledgehamr {
         } \
     };
 
-/** @brief Overrides function in project class.
+/** @brief Overrides function in project class. Does tagging on CPUs but without
+ *         using truncation error estimates.
  */
 #define SLEDGEHAMR_PRJ_TAG_WITHOUT_TRUNCATION_CPU virtual void \
     TagWithoutTruncationCpu( \
@@ -597,7 +636,8 @@ namespace sledgehamr {
         } \
     };
 
-/** @brief Overrides function in project class.
+/** @brief Overrides function in project class. Does tagging on GPUs but without
+ *         using truncation error estimates.
  */
 #define SLEDGEHAMR_PRJ_TAG_WITHOUT_TRUNCATION_GPU virtual void \
     TagWithoutTruncationGpu( \

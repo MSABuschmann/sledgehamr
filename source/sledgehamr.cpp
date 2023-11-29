@@ -10,6 +10,8 @@
 
 namespace sledgehamr {
 
+/** @brief Creates instances of submodules and reads input parameters.
+*/
 Sledgehamr::Sledgehamr () {
     amrex::Print() << "\nStarting sledgehamr..." << std::endl;
 
@@ -31,6 +33,9 @@ Sledgehamr::Sledgehamr () {
     DoPrerunChecks();
 }
 
+/** @brief Initalizes data from scratch or from checkpoint file. Sets up the 
+ *         remaining modules and updates them.
+*/
 void Sledgehamr::InitSledgehamr() {
     if (with_gravitational_waves)
         gravitational_waves = std::make_unique<GravitationalWaves>(this);
@@ -71,6 +76,8 @@ void Sledgehamr::InitSledgehamr() {
     io_module->UpdateOutputModules();
 }
 
+/** @brief Starts the evolution
+*/
 void Sledgehamr::Evolve() {
     if (no_simulation) return;
 
@@ -103,6 +110,14 @@ void Sledgehamr::Evolve() {
     amrex::Print() << "Finished!" << std::endl;
 }
 
+/** @brief Make a new level from scratch using provided BoxArray and
+ *         DistributionMapping. Only used during initialization. Overrides
+ *         the pure virtual function in amrex::AmrCore.
+ * @param   lev     Level to be created.
+ * @param   time    Time of new grid.
+ * @param   ba      New amrex::BoxArray.
+ * @param   dm      New amrex::DistributionMapping.
+ */
 void Sledgehamr::MakeNewLevelFromScratch(int lev, amrex::Real time,
                                          const amrex::BoxArray& ba,
                                          const amrex::DistributionMapping& dm) {
@@ -120,6 +135,14 @@ void Sledgehamr::MakeNewLevelFromScratch(int lev, amrex::Real time,
     fill_level.FromInitialStateFile();
 }
 
+/** @brief Make a new level using provided BoxArray and DistributionMapping,
+ *         and fills it with interpolated coarse level data. Overrides the
+ *         pure virtual function in amrex::AmrCore.
+ * @param   lev     Level to be created.
+ * @param   time    Time of new grid.
+ * @param   ba      New amrex::BoxArray.
+ * @param   dm      New amrex::DistributionMapping.
+ */
 void Sledgehamr::MakeNewLevelFromCoarse(int lev, amrex::Real time,
                                         const amrex::BoxArray& ba,
                                         const amrex::DistributionMapping& dm) {
@@ -136,6 +159,14 @@ void Sledgehamr::MakeNewLevelFromCoarse(int lev, amrex::Real time,
     level_synchronizer->FillCoarsePatch(lev, time, grid_new[lev]);
 }
 
+/** @brief Remake a new level using provided BoxArray and
+ *         DistributionMapping, and fills it with interpolated coarse level
+ *         data. Overrides the pure virtual function in amrex::AmrCore.
+ * @param   lev     Level to be remade.
+ * @param   time    Time of new grid.
+ * @param   ba      New amrex::BoxArray.
+ * @param   dm      New amrex::DistributionMapping.
+ */
 void Sledgehamr::RemakeLevel(int lev, amrex::Real time,
                              const amrex::BoxArray& ba,
                              const amrex::DistributionMapping& dm) {
@@ -154,11 +185,22 @@ void Sledgehamr::RemakeLevel(int lev, amrex::Real time,
     grid_old[lev].define(ba, dm, ncomp, nghost);
 }
 
+/** @brief Delete level data. Overrides the pure virtual function in
+ *         amrex::AmrCore.
+ * @param   lev Level to be deleted.
+ */
 void Sledgehamr::ClearLevel(int lev) {
     grid_new[lev].clear();
     grid_old[lev].clear();
 }
 
+/** @brief Tag cells for refinement. Overrides the pure virtual function in
+ *         amrex::AmrCore.
+ * @param   lev         Level on which cells are tagged.
+ * @param   time        Time of said level.
+ * @param   ngrow       Grid growth factor.
+ * @param   ntags_user  Counts number of user-defined tags.
+ */
 void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
                           int ngrow) {
     // Skip regrid right at the beginning of the sim. Allowed to be overridden
@@ -181,6 +223,9 @@ void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
     performance_monitor->Stop(performance_monitor->idx_tagging, lev);
 }
 
+/** @brief Creates a shadow level and evolves it by one time step. Needed
+ *         to compute truncation errors on the coarse level.
+ */
 void Sledgehamr::CreateShadowLevel() {
     const int ncomp = scalar_fields.size();
     const double time = grid_old[0].t;
@@ -200,6 +245,32 @@ void Sledgehamr::CreateShadowLevel() {
     time_stepper->integrator->Advance(-1);
 }
 
+/** @brief Checks whether we want to save the coarse level box layout for
+ *         chunking of the initial state.
+ */
+void Sledgehamr::DoPrerunChecks() {
+    if (get_box_layout_nodes > 0)
+        DetermineBoxLayout();
+}
+
+/** @brief Saves the coarse level box layout. 
+ */
+void Sledgehamr::DetermineBoxLayout() {
+    amrex::Print() << "Get box layout for " << get_box_layout_nodes
+                   << " nodes and exit ..." << std::endl;
+
+    amrex::Box bx(amrex::IntVect(0), amrex::IntVect(coarse_level_grid_size-1));
+    amrex::BoxArray ba(bx);
+    ChopGrids(0, ba, get_box_layout_nodes);
+    io_module->WriteBoxArray(ba);
+    no_simulation = true;
+}
+
+/** @brief Performs error estimation (i.e. tagging) on CPUs.
+ * @params  lev     Tagging level.
+ * @params  tags    Container to save tags.
+ * @params  time    Current time.
+ */
 void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     // Current state.
     const amrex::MultiFab& state = grid_new[lev];
@@ -270,6 +341,9 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     }
 }
 
+/** @brief Same as Sledgehamr::DoErrorEstCpu but on GPUs. Will not keep track
+ *         of tagging statistics.
+ */
 void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
     // Current state.
     const amrex::MultiFab& state = grid_new[lev];
@@ -304,6 +378,8 @@ void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
     amrex::Print()  << "  Tagged cells at level " << lev << "." << std::endl;
 }
 
+/** @brief Parses and tests all relevant input parameters.
+ */
 void Sledgehamr::ParseInput() {
     amrex::ParmParse pp("");
 
@@ -392,6 +468,8 @@ void Sledgehamr::ParseInput() {
                          do_thorough_checks);
 }
 
+/** @brief Parses all input parameters related to the individual scalar fields.
+ */
 void Sledgehamr::ParseInputScalars() {
     // Truncation error threshold.
     te_crit.resize( scalar_fields.size() );
@@ -464,6 +542,10 @@ void Sledgehamr::ParseInputScalars() {
     }
 }
 
+/** @brief Loads the spectrum binning from file. Aborts if they are not found.
+ * @param   reload  We reload the binning from file. Needed e.g. when we change
+ *                  the coarse level resolution.
+ */
 void Sledgehamr::ReadSpectrumKs(bool reload) {
     if (!spectrum_ks.empty() && !reload)
         return;
@@ -494,22 +576,6 @@ void Sledgehamr::ReadSpectrumKs(bool reload) {
     if (!utils::hdf5::Read(filename, {sdimN}, &(spectrum_ks[0]))) {
         amrex::Abort(msg);
     }
-}
-
-void Sledgehamr::DoPrerunChecks() {
-    if (get_box_layout_nodes > 0)
-        DetermineBoxLayout();
-}
-
-void Sledgehamr::DetermineBoxLayout() {
-    amrex::Print() << "Get box layout for " << get_box_layout_nodes
-                   << " nodes and exit ..." << std::endl;
-
-    amrex::Box bx(amrex::IntVect(0), amrex::IntVect(coarse_level_grid_size-1));
-    amrex::BoxArray ba(bx);
-    ChopGrids(0, ba, get_box_layout_nodes);
-    io_module->WriteBoxArray(ba);
-    no_simulation = true;
 }
 
 }; // namespace sledgehamr

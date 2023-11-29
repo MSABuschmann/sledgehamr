@@ -12,8 +12,10 @@ class ScalarField{
     /** @brief Upon construction this class will automatically add itself to a
      *         scalar field vector sfv in order to be simulated by the code.
      *         It will store its amrex::MultiFab component number as id.
-     * @param   str Name of scalar field.
-     * @param   sfv Vector of scalar fields to which this field will be added.
+     * @param   str         Name of scalar field.
+     * @param   sfv         Vector of scalar fields to which this field will be
+     *                      added.
+     * @param   is_momentum Whether this component is a conjugate field.
      */
     ScalarField(std::string str, std::vector<ScalarField*>& sfv,
                 bool is_momentum)
@@ -36,6 +38,8 @@ class ScalarField{
      */
     const int id;
 
+    /** @brief Whether this component is a conjugate field.
+     */
     bool is_conjugate_momentum;
 };
 

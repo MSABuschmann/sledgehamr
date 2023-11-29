@@ -3,6 +3,9 @@
 
 namespace sledgehamr {
 
+/** @brief Initalizes timers for all tracked functions.
+ * @param   owner   Pointer to simulation.
+ */
 PerformanceMonitor::PerformanceMonitor(Sledgehamr* owner)
   : sim{owner} {
     amrex::ParmParse pp("output.performance_monitor");
@@ -79,11 +82,21 @@ PerformanceMonitor::PerformanceMonitor(Sledgehamr* owner)
     }
 }
 
+/** @brief Starts a timer.
+ * @param   id      ID of timer to be started.
+ * @param   offset  Offset to be added to the timer ID.
+ */
 void PerformanceMonitor::Start(int id, int offset) {
     if (active) 
         timer[id + offset].Start();
 }
 
+/** @brief Stops a timer.
+ * @param   id      ID of timer to be stopped.
+ * @param   offset  Offset to be added to the timer ID.
+ * @return Time passed since start of timer in seconds. If performance monitor
+ *         has not been active then -DBL_MAX will be returned.
+ */
 double PerformanceMonitor::Stop(int id, int offset) {
     if (active) {
         timer[id + offset].Stop();
@@ -93,6 +106,10 @@ double PerformanceMonitor::Stop(int id, int offset) {
     }
 }
 
+/** @brief Sorts all timers by total time passed.
+ * @param   timers  Vector of timers.
+ * @return Vector of indices that would sort the timers.
+ */
 std::vector<int> PerformanceMonitor::TimerArgsort(std::vector<Timer> timers) {
     std::vector<int> idx(timers.size());
     std::iota(idx.begin(), idx.end(), 0);
@@ -106,10 +123,14 @@ std::vector<int> PerformanceMonitor::TimerArgsort(std::vector<Timer> timers) {
     return idx;
 }
 
+/** @brief Prints total time passed of all timers.
+ * @params  file_id HDF5 file to log the times. Currently not implemented.
+ */
 void PerformanceMonitor::Log(hid_t file_id) {
     std::vector<int> idx = TimerArgsort(timer);
 
-    amrex::Print() << " ------------------------ PERFORMANCE ------------------------------------\n";
+    amrex::Print() << " ------------------------ PERFORMANCE"
+                   << " ------------------------------------\n";
     for(int i : idx) {
         double d = timer[i].GetTotalTimeSeconds();
         if (d != 0) {
@@ -117,7 +138,8 @@ void PerformanceMonitor::Log(hid_t file_id) {
                            << d << "s\n";
         }
     }
-    amrex::Print() << " -------------------------------------------------------------------------" << std::endl;
+    amrex::Print() << " ------------------------------------"
+                   << "-------------------------------------" << std::endl;
 }
 
 }; // namespace sledgehamr
