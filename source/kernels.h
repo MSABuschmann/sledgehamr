@@ -41,32 +41,50 @@ void AverageDownWithTruncationError(int i, int j, int k, const int ncomp,
     }
 }
 
+/** @brief Template declaration for Kreiss-Oliger dissipation compution at a
+ *         single cell. Template parameter corresponds to the order of
+ *         dissipation.
+ * @param   state                   Current field state.
+ * @param   i                       i-th cells index.
+ * @param   j                       j-th cell index.
+ * @param   k                       k-th cell index.
+ * @param   c                       Scalar component.
+ * @param   dx                      Grid spacing.
+ * @param   dissipation_strength    Dissipation strength.
+ * @return Dissipation value.
+ */
 template<int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double KreissOligerDissipation(const amrex::Array4<double const>& state,
                               const int i, const int j, const int k,
                               const int c, const double dx,
                               const double dissipation_strength);
 
+/** @brief Template specialization for 2nd order Kreiss-Oliger dissipation. See
+ *         declartion of kernels::KreissOligerDissipation for more details.
+ */
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double KreissOligerDissipation<2>(const amrex::Array4<double const>& state,
                                  const int i, const int j, const int k,
                                  const int c, const double dx,
                                  const double dissipation_strength) {
     double dx4 = state(i+2,j,k,c) - 4.*state(i+1,j,k,c)
-               + state(i-2,j,k,c) - 4.*state(i-1,j,k,c) 
+               + state(i-2,j,k,c) - 4.*state(i-1,j,k,c)
                + 6.*state(i,j,k,c);
 
     double dy4 = state(i,j+2,k,c) - 4.*state(i,j+1,k,c)
-               + state(i,j-2,k,c) - 4.*state(i,j-1,k,c) 
+               + state(i,j-2,k,c) - 4.*state(i,j-1,k,c)
                + 6.*state(i,j,k,c);
 
     double dz4 = state(i,j,k+2,c) - 4.*state(i,j,k+1,c)
                + state(i,j,k-2,c) - 4.*state(i,j,k-1,c)
                + 6.*state(i,j,k,c);
 
-    return - dissipation_strength * (dx4+dy4+dz4) / 16. / dx;
+    return -dissipation_strength * (dx4+dy4+dz4) / 16. / dx;
 }
 
+/** @brief Template specialization for 3rd order Kreiss-Oliger dissipation. See
+ *         declartion of kernels::KreissOligerDissipation for more details.
+ */
 template<> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double KreissOligerDissipation<3>(const amrex::Array4<double const>& state,
                                  const int i, const int j, const int k,

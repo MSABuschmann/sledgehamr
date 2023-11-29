@@ -8,6 +8,10 @@
 
 namespace sledgehamr{
 
+/** @brief Constructor that initializes boundary conditions and inter-level
+ *         interpolation.
+ * @param   owner   Pointer to the simulation.
+ */
 LevelSynchronizer::LevelSynchronizer(Sledgehamr* owner) : sim(owner) {
     const int ncomp = sim->scalar_fields.size();
 
@@ -43,6 +47,12 @@ LevelSynchronizer::LevelSynchronizer(Sledgehamr* owner) : sim(owner) {
     }
 }
 
+/** @brief Fills LevelData with information from a coarse level. This is
+ *         used e.g. when a new level of refinement is added.
+ * @param   lev     New level to be filled with data from lev=1.
+ * @param   time    Time of new level.
+ * @param   mf      New level data.
+ */
 void LevelSynchronizer::FillCoarsePatch(const int lev, const double time,
                                         amrex::MultiFab& mf) {
     // Get lev-1 data.
@@ -72,6 +82,16 @@ void LevelSynchronizer::FillCoarsePatch(const int lev, const double time,
                                  sim->refRatio(lev-1), mapper, bcs, 0);
 }
 
+/** @brief Fills MultiFab with data from valid regions and fills ghost
+ *         cells. Works for single level and 2-level cases (interpolating
+ *         from coarse).
+ * @param   lev     (Fine) Level to be filled.
+ * @param   time    Time of level.
+ * @param   mf      MultiFab to be filled.
+ * @param   scomp   Starting component of source.
+ * @param   scomp   Starting component of destination.
+ * @param   ncomp   Total number of components.
+ */
 void LevelSynchronizer::FillPatch(const int lev, const double time,
                                   amrex::MultiFab& mf, const int scomp,
                                   const int dcomp, int ncomp) {
@@ -124,8 +144,19 @@ void LevelSynchronizer::FillPatch(const int lev, const double time,
             sim->performance_monitor->idx_fill_patch, lev);
 }
 
-void LevelSynchronizer::FillIntermediatePatch(const int lev, const double time,
-        amrex::MultiFab& mf, const int scomp, const int dcomp, int ncomp) {
+/** @brief Fills MultiFab with data from valid regions and fills ghost cells
+ *         during intermediate time steps. Works for single level and
+ *         2-level cases (interpolating from coarse).
+ * @param   lev     (Fine) Level to be filled.
+ * @param   time    Time of level.
+ * @param   mf      MultiFab to be filled.
+ * @param   scomp   Starting component of source.
+ * @param   scomp   Starting component of destination.
+ * @param   ncomp   Total number of components.
+ */
+void LevelSynchronizer::FillIntermediatePatch(
+        const int lev, const double time, amrex::MultiFab& mf, const int scomp,
+        const int dcomp, int ncomp) {
     sim->performance_monitor->Start(
             sim->performance_monitor->idx_fill_intermediate_patch, lev);
 
@@ -182,6 +213,9 @@ void LevelSynchronizer::FillIntermediatePatch(const int lev, const double time,
             sim->performance_monitor->idx_fill_intermediate_patch, lev);
 }
 
+/** @brief Average down fine level (lev+1) onto coarse level (lev).
+ * @param   lev Coarse Level onto which to be averaged down.
+ */
 void LevelSynchronizer::AverageDownTo(const int lev) {
     sim->performance_monitor->Start(
             sim->performance_monitor->idx_average_down, lev);
@@ -198,6 +232,11 @@ void LevelSynchronizer::AverageDownTo(const int lev) {
             sim->performance_monitor->idx_average_down, lev);
 }
 
+/** @brief Compute truncation errors for level lev and saves them in
+ *         sim->grid_old[lev]. Also averages down lev onto lev-1 at the
+ *         same time.
+ * @param   lev Level for which truncation errors are to be computed.
+ */
 void LevelSynchronizer::ComputeTruncationErrors(int lev) {
     sim->performance_monitor->Start(
             sim->performance_monitor->idx_truncation_error, lev);
@@ -317,27 +356,8 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
             sim->performance_monitor->idx_truncation_error, lev);
 }
 
-amrex::Vector<amrex::MultiFab*> LevelSynchronizer::GetLevelData(const int lev,
-        const double time) {
-    amrex::Vector<amrex::MultiFab*> mfs;
-    LevelData * New = lev < 0 ? &sim->shadow_level     : &sim->grid_new[lev];
-    LevelData * Old = lev < 0 ? &sim->shadow_level_tmp : &sim->grid_old[lev];
-
-    double teps = fabs(New->t - Old->t)*1.e-3;
-
-    // Add either new, old or both states.
-    if (time > New->t - teps && time < New->t + teps) {
-        mfs.push_back(New);
-    } else if (time > Old->t - teps && time < Old->t + teps) {
-        mfs.push_back(Old);
-    } else {
-        mfs.push_back(Old);
-        mfs.push_back(New);
-    }
-
-    return mfs;
-}
-
+/** @brief Procedure that will increase the coarse level resolution.
+ */
 void LevelSynchronizer::IncreaseCoarseLevelResolution() {
     amrex::Print() << "Increase Coarse Level resolution!" << std::endl;
 
@@ -403,6 +423,9 @@ void LevelSynchronizer::IncreaseCoarseLevelResolution() {
     sim->ReadSpectrumKs(true);
 }
 
+/** @brief Changes the the number of ghost cells at all levels.
+ * @param   new_nghost  New number of ghost cells.
+ */
 void LevelSynchronizer::ChangeNGhost(int new_nghost) {
     for (int lev = 0; lev <= sim->finest_level; ++lev) {
         LevelData& ld_old                    = sim->grid_new[lev];
@@ -432,6 +455,9 @@ void LevelSynchronizer::ChangeNGhost(int new_nghost) {
     sim->nghost = new_nghost;
 }
 
+/** @brief Forces to regrid the coarse level. This is needed whenever the number
+ *         of computing nodes changes.
+ */
 void LevelSynchronizer::RegridCoarse() {
     const int lev               = 0;
     LevelData& ld_old           = sim->grid_new[lev];
@@ -466,6 +492,34 @@ void LevelSynchronizer::RegridCoarse() {
     sim->grid_old[lev] = LevelData(ba, dm, ncomp, sim->nghost, time);
     sim->SetBoxArray(lev, ba);
     sim->SetDistributionMap(lev, dm);
+}
+
+/** @brief Fetches level data at a given level and time. Needs to be
+ *         amrex::Vector not std::vector.
+ * @param   lev     Level at which data is to be fetched.
+ * @param   time    Time at which data is to be fetched. If time does not
+ *                  align with t_old or t_new both states will be returned.
+ * @return  Vector with pointer to fetched data.
+ */
+amrex::Vector<amrex::MultiFab*> LevelSynchronizer::GetLevelData(const int lev,
+        const double time) {
+    amrex::Vector<amrex::MultiFab*> mfs;
+    LevelData * New = lev < 0 ? &sim->shadow_level     : &sim->grid_new[lev];
+    LevelData * Old = lev < 0 ? &sim->shadow_level_tmp : &sim->grid_old[lev];
+
+    double teps = fabs(New->t - Old->t)*1.e-3;
+
+    // Add either new, old or both states.
+    if (time > New->t - teps && time < New->t + teps) {
+        mfs.push_back(New);
+    } else if (time > Old->t - teps && time < Old->t + teps) {
+        mfs.push_back(Old);
+    } else {
+        mfs.push_back(Old);
+        mfs.push_back(New);
+    }
+
+    return mfs;
 }
 
 }; // namespace sledgehamr
