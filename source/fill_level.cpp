@@ -5,6 +5,13 @@
 
 namespace sledgehamr {
 
+/** @brief Will try to initialize data. It will use a checkpoint if one is found
+ *         and we are restarting the sim. Otherwise, it will attempt to find
+ *         initial state data in an hdf5 file, if the user has provided one. If
+ *         none is found, or a particular field component does not seem to be
+ *         provided in such file, the field will be initialize to zero. This 
+ *         procedure is verbose about what it ends up doing to avoid mistakes.
+ */
 void FillLevel::FromInitialStateFile() {
     amrex::ParmParse pp("");
     std::string initial_state_file = "";
@@ -14,13 +21,16 @@ void FillLevel::FromInitialStateFile() {
                          sim->do_thorough_checks);
 
     if (amrex::FileExists(initial_state_file + "/Meta.hdf5")) {
-        FromCheckpointFile(initial_state_file);
+        FromCheckpoint(initial_state_file);
     } else {
         FromHdf5File(initial_state_file);
     }
 }
 
-void FillLevel::FromCheckpointFile(std::string folder) {
+/** @brief Will initialize all levels from a given checkpoint.
+ * @param   folder  Directory of checkpoint.
+ */
+void FillLevel::FromCheckpoint(std::string folder) {
     Checkpoint chk(sim, folder);
     chk.Read();
 
@@ -33,6 +43,16 @@ void FillLevel::FromCheckpointFile(std::string folder) {
     }
 }
 
+/** @brief Will initialize a level using data provided in an hdf5 file. If a 
+ *         field component cannot be found the level will be initialize to zero
+ *         instead. This function is verbose about whether it could find the
+ *         data or not.
+ * @param   initial_state_file  Path to initial state file. This file will be 
+ *                              used only if we cannot find a file for each
+ *                              separate field component. If these are not found
+ *                              and 'initial_state_file' is an empty string as
+ *                              well, everything will be initialized to zero.
+ */
 void FillLevel::FromHdf5File(std::string initial_state_file) {
     amrex::ParmParse pp("input");
 
@@ -108,6 +128,13 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
     }
 }
 
+/** @brief Fill a component of the level with data given by an array. The arary
+ *         should cover the entire level (no runtime check currently performed,
+ *         so expect segfaults if violated).
+ * @param   comp    Number of field component.
+ * @param   data    Array with data.
+ * @param   dimN    Length of 'data'.
+ */
 void FillLevel::FromArray(const int comp, double* data, const long long dimN) {
     LevelData& state = sim->GetLevelData(lev);
 
@@ -133,6 +160,11 @@ void FillLevel::FromArray(const int comp, double* data, const long long dimN) {
     }
 }
 
+/** @brief Same as FillLevel::FromArray, but the array only covers the local
+ *         boxes owned by this node.
+ * @param   comp    Number of field component.
+ * @param   data    Array with local data.
+ */
 void FillLevel::FromArrayChunks(const int comp, double* data) {
     LevelData& state = sim->GetLevelData(lev);
 
@@ -162,6 +194,10 @@ void FillLevel::FromArrayChunks(const int comp, double* data) {
     }
 }
 
+/** @brief Fills the entire level for a given component with a given constant.
+ * @param   comp    Number of field component.
+ * @param   c       Fill constant.
+ */
 void FillLevel::FromConst(const int comp, const double c) {
     LevelData& state = sim->GetLevelData(lev);
 
