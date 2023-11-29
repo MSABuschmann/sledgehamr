@@ -77,7 +77,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Class that handles all I/O operations besides parsing the inputs file.  
+<p>Class that handles all I/O operations.  
  <a href="classsledgehamr_1_1IOModule.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="io__module_8h_source.html">io_module.h</a>&gt;</code></p>
@@ -85,26 +85,31 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aad737766170b477c2de5a30559798c07"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#aad737766170b477c2de5a30559798c07">IOModule</a> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *owner)</td></tr>
+<tr class="memdesc:aad737766170b477c2de5a30559798c07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor will read relevant input parameters, create output folder(s), and set up all pre-defined output types. @params owner Pointer to the simulation.  <a href="classsledgehamr_1_1IOModule.html#aad737766170b477c2de5a30559798c07">More...</a><br /></td></tr>
 <tr class="separator:aad737766170b477c2de5a30559798c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00c504dbc9915e3fd10a0983cad67c5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a00c504dbc9915e3fd10a0983cad67c5d">Write</a> (bool force=false)</td></tr>
-<tr class="memdesc:a00c504dbc9915e3fd10a0983cad67c5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes output if requested.  <a href="classsledgehamr_1_1IOModule.html#a00c504dbc9915e3fd10a0983cad67c5d">More...</a><br /></td></tr>
+<tr class="memdesc:a00c504dbc9915e3fd10a0983cad67c5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will go through all output types and trigger a write if criteria are met.  <a href="classsledgehamr_1_1IOModule.html#a00c504dbc9915e3fd10a0983cad67c5d">More...</a><br /></td></tr>
 <tr class="separator:a00c504dbc9915e3fd10a0983cad67c5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d40375399219df406fce38a63ce1ffb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a6d40375399219df406fce38a63ce1ffb">RestartSim</a> ()</td></tr>
+<tr class="memdesc:a6d40375399219df406fce38a63ce1ffb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will restart a sim from a checkpoint after locating the appropiate one.  <a href="classsledgehamr_1_1IOModule.html#a6d40375399219df406fce38a63ce1ffb">More...</a><br /></td></tr>
 <tr class="separator:a6d40375399219df406fce38a63ce1ffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a716cbe1da6249ecaaa4023d70ce2f2cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a716cbe1da6249ecaaa4023d70ce2f2cc">UpdateOutputModules</a> ()</td></tr>
+<tr class="memdesc:a716cbe1da6249ecaaa4023d70ce2f2cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">After we restarted a sim from a checkpoint this procedure will update the meta data of all output modules to keep intervals and counters consistent between runs.  <a href="classsledgehamr_1_1IOModule.html#a716cbe1da6249ecaaa4023d70ce2f2cc">More...</a><br /></td></tr>
 <tr class="separator:a716cbe1da6249ecaaa4023d70ce2f2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d235a92fd8afd2e35586b2c5da6e72f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a2d235a92fd8afd2e35586b2c5da6e72f">WriteBoxArray</a> (amrex::BoxArray &amp;ba)</td></tr>
+<tr class="memdesc:a2d235a92fd8afd2e35586b2c5da6e72f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an amrex::BoxArray to an hdf5 file.  <a href="classsledgehamr_1_1IOModule.html#a2d235a92fd8afd2e35586b2c5da6e72f">More...</a><br /></td></tr>
 <tr class="separator:a2d235a92fd8afd2e35586b2c5da6e72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:acf047b35679a313d50a8ca42be6c8956"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classsledgehamr_1_1Projection.html">Projection</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#acf047b35679a313d50a8ca42be6c8956">projections</a></td></tr>
-<tr class="memdesc:acf047b35679a313d50a8ca42be6c8956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vectors containing instructions for projections and spectra.  <a href="classsledgehamr_1_1IOModule.html#acf047b35679a313d50a8ca42be6c8956">More...</a><br /></td></tr>
+<tr class="memdesc:acf047b35679a313d50a8ca42be6c8956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vectors containing instructions for projections.  <a href="classsledgehamr_1_1IOModule.html#acf047b35679a313d50a8ca42be6c8956">More...</a><br /></td></tr>
 <tr class="separator:acf047b35679a313d50a8ca42be6c8956"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d5e66413be2b95f3873eaa3fd55f8b9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classsledgehamr_1_1Spectrum.html">Spectrum</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a0d5e66413be2b95f3873eaa3fd55f8b9">spectra</a></td></tr>
+<tr class="memdesc:a0d5e66413be2b95f3873eaa3fd55f8b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector containing instructions for spectrum computations. Gravitational wave spectra are handled separately and no instructions need to be provided.  <a href="classsledgehamr_1_1IOModule.html#a0d5e66413be2b95f3873eaa3fd55f8b9">More...</a><br /></td></tr>
 <tr class="separator:a0d5e66413be2b95f3873eaa3fd55f8b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6af01cdd296efb0893eca1ef85bfbd0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#aa6af01cdd296efb0893eca1ef85bfbd0">idx_slices</a> = -1</td></tr>
-<tr class="memdesc:aa6af01cdd296efb0893eca1ef85bfbd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Easy access pointers for user-modifications.  <a href="classsledgehamr_1_1IOModule.html#aa6af01cdd296efb0893eca1ef85bfbd0">More...</a><br /></td></tr>
+<tr class="memdesc:aa6af01cdd296efb0893eca1ef85bfbd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output module ID's of various output types.  <a href="classsledgehamr_1_1IOModule.html#aa6af01cdd296efb0893eca1ef85bfbd0">More...</a><br /></td></tr>
 <tr class="separator:aa6af01cdd296efb0893eca1ef85bfbd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99784bd378acf2b2efabb7beb4315dbb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a99784bd378acf2b2efabb7beb4315dbb">idx_coarse_box</a> = -1</td></tr>
 <tr class="separator:a99784bd378acf2b2efabb7beb4315dbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,73 +137,89 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:ab093c90582020e1f9b7d8af3814e833a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of output modules.  <a href="classsledgehamr_1_1IOModule.html#ab093c90582020e1f9b7d8af3814e833a">More...</a><br /></td></tr>
 <tr class="separator:ab093c90582020e1f9b7d8af3814e833a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a411357720a9bfbb0f5dc6548090814dc"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a411357720a9bfbb0f5dc6548090814dc">output_folder</a></td></tr>
+<tr class="memdesc:a411357720a9bfbb0f5dc6548090814dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Path to output folder.  <a href="classsledgehamr_1_1IOModule.html#a411357720a9bfbb0f5dc6548090814dc">More...</a><br /></td></tr>
 <tr class="separator:a411357720a9bfbb0f5dc6548090814dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7545db0fa7ab4c5f6ffaaefcab579d2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#af7545db0fa7ab4c5f6ffaaefcab579d2">alternative_output_folder</a> = &quot;&quot;</td></tr>
+<tr class="memdesc:af7545db0fa7ab4c5f6ffaaefcab579d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Path to alternative output folder if one is provided.  <a href="classsledgehamr_1_1IOModule.html#af7545db0fa7ab4c5f6ffaaefcab579d2">More...</a><br /></td></tr>
 <tr class="separator:af7545db0fa7ab4c5f6ffaaefcab579d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d75926888e4337742708c73db652bbb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a9d75926888e4337742708c73db652bbb">old_checkpoint</a> = &quot;&quot;</td></tr>
+<tr class="memdesc:a9d75926888e4337742708c73db652bbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Path to last checkpoint. Needed so we can delete it if we need to.  <a href="classsledgehamr_1_1IOModule.html#a9d75926888e4337742708c73db652bbb">More...</a><br /></td></tr>
 <tr class="separator:a9d75926888e4337742708c73db652bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a355d6519ee064ea5344a0b9797424441"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a355d6519ee064ea5344a0b9797424441">WriteSlices</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:a355d6519ee064ea5344a0b9797424441"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write slices on all levels.  <a href="classsledgehamr_1_1IOModule.html#a355d6519ee064ea5344a0b9797424441">More...</a><br /></td></tr>
 <tr class="separator:a355d6519ee064ea5344a0b9797424441"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d27a579504458f712cfb2fc2b653af7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a1d27a579504458f712cfb2fc2b653af7">WriteSlicesTruncationError</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:a1d27a579504458f712cfb2fc2b653af7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write slices of truncation error estimates on all levels.  <a href="classsledgehamr_1_1IOModule.html#a1d27a579504458f712cfb2fc2b653af7">More...</a><br /></td></tr>
 <tr class="separator:a1d27a579504458f712cfb2fc2b653af7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe583b9e93b48bdc844786c65853d116"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#afe583b9e93b48bdc844786c65853d116">WriteCoarseBox</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:afe583b9e93b48bdc844786c65853d116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write scalar fields on the coarse level.  <a href="classsledgehamr_1_1IOModule.html#afe583b9e93b48bdc844786c65853d116">More...</a><br /></td></tr>
 <tr class="separator:afe583b9e93b48bdc844786c65853d116"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3242f9b92d9e95444af248149dbb06c2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a3242f9b92d9e95444af248149dbb06c2">WriteCoarseBoxTruncationError</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:a3242f9b92d9e95444af248149dbb06c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write truncation error estimates on the coarse level.  <a href="classsledgehamr_1_1IOModule.html#a3242f9b92d9e95444af248149dbb06c2">More...</a><br /></td></tr>
 <tr class="separator:a3242f9b92d9e95444af248149dbb06c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9964d9c64caf4a0043a8855db85afbff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a9964d9c64caf4a0043a8855db85afbff">WriteFullBox</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:a9964d9c64caf4a0043a8855db85afbff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write scalar fields on all levels.  <a href="classsledgehamr_1_1IOModule.html#a9964d9c64caf4a0043a8855db85afbff">More...</a><br /></td></tr>
 <tr class="separator:a9964d9c64caf4a0043a8855db85afbff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4996f34e28cf45b2719fbf55eafa4d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#ab4996f34e28cf45b2719fbf55eafa4d9">WriteFullBoxTruncationError</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:ab4996f34e28cf45b2719fbf55eafa4d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write truncation error estimates on all levels.  <a href="classsledgehamr_1_1IOModule.html#ab4996f34e28cf45b2719fbf55eafa4d9">More...</a><br /></td></tr>
 <tr class="separator:ab4996f34e28cf45b2719fbf55eafa4d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfbb4a5e2566343f17e73e091647118c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#acfbb4a5e2566343f17e73e091647118c">WriteProjections</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:acfbb4a5e2566343f17e73e091647118c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write any projections.  <a href="classsledgehamr_1_1IOModule.html#acfbb4a5e2566343f17e73e091647118c">More...</a><br /></td></tr>
 <tr class="separator:acfbb4a5e2566343f17e73e091647118c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa128a1e1e34565c51bc172ff9fdbce2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#afa128a1e1e34565c51bc172ff9fdbce2">WriteSpectra</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:afa128a1e1e34565c51bc172ff9fdbce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write any spectra.  <a href="classsledgehamr_1_1IOModule.html#afa128a1e1e34565c51bc172ff9fdbce2">More...</a><br /></td></tr>
 <tr class="separator:afa128a1e1e34565c51bc172ff9fdbce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac79d4b897c5809b99ecfe34d43277aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#aac79d4b897c5809b99ecfe34d43277aa">WriteGravitationalWaveSpectrum</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:aac79d4b897c5809b99ecfe34d43277aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write a gravitational wave spectrum.  <a href="classsledgehamr_1_1IOModule.html#aac79d4b897c5809b99ecfe34d43277aa">More...</a><br /></td></tr>
 <tr class="separator:aac79d4b897c5809b99ecfe34d43277aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2b724ea52a0b7932f72754b3428cfbf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#af2b724ea52a0b7932f72754b3428cfbf">WritePerformanceMonitor</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:af2b724ea52a0b7932f72754b3428cfbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints and logs the latest performance update.  <a href="classsledgehamr_1_1IOModule.html#af2b724ea52a0b7932f72754b3428cfbf">More...</a><br /></td></tr>
 <tr class="separator:af2b724ea52a0b7932f72754b3428cfbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a72c66c1be752936db00e7dd031e055"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a7a72c66c1be752936db00e7dd031e055">WriteAmrexPlotFile</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:a7a72c66c1be752936db00e7dd031e055"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write an AMReX plotfile for yt support.  <a href="classsledgehamr_1_1IOModule.html#a7a72c66c1be752936db00e7dd031e055">More...</a><br /></td></tr>
 <tr class="separator:a7a72c66c1be752936db00e7dd031e055"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d2d0771f222ab85bb990633eee26651"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a0d2d0771f222ab85bb990633eee26651">WriteCheckpoint</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:a0d2d0771f222ab85bb990633eee26651"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will write a checkpoint.  <a href="classsledgehamr_1_1IOModule.html#a0d2d0771f222ab85bb990633eee26651">More...</a><br /></td></tr>
 <tr class="separator:a0d2d0771f222ab85bb990633eee26651"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14c26913dac8956455f839fe564acd46"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a14c26913dac8956455f839fe564acd46">FindLatestCheckpoint</a> (std::string folder)</td></tr>
+<tr class="memdesc:a14c26913dac8956455f839fe564acd46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locates the latest checkpoint within a parent folder.  <a href="classsledgehamr_1_1IOModule.html#a14c26913dac8956455f839fe564acd46">More...</a><br /></td></tr>
 <tr class="separator:a14c26913dac8956455f839fe564acd46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af39c8361e9f07cb20ccdb5a3619622ed"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#af39c8361e9f07cb20ccdb5a3619622ed">GetDirectories</a> (const std::string prefix)</td></tr>
+<tr class="memdesc:af39c8361e9f07cb20ccdb5a3619622ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtains all directories within a parent directory.  <a href="classsledgehamr_1_1IOModule.html#af39c8361e9f07cb20ccdb5a3619622ed">More...</a><br /></td></tr>
 <tr class="separator:af39c8361e9f07cb20ccdb5a3619622ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a778f3f91671637d966284d350c49b33a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a778f3f91671637d966284d350c49b33a">CheckIfOutputAlreadyExists</a> (std::string folder)</td></tr>
+<tr class="memdesc:a778f3f91671637d966284d350c49b33a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will check if an output folder already exists and throws an error if we do not explicitly want to restart or rename any existing output.  <a href="classsledgehamr_1_1IOModule.html#a778f3f91671637d966284d350c49b33a">More...</a><br /></td></tr>
 <tr class="separator:a778f3f91671637d966284d350c49b33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a870e8c1b217641d1a780ea48816b68e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a870e8c1b217641d1a780ea48816b68e8">CreateOutputFolder</a> (std::string folder)</td></tr>
+<tr class="memdesc:a870e8c1b217641d1a780ea48816b68e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will create an output folder if we are not restarting a sim. Will rename any already existing folder to *.old.xxxxxxxxx.  <a href="classsledgehamr_1_1IOModule.html#a870e8c1b217641d1a780ea48816b68e8">More...</a><br /></td></tr>
 <tr class="separator:a870e8c1b217641d1a780ea48816b68e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a277010cb118cf51111f630121d5859d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a277010cb118cf51111f630121d5859d6">AddOutputModules</a> ()</td></tr>
+<tr class="memdesc:a277010cb118cf51111f630121d5859d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will set up all pre-defined output types.  <a href="classsledgehamr_1_1IOModule.html#a277010cb118cf51111f630121d5859d6">More...</a><br /></td></tr>
 <tr class="separator:a277010cb118cf51111f630121d5859d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c474da1ed8556d833993a49258c0fa2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a3c474da1ed8556d833993a49258c0fa2">ParseParams</a> ()</td></tr>
+<tr class="memdesc:a3c474da1ed8556d833993a49258c0fa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parsing of all relevant input parameters.  <a href="classsledgehamr_1_1IOModule.html#a3c474da1ed8556d833993a49258c0fa2">More...</a><br /></td></tr>
 <tr class="separator:a3c474da1ed8556d833993a49258c0fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ab18b91e52ae23e65841e3e31ff863974"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#ab18b91e52ae23e65841e3e31ff863974">coarse_box_downsample_factor</a> = 1</td></tr>
-<tr class="separator:ab18b91e52ae23e65841e3e31ff863974"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5388ae124e4bffd6fcab401e70c2368"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#ad5388ae124e4bffd6fcab401e70c2368">coarse_box_truncation_error_downsample_factor</a> = 1</td></tr>
-<tr class="separator:ad5388ae124e4bffd6fcab401e70c2368"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a2f0c5e98c878de7cdb6e19eb7b8fd1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a8a2f0c5e98c878de7cdb6e19eb7b8fd1">full_box_downsample_factor</a> = 1</td></tr>
-<tr class="separator:a8a2f0c5e98c878de7cdb6e19eb7b8fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa8686c545b8563c554981a6f5e4da33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#afa8686c545b8563c554981a6f5e4da33">full_box_truncation_error_downsample_factor</a> = 1</td></tr>
-<tr class="separator:afa8686c545b8563c554981a6f5e4da33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab711b5ef71990052f17664ad22c6b32e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#ab711b5ef71990052f17664ad22c6b32e">initial_chk</a> = &quot;&quot;</td></tr>
+<tr class="memdesc:ab711b5ef71990052f17664ad22c6b32e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Path to initial checkpoint file if any.  <a href="classsledgehamr_1_1IOModule.html#ab711b5ef71990052f17664ad22c6b32e">More...</a><br /></td></tr>
 <tr class="separator:ab711b5ef71990052f17664ad22c6b32e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68b7c43b6a75a7e4dc3ac9f71fcd56aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a68b7c43b6a75a7e4dc3ac9f71fcd56aa">rolling_checkpoints</a> = false</td></tr>
+<tr class="memdesc:a68b7c43b6a75a7e4dc3ac9f71fcd56aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">If we are using rolling checkpoints, i.e. only ever keep the latest one.  <a href="classsledgehamr_1_1IOModule.html#a68b7c43b6a75a7e4dc3ac9f71fcd56aa">More...</a><br /></td></tr>
 <tr class="separator:a68b7c43b6a75a7e4dc3ac9f71fcd56aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4de1588316ada46517018144d58f40da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#a4de1588316ada46517018144d58f40da">delete_restart_checkpoint</a> = false</td></tr>
+<tr class="memdesc:a4de1588316ada46517018144d58f40da"><td class="mdescLeft">&#160;</td><td class="mdescRight">If we want to delete the checkpoint we restarted the sim from. Will only be deleted once we created a newer one.  <a href="classsledgehamr_1_1IOModule.html#a4de1588316ada46517018144d58f40da">More...</a><br /></td></tr>
 <tr class="separator:a4de1588316ada46517018144d58f40da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9bd49ecc9d30316598467dfd845d288"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IOModule.html#ae9bd49ecc9d30316598467dfd845d288">sim</a></td></tr>
-<tr class="memdesc:ae9bd49ecc9d30316598467dfd845d288"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to owner on whose data this class operates.  <a href="classsledgehamr_1_1IOModule.html#ae9bd49ecc9d30316598467dfd845d288">More...</a><br /></td></tr>
+<tr class="memdesc:ae9bd49ecc9d30316598467dfd845d288"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the simulation.  <a href="classsledgehamr_1_1IOModule.html#ae9bd49ecc9d30316598467dfd845d288">More...</a><br /></td></tr>
 <tr class="separator:ae9bd49ecc9d30316598467dfd845d288"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class that handles all I/O operations besides parsing the inputs file. </p>
+<div class="textblock"><p>Class that handles all I/O operations. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aad737766170b477c2de5a30559798c07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aad737766170b477c2de5a30559798c07">&#9670;&nbsp;</a></span>IOModule()</h2>
@@ -215,6 +236,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor will read relevant input parameters, create output folder(s), and set up all pre-defined output types. @params owner Pointer to the simulation. </p>
 
 </div>
 </div>
@@ -242,6 +265,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Will set up all pre-defined output types. </p>
+
 </div>
 </div>
 <a id="a778f3f91671637d966284d350c49b33a"></a>
@@ -267,6 +292,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Will check if an output folder already exists and throws an error if we do not explicitly want to restart or rename any existing output. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folder</td><td>Folder to be checked. If string is empty we do nothing. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -294,6 +327,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Will create an output folder if we are not restarting a sim. Will rename any already existing folder to *.old.xxxxxxxxx. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folder</td><td>Folder to be created. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a14c26913dac8956455f839fe564acd46"></a>
@@ -319,6 +360,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Locates the latest checkpoint within a parent folder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folder</td><td>Parent folder containing checkpoints. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ID of the latest checkpoint. </dd></dl>
 
 </div>
 </div>
@@ -346,6 +396,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Obtains all directories within a parent directory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prefix</td><td>Parent directoy. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of all directories within parent directory. </dd></dl>
+
 </div>
 </div>
 <a id="a3c474da1ed8556d833993a49258c0fa2"></a>
@@ -371,6 +430,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Parsing of all relevant input parameters. </p>
+
 </div>
 </div>
 <a id="a6d40375399219df406fce38a63ce1ffb"></a>
@@ -388,6 +449,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Will restart a sim from a checkpoint after locating the appropiate one. </p>
+
 </div>
 </div>
 <a id="a716cbe1da6249ecaaa4023d70ce2f2cc"></a>
@@ -404,6 +467,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>After we restarted a sim from a checkpoint this procedure will update the meta data of all output modules to keep intervals and counters consistent between runs. </p>
 
 </div>
 </div>
@@ -423,7 +488,13 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Writes output if requested. </p>
+<p>Will go through all output types and trigger a write if criteria are met. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">force</td><td>Will force a write even if writing interval has not been reached yet. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -461,6 +532,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Will write an AMReX plotfile for yt support. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
+
 </div>
 </div>
 <a id="a2d235a92fd8afd2e35586b2c5da6e72f"></a>
@@ -478,6 +559,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Writes an amrex::BoxArray to an hdf5 file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ba</td><td>Box array. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -515,6 +604,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Will write a checkpoint. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
+
 </div>
 </div>
 <a id="afe583b9e93b48bdc844786c65853d116"></a>
@@ -550,6 +649,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Will write scalar fields on the coarse level. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
 
 </div>
 </div>
@@ -587,6 +696,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Will write truncation error estimates on the coarse level. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
+
 </div>
 </div>
 <a id="a9964d9c64caf4a0043a8855db85afbff"></a>
@@ -622,6 +741,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Will write scalar fields on all levels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
 
 </div>
 </div>
@@ -659,6 +788,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Will write truncation error estimates on all levels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
+
 </div>
 </div>
 <a id="aac79d4b897c5809b99ecfe34d43277aa"></a>
@@ -694,6 +833,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Will write a gravitational wave spectrum. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
 
 </div>
 </div>
@@ -731,6 +880,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Prints and logs the latest performance update. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
+
 </div>
 </div>
 <a id="acfbb4a5e2566343f17e73e091647118c"></a>
@@ -766,6 +925,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Will write any projections. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
 
 </div>
 </div>
@@ -803,6 +972,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Will write slices on all levels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
+
 </div>
 </div>
 <a id="a1d27a579504458f712cfb2fc2b653af7"></a>
@@ -838,6 +1017,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Will write slices of truncation error estimates on all levels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
 
 </div>
 </div>
@@ -875,6 +1064,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Will write any spectra. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Assigned output folder. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the write was successfull or not. </dd></dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -890,50 +1089,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="ab18b91e52ae23e65841e3e31ff863974"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab18b91e52ae23e65841e3e31ff863974">&#9670;&nbsp;</a></span>coarse_box_downsample_factor</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int sledgehamr::IOModule::coarse_box_downsample_factor = 1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Downsampling factors for coarse/full level output. </p>
-
-</div>
-</div>
-<a id="ad5388ae124e4bffd6fcab401e70c2368"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5388ae124e4bffd6fcab401e70c2368">&#9670;&nbsp;</a></span>coarse_box_truncation_error_downsample_factor</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int sledgehamr::IOModule::coarse_box_truncation_error_downsample_factor = 1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Path to alternative output folder if one is provided. </p>
 
 </div>
 </div>
@@ -957,49 +1113,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="a8a2f0c5e98c878de7cdb6e19eb7b8fd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a2f0c5e98c878de7cdb6e19eb7b8fd1">&#9670;&nbsp;</a></span>full_box_downsample_factor</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int sledgehamr::IOModule::full_box_downsample_factor = 1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afa8686c545b8563c554981a6f5e4da33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa8686c545b8563c554981a6f5e4da33">&#9670;&nbsp;</a></span>full_box_truncation_error_downsample_factor</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int sledgehamr::IOModule::full_box_truncation_error_downsample_factor = 1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>If we want to delete the checkpoint we restarted the sim from. Will only be deleted once we created a newer one. </p>
 
 </div>
 </div>
@@ -1141,7 +1255,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Easy access pointers for user-modifications. </p>
+<p>Output module ID's of various output types. </p>
 
 </div>
 </div>
@@ -1193,6 +1307,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Path to initial checkpoint file if any. </p>
+
 </div>
 </div>
 <a id="a9d75926888e4337742708c73db652bbb"></a>
@@ -1206,6 +1322,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Path to last checkpoint. Needed so we can delete it if we need to. </p>
 
 </div>
 </div>
@@ -1237,6 +1355,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Path to output folder. </p>
+
 </div>
 </div>
 <a id="acf047b35679a313d50a8ca42be6c8956"></a>
@@ -1251,7 +1371,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Vectors containing instructions for projections and spectra. </p>
+<p>Vectors containing instructions for projections. </p>
 
 </div>
 </div>
@@ -1275,6 +1395,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>If we are using rolling checkpoints, i.e. only ever keep the latest one. </p>
+
 </div>
 </div>
 <a id="ae9bd49ecc9d30316598467dfd845d288"></a>
@@ -1297,7 +1419,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Pointer to owner on whose data this class operates. </p>
+<p>Pointer to the simulation. </p>
 
 </div>
 </div>
@@ -1312,6 +1434,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Vector containing instructions for spectrum computations. Gravitational wave spectra are handled separately and no instructions need to be provided. </p>
 
 </div>
 </div>

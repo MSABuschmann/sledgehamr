@@ -78,7 +78,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>This class handles all operations between two levels such as averaging down, interpolation to fine, filling of ghost cells, etc. Class is friend of SledgeHAMR.  
+<p>This class handles all operations between two levels such as averaging down, interpolation to fine, filling of ghost cells, etc. Class is friend of sledgehamr.  
  <a href="classsledgehamr_1_1LevelSynchronizer.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="level__synchronizer_8h_source.html">level_synchronizer.h</a>&gt;</code></p>
@@ -86,6 +86,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a28eb74d8fe0c22d97483543350c6eb2a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelSynchronizer.html#a28eb74d8fe0c22d97483543350c6eb2a">LevelSynchronizer</a> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *owner)</td></tr>
+<tr class="memdesc:a28eb74d8fe0c22d97483543350c6eb2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor that initializes boundary conditions and inter-level interpolation.  <a href="classsledgehamr_1_1LevelSynchronizer.html#a28eb74d8fe0c22d97483543350c6eb2a">More...</a><br /></td></tr>
 <tr class="separator:a28eb74d8fe0c22d97483543350c6eb2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7b774c45a02b121bb6d6cb796875805"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelSynchronizer.html#ab7b774c45a02b121bb6d6cb796875805">FillCoarsePatch</a> (const int lev, const double time, amrex::MultiFab &amp;ld)</td></tr>
 <tr class="memdesc:ab7b774c45a02b121bb6d6cb796875805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills <a class="el" href="classsledgehamr_1_1LevelData.html" title="Class that holds the MultiFab data while also keeping track of time and step numbers.">LevelData</a> with information from a coarse level. This is used e.g. when a new level of refinement is added.  <a href="classsledgehamr_1_1LevelSynchronizer.html#ab7b774c45a02b121bb6d6cb796875805">More...</a><br /></td></tr>
@@ -103,10 +104,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a4798ce7632bccf7ad0f85818821510e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute truncation errors for level lev and saves them in sim-&gt;grid_old[lev]. Also averages down lev onto lev-1 at the same time.  <a href="classsledgehamr_1_1LevelSynchronizer.html#a4798ce7632bccf7ad0f85818821510e5">More...</a><br /></td></tr>
 <tr class="separator:a4798ce7632bccf7ad0f85818821510e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5aa6cfaef9320be425e5a277e8b53347"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelSynchronizer.html#a5aa6cfaef9320be425e5a277e8b53347">IncreaseCoarseLevelResolution</a> ()</td></tr>
+<tr class="memdesc:a5aa6cfaef9320be425e5a277e8b53347"><td class="mdescLeft">&#160;</td><td class="mdescRight">Procedure that will increase the coarse level resolution.  <a href="classsledgehamr_1_1LevelSynchronizer.html#a5aa6cfaef9320be425e5a277e8b53347">More...</a><br /></td></tr>
 <tr class="separator:a5aa6cfaef9320be425e5a277e8b53347"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb187b4ec4d11418262719b8b795920b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelSynchronizer.html#aeb187b4ec4d11418262719b8b795920b">ChangeNGhost</a> (int new_nghost)</td></tr>
+<tr class="memdesc:aeb187b4ec4d11418262719b8b795920b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the the number of ghost cells at all levels.  <a href="classsledgehamr_1_1LevelSynchronizer.html#aeb187b4ec4d11418262719b8b795920b">More...</a><br /></td></tr>
 <tr class="separator:aeb187b4ec4d11418262719b8b795920b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fa60835bbe73c27b23c24227921515c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelSynchronizer.html#a1fa60835bbe73c27b23c24227921515c">RegridCoarse</a> ()</td></tr>
+<tr class="memdesc:a1fa60835bbe73c27b23c24227921515c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forces to regrid the coarse level. This is needed whenever the number of computing nodes changes.  <a href="classsledgehamr_1_1LevelSynchronizer.html#a1fa60835bbe73c27b23c24227921515c">More...</a><br /></td></tr>
 <tr class="separator:a1fa60835bbe73c27b23c24227921515c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -137,11 +141,11 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:aba71754c5ac7a18f355d116a877880a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to AMReX interpolator to be used between levels.  <a href="classsledgehamr_1_1LevelSynchronizer.html#aba71754c5ac7a18f355d116a877880a1">More...</a><br /></td></tr>
 <tr class="separator:aba71754c5ac7a18f355d116a877880a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac25011962f65b6d136f22c18708ab6d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelSynchronizer.html#ac25011962f65b6d136f22c18708ab6d1">sim</a></td></tr>
-<tr class="memdesc:ac25011962f65b6d136f22c18708ab6d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to owner on whose data this class operates.  <a href="classsledgehamr_1_1LevelSynchronizer.html#ac25011962f65b6d136f22c18708ab6d1">More...</a><br /></td></tr>
+<tr class="memdesc:ac25011962f65b6d136f22c18708ab6d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the simulation.  <a href="classsledgehamr_1_1LevelSynchronizer.html#ac25011962f65b6d136f22c18708ab6d1">More...</a><br /></td></tr>
 <tr class="separator:ac25011962f65b6d136f22c18708ab6d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This class handles all operations between two levels such as averaging down, interpolation to fine, filling of ghost cells, etc. Class is friend of SledgeHAMR. </p>
+<div class="textblock"><p>This class handles all operations between two levels such as averaging down, interpolation to fine, filling of ghost cells, etc. Class is friend of sledgehamr. </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="ab64b6a3cdb8231a63b71ee8d7197510a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab64b6a3cdb8231a63b71ee8d7197510a">&#9670;&nbsp;</a></span>InterpType</h2>
@@ -190,6 +194,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructor that initializes boundary conditions and inter-level interpolation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">owner</td><td>Pointer to the simulation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -234,6 +246,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Changes the the number of ghost cells at all levels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">new_nghost</td><td>New number of ghost cells. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -285,7 +305,7 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>ld</em>&#160;</td>
+          <td class="paramname"><em>mf</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -300,7 +320,7 @@ Private Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">lev</td><td>New level to be filled with data from lev=1. </td></tr>
     <tr><td class="paramname">time</td><td>Time of new level. </td></tr>
-    <tr><td class="paramname">ld</td><td>New level data. </td></tr>
+    <tr><td class="paramname">mf</td><td>New level data. </td></tr>
   </table>
   </dd>
 </dl>
@@ -498,6 +518,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Procedure that will increase the coarse level resolution. </p>
+
 </div>
 </div>
 <a id="a1fa60835bbe73c27b23c24227921515c"></a>
@@ -514,6 +536,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Forces to regrid the coarse level. This is needed whenever the number of computing nodes changes. </p>
 
 </div>
 </div>
@@ -578,7 +602,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Pointer to owner on whose data this class operates. </p>
+<p>Pointer to the simulation. </p>
 
 </div>
 </div>
