@@ -5,6 +5,10 @@
 
 namespace sledgehamr {
 
+/** @brief Constructor that initialized all tensor components needed to
+ *         simulate gravitional waves.
+ * @param   owner   Pointer to the simulation.
+ */
 GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
     sim = owner;
     idx_offset = sim->scalar_fields.size();
@@ -35,6 +39,10 @@ GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
                        sim->nerrors, sim->do_thorough_checks);
 }
 
+/** @brief Will compute the gravitional wave spectrum and write the result in
+ *         the given hdf5 file.
+ * @param   file_id hdf5 file handle.
+ */
 void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
     const int lev = 0;
     int dimN = sim->dimN[lev];
@@ -150,6 +158,11 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
     }
 }
 
+/** @brief Converts a given index to k-space given a projection type.
+ * @param   a   Index to be converted.
+ * @param   N   Total index length.
+ * @return k-value.
+ */
 inline double GravitationalWaves::IndexToK(int a, int N) {
     double n_tilde = a-N <= -N/2-1 ? a : a-N;
     double two_pi_n_tilde = 2.*M_PI/static_cast<double>(N)*n_tilde;
@@ -163,6 +176,13 @@ inline double GravitationalWaves::IndexToK(int a, int N) {
     return 0.;
 }
 
+/** @brief Projects all indicies.
+ * @param   i   i-index.
+ * @param   j   j-index.
+ * @param   abc a-, b-, and c- index.
+ * @param   N   Total index length.
+ * @return Projected value.
+ */
 inline double GravitationalWaves::GetProjection(int i, int j, int abc[3],
                                                 int N) {
     if( abc[0] == 0 && abc[1] == 0 && abc[2] == 0)
@@ -182,6 +202,15 @@ inline double GravitationalWaves::GetProjection(int i, int j, int abc[3],
     return static_cast<double>(l==m) - proj/norm;
 }
 
+/** @brief Computes lambda from projections.
+ * @param   i   i-index.
+ * @param   j   j-index.
+ * @param   l   l-index.
+ * @param   m   m-index.
+ * @param   abc a-, b-, and c-index.
+ * @param   N   Total index length.
+ * @return Lambda
+ */
 inline double GravitationalWaves::GetLambda(int i, int j, int l, int m,
                                             int abc[3], int N) {
     return GetProjection(i, l, abc, N) * GetProjection(j, m, abc, N)

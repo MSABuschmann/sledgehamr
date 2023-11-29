@@ -9,13 +9,13 @@ namespace sledgehamr {
  *         and we are restarting the sim. Otherwise, it will attempt to find
  *         initial state data in an hdf5 file, if the user has provided one. If
  *         none is found, or a particular field component does not seem to be
- *         provided in such file, the field will be initialize to zero. This 
+ *         provided in such file, the field will be initialize to zero. This
  *         procedure is verbose about what it ends up doing to avoid mistakes.
  */
 void FillLevel::FromInitialStateFile() {
     amrex::ParmParse pp("");
     std::string initial_state_file = "";
-    std::string param_name = "input.initial_state"; 
+    std::string param_name = "input.initial_state";
     pp.query(param_name.c_str(), initial_state_file);
     utils::AssessParamOK(param_name, initial_state_file,
                          sim->do_thorough_checks);
@@ -43,11 +43,11 @@ void FillLevel::FromCheckpoint(std::string folder) {
     }
 }
 
-/** @brief Will initialize a level using data provided in an hdf5 file. If a 
+/** @brief Will initialize a level using data provided in an hdf5 file. If a
  *         field component cannot be found the level will be initialize to zero
  *         instead. This function is verbose about whether it could find the
  *         data or not.
- * @param   initial_state_file  Path to initial state file. This file will be 
+ * @param   initial_state_file  Path to initial state file. This file will be
  *                              used only if we cannot find a file for each
  *                              separate field component. If these are not found
  *                              and 'initial_state_file' is an empty string as
@@ -133,7 +133,7 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
  *         so expect segfaults if violated).
  * @param   comp    Number of field component.
  * @param   data    Array with data.
- * @param   dimN    Length of 'data'.
+ * @param   dimN    Length of data array.
  */
 void FillLevel::FromArray(const int comp, double* data, const long long dimN) {
     LevelData& state = sim->GetLevelData(lev);

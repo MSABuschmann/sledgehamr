@@ -15,7 +15,7 @@ class FillLevel {
   public:
     /** @brief Constructor. Doesn't do any work except collect meta data.
      * @param   owner   Pointer to the simulation.
-     * @param   level   Number of Level to be filled with data (unless we
+     * @param   level   Number of level to be filled with data (unless we
      *                  initialize from a checkpoint).
      */
     FillLevel(Sledgehamr* owner, const int level) : sim(owner), lev(level) {};
