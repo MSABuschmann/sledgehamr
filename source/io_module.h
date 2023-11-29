@@ -13,29 +13,28 @@ class Sledgehamr;
 class Projection;
 class Spectrum;
 
-/** @brief Class that handles all I/O operations besides parsing the inputs
- *         file.
+/** @brief Class that handles all I/O operations.
  */
 class IOModule {
   public:
     IOModule (Sledgehamr* owner);
 
-    /** @brief Writes output if requested.
-     */
     void Write(bool force=false);
-
     void RestartSim();
-
     void UpdateOutputModules();
-
     void WriteBoxArray(amrex::BoxArray& ba);
 
-    /** @brief Vectors containing instructions for projections and spectra.
+    /** @brief Vectors containing instructions for projections.
      */
     std::vector<Projection> projections;
+
+    /** @brief Vector containing instructions for spectrum computations.
+     *         Gravitational wave spectra are handled separately and no
+     *         instructions need to be provided.
+     */
     std::vector<Spectrum> spectra;
 
-    /** @brief Easy access pointers for user-modifications.
+    /** @brief Output module ID's of various output types.
      */
     int idx_slices = -1;
     int idx_coarse_box = -1;
@@ -50,12 +49,21 @@ class IOModule {
     int idx_amrex_plotfile = -1;
     int idx_checkpoints = -1;
 
-    /** @brief Vector of output modules
+    /** @brief Vector of output modules.
      */
     std::vector<OutputModule> output;
 
+    /** @brief Path to output folder.
+     */
     std::string output_folder;
+
+    /** @brief Path to alternative output folder if one is provided.
+     */
     std::string alternative_output_folder = "";
+
+    /** @brief Path to last checkpoint. Needed so we can delete it if
+     *         we need to.
+     */
     std::string old_checkpoint = "";
 
   private:
@@ -71,8 +79,8 @@ class IOModule {
     bool WritePerformanceMonitor(double time, std::string prefix);
     bool WriteAmrexPlotFile(double time, std::string prefix);
     bool WriteCheckpoint(double time, std::string prefix);
-    int FindLatestCheckpoint(std::string folder);
 
+    int FindLatestCheckpoint(std::string folder);
     std::vector<std::string> GetDirectories(const std::string prefix);
     void CheckIfOutputAlreadyExists(std::string folder);
     void CreateOutputFolder(std::string folder);
@@ -80,18 +88,21 @@ class IOModule {
     void AddOutputModules();
     void ParseParams();
 
-    /** Downsampling factors for coarse/full level output.
+    /** @brief Path to initial checkpoint file if any.
      */
-    int coarse_box_downsample_factor = 1;
-    int coarse_box_truncation_error_downsample_factor = 1;
-    int full_box_downsample_factor = 1;
-    int full_box_truncation_error_downsample_factor = 1;
-
     std::string initial_chk = "";
+
+    /** @brief If we are using rolling checkpoints, i.e. only ever keep the
+     *         latest one.
+     */
     bool rolling_checkpoints = false;
+
+    /** @brief If we want to delete the checkpoint we restarted the sim from.
+     *         Will only be deleted once we created a newer one.
+     */
     bool delete_restart_checkpoint = false;
 
-    /** @brief Pointer to owner on whose data this class operates.
+    /** @brief Pointer to the simulation.
      */
     Sledgehamr* sim;
 };

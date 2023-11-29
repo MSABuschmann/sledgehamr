@@ -13,6 +13,11 @@
 
 namespace sledgehamr {
 
+/** @brief Constructor will read relevant input parameters, create output
+ *         folder(s), and set up all pre-defined output types.
+ * @params  owner   Pointer to the simulation.
+ */
+           
 IOModule::IOModule(Sledgehamr* owner) : sim(owner) {
     ParseParams();
     CheckIfOutputAlreadyExists(output_folder);
@@ -23,6 +28,8 @@ IOModule::IOModule(Sledgehamr* owner) : sim(owner) {
     AddOutputModules();
 }
 
+/** @brief Parsing of all relevant input parameters.
+ */
 void IOModule::ParseParams() {
     amrex::ParmParse pp("");
     pp.get("output.output_folder", output_folder);
@@ -45,6 +52,8 @@ void IOModule::ParseParams() {
                        "", warning_msg, sim->nerrors, sim->do_thorough_checks);
 }
 
+/** @brief Will set up all pre-defined output types.
+ */
 void IOModule::AddOutputModules() {
     idx_slices = output.size();
     output.emplace_back("slices", OUTPUT_FCT(IOModule::WriteSlices));
@@ -101,6 +110,11 @@ void IOModule::AddOutputModules() {
     }
 }
 
+/** @brief Will check if an output folder already exists and throws an error
+ *         if we do not explicitly want to restart or rename any existing 
+ *         output.
+ * @param   folder  Folder to be checked. If string is empty we do nothing.
+ */
 void IOModule::CheckIfOutputAlreadyExists(std::string folder) {
     if (folder=="")
         return;
@@ -130,6 +144,10 @@ void IOModule::CheckIfOutputAlreadyExists(std::string folder) {
     }
 }
 
+/** @brief Will create an output folder if we are not restarting a sim. Will
+ *         rename any already existing folder to *.old.xxxxxxxxx.
+ * @param   folder  Folder to be created.
+ */
 void IOModule::CreateOutputFolder(std::string folder) {
     if (folder == "" || sim->do_thorough_checks)
         return;
@@ -145,6 +163,11 @@ void IOModule::CreateOutputFolder(std::string folder) {
     }
 }
 
+/** @brief Will go through all output types and trigger a write if criteria
+ *         are met.
+ * @param   force   Will force a write even if writing interval has not been
+ *                  reached yet.
+ */
 void IOModule::Write(bool force) {
     // Make sure checkpoints are written last to ensure most up-to-date meta
     // data.
@@ -165,12 +188,22 @@ void IOModule::Write(bool force) {
             sim->performance_monitor->idx_output, idx_checkpoints);
 }
 
+/** @brief Will write slices on all levels.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteSlices(double time, std::string prefix) {
     Slices slices(sim, prefix, false);
     slices.Write();
     return true;
 }
 
+/** @brief Will write slices of truncation error estimates on all levels.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
     if (!sim->grid_old[0].contains_truncation_errors)
         return false;
@@ -180,12 +213,22 @@ bool IOModule::WriteSlicesTruncationError(double time, std::string prefix) {
     return true;
 }
 
+/** @brief Will write scalar fields on the coarse level.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteCoarseBox(double time, std::string prefix) {
     LevelWriter writer(sim, prefix, idx_coarse_box);
     writer.Write();
     return true;
 }
 
+/** @brief Will write truncation error estimates on the coarse level.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteCoarseBoxTruncationError(double time, std::string prefix) {
     if (!sim->grid_old[0].contains_truncation_errors)
         return false;
@@ -195,6 +238,11 @@ bool IOModule::WriteCoarseBoxTruncationError(double time, std::string prefix) {
     return true;
 }
 
+/** @brief Will write scalar fields on all levels.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteFullBox(double time, std::string prefix) {
     if (!sim->grid_old[0].contains_truncation_errors)
         return false;
@@ -204,6 +252,11 @@ bool IOModule::WriteFullBox(double time, std::string prefix) {
     return true;
 }
 
+/** @brief Will write truncation error estimates on all levels.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteFullBoxTruncationError(double time, std::string prefix) {
     if (!sim->grid_old[0].contains_truncation_errors)
         return false;
@@ -213,12 +266,22 @@ bool IOModule::WriteFullBoxTruncationError(double time, std::string prefix) {
     return true;
 }
 
+/** @brief Will write an AMReX plotfile for yt support.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteAmrexPlotFile(double time, std::string prefix) {
     AmrexPlotFile writer(sim, prefix);
     writer.Write();
     return true;
 }
 
+/** @brief Will write any projections.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteProjections(double time, std::string prefix) {
     if (projections.empty())
         return false;
@@ -239,6 +302,11 @@ bool IOModule::WriteProjections(double time, std::string prefix) {
     return true;
 }
 
+/** @brief Will write any spectra.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteSpectra(double time, std::string prefix) {
     if (spectra.empty())
         return false;
@@ -261,6 +329,11 @@ bool IOModule::WriteSpectra(double time, std::string prefix) {
     return true;
 }
 
+/** @brief Will write a gravitational wave spectrum.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
     if (!sim->with_gravitational_waves)
         return false;
@@ -282,6 +355,11 @@ bool IOModule::WriteGravitationalWaveSpectrum(double time, std::string prefix) {
     return true;
 }
 
+/** @brief Will write a checkpoint.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
 bool IOModule::WriteCheckpoint(double time, std::string prefix) {
     Checkpoint chk(sim, prefix);
     chk.Write();
@@ -298,6 +376,67 @@ bool IOModule::WriteCheckpoint(double time, std::string prefix) {
     return true;
 }
 
+/** @brief Prints and logs the latest performance update.
+ * @param   time    Current time.
+ * @param   prefix  Assigned output folder.
+ * @return  Whether the write was successfull or not.
+ */
+bool IOModule::WritePerformanceMonitor(double time, std::string prefix) {
+    if (!sim->performance_monitor->IsActive())
+        return false;
+
+    hid_t file_id;
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        std::string filename = prefix + "/log.hdf5";
+        file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                            H5P_DEFAULT);
+    }
+
+    sim->performance_monitor->Log(file_id);
+
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        H5Fclose(file_id);
+    }
+
+    return true;
+}
+
+/** @brief Writes an amrex::BoxArray to an hdf5 file.
+ * @param   ba  Box array.
+ */
+void IOModule::WriteBoxArray(amrex::BoxArray& ba) {
+    if (!amrex::ParallelDescriptor::IOProcessor())
+        return;
+
+    const int nba = ba.size();
+    std::vector<int> x0(nba), y0(nba), z0(nba), x1(nba), y1(nba), z1(nba);
+    for (int b = 0; b < nba; ++b) {
+        x0[b] = ba[b].smallEnd(0);
+        y0[b] = ba[b].smallEnd(1);
+        z0[b] = ba[b].smallEnd(2);
+        x1[b] = ba[b].bigEnd(0);
+        y1[b] = ba[b].bigEnd(1);
+        z1[b] = ba[b].bigEnd(2);
+    }
+    int header[1] = {nba};
+
+    std::string filename = output_folder + "/box_layout.h5";
+    hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                            H5P_DEFAULT);
+    utils::hdf5::Write(file_id, "header", header, 1);
+    utils::hdf5::Write(file_id, "x0", x0.data(), nba);
+    utils::hdf5::Write(file_id, "y0", y0.data(), nba);
+    utils::hdf5::Write(file_id, "z0", z0.data(), nba);
+    utils::hdf5::Write(file_id, "x1", x1.data(), nba);
+    utils::hdf5::Write(file_id, "y1", y1.data(), nba);
+    utils::hdf5::Write(file_id, "z1", z1.data(), nba);
+    H5Fclose(file_id);
+}
+
+
+/** @brief Will restart a sim from a checkpoint after locating the appropiate
+ *         one.
+ */
 void IOModule::RestartSim() {
     amrex::ParmParse pp("input");
     std::string selected_chk = "None Selected";
@@ -350,11 +489,19 @@ void IOModule::RestartSim() {
     }
 }
 
+/** @brief After we restarted a sim from a checkpoint this procedure will 
+ *         update the meta data of all output modules to keep intervals and
+ *         counters consistent between runs.
+ */
 void IOModule::UpdateOutputModules() {
     Checkpoint chk(sim, initial_chk);
     chk.UpdateOutputModules();
 }
 
+/** @brief Locates the latest checkpoint within a parent folder.
+ * @param   folder  Parent folder containing checkpoints.
+ * @return  ID of the latest checkpoint.
+ */
 int IOModule::FindLatestCheckpoint(std::string folder) {
     if (folder == "")
         return -1;
@@ -385,61 +532,16 @@ int IOModule::FindLatestCheckpoint(std::string folder) {
     return latest_chk;
 }
 
+/** @brief Obtains all directories within a parent directory.
+ * @param   prefix  Parent directoy.
+ * @return  Vector of all directories within parent directory.
+ */
 std::vector<std::string> IOModule::GetDirectories(const std::string prefix) {
     std::vector<std::string> res;
     for (auto& p : std::filesystem::recursive_directory_iterator(prefix))
         if (p.is_directory())
             res.push_back(p.path().string());
     return res;
-}
-
-bool IOModule::WritePerformanceMonitor(double time, std::string prefix) {
-    if (!sim->performance_monitor->IsActive())
-        return false;
-
-    hid_t file_id;
-    if (amrex::ParallelDescriptor::IOProcessor()) {
-        std::string filename = prefix + "/log.hdf5";
-        file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
-                            H5P_DEFAULT);
-    }
-
-    sim->performance_monitor->Log(file_id);
-
-    if (amrex::ParallelDescriptor::IOProcessor()) {
-        H5Fclose(file_id);
-    }
-
-    return true;
-}
-
-void IOModule::WriteBoxArray(amrex::BoxArray& ba) {
-    if (!amrex::ParallelDescriptor::IOProcessor())
-        return;
-
-    const int nba = ba.size();
-    std::vector<int> x0(nba), y0(nba), z0(nba), x1(nba), y1(nba), z1(nba);
-    for (int b = 0; b < nba; ++b) {
-        x0[b] = ba[b].smallEnd(0);
-        y0[b] = ba[b].smallEnd(1);
-        z0[b] = ba[b].smallEnd(2);
-        x1[b] = ba[b].bigEnd(0);
-        y1[b] = ba[b].bigEnd(1);
-        z1[b] = ba[b].bigEnd(2);
-    }
-    int header[1] = {nba};
-
-    std::string filename = output_folder + "/box_layout.h5";
-    hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
-                            H5P_DEFAULT);
-    utils::hdf5::Write(file_id, "header", header, 1);
-    utils::hdf5::Write(file_id, "x0", x0.data(), nba);
-    utils::hdf5::Write(file_id, "y0", y0.data(), nba);
-    utils::hdf5::Write(file_id, "z0", z0.data(), nba);
-    utils::hdf5::Write(file_id, "x1", x1.data(), nba);
-    utils::hdf5::Write(file_id, "y1", y1.data(), nba);
-    utils::hdf5::Write(file_id, "z1", z1.data(), nba);
-    H5Fclose(file_id);
 }
 
 }; // namespace sledgehamr
