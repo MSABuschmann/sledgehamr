@@ -68,30 +68,220 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classsledgehamr_1_1RegridScheduler-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">sledgehamr::RegridScheduler Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="regrid__scheduler_8h_source.html">regrid_scheduler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae5caf3673568ad9a7bfe3bc1d471e69d"><td class="memItemLeft" align="right" valign="top"><a id="ae5caf3673568ad9a7bfe3bc1d471e69d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Schedule</b> (int lev, double t)</td></tr>
+<tr class="memitem:a3105fd6453faa0b9ceab0d7baccc8aa6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a3105fd6453faa0b9ceab0d7baccc8aa6">RegridScheduler</a> ()</td></tr>
+<tr class="separator:a3105fd6453faa0b9ceab0d7baccc8aa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5caf3673568ad9a7bfe3bc1d471e69d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#ae5caf3673568ad9a7bfe3bc1d471e69d">Schedule</a> (int lev, double t)</td></tr>
 <tr class="separator:ae5caf3673568ad9a7bfe3bc1d471e69d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d92eb153ff6fbd334c39c22bef57da0"><td class="memItemLeft" align="right" valign="top"><a id="a9d92eb153ff6fbd334c39c22bef57da0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>DoRegrid</b> (int lev, double t) const</td></tr>
+<tr class="memitem:a9d92eb153ff6fbd334c39c22bef57da0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a9d92eb153ff6fbd334c39c22bef57da0">DoRegrid</a> (int lev, double t) const</td></tr>
 <tr class="separator:a9d92eb153ff6fbd334c39c22bef57da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a49110b83beb48474b92d596d7bd2d5"><td class="memItemLeft" align="right" valign="top"><a id="a0a49110b83beb48474b92d596d7bd2d5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>NeedTruncationError</b> (int lev, double t) const</td></tr>
+<tr class="memitem:a0a49110b83beb48474b92d596d7bd2d5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a0a49110b83beb48474b92d596d7bd2d5">NeedTruncationError</a> (int lev, double t) const</td></tr>
 <tr class="separator:a0a49110b83beb48474b92d596d7bd2d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26b2584d874cdb4108f852be9fafee7c"><td class="memItemLeft" align="right" valign="top"><a id="a26b2584d874cdb4108f852be9fafee7c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>DidRegrid</b> (double t)</td></tr>
+<tr class="memitem:a26b2584d874cdb4108f852be9fafee7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a26b2584d874cdb4108f852be9fafee7c">DidRegrid</a> (double t)</td></tr>
 <tr class="separator:a26b2584d874cdb4108f852be9fafee7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a9c8261efd3220ee252abc49e7ab1d041"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#a9c8261efd3220ee252abc49e7ab1d041">FindSchedule</a> (double t) const</td></tr>
+<tr class="separator:a9c8261efd3220ee252abc49e7ab1d041"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aea3e741ec912ca69c74cf2bdbc0b8239"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classsledgehamr_1_1ScheduledRegrid.html">ScheduledRegrid</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1RegridScheduler.html#aea3e741ec912ca69c74cf2bdbc0b8239">schedule</a></td></tr>
+<tr class="separator:aea3e741ec912ca69c74cf2bdbc0b8239"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a3105fd6453faa0b9ceab0d7baccc8aa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3105fd6453faa0b9ceab0d7baccc8aa6">&#9670;&nbsp;</a></span>RegridScheduler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">sledgehamr::RegridScheduler::RegridScheduler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a26b2584d874cdb4108f852be9fafee7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26b2584d874cdb4108f852be9fafee7c">&#9670;&nbsp;</a></span>DidRegrid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::RegridScheduler::DidRegrid </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9d92eb153ff6fbd334c39c22bef57da0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d92eb153ff6fbd334c39c22bef57da0">&#9670;&nbsp;</a></span>DoRegrid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sledgehamr::RegridScheduler::DoRegrid </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>lev</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9c8261efd3220ee252abc49e7ab1d041"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c8261efd3220ee252abc49e7ab1d041">&#9670;&nbsp;</a></span>FindSchedule()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sledgehamr::RegridScheduler::FindSchedule </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a49110b83beb48474b92d596d7bd2d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a49110b83beb48474b92d596d7bd2d5">&#9670;&nbsp;</a></span>NeedTruncationError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sledgehamr::RegridScheduler::NeedTruncationError </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>lev</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae5caf3673568ad9a7bfe3bc1d471e69d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5caf3673568ad9a7bfe3bc1d471e69d">&#9670;&nbsp;</a></span>Schedule()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::RegridScheduler::Schedule </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>lev</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aea3e741ec912ca69c74cf2bdbc0b8239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea3e741ec912ca69c74cf2bdbc0b8239">&#9670;&nbsp;</a></span>schedule</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classsledgehamr_1_1ScheduledRegrid.html">ScheduledRegrid</a>&gt; sledgehamr::RegridScheduler::schedule</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>source/<a class="el" href="regrid__scheduler_8h_source.html">regrid_scheduler.h</a></li>
-<li>source/regrid_scheduler.cpp</li>
+<li>source/<a class="el" href="regrid__scheduler_8cpp.html">regrid_scheduler.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

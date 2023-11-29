@@ -1,8 +1,22 @@
 var searchData=
 [
-  ['add_169',['Add',['../classsledgehamr_1_1UniqueLayout.html#a914ba111ceda3d653b6818666d73c4a1',1,'sledgehamr::UniqueLayout']]],
-  ['addboxes_170',['AddBoxes',['../classsledgehamr_1_1LocalRegrid.html#a7abc012848cab999afceb48d34ba637f',1,'sledgehamr::LocalRegrid']]],
-  ['advance_171',['Advance',['../classsledgehamr_1_1Integrator.html#a8312a57d5b4f3c0f104bf94c800aa8b2',1,'sledgehamr::Integrator::Advance()'],['../classsledgehamr_1_1TimeStepper.html#a029f92dcddadc58f020a528cd93da35d',1,'sledgehamr::TimeStepper::Advance()']]],
-  ['attemptregrid_172',['AttemptRegrid',['../classsledgehamr_1_1LocalRegrid.html#a4458da4a915248888078544b767c6b24',1,'sledgehamr::LocalRegrid']]],
-  ['averagedownto_173',['AverageDownTo',['../classsledgehamr_1_1LevelSynchronizer.html#a8242eca3f0b55a87c5ea68b6d7ac6fdb',1,'sledgehamr::LevelSynchronizer']]]
+  ['a_5fprime2_854',['a_prime2',['../namespaceAxionStrings.html#a21448d59d97293a04f223acd829552cf',1,'AxionStrings']]],
+  ['a_5fprime_5fscreened_855',['a_prime_screened',['../namespaceAxionStrings.html#a09809ac85cef5958bcdf718e22c74602',1,'AxionStrings']]],
+  ['add_856',['Add',['../classsledgehamr_1_1Projection.html#a334deab368101324f1834afe9fcf20a7',1,'sledgehamr::Projection::Add()'],['../classsledgehamr_1_1UniqueLayout.html#a914ba111ceda3d653b6818666d73c4a1',1,'sledgehamr::UniqueLayout::Add()']]],
+  ['addallboxes_857',['AddAllBoxes',['../classsledgehamr_1_1LocalRegrid.html#aefb58fcf06a2c658aec35d9b175440d1',1,'sledgehamr::LocalRegrid']]],
+  ['addboxes_858',['AddBoxes',['../classsledgehamr_1_1LocalRegrid.html#a7abc012848cab999afceb48d34ba637f',1,'sledgehamr::LocalRegrid']]],
+  ['addbubble_859',['AddBubble',['../namespaceFirstOrderPhaseTransition.html#a0cbc764b329e5dab3eab1fddf0fc01ce',1,'FirstOrderPhaseTransition']]],
+  ['addbubblevalues_860',['AddBubbleValues',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a9da34a4f79919d54a67bc66fcb133ea7',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
+  ['addoutputmodules_861',['AddOutputModules',['../classsledgehamr_1_1IOModule.html#a277010cb118cf51111f630121d5859d6',1,'sledgehamr::IOModule']]],
+  ['addtolayout_862',['AddToLayout',['../classsledgehamr_1_1LocalRegrid.html#a7ab0a5321f0b195e2b151783bcde5fa7',1,'sledgehamr::LocalRegrid']]],
+  ['advance_863',['Advance',['../classsledgehamr_1_1Integrator.html#a8312a57d5b4f3c0f104bf94c800aa8b2',1,'sledgehamr::Integrator::Advance()'],['../classsledgehamr_1_1TimeStepper.html#a029f92dcddadc58f020a528cd93da35d',1,'sledgehamr::TimeStepper::Advance()']]],
+  ['allgather_864',['AllGather',['../classsledgehamr_1_1Location.html#aeb0d5875182f2b0f18e67ba1599cd016',1,'sledgehamr::Location']]],
+  ['alternate_865',['Alternate',['../classsledgehamr_1_1OutputModule.html#af26d6d1468d5ec45214b5ffb32471e01',1,'sledgehamr::OutputModule']]],
+  ['amrexplotfile_866',['AmrexPlotFile',['../classsledgehamr_1_1AmrexPlotFile.html#a2860b6ef01be4e90abb0b85daebfe679',1,'sledgehamr::AmrexPlotFile']]],
+  ['approxequal_867',['ApproxEqual',['../namespacesledgehamr_1_1utils.html#a0a96468f757ebbb17eb6664ccdceb3de',1,'sledgehamr::utils']]],
+  ['assessparam_868',['AssessParam',['../namespacesledgehamr_1_1utils.html#a86afc7c9a138e32578b5d3e4cf887e59',1,'sledgehamr::utils']]],
+  ['assessparamok_869',['AssessParamOK',['../namespacesledgehamr_1_1utils.html#a12538733231611071a8d8e91cc0edec6',1,'sledgehamr::utils']]],
+  ['attemptregrid_870',['AttemptRegrid',['../classsledgehamr_1_1LocalRegrid.html#a4458da4a915248888078544b767c6b24',1,'sledgehamr::LocalRegrid']]],
+  ['averagedownto_871',['AverageDownTo',['../classsledgehamr_1_1LevelSynchronizer.html#a8242eca3f0b55a87c5ea68b6d7ac6fdb',1,'sledgehamr::LevelSynchronizer']]],
+  ['averagedownwithtruncationerror_872',['AverageDownWithTruncationError',['../namespacesledgehamr_1_1kernels.html#a7902634ceb3ad67f2f65aa078788093b',1,'sledgehamr::kernels']]]
 ];

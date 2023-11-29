@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['uniquelayout_128',['UniqueLayout',['../classsledgehamr_1_1UniqueLayout.html',1,'sledgehamr::UniqueLayout'],['../classsledgehamr_1_1UniqueLayout.html#af08494a86435e7206e7ad84ec31bddfc',1,'sledgehamr::UniqueLayout::UniqueLayout()']]]
+  ['quadratic_500',['quadratic',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a1820c318a08826f9774e05463808d541',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
+  ['quartic_501',['quartic',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a30114ba7175732c76f5d5e16a6822342',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]]
 ];

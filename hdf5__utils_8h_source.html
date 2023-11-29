@@ -70,7 +70,7 @@ $(function() {
 <div class="title">hdf5_utils.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef SLEDGEHAMR_HDF5_UTILS_H_</span></div>
+<a href="hdf5__utils_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef SLEDGEHAMR_HDF5_UTILS_H_</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define SLEDGEHAMR_HDF5_UTILS_H_</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;hdf5.h&gt;</span></div>
@@ -79,10 +79,10 @@ $(function() {
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesledgehamr.html">sledgehamr</a> {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>utils {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>hdf5 {</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="namespacesledgehamr_1_1utils_1_1hdf5.html">   10</a></span>&#160;<span class="keyword">namespace </span>hdf5 {</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> Read(std::string filename, std::vector&lt;std::string&gt; dnames,</div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="namespacesledgehamr_1_1utils_1_1hdf5.html#aa4ceaa8315959e1c0c75970a33085a1f">   13</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="namespacesledgehamr_1_1utils_1_1hdf5.html#aa4ceaa8315959e1c0c75970a33085a1f">Read</a>(std::string filename, std::vector&lt;std::string&gt; dnames,</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                 T* data) {</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="comment">// Identify datatype.</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    hid_t mem_type_id;</div>
@@ -137,7 +137,7 @@ $(function() {
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> Write(hid_t file_id, std::string dset, T* data,</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="namespacesledgehamr_1_1utils_1_1hdf5.html#a7dd2217f67b68136477cc14f6c0bb298">   68</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="namespacesledgehamr_1_1utils_1_1hdf5.html#a7dd2217f67b68136477cc14f6c0bb298">Write</a>(hid_t file_id, std::string dset, T* data,</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                  <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> size) {</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">// Identify datatype.</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    hid_t mem_type_id, dset_type_id;</div>
@@ -164,7 +164,7 @@ $(function() {
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    H5Dclose(dataset_id);</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keyword">static</span> std::string FindDataset(std::string filename,</div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="namespacesledgehamr_1_1utils_1_1hdf5.html#a05ffffa88c37d5940a34af8aa639a88a">   95</a></span>&#160;<span class="keyword">static</span> std::string <a class="code" href="namespacesledgehamr_1_1utils_1_1hdf5.html#a05ffffa88c37d5940a34af8aa639a88a">FindDataset</a>(std::string filename,</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                                std::vector&lt;std::string&gt; dnames) {</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="comment">// Try and open HDF5 file.</span></div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    hid_t file_id = H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);</div>
@@ -189,6 +189,9 @@ $(function() {
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}; <span class="comment">// namespace sledgehamr</span></div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// SLEDGEHAMR_HDF5_UTILS_H_</span></div>
+<div class="ttc" id="anamespacesledgehamr_1_1utils_1_1hdf5_html_a05ffffa88c37d5940a34af8aa639a88a"><div class="ttname"><a href="namespacesledgehamr_1_1utils_1_1hdf5.html#a05ffffa88c37d5940a34af8aa639a88a">sledgehamr::utils::hdf5::FindDataset</a></div><div class="ttdeci">static std::string FindDataset(std::string filename, std::vector&lt; std::string &gt; dnames)</div><div class="ttdef"><b>Definition:</b> hdf5_utils.h:95</div></div>
+<div class="ttc" id="anamespacesledgehamr_1_1utils_1_1hdf5_html_a7dd2217f67b68136477cc14f6c0bb298"><div class="ttname"><a href="namespacesledgehamr_1_1utils_1_1hdf5.html#a7dd2217f67b68136477cc14f6c0bb298">sledgehamr::utils::hdf5::Write</a></div><div class="ttdeci">static void Write(hid_t file_id, std::string dset, T *data, unsigned long long size)</div><div class="ttdef"><b>Definition:</b> hdf5_utils.h:68</div></div>
+<div class="ttc" id="anamespacesledgehamr_1_1utils_1_1hdf5_html_aa4ceaa8315959e1c0c75970a33085a1f"><div class="ttname"><a href="namespacesledgehamr_1_1utils_1_1hdf5.html#aa4ceaa8315959e1c0c75970a33085a1f">sledgehamr::utils::hdf5::Read</a></div><div class="ttdeci">static bool Read(std::string filename, std::vector&lt; std::string &gt; dnames, T *data)</div><div class="ttdef"><b>Definition:</b> hdf5_utils.h:13</div></div>
 <div class="ttc" id="anamespacesledgehamr_html"><div class="ttname"><a href="namespacesledgehamr.html">sledgehamr</a></div><div class="ttdef"><b>Definition:</b> fill_level.cpp:6</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

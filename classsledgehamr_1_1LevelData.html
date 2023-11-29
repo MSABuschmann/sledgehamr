@@ -89,6 +89,8 @@ Inheritance diagram for sledgehamr::LevelData:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a0ccfa6e6171b7e36ddcb68be82c80fd3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelData.html#a0ccfa6e6171b7e36ddcb68be82c80fd3">LevelData</a> ()</td></tr>
+<tr class="separator:a0ccfa6e6171b7e36ddcb68be82c80fd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3e83b8e4d23e14648c511f80b6bfd39"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelData.html#aa3e83b8e4d23e14648c511f80b6bfd39">LevelData</a> (amrex::BoxArray ba, amrex::DistributionMapping dm, int ncomp, int nghost, double time=0)</td></tr>
 <tr class="memdesc:aa3e83b8e4d23e14648c511f80b6bfd39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct data using the given grid layout.  <a href="classsledgehamr_1_1LevelData.html#aa3e83b8e4d23e14648c511f80b6bfd39">More...</a><br /></td></tr>
 <tr class="separator:aa3e83b8e4d23e14648c511f80b6bfd39"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -104,24 +106,46 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a9bc416cbd6054f0adb499ffd64144860"><td class="memItemLeft" align="right" valign="top"><a id="a9bc416cbd6054f0adb499ffd64144860"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelData.html#a9bc416cbd6054f0adb499ffd64144860">t</a> = 0.</td></tr>
-<tr class="memdesc:a9bc416cbd6054f0adb499ffd64144860"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time corresponding to amrex::MultiFab data. <br /></td></tr>
+<tr class="memitem:a9bc416cbd6054f0adb499ffd64144860"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelData.html#a9bc416cbd6054f0adb499ffd64144860">t</a> = 0.</td></tr>
+<tr class="memdesc:a9bc416cbd6054f0adb499ffd64144860"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time corresponding to amrex::MultiFab data.  <a href="classsledgehamr_1_1LevelData.html#a9bc416cbd6054f0adb499ffd64144860">More...</a><br /></td></tr>
 <tr class="separator:a9bc416cbd6054f0adb499ffd64144860"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fc20b81bee0349d0cc24a8407a42e3a"><td class="memItemLeft" align="right" valign="top"><a id="a1fc20b81bee0349d0cc24a8407a42e3a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelData.html#a1fc20b81bee0349d0cc24a8407a42e3a">istep</a> = 0</td></tr>
-<tr class="memdesc:a1fc20b81bee0349d0cc24a8407a42e3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">How often this level has been advanced. <br /></td></tr>
+<tr class="memitem:a1fc20b81bee0349d0cc24a8407a42e3a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelData.html#a1fc20b81bee0349d0cc24a8407a42e3a">istep</a> = 0</td></tr>
+<tr class="memdesc:a1fc20b81bee0349d0cc24a8407a42e3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">How often this level has been advanced.  <a href="classsledgehamr_1_1LevelData.html#a1fc20b81bee0349d0cc24a8407a42e3a">More...</a><br /></td></tr>
 <tr class="separator:a1fc20b81bee0349d0cc24a8407a42e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4bc919d70ab9353c53c8e70e795777d"><td class="memItemLeft" align="right" valign="top"><a id="af4bc919d70ab9353c53c8e70e795777d"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelData.html#af4bc919d70ab9353c53c8e70e795777d">contains_truncation_errors</a> = false</td></tr>
-<tr class="memdesc:af4bc919d70ab9353c53c8e70e795777d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag as to whether the MutliFab has truncation errors encoded into it. <br /></td></tr>
+<tr class="memitem:af4bc919d70ab9353c53c8e70e795777d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelData.html#af4bc919d70ab9353c53c8e70e795777d">contains_truncation_errors</a> = false</td></tr>
+<tr class="memdesc:af4bc919d70ab9353c53c8e70e795777d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag as to whether the MutliFab has truncation errors encoded into it.  <a href="classsledgehamr_1_1LevelData.html#af4bc919d70ab9353c53c8e70e795777d">More...</a><br /></td></tr>
 <tr class="separator:af4bc919d70ab9353c53c8e70e795777d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class that holds the MultiFab data while also keeping track of time and step numbers. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a0ccfa6e6171b7e36ddcb68be82c80fd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ccfa6e6171b7e36ddcb68be82c80fd3">&#9670;&nbsp;</a></span>LevelData() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">sledgehamr::LevelData::LevelData </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa3e83b8e4d23e14648c511f80b6bfd39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3e83b8e4d23e14648c511f80b6bfd39">&#9670;&nbsp;</a></span>LevelData()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3e83b8e4d23e14648c511f80b6bfd39">&#9670;&nbsp;</a></span>LevelData() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -285,6 +309,55 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Vector of times. Needs to be amrex::Vector to be usable with e.g. amrex::FillPatchTwoLevels. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="af4bc919d70ab9353c53c8e70e795777d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4bc919d70ab9353c53c8e70e795777d">&#9670;&nbsp;</a></span>contains_truncation_errors</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sledgehamr::LevelData::contains_truncation_errors = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Flag as to whether the MutliFab has truncation errors encoded into it. </p>
+
+</div>
+</div>
+<a id="a1fc20b81bee0349d0cc24a8407a42e3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fc20b81bee0349d0cc24a8407a42e3a">&#9670;&nbsp;</a></span>istep</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sledgehamr::LevelData::istep = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>How often this level has been advanced. </p>
+
+</div>
+</div>
+<a id="a9bc416cbd6054f0adb499ffd64144860"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bc416cbd6054f0adb499ffd64144860">&#9670;&nbsp;</a></span>t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double sledgehamr::LevelData::t = 0.</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Time corresponding to amrex::MultiFab data. </p>
 
 </div>
 </div>

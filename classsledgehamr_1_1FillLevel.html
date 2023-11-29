@@ -68,6 +68,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classsledgehamr_1_1FillLevel-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">sledgehamr::FillLevel Class Reference</div>  </div>
@@ -84,9 +85,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3482576738568fcced5844a2de8b028f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1FillLevel.html#a3482576738568fcced5844a2de8b028f">FillLevel</a> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *owner, const int level)</td></tr>
 <tr class="memdesc:a3482576738568fcced5844a2de8b028f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. Doesn't do any work except collect meta data.  <a href="classsledgehamr_1_1FillLevel.html#a3482576738568fcced5844a2de8b028f">More...</a><br /></td></tr>
 <tr class="separator:a3482576738568fcced5844a2de8b028f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32272a06c4a4238f47b008220a449f87"><td class="memItemLeft" align="right" valign="top"><a id="a32272a06c4a4238f47b008220a449f87"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1FillLevel.html#a32272a06c4a4238f47b008220a449f87">FromInitialStateFile</a> ()</td></tr>
-<tr class="memdesc:a32272a06c4a4238f47b008220a449f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will try to initialize data. It will use a checkpoint if one is found and we are restarting the sim. Otherwise, it will attempt to find initial state data in an hdf5 file, if the user has provided one. If none is found, or a particular field component does not seem to be provided in such file, the field will be initialize to zero. This procedure is verbose about what it ends up doing to avoid mistakes. <br /></td></tr>
+<tr class="memitem:a32272a06c4a4238f47b008220a449f87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1FillLevel.html#a32272a06c4a4238f47b008220a449f87">FromInitialStateFile</a> ()</td></tr>
+<tr class="memdesc:a32272a06c4a4238f47b008220a449f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will try to initialize data. It will use a checkpoint if one is found and we are restarting the sim. Otherwise, it will attempt to find initial state data in an hdf5 file, if the user has provided one. If none is found, or a particular field component does not seem to be provided in such file, the field will be initialize to zero. This procedure is verbose about what it ends up doing to avoid mistakes.  <a href="classsledgehamr_1_1FillLevel.html#a32272a06c4a4238f47b008220a449f87">More...</a><br /></td></tr>
 <tr class="separator:a32272a06c4a4238f47b008220a449f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abed1cdb4375dc48cef3fe2ed928919d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1FillLevel.html#abed1cdb4375dc48cef3fe2ed928919d2">FromCheckpoint</a> (std::string folder)</td></tr>
 <tr class="memdesc:abed1cdb4375dc48cef3fe2ed928919d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will initialize all levels from a given checkpoint.  <a href="classsledgehamr_1_1FillLevel.html#abed1cdb4375dc48cef3fe2ed928919d2">More...</a><br /></td></tr>
@@ -103,6 +103,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a0cae844e7fe47a7bef70925b34ee436e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1FillLevel.html#a0cae844e7fe47a7bef70925b34ee436e">FromConst</a> (const int comp, const double c)</td></tr>
 <tr class="memdesc:a0cae844e7fe47a7bef70925b34ee436e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills the entire level for a given component with a given constant.  <a href="classsledgehamr_1_1FillLevel.html#a0cae844e7fe47a7bef70925b34ee436e">More...</a><br /></td></tr>
 <tr class="separator:a0cae844e7fe47a7bef70925b34ee436e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ad6a502c1297b6d5492b828366b3e64d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1FillLevel.html#ad6a502c1297b6d5492b828366b3e64d3">sim</a></td></tr>
+<tr class="memdesc:ad6a502c1297b6d5492b828366b3e64d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the simulation.  <a href="classsledgehamr_1_1FillLevel.html#ad6a502c1297b6d5492b828366b3e64d3">More...</a><br /></td></tr>
+<tr class="separator:ad6a502c1297b6d5492b828366b3e64d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c7a9a5fe91625f19d2beac1c60ebfc8"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1FillLevel.html#a3c7a9a5fe91625f19d2beac1c60ebfc8">lev</a></td></tr>
+<tr class="memdesc:a3c7a9a5fe91625f19d2beac1c60ebfc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of level to be filled with data (unless we initialize from a checkpoint).  <a href="classsledgehamr_1_1FillLevel.html#a3c7a9a5fe91625f19d2beac1c60ebfc8">More...</a><br /></td></tr>
+<tr class="separator:a3c7a9a5fe91625f19d2beac1c60ebfc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class will fill an entire level with data from either a checkpoint, an hdf5 file, an array or using a constant value, depending on the chosen routine. Operates on a single level given in the constructor unless we are trying to initialize a run via a checkpoint. </p>
@@ -145,7 +154,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">owner</td><td>Pointer to the simulation. </td></tr>
-    <tr><td class="paramname">level</td><td>Number of Level to be filled with data (unless we initialize from a checkpoint). </td></tr>
+    <tr><td class="paramname">level</td><td>Number of level to be filled with data (unless we initialize from a checkpoint). </td></tr>
   </table>
   </dd>
 </dl>
@@ -190,7 +199,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   <table class="params">
     <tr><td class="paramname">comp</td><td>Number of field component. </td></tr>
     <tr><td class="paramname">data</td><td>Array with data. </td></tr>
-    <tr><td class="paramname">dimN</td><td>Length of 'data'. </td></tr>
+    <tr><td class="paramname">dimN</td><td>Length of data array. </td></tr>
   </table>
   </dd>
 </dl>
@@ -323,9 +332,77 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a id="a32272a06c4a4238f47b008220a449f87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32272a06c4a4238f47b008220a449f87">&#9670;&nbsp;</a></span>FromInitialStateFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::FillLevel::FromInitialStateFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Will try to initialize data. It will use a checkpoint if one is found and we are restarting the sim. Otherwise, it will attempt to find initial state data in an hdf5 file, if the user has provided one. If none is found, or a particular field component does not seem to be provided in such file, the field will be initialize to zero. This procedure is verbose about what it ends up doing to avoid mistakes. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a3c7a9a5fe91625f19d2beac1c60ebfc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c7a9a5fe91625f19d2beac1c60ebfc8">&#9670;&nbsp;</a></span>lev</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int sledgehamr::FillLevel::lev</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of level to be filled with data (unless we initialize from a checkpoint). </p>
+
+</div>
+</div>
+<a id="ad6a502c1297b6d5492b828366b3e64d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6a502c1297b6d5492b828366b3e64d3">&#9670;&nbsp;</a></span>sim</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a>* sledgehamr::FillLevel::sim</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pointer to the simulation. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>source/<a class="el" href="fill__level_8h_source.html">fill_level.h</a></li>
-<li>source/fill_level.cpp</li>
+<li>source/<a class="el" href="fill__level_8cpp.html">fill_level.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

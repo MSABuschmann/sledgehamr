@@ -68,6 +68,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classsledgehamr_1_1SledgehamrInit-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">sledgehamr::SledgehamrInit Class Reference</div>  </div>
@@ -81,13 +83,48 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a1754a1e9101ac7b63938e633b1866919"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1SledgehamrInit.html#a1754a1e9101ac7b63938e633b1866919">SledgehamrInit</a> ()</td></tr>
+<tr class="separator:a1754a1e9101ac7b63938e633b1866919"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a177c4d6ec54f960acea4bfde0c8ccd7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1SledgehamrInit.html#a177c4d6ec54f960acea4bfde0c8ccd7c">CreateInstance</a> ()</td></tr>
 <tr class="memdesc:a177c4d6ec54f960acea4bfde0c8ccd7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates instance of requested derived project class.  <a href="classsledgehamr_1_1SledgehamrInit.html#a177c4d6ec54f960acea4bfde0c8ccd7c">More...</a><br /></td></tr>
 <tr class="separator:a177c4d6ec54f960acea4bfde0c8ccd7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a9cd811e9d222599e80ee40bbfda9ba9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1SledgehamrInit.html#a9cd811e9d222599e80ee40bbfda9ba9d">DetermineProjectName</a> ()</td></tr>
+<tr class="memdesc:a9cd811e9d222599e80ee40bbfda9ba9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads project name from inputs file.  <a href="classsledgehamr_1_1SledgehamrInit.html#a9cd811e9d222599e80ee40bbfda9ba9d">More...</a><br /></td></tr>
+<tr class="separator:a9cd811e9d222599e80ee40bbfda9ba9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8371e2e1e2e8b9239da84b8c0080d290"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1SledgehamrInit.html#a8371e2e1e2e8b9239da84b8c0080d290">FinishAMReXSetup</a> ()</td></tr>
+<tr class="memdesc:a8371e2e1e2e8b9239da84b8c0080d290"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set parameters such as 'amr.n_cell' for amrex::AmrCore.  <a href="classsledgehamr_1_1SledgehamrInit.html#a8371e2e1e2e8b9239da84b8c0080d290">More...</a><br /></td></tr>
+<tr class="separator:a8371e2e1e2e8b9239da84b8c0080d290"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:acfe8f36baeede7d83a0081664233cdc6"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1SledgehamrInit.html#acfe8f36baeede7d83a0081664233cdc6">project_name</a></td></tr>
+<tr class="memdesc:acfe8f36baeede7d83a0081664233cdc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains 'project.name' from inputs file.  <a href="classsledgehamr_1_1SledgehamrInit.html#acfe8f36baeede7d83a0081664233cdc6">More...</a><br /></td></tr>
+<tr class="separator:acfe8f36baeede7d83a0081664233cdc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Determines with project has been requested. Also feeds extra derived information to amrex::AmrCore. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a1754a1e9101ac7b63938e633b1866919"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1754a1e9101ac7b63938e633b1866919">&#9670;&nbsp;</a></span>SledgehamrInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sledgehamr::SledgehamrInit::SledgehamrInit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a177c4d6ec54f960acea4bfde0c8ccd7c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a177c4d6ec54f960acea4bfde0c8ccd7c">&#9670;&nbsp;</a></span>CreateInstance()</h2>
 
@@ -108,9 +145,88 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a9cd811e9d222599e80ee40bbfda9ba9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cd811e9d222599e80ee40bbfda9ba9d">&#9670;&nbsp;</a></span>DetermineProjectName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::SledgehamrInit::DetermineProjectName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads project name from inputs file. </p>
+
+</div>
+</div>
+<a id="a8371e2e1e2e8b9239da84b8c0080d290"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8371e2e1e2e8b9239da84b8c0080d290">&#9670;&nbsp;</a></span>FinishAMReXSetup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::SledgehamrInit::FinishAMReXSetup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set parameters such as 'amr.n_cell' for amrex::AmrCore. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="acfe8f36baeede7d83a0081664233cdc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfe8f36baeede7d83a0081664233cdc6">&#9670;&nbsp;</a></span>project_name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string sledgehamr::SledgehamrInit::project_name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Contains 'project.name' from inputs file. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>source/<a class="el" href="sledgehamr__init_8h_source.html">sledgehamr_init.h</a></li>
-<li>source/sledgehamr_init.cpp</li>
+<li>source/<a class="el" href="sledgehamr__init_8cpp.html">sledgehamr_init.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

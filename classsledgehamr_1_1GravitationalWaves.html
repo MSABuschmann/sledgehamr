@@ -68,24 +68,460 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classsledgehamr_1_1GravitationalWaves-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">sledgehamr::GravitationalWaves Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This will setup everything needed to simulate gravitational waves and compute the gravitational wave spectrum.  
+ <a href="classsledgehamr_1_1GravitationalWaves.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="gravitational__waves_8h_source.html">gravitational_waves.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2d9489551b81e733bb1685023a3945b0"><td class="memItemLeft" align="right" valign="top"><a id="a2d9489551b81e733bb1685023a3945b0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>GravitationalWaves</b> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *owner)</td></tr>
+<tr class="memitem:a2d9489551b81e733bb1685023a3945b0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a2d9489551b81e733bb1685023a3945b0">GravitationalWaves</a> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *owner)</td></tr>
+<tr class="memdesc:a2d9489551b81e733bb1685023a3945b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor that initialized all tensor components needed to simulate gravitional waves.  <a href="classsledgehamr_1_1GravitationalWaves.html#a2d9489551b81e733bb1685023a3945b0">More...</a><br /></td></tr>
 <tr class="separator:a2d9489551b81e733bb1685023a3945b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa00cb3f7c6993a6bb7eb6d5475a6cfa0"><td class="memItemLeft" align="right" valign="top"><a id="aa00cb3f7c6993a6bb7eb6d5475a6cfa0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeSpectrum</b> (hid_t file_id)</td></tr>
+<tr class="memitem:aa00cb3f7c6993a6bb7eb6d5475a6cfa0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#aa00cb3f7c6993a6bb7eb6d5475a6cfa0">ComputeSpectrum</a> (hid_t file_id)</td></tr>
+<tr class="memdesc:aa00cb3f7c6993a6bb7eb6d5475a6cfa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will compute the gravitional wave spectrum and write the result in the given hdf5 file.  <a href="classsledgehamr_1_1GravitationalWaves.html#aa00cb3f7c6993a6bb7eb6d5475a6cfa0">More...</a><br /></td></tr>
 <tr class="separator:aa00cb3f7c6993a6bb7eb6d5475a6cfa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:ab45079282000fd5167547df7592b4240"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240">Gw</a> { <br />
+&#160;&#160;<a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a1308d9b71460742989bb07db4f49cbbb">u_xx</a> = 0
+, <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240abbeeb0e40f056714a703591d1f53e528">u_yy</a>
+, <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a724779649431f53e5c4cd4f6880e736e">u_zz</a>
+, <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a431fc88a8f0e1ed5dd7369ee78538e55">u_xy</a>
+, <br />
+&#160;&#160;<a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a329219157085ba868251692dbcb477c6">u_xz</a>
+, <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240ad702ef1f04e7610d6b676d17b01f0d86">u_yz</a>
+, <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a9a03cbb81fb92a28b5a37ea87cb0cac5">du_xx</a>
+, <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240ac33c81ffd3db7389931d8280c1845b15">du_yy</a>
+, <br />
+&#160;&#160;<a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a7349bcdba2c689f9da7457cbdaffdeff">du_zz</a>
+, <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a62cc22e2f4cc3db257a851eddabd582c">du_xy</a>
+, <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a8f233f96797dbfc78cccd758f51b498e">du_xz</a>
+, <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a2a5f300b494682128d4ee9866679f772">du_yz</a>
+, <br />
+&#160;&#160;<a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a0e40bc0e9901ff7ae630aad44359249e">NGwScalars</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:ab45079282000fd5167547df7592b4240"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum with the tensor components.  <a href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240">More...</a><br /></td></tr>
+<tr class="separator:ab45079282000fd5167547df7592b4240"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ad7086d64ceda987947542d6520b4a314"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ad7086d64ceda987947542d6520b4a314">IndexToK</a> (int a, int N)</td></tr>
+<tr class="memdesc:ad7086d64ceda987947542d6520b4a314"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a given index to k-space given a projection type.  <a href="classsledgehamr_1_1GravitationalWaves.html#ad7086d64ceda987947542d6520b4a314">More...</a><br /></td></tr>
+<tr class="separator:ad7086d64ceda987947542d6520b4a314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75f8c4ad778f968ca006189f6326a17b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a75f8c4ad778f968ca006189f6326a17b">GetProjection</a> (int i, int j, int abc[3], int N)</td></tr>
+<tr class="memdesc:a75f8c4ad778f968ca006189f6326a17b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects all indicies.  <a href="classsledgehamr_1_1GravitationalWaves.html#a75f8c4ad778f968ca006189f6326a17b">More...</a><br /></td></tr>
+<tr class="separator:a75f8c4ad778f968ca006189f6326a17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d7aa6918836ae602d6866280188b08b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a2d7aa6918836ae602d6866280188b08b">GetLambda</a> (int i, int j, int l, int m, int abc[3], int N)</td></tr>
+<tr class="memdesc:a2d7aa6918836ae602d6866280188b08b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lambda from projections.  <a href="classsledgehamr_1_1GravitationalWaves.html#a2d7aa6918836ae602d6866280188b08b">More...</a><br /></td></tr>
+<tr class="separator:a2d7aa6918836ae602d6866280188b08b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:afa251c68ac471802439b4d46e962369d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#afa251c68ac471802439b4d46e962369d">sim</a></td></tr>
+<tr class="memdesc:afa251c68ac471802439b4d46e962369d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the simulation.  <a href="classsledgehamr_1_1GravitationalWaves.html#afa251c68ac471802439b4d46e962369d">More...</a><br /></td></tr>
+<tr class="separator:afa251c68ac471802439b4d46e962369d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa31174f4b7f32c0eef8ea3d2f62a9790"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#aa31174f4b7f32c0eef8ea3d2f62a9790">idx_offset</a></td></tr>
+<tr class="memdesc:aa31174f4b7f32c0eef8ea3d2f62a9790"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset corresponding the number of user-defined scalar fields. We need this as all gravitional wave fields are appended to the end of that list.  <a href="classsledgehamr_1_1GravitationalWaves.html#aa31174f4b7f32c0eef8ea3d2f62a9790">More...</a><br /></td></tr>
+<tr class="separator:aa31174f4b7f32c0eef8ea3d2f62a9790"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a485542991a40b578f80cf9b772395b0b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a485542991a40b578f80cf9b772395b0b">projection_type</a> = 2</td></tr>
+<tr class="memdesc:a485542991a40b578f80cf9b772395b0b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classsledgehamr_1_1Projection.html" title="TODO.">Projection</a> type when computing the spectrum. This should be set to the same order as the gradient computation in the EOM. However, since this defined in a kernel function we need to keep this is a free parameter here and rely on the user to select the appropiate projection type through the input file. Will be set by 'output.gw_spectra.projection_type'.  <a href="classsledgehamr_1_1GravitationalWaves.html#a485542991a40b578f80cf9b772395b0b">More...</a><br /></td></tr>
+<tr class="separator:a485542991a40b578f80cf9b772395b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:af4eb42f73052f89295e321f0951df96c"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#af4eb42f73052f89295e321f0951df96c">NScalars</a> = 12</td></tr>
+<tr class="memdesc:af4eb42f73052f89295e321f0951df96c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of gravitational wave components.  <a href="classsledgehamr_1_1GravitationalWaves.html#af4eb42f73052f89295e321f0951df96c">More...</a><br /></td></tr>
+<tr class="separator:af4eb42f73052f89295e321f0951df96c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This will setup everything needed to simulate gravitational waves and compute the gravitational wave spectrum. </p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="ab45079282000fd5167547df7592b4240"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab45079282000fd5167547df7592b4240">&#9670;&nbsp;</a></span>Gw</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240">sledgehamr::GravitationalWaves::Gw</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>enum with the tensor components. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a1308d9b71460742989bb07db4f49cbbb"></a>u_xx&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240abbeeb0e40f056714a703591d1f53e528"></a>u_yy&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a724779649431f53e5c4cd4f6880e736e"></a>u_zz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a431fc88a8f0e1ed5dd7369ee78538e55"></a>u_xy&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a329219157085ba868251692dbcb477c6"></a>u_xz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240ad702ef1f04e7610d6b676d17b01f0d86"></a>u_yz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a9a03cbb81fb92a28b5a37ea87cb0cac5"></a>du_xx&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240ac33c81ffd3db7389931d8280c1845b15"></a>du_yy&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a7349bcdba2c689f9da7457cbdaffdeff"></a>du_zz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a62cc22e2f4cc3db257a851eddabd582c"></a>du_xy&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a8f233f96797dbfc78cccd758f51b498e"></a>du_xz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a2a5f300b494682128d4ee9866679f772"></a>du_yz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab45079282000fd5167547df7592b4240a0e40bc0e9901ff7ae630aad44359249e"></a>NGwScalars&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2d9489551b81e733bb1685023a3945b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d9489551b81e733bb1685023a3945b0">&#9670;&nbsp;</a></span>GravitationalWaves()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sledgehamr::GravitationalWaves::GravitationalWaves </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td>
+          <td class="paramname"><em>owner</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor that initialized all tensor components needed to simulate gravitional waves. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">owner</td><td>Pointer to the simulation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa00cb3f7c6993a6bb7eb6d5475a6cfa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa00cb3f7c6993a6bb7eb6d5475a6cfa0">&#9670;&nbsp;</a></span>ComputeSpectrum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::GravitationalWaves::ComputeSpectrum </td>
+          <td>(</td>
+          <td class="paramtype">hid_t&#160;</td>
+          <td class="paramname"><em>file_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Will compute the gravitional wave spectrum and write the result in the given hdf5 file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_id</td><td>hdf5 file handle. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2d7aa6918836ae602d6866280188b08b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d7aa6918836ae602d6866280188b08b">&#9670;&nbsp;</a></span>GetLambda()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double sledgehamr::GravitationalWaves::GetLambda </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>abc</em>[3], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>N</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes lambda from projections. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>i-index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-index. </td></tr>
+    <tr><td class="paramname">l</td><td>l-index. </td></tr>
+    <tr><td class="paramname">m</td><td>m-index. </td></tr>
+    <tr><td class="paramname">abc</td><td>a-, b-, and c-index. </td></tr>
+    <tr><td class="paramname">N</td><td>Total index length. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Lambda </dd></dl>
+
+</div>
+</div>
+<a id="a75f8c4ad778f968ca006189f6326a17b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75f8c4ad778f968ca006189f6326a17b">&#9670;&nbsp;</a></span>GetProjection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double sledgehamr::GravitationalWaves::GetProjection </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>abc</em>[3], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>N</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Projects all indicies. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>i-index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-index. </td></tr>
+    <tr><td class="paramname">abc</td><td>a-, b-, and c- index. </td></tr>
+    <tr><td class="paramname">N</td><td>Total index length. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Projected value. </dd></dl>
+
+</div>
+</div>
+<a id="ad7086d64ceda987947542d6520b4a314"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7086d64ceda987947542d6520b4a314">&#9670;&nbsp;</a></span>IndexToK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double sledgehamr::GravitationalWaves::IndexToK </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>N</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a given index to k-space given a projection type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>Index to be converted. </td></tr>
+    <tr><td class="paramname">N</td><td>Total index length. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>k-value. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aa31174f4b7f32c0eef8ea3d2f62a9790"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa31174f4b7f32c0eef8ea3d2f62a9790">&#9670;&nbsp;</a></span>idx_offset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sledgehamr::GravitationalWaves::idx_offset</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Offset corresponding the number of user-defined scalar fields. We need this as all gravitional wave fields are appended to the end of that list. </p>
+
+</div>
+</div>
+<a id="af4eb42f73052f89295e321f0951df96c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4eb42f73052f89295e321f0951df96c">&#9670;&nbsp;</a></span>NScalars</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int sledgehamr::GravitationalWaves::NScalars = 12</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of gravitational wave components. </p>
+
+</div>
+</div>
+<a id="a485542991a40b578f80cf9b772395b0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a485542991a40b578f80cf9b772395b0b">&#9670;&nbsp;</a></span>projection_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sledgehamr::GravitationalWaves::projection_type = 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classsledgehamr_1_1Projection.html" title="TODO.">Projection</a> type when computing the spectrum. This should be set to the same order as the gradient computation in the EOM. However, since this defined in a kernel function we need to keep this is a free parameter here and rely on the user to select the appropiate projection type through the input file. Will be set by 'output.gw_spectra.projection_type'. </p>
+
+</div>
+</div>
+<a id="afa251c68ac471802439b4d46e962369d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa251c68ac471802439b4d46e962369d">&#9670;&nbsp;</a></span>sim</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a>* sledgehamr::GravitationalWaves::sim</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pointer to the simulation. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>source/<a class="el" href="gravitational__waves_8h_source.html">gravitational_waves.h</a></li>
-<li>source/gravitational_waves.cpp</li>
+<li>source/<a class="el" href="gravitational__waves_8cpp.html">gravitational_waves.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

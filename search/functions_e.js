@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['tagwithouttruncationcpu_235',['TagWithoutTruncationCpu',['../classsledgehamr_1_1Sledgehamr.html#a72376b1fc0e22a68c8449bccc6518897',1,'sledgehamr::Sledgehamr']]],
-  ['tagwithtruncationcpu_236',['TagWithTruncationCpu',['../classsledgehamr_1_1Sledgehamr.html#a14510bc01e24329a95ec7aa2d86ab569',1,'sledgehamr::Sledgehamr']]]
+  ['name_1053',['Name',['../classsledgehamr_1_1Integrator.html#ae61eb914c8d9303f5731e2f019ac24c0',1,'sledgehamr::Integrator']]],
+  ['needtruncationerror_1054',['NeedTruncationError',['../classsledgehamr_1_1RegridScheduler.html#a0a49110b83beb48474b92d596d7bd2d5',1,'sledgehamr::RegridScheduler']]],
+  ['noshadowregrid_1055',['NoShadowRegrid',['../classsledgehamr_1_1TimeStepper.html#a876a8b93c502e65daa1f7dafeeddf368',1,'sledgehamr::TimeStepper']]]
 ];

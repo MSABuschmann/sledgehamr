@@ -70,17 +70,17 @@ $(function() {
 <div class="title">MinimalExample.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="MinimalExample_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;sledgehamr.h&gt;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="sledgehamr_8h.html">sledgehamr.h</a>&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>MinimalExample {</div>
+<div class="line"><a name="l00005"></a><span class="lineno"><a class="line" href="namespaceMinimalExample.html">    5</a></span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceMinimalExample.html">MinimalExample</a> {</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;SLEDGEHAMR_ADD_SCALARS(Psi1, Psi2)</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;SLEDGEHAMR_ADD_CONJUGATE_MOMENTA(Pi1, Pi2)</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<a class="code" href="macros_8h.html#a3e1ec0849746bb91e06ba03644c80816">SLEDGEHAMR_ADD_SCALARS</a>(Psi1, Psi2)</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<a class="code" href="macros_8h.html#af2c220d1071424c9dd9d4a2f39e21887">SLEDGEHAMR_ADD_CONJUGATE_MOMENTA</a>(Pi1, Pi2)</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;AMREX_GPU_DEVICE AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keywordtype">void</span> Rhs(<span class="keyword">const</span> amrex::Array4&lt;double&gt;&amp; rhs,</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="namespaceMinimalExample.html#ad8133a91ec61be60ee6fc33fc8ae7a01">   11</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceMinimalExample.html#ad8133a91ec61be60ee6fc33fc8ae7a01">Rhs</a>(<span class="keyword">const</span> amrex::Array4&lt;double&gt;&amp; rhs,</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;         <span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;         <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev,</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;         <span class="keyword">const</span> <span class="keywordtype">double</span> time, <span class="keyword">const</span> <span class="keywordtype">double</span> dt, <span class="keyword">const</span> <span class="keywordtype">double</span> dx,</div>
@@ -110,16 +110,22 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    rhs(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + laplacian_Psi2 - Psi2*potential;</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;SLEDGEHAMR_FINISH_SETUP</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<a class="code" href="macros_8h.html#afbab7996f134b890fb86449e21e89b9f">SLEDGEHAMR_FINISH_SETUP</a></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classMinimalExample_1_1MinimalExample.html">   43</a></span>&#160;<span class="keyword">class </span><a class="code" href="classMinimalExample_1_1MinimalExample.html">MinimalExample</a> : <span class="keyword">public</span> <a class="code" href="classsledgehamr_1_1Sledgehamr.html">sledgehamr::Sledgehamr</a> {</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classMinimalExample_1_1MinimalExample.html">   43</a></span>&#160;<span class="keyword">class </span><a class="code" href="namespaceMinimalExample.html">MinimalExample</a> : <span class="keyword">public</span> <a class="code" href="classsledgehamr_1_1Sledgehamr.html">sledgehamr::Sledgehamr</a> {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    SLEDGEHAMR_INITIALIZE_PROJECT(<a class="code" href="classMinimalExample_1_1MinimalExample.html">MinimalExample</a>)</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="macros_8h.html#ada9a5088bb2e3942da8027b93aff846b">SLEDGEHAMR_INITIALIZE_PROJECT</a>(<a class="code" href="namespaceMinimalExample.html">MinimalExample</a>)</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}; <span class="comment">// namespace MinimalExample</span></div>
-<div class="ttc" id="aclassMinimalExample_1_1MinimalExample_html"><div class="ttname"><a href="classMinimalExample_1_1MinimalExample.html">MinimalExample::MinimalExample</a></div><div class="ttdef"><b>Definition:</b> MinimalExample.h:43</div></div>
 <div class="ttc" id="aclasssledgehamr_1_1Sledgehamr_html"><div class="ttname"><a href="classsledgehamr_1_1Sledgehamr.html">sledgehamr::Sledgehamr</a></div><div class="ttdoc">Base class for all derived projects. Combines all the ingredients to make this code work.</div><div class="ttdef"><b>Definition:</b> sledgehamr.h:40</div></div>
+<div class="ttc" id="amacros_8h_html_a3e1ec0849746bb91e06ba03644c80816"><div class="ttname"><a href="macros_8h.html#a3e1ec0849746bb91e06ba03644c80816">SLEDGEHAMR_ADD_SCALARS</a></div><div class="ttdeci">#define SLEDGEHAMR_ADD_SCALARS(...)</div><div class="ttdoc">Macro to add multiple scalar fields and default template functions to the project namespace.</div><div class="ttdef"><b>Definition:</b> macros.h:123</div></div>
+<div class="ttc" id="amacros_8h_html_ada9a5088bb2e3942da8027b93aff846b"><div class="ttname"><a href="macros_8h.html#ada9a5088bb2e3942da8027b93aff846b">SLEDGEHAMR_INITIALIZE_PROJECT</a></div><div class="ttdeci">#define SLEDGEHAMR_INITIALIZE_PROJECT(prj)</div><div class="ttdoc">Add boilerplate functions to project class.</div><div class="ttdef"><b>Definition:</b> macros.h:625</div></div>
+<div class="ttc" id="amacros_8h_html_af2c220d1071424c9dd9d4a2f39e21887"><div class="ttname"><a href="macros_8h.html#af2c220d1071424c9dd9d4a2f39e21887">SLEDGEHAMR_ADD_CONJUGATE_MOMENTA</a></div><div class="ttdeci">#define SLEDGEHAMR_ADD_CONJUGATE_MOMENTA(...)</div><div class="ttdef"><b>Definition:</b> macros.h:129</div></div>
+<div class="ttc" id="amacros_8h_html_afbab7996f134b890fb86449e21e89b9f"><div class="ttname"><a href="macros_8h.html#afbab7996f134b890fb86449e21e89b9f">SLEDGEHAMR_FINISH_SETUP</a></div><div class="ttdeci">#define SLEDGEHAMR_FINISH_SETUP</div><div class="ttdoc">Add functions to project namespace that depend on custom template specialisations.</div><div class="ttdef"><b>Definition:</b> macros.h:203</div></div>
+<div class="ttc" id="anamespaceMinimalExample_html"><div class="ttname"><a href="namespaceMinimalExample.html">MinimalExample</a></div><div class="ttdef"><b>Definition:</b> MinimalExample.h:5</div></div>
+<div class="ttc" id="anamespaceMinimalExample_html_ad8133a91ec61be60ee6fc33fc8ae7a01"><div class="ttname"><a href="namespaceMinimalExample.html#ad8133a91ec61be60ee6fc33fc8ae7a01">MinimalExample::Rhs</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_FORCE_INLINE void Rhs(const amrex::Array4&lt; double &gt; &amp;rhs, const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const double *params)</div><div class="ttdef"><b>Definition:</b> MinimalExample.h:11</div></div>
+<div class="ttc" id="asledgehamr_8h_html"><div class="ttname"><a href="sledgehamr_8h.html">sledgehamr.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

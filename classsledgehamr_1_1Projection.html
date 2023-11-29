@@ -69,6 +69,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classsledgehamr_1_1Projection-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">sledgehamr::Projection Class Reference</div>  </div>
@@ -82,30 +83,223 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a99fad3673ddd8fa24f430d91e10e7c57"><td class="memItemLeft" align="right" valign="top"><a id="a99fad3673ddd8fa24f430d91e10e7c57"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Projection</b> (projection_fct function, std::string identification, int projection_mode=0)</td></tr>
+<tr class="memitem:a99fad3673ddd8fa24f430d91e10e7c57"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a99fad3673ddd8fa24f430d91e10e7c57">Projection</a> (<a class="el" href="namespacesledgehamr.html#acaecccbfaf8bf453c27a3368a9843262">projection_fct</a> function, std::string identification, int projection_mode=0)</td></tr>
 <tr class="separator:a99fad3673ddd8fa24f430d91e10e7c57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dd6771d9d4b629604e890d85801c17f"><td class="memItemLeft" align="right" valign="top"><a id="a2dd6771d9d4b629604e890d85801c17f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Compute</b> (const int id, const hid_t file_id, <a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *sim)</td></tr>
+<tr class="memitem:a2dd6771d9d4b629604e890d85801c17f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a2dd6771d9d4b629604e890d85801c17f">Compute</a> (const int id, const hid_t file_id, <a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *sim)</td></tr>
 <tr class="separator:a2dd6771d9d4b629604e890d85801c17f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a2e5e2793bcc76892657485bc3182411e"><td class="memItemLeft" align="right" valign="top"><a id="a2e5e2793bcc76892657485bc3182411e"></a>
-projection_fct&#160;</td><td class="memItemRight" valign="bottom"><b>fct</b></td></tr>
+<tr class="memitem:a2e5e2793bcc76892657485bc3182411e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesledgehamr.html#acaecccbfaf8bf453c27a3368a9843262">projection_fct</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a2e5e2793bcc76892657485bc3182411e">fct</a></td></tr>
 <tr class="separator:a2e5e2793bcc76892657485bc3182411e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae08776e4496008bc266c632608320e4e"><td class="memItemLeft" align="right" valign="top"><a id="ae08776e4496008bc266c632608320e4e"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ident</b> = &quot;None&quot;</td></tr>
+<tr class="memitem:ae08776e4496008bc266c632608320e4e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#ae08776e4496008bc266c632608320e4e">ident</a> = &quot;None&quot;</td></tr>
 <tr class="separator:ae08776e4496008bc266c632608320e4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97e168351a5a4031d955ef81184f7a7c"><td class="memItemLeft" align="right" valign="top"><a id="a97e168351a5a4031d955ef81184f7a7c"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>mode</b> = 0</td></tr>
+<tr class="memitem:a97e168351a5a4031d955ef81184f7a7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a97e168351a5a4031d955ef81184f7a7c">mode</a> = 0</td></tr>
 <tr class="separator:a97e168351a5a4031d955ef81184f7a7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a334deab368101324f1834afe9fcf20a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a334deab368101324f1834afe9fcf20a7">Add</a> (const int i, const int j, const int k, double *projection, int *n_projection, const int ratio, const int dimN, const double val)</td></tr>
+<tr class="separator:a334deab368101324f1834afe9fcf20a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>TODO. </p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a99fad3673ddd8fa24f430d91e10e7c57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99fad3673ddd8fa24f430d91e10e7c57">&#9670;&nbsp;</a></span>Projection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">sledgehamr::Projection::Projection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacesledgehamr.html#acaecccbfaf8bf453c27a3368a9843262">projection_fct</a>&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>identification</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>projection_mode</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a334deab368101324f1834afe9fcf20a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a334deab368101324f1834afe9fcf20a7">&#9670;&nbsp;</a></span>Add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_FORCE_INLINE void sledgehamr::Projection::Add </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>projection</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>n_projection</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>ratio</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>dimN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2dd6771d9d4b629604e890d85801c17f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dd6771d9d4b629604e890d85801c17f">&#9670;&nbsp;</a></span>Compute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::Projection::Compute </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const hid_t&#160;</td>
+          <td class="paramname"><em>file_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td>
+          <td class="paramname"><em>sim</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2e5e2793bcc76892657485bc3182411e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e5e2793bcc76892657485bc3182411e">&#9670;&nbsp;</a></span>fct</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacesledgehamr.html#acaecccbfaf8bf453c27a3368a9843262">projection_fct</a> sledgehamr::Projection::fct</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae08776e4496008bc266c632608320e4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae08776e4496008bc266c632608320e4e">&#9670;&nbsp;</a></span>ident</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string sledgehamr::Projection::ident = &quot;None&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a97e168351a5a4031d955ef81184f7a7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97e168351a5a4031d955ef81184f7a7c">&#9670;&nbsp;</a></span>mode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sledgehamr::Projection::mode = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>source/output_types/<a class="el" href="projection_8h_source.html">projection.h</a></li>
-<li>source/output_types/projection.cpp</li>
+<li>source/output_types/<a class="el" href="projection_8cpp.html">projection.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

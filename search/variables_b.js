@@ -1,7 +1,21 @@
 var searchData=
 [
-  ['t_264',['t',['../classsledgehamr_1_1LevelData.html#a9bc416cbd6054f0adb499ffd64144860',1,'sledgehamr::LevelData']]],
-  ['t_5fstart_265',['t_start',['../classsledgehamr_1_1Sledgehamr.html#ab39530956a51008b7eeb2d61f4eb14f5',1,'sledgehamr::Sledgehamr']]],
-  ['te_5fcrit_266',['te_crit',['../classsledgehamr_1_1Sledgehamr.html#a1d32f49c7150d593c48e2952f27f6da9',1,'sledgehamr::Sledgehamr']]],
-  ['time_5fstepper_267',['time_stepper',['../classsledgehamr_1_1Sledgehamr.html#aa2e845b6090d41759cc34caa18fe1739',1,'sledgehamr::Sledgehamr']]]
+  ['l_1263',['L',['../classFirstOrderPhaseTransition_1_1Bubble.html#a9939fcb8a7ff989e1c77980dcfbe510a',1,'FirstOrderPhaseTransition::Bubble::L()'],['../classsledgehamr_1_1Sledgehamr.html#a3b6cac62b23df3148a59a516f4aab93b',1,'sledgehamr::Sledgehamr::L()']]],
+  ['lambda_1264',['lambda',['../classAxionStrings_1_1Cosmology.html#a581ac71a98affe4e4553cd46e0753db5',1,'AxionStrings::Cosmology']]],
+  ['lambda_5fbar_1265',['lambda_bar',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#adef10df82e65dc3f2c1834e1bd961424',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
+  ['last_5fduration_5fmicro_1266',['last_duration_micro',['../classsledgehamr_1_1Timer.html#a01433c84e8dcacd450f74f6a98426194',1,'sledgehamr::Timer']]],
+  ['last_5fnumpts_1267',['last_numPts',['../classsledgehamr_1_1LocalRegrid.html#aa13a330b0df260418a96b950fb3446bc',1,'sledgehamr::LocalRegrid']]],
+  ['last_5fregrid_5ftime_1268',['last_regrid_time',['../classsledgehamr_1_1TimeStepper.html#a8ff583a364f36410e458ae0e44318b16',1,'sledgehamr::TimeStepper']]],
+  ['last_5fwritten_1269',['last_written',['../classsledgehamr_1_1OutputModule.html#a975ff906622ba14591fd780286d750ea',1,'sledgehamr::OutputModule']]],
+  ['latest_5fpossible_5fregrid_5ftime_1270',['latest_possible_regrid_time',['../classsledgehamr_1_1LocalRegrid.html#a7c65ca82aff444f6e0ec107f092d970e',1,'sledgehamr::LocalRegrid']]],
+  ['layouts_1271',['layouts',['../classsledgehamr_1_1LocalRegrid.html#a48b38ea21c94615db481b11a56fadd9f',1,'sledgehamr::LocalRegrid']]],
+  ['lev_1272',['lev',['../classsledgehamr_1_1FillLevel.html#a3c7a9a5fe91625f19d2beac1c60ebfc8',1,'sledgehamr::FillLevel']]],
+  ['level_1273',['level',['../classFirstOrderPhaseTransition_1_1Bubble.html#a2daee11bdb67e5d85589c2e1ad0e2c39',1,'FirstOrderPhaseTransition::Bubble']]],
+  ['level_5fmax_1274',['level_max',['../classsledgehamr_1_1LevelWriter.html#aea8abc0525094d48120196e31c583d34',1,'sledgehamr::LevelWriter']]],
+  ['level_5fmin_1275',['level_min',['../classsledgehamr_1_1LevelWriter.html#ab2f77fa3526171f557bbb5426c7627cb',1,'sledgehamr::LevelWriter']]],
+  ['level_5fsynchronizer_1276',['level_synchronizer',['../classsledgehamr_1_1Sledgehamr.html#a08088a5d33fc94d5aff24ae0facae9d3',1,'sledgehamr::Sledgehamr']]],
+  ['local_5fregrid_1277',['local_regrid',['../classsledgehamr_1_1TimeStepper.html#a72c737467fbb1dd826d088256708d652',1,'sledgehamr::TimeStepper']]],
+  ['log_5f0_1278',['log_0',['../classAxionStringsPostevolution_1_1AxionStringsPostevolution.html#a64580181489f3af0e30cbb1843ec114a',1,'AxionStringsPostevolution::AxionStringsPostevolution::log_0()'],['../classAxionStringsPreevolution_1_1AxionStringsPreevolution.html#a95b0c47def8c31228d5b813ccd1069c0',1,'AxionStringsPreevolution::AxionStringsPreevolution::log_0()']]],
+  ['lowest_5flevel_1279',['lowest_level',['../classsledgehamr_1_1ScheduledRegrid.html#a1553e76dca9982e2a4be902d2487d85a',1,'sledgehamr::ScheduledRegrid']]],
+  ['lr_1280',['lr',['../classsledgehamr_1_1UniqueLayout.html#a5fbf44e12c0f7f2f76345b1cb16bef29',1,'sledgehamr::UniqueLayout']]]
 ];

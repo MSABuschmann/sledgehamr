@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['scalarfield_231',['ScalarField',['../classsledgehamr_1_1ScalarField.html#ac631e8066ee85ed7487157e61786f012',1,'sledgehamr::ScalarField']]],
-  ['size_232',['Size',['../classsledgehamr_1_1UniqueLayout.html#ae185ad5a4485ca9e0756ec445c184fc1',1,'sledgehamr::UniqueLayout']]],
-  ['sizeall_233',['SizeAll',['../classsledgehamr_1_1UniqueLayout.html#a91de57bccc10b7c094d8d2b982e4f6d6',1,'sledgehamr::UniqueLayout']]],
-  ['sledgehamr_234',['Sledgehamr',['../classsledgehamr_1_1Sledgehamr.html#aa79a7ecd89061020a65f5259a286bc3a',1,'sledgehamr::Sledgehamr']]]
+  ['main_1047',['main',['../main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main.cpp']]],
+  ['makenewlevelfromcoarse_1048',['MakeNewLevelFromCoarse',['../classsledgehamr_1_1Sledgehamr.html#ae6cc40f77442f989b46196439ca1310e',1,'sledgehamr::Sledgehamr']]],
+  ['makenewlevelfromscratch_1049',['MakeNewLevelFromScratch',['../classsledgehamr_1_1Sledgehamr.html#a29f2cfdb24f159a165d177012ca7f219',1,'sledgehamr::Sledgehamr']]],
+  ['merge_1050',['Merge',['../classsledgehamr_1_1UniqueLayout.html#aafcd41dd368ef4eeff4c371d373e1edf',1,'sledgehamr::UniqueLayout']]],
+  ['mergeplane_1051',['MergePlane',['../classsledgehamr_1_1UniqueLayout.html#a893f9964781c9e890fb22c154a213896',1,'sledgehamr::UniqueLayout']]],
+  ['mr_1052',['Mr',['../classAxionStrings_1_1Cosmology.html#a856ccb363ed9c38dca6b97d8903041b8',1,'AxionStrings::Cosmology']]]
 ];

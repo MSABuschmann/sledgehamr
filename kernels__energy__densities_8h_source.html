@@ -70,15 +70,15 @@ $(function() {
 <div class="title">kernels_energy_densities.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PROJECTS_AXION_STRINGS_KERNELS_ENERGY_DENSITIES_H_</span></div>
+<a href="kernels__energy__densities_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PROJECTS_AXION_STRINGS_KERNELS_ENERGY_DENSITIES_H_</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PROJECTS_AXION_STRINGS_KERNELS_ENERGY_DENSITIES_H_</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;setup.h&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="FirstOrderPhaseTransition_2setup_8h.html">setup.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>AxionStrings {</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceAxionStrings.html">AxionStrings</a> {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keywordtype">double</span> a_prime2(amrex::Array4&lt;amrex::Real const&gt; <span class="keyword">const</span>&amp; state, <span class="keyword">const</span> <span class="keywordtype">int</span> i,</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#a21448d59d97293a04f223acd829552cf">   11</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespaceAxionStrings.html#a21448d59d97293a04f223acd829552cf">a_prime2</a>(amrex::Array4&lt;amrex::Real const&gt; <span class="keyword">const</span>&amp; state, <span class="keyword">const</span> <span class="keywordtype">int</span> i,</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev, <span class="keyword">const</span> <span class="keywordtype">double</span> time,</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">double</span> dt, <span class="keyword">const</span> <span class="keywordtype">double</span> dx,</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">const</span> std::vector&lt;double&gt;&amp; params) {</div>
@@ -92,7 +92,7 @@ $(function() {
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;}</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">double</span> a_prime_screened(amrex::Array4&lt;amrex::Real const&gt; <span class="keyword">const</span>&amp; state,</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#a09809ac85cef5958bcdf718e22c74602">   25</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespaceAxionStrings.html#a09809ac85cef5958bcdf718e22c74602">a_prime_screened</a>(amrex::Array4&lt;amrex::Real const&gt; <span class="keyword">const</span>&amp; state,</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev, <span class="keyword">const</span> <span class="keywordtype">double</span> time,</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">double</span> dt, <span class="keyword">const</span> <span class="keywordtype">double</span> dx,</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">const</span> std::vector&lt;double&gt;&amp; params) {</div>
@@ -105,7 +105,7 @@ $(function() {
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">double</span> r_prime2(amrex::Array4&lt;amrex::Real const&gt; <span class="keyword">const</span>&amp; state, <span class="keyword">const</span> <span class="keywordtype">int</span> i,</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#a714550de8307345d236c959e1ceb8ae0">   38</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespaceAxionStrings.html#a714550de8307345d236c959e1ceb8ae0">r_prime2</a>(amrex::Array4&lt;amrex::Real const&gt; <span class="keyword">const</span>&amp; state, <span class="keyword">const</span> <span class="keywordtype">int</span> i,</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev, <span class="keyword">const</span> <span class="keywordtype">double</span> time,</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">double</span> dt, <span class="keyword">const</span> <span class="keywordtype">double</span> dx,</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">const</span> std::vector&lt;double&gt;&amp; params) {</div>
@@ -121,6 +121,11 @@ $(function() {
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}; <span class="comment">// namespace AxionStrings</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PROJECTS_AXION_STRINGS_KERNELS_ENERGY_DENSITIES_H_</span></div>
+<div class="ttc" id="aFirstOrderPhaseTransition_2setup_8h_html"><div class="ttname"><a href="FirstOrderPhaseTransition_2setup_8h.html">setup.h</a></div></div>
+<div class="ttc" id="anamespaceAxionStrings_html"><div class="ttname"><a href="namespaceAxionStrings.html">AxionStrings</a></div><div class="ttdef"><b>Definition:</b> AxionStrings.h:9</div></div>
+<div class="ttc" id="anamespaceAxionStrings_html_a09809ac85cef5958bcdf718e22c74602"><div class="ttname"><a href="namespaceAxionStrings.html#a09809ac85cef5958bcdf718e22c74602">AxionStrings::a_prime_screened</a></div><div class="ttdeci">AMREX_FORCE_INLINE double a_prime_screened(amrex::Array4&lt; amrex::Real const &gt; const &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const std::vector&lt; double &gt; &amp;params)</div><div class="ttdef"><b>Definition:</b> kernels_energy_densities.h:25</div></div>
+<div class="ttc" id="anamespaceAxionStrings_html_a21448d59d97293a04f223acd829552cf"><div class="ttname"><a href="namespaceAxionStrings.html#a21448d59d97293a04f223acd829552cf">AxionStrings::a_prime2</a></div><div class="ttdeci">AMREX_FORCE_INLINE double a_prime2(amrex::Array4&lt; amrex::Real const &gt; const &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const std::vector&lt; double &gt; &amp;params)</div><div class="ttdoc">TODO.</div><div class="ttdef"><b>Definition:</b> kernels_energy_densities.h:11</div></div>
+<div class="ttc" id="anamespaceAxionStrings_html_a714550de8307345d236c959e1ceb8ae0"><div class="ttname"><a href="namespaceAxionStrings.html#a714550de8307345d236c959e1ceb8ae0">AxionStrings::r_prime2</a></div><div class="ttdeci">AMREX_FORCE_INLINE double r_prime2(amrex::Array4&lt; amrex::Real const &gt; const &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const std::vector&lt; double &gt; &amp;params)</div><div class="ttdef"><b>Definition:</b> kernels_energy_densities.h:38</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

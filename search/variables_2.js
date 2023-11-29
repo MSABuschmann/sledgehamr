@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['dimn_245',['dimN',['../classsledgehamr_1_1Sledgehamr.html#a7cd2ed06ec7cffa965017fc3858948e3',1,'sledgehamr::Sledgehamr']]],
-  ['do_5fglobal_5fregrid_246',['do_global_regrid',['../classsledgehamr_1_1LocalRegrid.html#a4e903f8bbe42b29f94666c569e734bee',1,'sledgehamr::LocalRegrid']]],
-  ['dt_247',['dt',['../classsledgehamr_1_1Sledgehamr.html#a9239f0c77e572cc155e33f602c19b8dc',1,'sledgehamr::Sledgehamr']]]
+  ['bcs_1181',['bcs',['../classsledgehamr_1_1LevelSynchronizer.html#ae842540f1dba4f74c6ab6444fc7838d7',1,'sledgehamr::LevelSynchronizer']]],
+  ['bubbles_1182',['bubbles',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#aa73491fa2e7a5ace537ecfa7fba5abe8',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
+  ['bubbles_5fto_5finject_1183',['bubbles_to_inject',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#aacf9d262721db2760c514ece5d620bbd',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]]
 ];

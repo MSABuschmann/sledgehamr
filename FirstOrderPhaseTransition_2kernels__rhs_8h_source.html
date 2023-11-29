@@ -70,16 +70,16 @@ $(function() {
 <div class="title">kernels_rhs.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PROJECTS_FIRST_ORDER_PHASE_TRANSITION_KERNELS_RHS_H_</span></div>
+<a href="FirstOrderPhaseTransition_2kernels__rhs_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PROJECTS_FIRST_ORDER_PHASE_TRANSITION_KERNELS_RHS_H_</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PROJECTS_FIRST_ORDER_PHASE_TRANSITION_KERNELS_RHS_H_</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;sledgehamr_utils.h&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;setup.h&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="sledgehamr__utils_8h.html">sledgehamr_utils.h</a>&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="FirstOrderPhaseTransition_2setup_8h.html">setup.h</a>&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>FirstOrderPhaseTransition {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceFirstOrderPhaseTransition.html">FirstOrderPhaseTransition</a> {</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;AMREX_GPU_DEVICE AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">void</span> Rhs(<span class="keyword">const</span> amrex::Array4&lt;double&gt;&amp; rhs,</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="namespaceFirstOrderPhaseTransition.html#aff424a0ed61fe5928b274995bcfc9134">   21</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceFirstOrderPhaseTransition.html#aff424a0ed61fe5928b274995bcfc9134">Rhs</a>(<span class="keyword">const</span> amrex::Array4&lt;double&gt;&amp; rhs,</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;         <span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;         <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev,</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;         <span class="keyword">const</span> <span class="keywordtype">double</span> time, <span class="keyword">const</span> <span class="keywordtype">double</span> dt, <span class="keyword">const</span> <span class="keywordtype">double</span> dx,</div>
@@ -99,7 +99,7 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">template</span>&lt;&gt; AMREX_GPU_DEVICE AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">void</span> GravitationalWavesRhs&lt;true&gt;(<span class="keyword">const</span> amrex::Array4&lt;double&gt;&amp; rhs,</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="namespaceFirstOrderPhaseTransition.html#a9c780f1bdd6cdb0610f43d449425ac96">   41</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceFirstOrderPhaseTransition.html#a9c780f1bdd6cdb0610f43d449425ac96">GravitationalWavesRhs&lt;true&gt;</a>(<span class="keyword">const</span> amrex::Array4&lt;double&gt;&amp; rhs,</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state, <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j,</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev, <span class="keyword">const</span> <span class="keywordtype">double</span> time, <span class="keyword">const</span> <span class="keywordtype">double</span> dt,</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">double</span> dx, <span class="keyword">const</span> <span class="keywordtype">double</span>* params) {</div>
@@ -146,6 +146,11 @@ $(function() {
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}; <span class="comment">// namespace FirstOrderPhaseTransition</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PROJECTS_FIRST_ORDER_PHASE_TRANSITION_KERNELS_RHS_H_</span></div>
+<div class="ttc" id="aFirstOrderPhaseTransition_2setup_8h_html"><div class="ttname"><a href="FirstOrderPhaseTransition_2setup_8h.html">setup.h</a></div></div>
+<div class="ttc" id="anamespaceFirstOrderPhaseTransition_html"><div class="ttname"><a href="namespaceFirstOrderPhaseTransition.html">FirstOrderPhaseTransition</a></div><div class="ttdef"><b>Definition:</b> bubbles.h:4</div></div>
+<div class="ttc" id="anamespaceFirstOrderPhaseTransition_html_a9c780f1bdd6cdb0610f43d449425ac96"><div class="ttname"><a href="namespaceFirstOrderPhaseTransition.html#a9c780f1bdd6cdb0610f43d449425ac96">FirstOrderPhaseTransition::GravitationalWavesRhs&lt; true &gt;</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_FORCE_INLINE void GravitationalWavesRhs&lt; true &gt;(const amrex::Array4&lt; double &gt; &amp;rhs, const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const double *params)</div><div class="ttdef"><b>Definition:</b> kernels_rhs.h:41</div></div>
+<div class="ttc" id="anamespaceFirstOrderPhaseTransition_html_aff424a0ed61fe5928b274995bcfc9134"><div class="ttname"><a href="namespaceFirstOrderPhaseTransition.html#aff424a0ed61fe5928b274995bcfc9134">FirstOrderPhaseTransition::Rhs</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_FORCE_INLINE void Rhs(const amrex::Array4&lt; double &gt; &amp;rhs, const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const double *params)</div><div class="ttdoc">Function that calculates the RHS of the EOM at a single cell.</div><div class="ttdef"><b>Definition:</b> kernels_rhs.h:21</div></div>
+<div class="ttc" id="asledgehamr__utils_8h_html"><div class="ttname"><a href="sledgehamr__utils_8h.html">sledgehamr_utils.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

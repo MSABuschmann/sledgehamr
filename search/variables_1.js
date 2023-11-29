@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['cfl_241',['cfl',['../classsledgehamr_1_1Sledgehamr.html#ae63f7440e3ecaac50023872f8aa23d80',1,'sledgehamr::Sledgehamr']]],
-  ['coarse_5flevel_5fgrid_5fsize_242',['coarse_level_grid_size',['../classsledgehamr_1_1Sledgehamr.html#a67d75bdf0fb15f5cfba92a081e694e2b',1,'sledgehamr::Sledgehamr']]],
-  ['comm_5fmatrix_243',['comm_matrix',['../classsledgehamr_1_1LocalRegrid.html#a8d0f98de185f108dae15af7e2997d886',1,'sledgehamr::LocalRegrid']]],
-  ['contains_5ftruncation_5ferrors_244',['contains_truncation_errors',['../classsledgehamr_1_1LevelData.html#af4bc919d70ab9353c53c8e70e795777d',1,'sledgehamr::LevelData']]]
+  ['active_1177',['active',['../classsledgehamr_1_1PerformanceMonitor.html#a519ca4a5e0d6d1252e7309656e42e722',1,'sledgehamr::PerformanceMonitor']]],
+  ['alt_5fprefix_1178',['alt_prefix',['../classsledgehamr_1_1OutputModule.html#a2877a7a6754663b9aabe049a3bbf4e93',1,'sledgehamr::OutputModule']]],
+  ['alternate_1179',['alternate',['../classsledgehamr_1_1OutputModule.html#afc2254344c98867224f9dfd509f697f2',1,'sledgehamr::OutputModule']]],
+  ['alternative_5foutput_5ffolder_1180',['alternative_output_folder',['../classsledgehamr_1_1IOModule.html#af7545db0fa7ab4c5f6ffaaefcab579d2',1,'sledgehamr::IOModule']]]
 ];
