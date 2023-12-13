@@ -76,7 +76,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Determines with project has been requested. Also feeds extra derived information to amrex::AmrCore.  
+<p>Determines with project has been requested and creates correct sledgehamr instance. Also feeds extra derived information to amrex::AmrCore to make sure it plays nicely.  
  <a href="classsledgehamr_1_1SledgehamrInit.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sledgehamr__init_8h_source.html">sledgehamr_init.h</a>&gt;</code></p>
@@ -84,18 +84,19 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1754a1e9101ac7b63938e633b1866919"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1SledgehamrInit.html#a1754a1e9101ac7b63938e633b1866919">SledgehamrInit</a> ()</td></tr>
+<tr class="memdesc:a1754a1e9101ac7b63938e633b1866919"><td class="mdescLeft">&#160;</td><td class="mdescRight">General initialization needed before sledgehamr itself can be initialized.  <a href="classsledgehamr_1_1SledgehamrInit.html#a1754a1e9101ac7b63938e633b1866919">More...</a><br /></td></tr>
 <tr class="separator:a1754a1e9101ac7b63938e633b1866919"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a177c4d6ec54f960acea4bfde0c8ccd7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1SledgehamrInit.html#a177c4d6ec54f960acea4bfde0c8ccd7c">CreateInstance</a> ()</td></tr>
-<tr class="memdesc:a177c4d6ec54f960acea4bfde0c8ccd7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates instance of requested derived project class.  <a href="classsledgehamr_1_1SledgehamrInit.html#a177c4d6ec54f960acea4bfde0c8ccd7c">More...</a><br /></td></tr>
+<tr class="memdesc:a177c4d6ec54f960acea4bfde0c8ccd7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will return a pointer to a <a class="el" href="classsledgehamr_1_1Sledgehamr.html" title="Abstract base class for all derived projects. Combines all the ingredients to make this code work.">Sledgehamr</a> instance depending on which project has been selected. This class will remain owner of instance but given the singleton nature of everything we just ignore this. We do an implicit cast here from derived to base. return <a class="el" href="classsledgehamr_1_1Sledgehamr.html" title="Abstract base class for all derived projects. Combines all the ingredients to make this code work.">Sledgehamr</a> instance. NULL if no corresponding project has been found.  <a href="classsledgehamr_1_1SledgehamrInit.html#a177c4d6ec54f960acea4bfde0c8ccd7c">More...</a><br /></td></tr>
 <tr class="separator:a177c4d6ec54f960acea4bfde0c8ccd7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a9cd811e9d222599e80ee40bbfda9ba9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1SledgehamrInit.html#a9cd811e9d222599e80ee40bbfda9ba9d">DetermineProjectName</a> ()</td></tr>
-<tr class="memdesc:a9cd811e9d222599e80ee40bbfda9ba9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads project name from inputs file.  <a href="classsledgehamr_1_1SledgehamrInit.html#a9cd811e9d222599e80ee40bbfda9ba9d">More...</a><br /></td></tr>
+<tr class="memdesc:a9cd811e9d222599e80ee40bbfda9ba9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets project name using the inputs file.  <a href="classsledgehamr_1_1SledgehamrInit.html#a9cd811e9d222599e80ee40bbfda9ba9d">More...</a><br /></td></tr>
 <tr class="separator:a9cd811e9d222599e80ee40bbfda9ba9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8371e2e1e2e8b9239da84b8c0080d290"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1SledgehamrInit.html#a8371e2e1e2e8b9239da84b8c0080d290">FinishAMReXSetup</a> ()</td></tr>
-<tr class="memdesc:a8371e2e1e2e8b9239da84b8c0080d290"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set parameters such as 'amr.n_cell' for amrex::AmrCore.  <a href="classsledgehamr_1_1SledgehamrInit.html#a8371e2e1e2e8b9239da84b8c0080d290">More...</a><br /></td></tr>
+<tr class="memdesc:a8371e2e1e2e8b9239da84b8c0080d290"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides and/or sets parameters to force correct behaviour of amrex::AmrCore.  <a href="classsledgehamr_1_1SledgehamrInit.html#a8371e2e1e2e8b9239da84b8c0080d290">More...</a><br /></td></tr>
 <tr class="separator:a8371e2e1e2e8b9239da84b8c0080d290"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -105,7 +106,7 @@ Private Attributes</h2></td></tr>
 <tr class="separator:acfe8f36baeede7d83a0081664233cdc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Determines with project has been requested. Also feeds extra derived information to amrex::AmrCore. </p>
+<div class="textblock"><p>Determines with project has been requested and creates correct sledgehamr instance. Also feeds extra derived information to amrex::AmrCore to make sure it plays nicely. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1754a1e9101ac7b63938e633b1866919"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1754a1e9101ac7b63938e633b1866919">&#9670;&nbsp;</a></span>SledgehamrInit()</h2>
@@ -121,6 +122,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>General initialization needed before sledgehamr itself can be initialized. </p>
 
 </div>
 </div>
@@ -140,8 +143,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Creates instance of requested derived project class. </p>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to derived class instance cast to base. Returns NULL if none found. </dd></dl>
+<p>Will return a pointer to a <a class="el" href="classsledgehamr_1_1Sledgehamr.html" title="Abstract base class for all derived projects. Combines all the ingredients to make this code work.">Sledgehamr</a> instance depending on which project has been selected. This class will remain owner of instance but given the singleton nature of everything we just ignore this. We do an implicit cast here from derived to base. return <a class="el" href="classsledgehamr_1_1Sledgehamr.html" title="Abstract base class for all derived projects. Combines all the ingredients to make this code work.">Sledgehamr</a> instance. NULL if no corresponding project has been found. </p>
 
 </div>
 </div>
@@ -168,7 +170,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reads project name from inputs file. </p>
+<p>Sets project name using the inputs file. </p>
 
 </div>
 </div>
@@ -195,7 +197,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Set parameters such as 'amr.n_cell' for amrex::AmrCore. </p>
+<p>Overrides and/or sets parameters to force correct behaviour of amrex::AmrCore. </p>
 
 </div>
 </div>
