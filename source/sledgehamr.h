@@ -38,7 +38,6 @@ class PerformanceMonitor;
  *         ingredients to make this code work.
  */
 class Sledgehamr : public amrex::AmrCore {
-    // Give submodules access to data.
     friend class LevelSynchronizer;
     friend class LocalRegrid;
     friend class TimeStepper;
