@@ -86,6 +86,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a48a0392601adc7046203719af5feb824"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a48a0392601adc7046203719af5feb824">LocalRegrid</a> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *owner)</td></tr>
+<tr class="memdesc:a48a0392601adc7046203719af5feb824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initalize all needed structures.  <a href="classsledgehamr_1_1LocalRegrid.html#a48a0392601adc7046203719af5feb824">More...</a><br /></td></tr>
 <tr class="separator:a48a0392601adc7046203719af5feb824"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4458da4a915248888078544b767c6b24"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a4458da4a915248888078544b767c6b24">AttemptRegrid</a> (const int lev)</td></tr>
 <tr class="memdesc:a4458da4a915248888078544b767c6b24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a local regrid on level lev after checking various criteria.  <a href="classsledgehamr_1_1LocalRegrid.html#a4458da4a915248888078544b767c6b24">More...</a><br /></td></tr>
@@ -94,24 +95,29 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ad8209f8ed254d084ef0c85d17334a84b"><td class="mdescLeft">&#160;</td><td class="mdescRight">To be called if a global regrid on level lev has been performed. Needed in case this <a class="el" href="classsledgehamr_1_1LocalRegrid.html" title="Class to perform a local regrid (if possible).">LocalRegrid</a> module invoked the global regrid such that we can reset the relevant flags.  <a href="classsledgehamr_1_1LocalRegrid.html#ad8209f8ed254d084ef0c85d17334a84b">More...</a><br /></td></tr>
 <tr class="separator:ad8209f8ed254d084ef0c85d17334a84b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca8f2a065d1f69ad66d46eef5f01d910"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#aca8f2a065d1f69ad66d46eef5f01d910">InitializeLayout</a> (const int max_lev)</td></tr>
+<tr class="memdesc:aca8f2a065d1f69ad66d46eef5f01d910"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates all layout structures needed for the local regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#aca8f2a065d1f69ad66d46eef5f01d910">More...</a><br /></td></tr>
 <tr class="separator:aca8f2a065d1f69ad66d46eef5f01d910"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1d361cc8d3d5cdf88a3b2af70b98235"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#ad1d361cc8d3d5cdf88a3b2af70b98235">ClearLayout</a> ()</td></tr>
+<tr class="memdesc:ad1d361cc8d3d5cdf88a3b2af70b98235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up all layout structures after the local regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#ad1d361cc8d3d5cdf88a3b2af70b98235">More...</a><br /></td></tr>
 <tr class="separator:ad1d361cc8d3d5cdf88a3b2af70b98235"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3c39f4e8b15c13b471f68e36a9dc33f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#aa3c39f4e8b15c13b471f68e36a9dc33f">FixNesting</a> (const int lev)</td></tr>
-<tr class="memdesc:aa3c39f4e8b15c13b471f68e36a9dc33f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures that the new BoxArray at level lev is properly nested with the lower levels by expanding the lower levels if needed.  <a href="classsledgehamr_1_1LocalRegrid.html#aa3c39f4e8b15c13b471f68e36a9dc33f">More...</a><br /></td></tr>
-<tr class="separator:aa3c39f4e8b15c13b471f68e36a9dc33f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8054c3efb82b28b33e3357bda47f3ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#ab8054c3efb82b28b33e3357bda47f3ee">JoinBoxArrays</a> (const int lev, amrex::BoxArray &amp;ba)</td></tr>
-<tr class="separator:ab8054c3efb82b28b33e3357bda47f3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7abc012848cab999afceb48d34ba637f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a7abc012848cab999afceb48d34ba637f">AddBoxes</a> (const int lev, amrex::BoxArray &amp;ba)</td></tr>
-<tr class="memdesc:a7abc012848cab999afceb48d34ba637f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an amrex::BoxArray to the existing BoxArray at level lev. Data will be allocated and filled.  <a href="classsledgehamr_1_1LocalRegrid.html#a7abc012848cab999afceb48d34ba637f">More...</a><br /></td></tr>
-<tr class="separator:a7abc012848cab999afceb48d34ba637f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ab0a5321f0b195e2b151783bcde5fa7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a7ab0a5321f0b195e2b151783bcde5fa7">AddToLayout</a> (const int lev, const int thread, const int i, const int j, const int k)</td></tr>
-<tr class="separator:a7ab0a5321f0b195e2b151783bcde5fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54eaba36170ad1032ffa996aa1823ef0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a54eaba36170ad1032ffa996aa1823ef0">FinalizeLayout</a> (const int lev)</td></tr>
+<tr class="memdesc:a54eaba36170ad1032ffa996aa1823ef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronizes all layout structures across OpenMP threads and MPI ranks for a particular level.  <a href="classsledgehamr_1_1LocalRegrid.html#a54eaba36170ad1032ffa996aa1823ef0">More...</a><br /></td></tr>
 <tr class="separator:a54eaba36170ad1032ffa996aa1823ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf96edb1e54961ac32416d58020bd1d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#acf96edb1e54961ac32416d58020bd1d2">WrapIndices</a> (const int lev)</td></tr>
-<tr class="memdesc:acf96edb1e54961ac32416d58020bd1d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pre-computes wrapped index loop-up table for periodic boundary conditions.  <a href="classsledgehamr_1_1LocalRegrid.html#acf96edb1e54961ac32416d58020bd1d2">More...</a><br /></td></tr>
+<tr class="memdesc:acf96edb1e54961ac32416d58020bd1d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps box indicies across the periodic boundary conditions.  <a href="classsledgehamr_1_1LocalRegrid.html#acf96edb1e54961ac32416d58020bd1d2">More...</a><br /></td></tr>
 <tr class="separator:acf96edb1e54961ac32416d58020bd1d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8054c3efb82b28b33e3357bda47f3ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#ab8054c3efb82b28b33e3357bda47f3ee">JoinBoxArrays</a> (const int lev, amrex::BoxArray &amp;ba)</td></tr>
+<tr class="memdesc:ab8054c3efb82b28b33e3357bda47f3ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Joins BoxArray's from multiple nodes. Simplifies box lists only locally for efficiency.  <a href="classsledgehamr_1_1LocalRegrid.html#ab8054c3efb82b28b33e3357bda47f3ee">More...</a><br /></td></tr>
+<tr class="separator:ab8054c3efb82b28b33e3357bda47f3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7abc012848cab999afceb48d34ba637f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a7abc012848cab999afceb48d34ba637f">AddBoxes</a> (const int lev, amrex::BoxArray &amp;ba)</td></tr>
+<tr class="memdesc:a7abc012848cab999afceb48d34ba637f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly add boxes to a given level and fill it with data.  <a href="classsledgehamr_1_1LocalRegrid.html#a7abc012848cab999afceb48d34ba637f">More...</a><br /></td></tr>
+<tr class="separator:a7abc012848cab999afceb48d34ba637f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3c39f4e8b15c13b471f68e36a9dc33f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#aa3c39f4e8b15c13b471f68e36a9dc33f">FixNesting</a> (const int lev)</td></tr>
+<tr class="memdesc:aa3c39f4e8b15c13b471f68e36a9dc33f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will expand lower level locally to ensure the fine level is nested properly within.  <a href="classsledgehamr_1_1LocalRegrid.html#aa3c39f4e8b15c13b471f68e36a9dc33f">More...</a><br /></td></tr>
+<tr class="separator:aa3c39f4e8b15c13b471f68e36a9dc33f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ab0a5321f0b195e2b151783bcde5fa7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a7ab0a5321f0b195e2b151783bcde5fa7">AddToLayout</a> (const int lev, const int thread, const int i, const int j, const int k)</td></tr>
+<tr class="memdesc:a7ab0a5321f0b195e2b151783bcde5fa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a particular box to the layout structure.  <a href="classsledgehamr_1_1LocalRegrid.html#a7ab0a5321f0b195e2b151783bcde5fa7">More...</a><br /></td></tr>
+<tr class="separator:a7ab0a5321f0b195e2b151783bcde5fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -119,7 +125,7 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a4e903f8bbe42b29f94666c569e734bee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag that will be checked the <a class="el" href="classsledgehamr_1_1TimeStepper.html" title="Class that takes care of the sub-cycling in time algorithm and schedules regrids when necessary.">TimeStepper</a> module to force a global regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#a4e903f8bbe42b29f94666c569e734bee">More...</a><br /></td></tr>
 <tr class="separator:a4e903f8bbe42b29f94666c569e734bee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d0f98de185f108dae15af7e2997d886"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a8d0f98de185f108dae15af7e2997d886">comm_matrix</a></td></tr>
-<tr class="memdesc:a8d0f98de185f108dae15af7e2997d886"><td class="mdescLeft">&#160;</td><td class="mdescRight">N&lt;-&gt;M MPI communication matrix. Look-up table used by the <a class="el" href="classsledgehamr_1_1UniqueLayout.html" title="This class ensures the uniqueness of a grid by reducing the problem to sets of touples....">UniqueLayout</a> class.  <a href="classsledgehamr_1_1LocalRegrid.html#a8d0f98de185f108dae15af7e2997d886">More...</a><br /></td></tr>
+<tr class="memdesc:a8d0f98de185f108dae15af7e2997d886"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPI communication matrix. Look-up table used by the <a class="el" href="classsledgehamr_1_1UniqueLayout.html" title="This class ensures the uniqueness of a grid by reducing the problem to sets of touples....">UniqueLayout</a> class.  <a href="classsledgehamr_1_1LocalRegrid.html#a8d0f98de185f108dae15af7e2997d886">More...</a><br /></td></tr>
 <tr class="separator:a8d0f98de185f108dae15af7e2997d886"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
@@ -132,52 +138,68 @@ Private Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:acbdf638db8837580b881637a3b5871d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#acbdf638db8837580b881637a3b5871d4">DoAttemptRegrid</a> (const int lev)</td></tr>
-<tr class="separator:acbdf638db8837580b881637a3b5871d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bfc34e198cf1d9091ae557b508c3b83"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a3bfc34e198cf1d9091ae557b508c3b83">Prechecks</a> (const int lev)</td></tr>
+<tr class="memdesc:a3bfc34e198cf1d9091ae557b508c3b83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks pre-conditions whether we even need to attempt a local regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#a3bfc34e198cf1d9091ae557b508c3b83">More...</a><br /></td></tr>
 <tr class="separator:a3bfc34e198cf1d9091ae557b508c3b83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd2eaafd8b0ef4d31171234e56bbbc62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#abd2eaafd8b0ef4d31171234e56bbbc62">InitializeLocalRegrid</a> ()</td></tr>
+<tr class="memdesc:abd2eaafd8b0ef4d31171234e56bbbc62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up everything needed prior to a local regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#abd2eaafd8b0ef4d31171234e56bbbc62">More...</a><br /></td></tr>
 <tr class="separator:abd2eaafd8b0ef4d31171234e56bbbc62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa728f1d2fe1519e19006258a6f3dd2af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#aa728f1d2fe1519e19006258a6f3dd2af">DetermineAllBoxArrays</a> (const int lev)</td></tr>
-<tr class="separator:aa728f1d2fe1519e19006258a6f3dd2af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34e74dd5fc82512098f9516ab1660221"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a34e74dd5fc82512098f9516ab1660221">FixAllNesting</a> ()</td></tr>
-<tr class="separator:a34e74dd5fc82512098f9516ab1660221"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c5a104f1c94bd81627803b13225c32e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a5c5a104f1c94bd81627803b13225c32e">JoinAllBoxArrays</a> (std::vector&lt; amrex::BoxArray &gt; &amp;box_arrays)</td></tr>
-<tr class="separator:a5c5a104f1c94bd81627803b13225c32e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefb58fcf06a2c658aec35d9b175440d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#aefb58fcf06a2c658aec35d9b175440d1">AddAllBoxes</a> (std::vector&lt; amrex::BoxArray &gt; &amp;box_arrays)</td></tr>
-<tr class="separator:aefb58fcf06a2c658aec35d9b175440d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a0ce70c479608f2786a4706a1e28174"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a3a0ce70c479608f2786a4706a1e28174">CheckThresholds</a> (const int lev, amrex::BoxArray &amp;box_array)</td></tr>
-<tr class="separator:a3a0ce70c479608f2786a4706a1e28174"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a4c4e0124cce6e52a2d31d422cd1867"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a5a4c4e0124cce6e52a2d31d422cd1867">ComputeLatestPossibleRegridTime</a> (const int l, const int lev)</td></tr>
-<tr class="separator:a5a4c4e0124cce6e52a2d31d422cd1867"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f0308e5b708bddbedfabc7d5462507b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a8f0308e5b708bddbedfabc7d5462507b">CheckForVeto</a> (const int lev, std::vector&lt; amrex::BoxArray &gt; &amp;box_arrays)</td></tr>
-<tr class="separator:a8f0308e5b708bddbedfabc7d5462507b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69abb9abd18afb23af2854dab85b325e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a5e77b4e9b1abddac86fca72caf4c6f7b">VetoResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a69abb9abd18afb23af2854dab85b325e">DealWithVeto</a> (const int lev)</td></tr>
-<tr class="separator:a69abb9abd18afb23af2854dab85b325e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fdb62c58cea11f1be4fd4db3d827509"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a7fdb62c58cea11f1be4fd4db3d827509">ParseInput</a> ()</td></tr>
+<tr class="memdesc:a7fdb62c58cea11f1be4fd4db3d827509"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses all input parameters related to a local regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#a7fdb62c58cea11f1be4fd4db3d827509">More...</a><br /></td></tr>
 <tr class="separator:a7fdb62c58cea11f1be4fd4db3d827509"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa044dbf92775ab6f8ad67ddca9be6765"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#aa044dbf92775ab6f8ad67ddca9be6765">CreateCommMatrix</a> ()</td></tr>
-<tr class="memdesc:aa044dbf92775ab6f8ad67ddca9be6765"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates comm_matrix loop-up table.  <a href="classsledgehamr_1_1LocalRegrid.html#aa044dbf92775ab6f8ad67ddca9be6765">More...</a><br /></td></tr>
+<tr class="memdesc:aa044dbf92775ab6f8ad67ddca9be6765"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a N x N communication matrix M_{ij} between N MPI ranks. The i-th MPI rank talks to the M_{ij}-th MPI rank during the j-th communication cycle. Each rank talks to each other rank exactly once.  <a href="classsledgehamr_1_1LocalRegrid.html#aa044dbf92775ab6f8ad67ddca9be6765">More...</a><br /></td></tr>
 <tr class="separator:aa044dbf92775ab6f8ad67ddca9be6765"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbdf638db8837580b881637a3b5871d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#acbdf638db8837580b881637a3b5871d4">DoAttemptRegrid</a> (const int lev)</td></tr>
+<tr class="memdesc:acbdf638db8837580b881637a3b5871d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts a local regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#acbdf638db8837580b881637a3b5871d4">More...</a><br /></td></tr>
+<tr class="separator:acbdf638db8837580b881637a3b5871d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa728f1d2fe1519e19006258a6f3dd2af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#aa728f1d2fe1519e19006258a6f3dd2af">DetermineAllBoxArrays</a> (const int lev)</td></tr>
+<tr class="memdesc:aa728f1d2fe1519e19006258a6f3dd2af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines new layout on all levels based on taggin criteria.  <a href="classsledgehamr_1_1LocalRegrid.html#aa728f1d2fe1519e19006258a6f3dd2af">More...</a><br /></td></tr>
+<tr class="separator:aa728f1d2fe1519e19006258a6f3dd2af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab78dd484cbf81ffacfc4a8901a3248ec"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#ab78dd484cbf81ffacfc4a8901a3248ec">DetermineNewBoxArray</a> (const int lev)</td></tr>
-<tr class="memdesc:ab78dd484cbf81ffacfc4a8901a3248ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the amrex::BoxArray that will need to be added at a given level.  <a href="classsledgehamr_1_1LocalRegrid.html#ab78dd484cbf81ffacfc4a8901a3248ec">More...</a><br /></td></tr>
+<tr class="memdesc:ab78dd484cbf81ffacfc4a8901a3248ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tags cells on a level and measure distance to coarse/fine boundary. If the tagged cell is too close we expand our layout structure at that location.  <a href="classsledgehamr_1_1LocalRegrid.html#ab78dd484cbf81ffacfc4a8901a3248ec">More...</a><br /></td></tr>
 <tr class="separator:ab78dd484cbf81ffacfc4a8901a3248ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34e74dd5fc82512098f9516ab1660221"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a34e74dd5fc82512098f9516ab1660221">FixAllNesting</a> ()</td></tr>
+<tr class="memdesc:a34e74dd5fc82512098f9516ab1660221"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures that all levels are properly nested within the lower levels.  <a href="classsledgehamr_1_1LocalRegrid.html#a34e74dd5fc82512098f9516ab1660221">More...</a><br /></td></tr>
+<tr class="separator:a34e74dd5fc82512098f9516ab1660221"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c5a104f1c94bd81627803b13225c32e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a5c5a104f1c94bd81627803b13225c32e">JoinAllBoxArrays</a> (std::vector&lt; amrex::BoxArray &gt; &amp;box_arrays)</td></tr>
+<tr class="memdesc:a5c5a104f1c94bd81627803b13225c32e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combines all BoxArray's on each level.  <a href="classsledgehamr_1_1LocalRegrid.html#a5c5a104f1c94bd81627803b13225c32e">More...</a><br /></td></tr>
+<tr class="separator:a5c5a104f1c94bd81627803b13225c32e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefb58fcf06a2c658aec35d9b175440d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#aefb58fcf06a2c658aec35d9b175440d1">AddAllBoxes</a> (std::vector&lt; amrex::BoxArray &gt; &amp;box_arrays)</td></tr>
+<tr class="memdesc:aefb58fcf06a2c658aec35d9b175440d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds all boxes on all levels to the grid.  <a href="classsledgehamr_1_1LocalRegrid.html#aefb58fcf06a2c658aec35d9b175440d1">More...</a><br /></td></tr>
+<tr class="separator:aefb58fcf06a2c658aec35d9b175440d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91da1033161cc643d7e352c845a81b85"><td class="memItemLeft" align="right" valign="top">amrex::BoxArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a91da1033161cc643d7e352c845a81b85">WrapBoxArray</a> (amrex::BoxArray &amp;ba, int N)</td></tr>
+<tr class="memdesc:a91da1033161cc643d7e352c845a81b85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps a box array accross periodic boundary conditions.  <a href="classsledgehamr_1_1LocalRegrid.html#a91da1033161cc643d7e352c845a81b85">More...</a><br /></td></tr>
+<tr class="separator:a91da1033161cc643d7e352c845a81b85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e4dfcab9bf143c7d284387c643c66fe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a1e4dfcab9bf143c7d284387c643c66fe">GetBoxCoarseFineBorders</a> (const amrex::Box &amp;tilebox, const amrex::IntVect &amp;c0, const amrex::IntVect &amp;c1, const int lev, boost::multi_array&lt; bool, 3 &gt; &amp;border)</td></tr>
+<tr class="memdesc:a1e4dfcab9bf143c7d284387c643c66fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether a box has neighbouring coarse/fine boundaries.  <a href="classsledgehamr_1_1LocalRegrid.html#a1e4dfcab9bf143c7d284387c643c66fe">More...</a><br /></td></tr>
 <tr class="separator:a1e4dfcab9bf143c7d284387c643c66fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8acdc638840f81d22adff7ad9bd1f4cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a8acdc638840f81d22adff7ad9bd1f4cf">TagAndMeasure</a> (const amrex::Dim3 &amp;lo, const amrex::Dim3 &amp;hi, int remaining, const amrex::Array4&lt; char &gt; &amp;tag_arr, const amrex::IntVect &amp;c0, const amrex::IntVect &amp;c1, const int lev, const int ibff, const double bff, boost::multi_array&lt; bool, 3 &gt; &amp;border, std::vector&lt; <a class="el" href="classsledgehamr_1_1Location.html">Location</a> &gt; &amp;closest_locations, const double threshold, const int omp_thread_num)</td></tr>
+<tr class="memdesc:a8acdc638840f81d22adff7ad9bd1f4cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds tagged cells within a box and measures its distance of any coarse/fine boundary.  <a href="classsledgehamr_1_1LocalRegrid.html#a8acdc638840f81d22adff7ad9bd1f4cf">More...</a><br /></td></tr>
 <tr class="separator:a8acdc638840f81d22adff7ad9bd1f4cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7904cbeebaf630718c2fd6c358b0ffab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a7904cbeebaf630718c2fd6c358b0ffab">CheckBorders</a> (const amrex::IntVect &amp;ci, const amrex::IntVect &amp;c0, const amrex::IntVect &amp;c1, const int ibff, const double bff, int remaining, const int lev, boost::multi_array&lt; bool, 3 &gt; &amp;border, std::vector&lt; <a class="el" href="classsledgehamr_1_1Location.html">Location</a> &gt; &amp;closest_locations, const double threshold, const int omp_thread_num)</td></tr>
+<tr class="memdesc:a7904cbeebaf630718c2fd6c358b0ffab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a location we measure the distance to all adjacent coarse/fine boundaries. We add to our layout structure if the location is too close.  <a href="classsledgehamr_1_1LocalRegrid.html#a7904cbeebaf630718c2fd6c358b0ffab">More...</a><br /></td></tr>
 <tr class="separator:a7904cbeebaf630718c2fd6c358b0ffab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91da1033161cc643d7e352c845a81b85"><td class="memItemLeft" align="right" valign="top">amrex::BoxArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a91da1033161cc643d7e352c845a81b85">WrapBoxArray</a> (amrex::BoxArray &amp;ba, int N)</td></tr>
-<tr class="memdesc:a91da1033161cc643d7e352c845a81b85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapps an amrex::BoxArray across periodic boundary conditions.  <a href="classsledgehamr_1_1LocalRegrid.html#a91da1033161cc643d7e352c845a81b85">More...</a><br /></td></tr>
-<tr class="separator:a91da1033161cc643d7e352c845a81b85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a0ce70c479608f2786a4706a1e28174"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a3a0ce70c479608f2786a4706a1e28174">CheckThresholds</a> (const int lev, amrex::BoxArray &amp;box_array)</td></tr>
+<tr class="memdesc:a3a0ce70c479608f2786a4706a1e28174"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks all thresholds and determines whether we should continue with the local regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#a3a0ce70c479608f2786a4706a1e28174">More...</a><br /></td></tr>
+<tr class="separator:a3a0ce70c479608f2786a4706a1e28174"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a4c4e0124cce6e52a2d31d422cd1867"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a5a4c4e0124cce6e52a2d31d422cd1867">ComputeLatestPossibleRegridTime</a> (const int l, const int lev)</td></tr>
+<tr class="memdesc:a5a4c4e0124cce6e52a2d31d422cd1867"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the most pessimistiv time by which we should have performed any regrid or otherwise we run risk of having features propagate outside a refined region.  <a href="classsledgehamr_1_1LocalRegrid.html#a5a4c4e0124cce6e52a2d31d422cd1867">More...</a><br /></td></tr>
+<tr class="separator:a5a4c4e0124cce6e52a2d31d422cd1867"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f0308e5b708bddbedfabc7d5462507b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a8f0308e5b708bddbedfabc7d5462507b">CheckForVeto</a> (const int lev, std::vector&lt; amrex::BoxArray &gt; &amp;box_arrays)</td></tr>
+<tr class="memdesc:a8f0308e5b708bddbedfabc7d5462507b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indentifies whether any part of the code wants to veto the local regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#a8f0308e5b708bddbedfabc7d5462507b">More...</a><br /></td></tr>
+<tr class="separator:a8f0308e5b708bddbedfabc7d5462507b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69abb9abd18afb23af2854dab85b325e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a5e77b4e9b1abddac86fca72caf4c6f7b">VetoResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a69abb9abd18afb23af2854dab85b325e">DealWithVeto</a> (const int lev)</td></tr>
+<tr class="memdesc:a69abb9abd18afb23af2854dab85b325e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the best course of action in case the local regrid was vetoed. This could be either to do nothing, do a global regrid, or or to do a local regrid anyway followed by a global regrid at the next opportunity.  <a href="classsledgehamr_1_1LocalRegrid.html#a69abb9abd18afb23af2854dab85b325e">More...</a><br /></td></tr>
+<tr class="separator:a69abb9abd18afb23af2854dab85b325e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a3d091ebbe33a613e98ac5e0a6584f7d9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a3d091ebbe33a613e98ac5e0a6584f7d9">volume_threshold_accumulated</a> = 1.1</td></tr>
-<tr class="memdesc:a3d091ebbe33a613e98ac5e0a6584f7d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strong and weak threshold that decide whether we want to do a local or global regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#a3d091ebbe33a613e98ac5e0a6584f7d9">More...</a><br /></td></tr>
+<tr class="memdesc:a3d091ebbe33a613e98ac5e0a6584f7d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strong threshold that decide whether we want to do a local or global regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#a3d091ebbe33a613e98ac5e0a6584f7d9">More...</a><br /></td></tr>
 <tr class="separator:a3d091ebbe33a613e98ac5e0a6584f7d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7e235329d39882b756791f9e94e609d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#ae7e235329d39882b756791f9e94e609d">volume_threshold_single</a> = 1.05</td></tr>
+<tr class="memdesc:ae7e235329d39882b756791f9e94e609d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weak threshold that decide whether we want to do a local or global regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#ae7e235329d39882b756791f9e94e609d">More...</a><br /></td></tr>
 <tr class="separator:ae7e235329d39882b756791f9e94e609d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e86a8af0dd02440edea03389daeb1d3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a5e86a8af0dd02440edea03389daeb1d3">veto_level</a> = -1</td></tr>
 <tr class="memdesc:a5e86a8af0dd02440edea03389daeb1d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lowest level that would rather do a global regrid than a local.  <a href="classsledgehamr_1_1LocalRegrid.html#a5e86a8af0dd02440edea03389daeb1d3">More...</a><br /></td></tr>
@@ -186,9 +208,10 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a22ed6ede76749d7a30af53b4e996679b"><td class="mdescLeft">&#160;</td><td class="mdescRight">If flag set to true we will skip the local regrid once.  <a href="classsledgehamr_1_1LocalRegrid.html#a22ed6ede76749d7a30af53b4e996679b">More...</a><br /></td></tr>
 <tr class="separator:a22ed6ede76749d7a30af53b4e996679b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a713ec6e07916351b8b41ecab3f2e2a17"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a713ec6e07916351b8b41ecab3f2e2a17">max_local_regrids</a> = 10</td></tr>
-<tr class="memdesc:a713ec6e07916351b8b41ecab3f2e2a17"><td class="mdescLeft">&#160;</td><td class="mdescRight">How often we are allowed to do a local regrid in a row and corresponding counter.  <a href="classsledgehamr_1_1LocalRegrid.html#a713ec6e07916351b8b41ecab3f2e2a17">More...</a><br /></td></tr>
+<tr class="memdesc:a713ec6e07916351b8b41ecab3f2e2a17"><td class="mdescLeft">&#160;</td><td class="mdescRight">How often we are allowed to do a local regrid in a row.  <a href="classsledgehamr_1_1LocalRegrid.html#a713ec6e07916351b8b41ecab3f2e2a17">More...</a><br /></td></tr>
 <tr class="separator:a713ec6e07916351b8b41ecab3f2e2a17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a042da77091f22870797a9d406fa12506"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a042da77091f22870797a9d406fa12506">nregrids</a> = 0</td></tr>
+<tr class="memdesc:a042da77091f22870797a9d406fa12506"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts number of consecutive local regrids.  <a href="classsledgehamr_1_1LocalRegrid.html#a042da77091f22870797a9d406fa12506">More...</a><br /></td></tr>
 <tr class="separator:a042da77091f22870797a9d406fa12506"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8403a32f1028bda506f2e2f4ea7e7eef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a8403a32f1028bda506f2e2f4ea7e7eef">n_error_buf</a> = 0</td></tr>
 <tr class="memdesc:a8403a32f1028bda506f2e2f4ea7e7eef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of error buffer.  <a href="classsledgehamr_1_1LocalRegrid.html#a8403a32f1028bda506f2e2f4ea7e7eef">More...</a><br /></td></tr>
@@ -203,13 +226,16 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:ab5c0c64729d05d204f461d223d01bc72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Look-up table of wrapped indices for periodic boundary conditions.  <a href="classsledgehamr_1_1LocalRegrid.html#ab5c0c64729d05d204f461d223d01bc72">More...</a><br /></td></tr>
 <tr class="separator:ab5c0c64729d05d204f461d223d01bc72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c65ca82aff444f6e0ec107f092d970e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a7c65ca82aff444f6e0ec107f092d970e">latest_possible_regrid_time</a></td></tr>
+<tr class="memdesc:a7c65ca82aff444f6e0ec107f092d970e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the time by which we should have done a regrid.  <a href="classsledgehamr_1_1LocalRegrid.html#a7c65ca82aff444f6e0ec107f092d970e">More...</a><br /></td></tr>
 <tr class="separator:a7c65ca82aff444f6e0ec107f092d970e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7979ef82194a55c08f939f5cfd33d943"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a7979ef82194a55c08f939f5cfd33d943">min_distance</a></td></tr>
+<tr class="memdesc:a7979ef82194a55c08f939f5cfd33d943"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum distance of a tagged cell to a coarse/fine boundary for each OpenMP thread.  <a href="classsledgehamr_1_1LocalRegrid.html#a7979ef82194a55c08f939f5cfd33d943">More...</a><br /></td></tr>
 <tr class="separator:a7979ef82194a55c08f939f5cfd33d943"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48b38ea21c94615db481b11a56fadd9f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::unique_ptr&lt; <a class="el" href="classsledgehamr_1_1UniqueLayout.html">UniqueLayout</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a48b38ea21c94615db481b11a56fadd9f">layouts</a></td></tr>
 <tr class="memdesc:a48b38ea21c94615db481b11a56fadd9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of UniqueLayouts for each level and each core.  <a href="classsledgehamr_1_1LocalRegrid.html#a48b38ea21c94615db481b11a56fadd9f">More...</a><br /></td></tr>
 <tr class="separator:a48b38ea21c94615db481b11a56fadd9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d60672b3f1690a0b299a97b36358648"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LocalRegrid.html#a4d60672b3f1690a0b299a97b36358648">sim</a></td></tr>
+<tr class="memdesc:a4d60672b3f1690a0b299a97b36358648"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the simulation.  <a href="classsledgehamr_1_1LocalRegrid.html#a4d60672b3f1690a0b299a97b36358648">More...</a><br /></td></tr>
 <tr class="separator:a4d60672b3f1690a0b299a97b36358648"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -259,6 +285,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Initalize all needed structures. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">owner</td><td>Pointer to simulation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -285,6 +319,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Adds all boxes on all levels to the grid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">box_arrays</td><td>Array of BoxArray's to be added to each level. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -314,7 +356,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds an amrex::BoxArray to the existing BoxArray at level lev. Data will be allocated and filled. </p>
+<p>Explicitly add boxes to a given level and fill it with data. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">ba</td><td>BoxArray to be added to level. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -362,6 +411,18 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Adds a particular box to the layout structure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Corresponding level. </td></tr>
+    <tr><td class="paramname">thread</td><td>Local OpenMP thread id. </td></tr>
+    <tr><td class="paramname">i</td><td>i-th box index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th box index. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th box index. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a4458da4a915248888078544b767c6b24"></a>
@@ -381,6 +442,13 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Perform a local regrid on level lev after checking various criteria. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Coarsest level for tagging. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether we regridded or not. </dd></dl>
 
 </div>
 </div>
@@ -472,6 +540,25 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Given a location we measure the distance to all adjacent coarse/fine boundaries. We add to our layout structure if the location is too close. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ci</td><td>Index to be checked. </td></tr>
+    <tr><td class="paramname">c0</td><td>Lower box index of current box. </td></tr>
+    <tr><td class="paramname">c1</td><td>Upper box index of current box. </td></tr>
+    <tr><td class="paramname">ibff</td><td>Fine coarse level blocking factor of type int. </td></tr>
+    <tr><td class="paramname">bff</td><td>Fine coarse level blocking factor but cast to double. </td></tr>
+    <tr><td class="paramname">remaining</td><td>Number of adjecent coarse/fine boundaries that could still be pushed further. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current coarse level. </td></tr>
+    <tr><td class="paramname">border</td><td>Map that indicates locations of coarse/fine boundaries. </td></tr>
+    <tr><td class="paramname">closest_locations</td><td>Array containing the locations closest to a coarse/fine boundary on each OpenMP rank. <br  />
+ </td></tr>
+    <tr><td class="paramname">threshold</td><td>Distance threshold beyond which we don't really care about the exact distance anymore. </td></tr>
+    <tr><td class="paramname">omp_thread_num</td><td>Current OpenMP thread. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a8f0308e5b708bddbedfabc7d5462507b"></a>
@@ -508,6 +595,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Indentifies whether any part of the code wants to veto the local regrid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level to check for vetos. </td></tr>
+    <tr><td class="paramname">box_arrays</td><td>Array of BoxArray's containing the local additions. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether we found a veto anywhere. </dd></dl>
+
 </div>
 </div>
 <a id="a3a0ce70c479608f2786a4706a1e28174"></a>
@@ -529,7 +626,7 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">amrex::BoxArray &amp;&#160;</td>
-          <td class="paramname"><em>box_array</em>&#160;</td>
+          <td class="paramname"><em>ba</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -543,6 +640,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Checks all thresholds and determines whether we should continue with the local regrid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level to be checked. </td></tr>
+    <tr><td class="paramname">ba</td><td>BoxArray to be added to the given level. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether we should veto the local regrid. </dd></dl>
 
 </div>
 </div>
@@ -560,6 +667,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Cleans up all layout structures after the local regrid. </p>
 
 </div>
 </div>
@@ -597,6 +706,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Computes the most pessimistiv time by which we should have performed any regrid or otherwise we run risk of having features propagate outside a refined region. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">l</td><td>Level to be used for computation. </td></tr>
+    <tr><td class="paramname">lev</td><td>Coarsest level on which we tagged. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="aa044dbf92775ab6f8ad67ddca9be6765"></a>
@@ -622,7 +740,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Creates comm_matrix loop-up table. </p>
+<p>Creates a N x N communication matrix M_{ij} between N MPI ranks. The i-th MPI rank talks to the M_{ij}-th MPI rank during the j-th communication cycle. Each rank talks to each other rank exactly once. </p>
 
 </div>
 </div>
@@ -650,6 +768,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Determines the best course of action in case the local regrid was vetoed. This could be either to do nothing, do a global regrid, or or to do a local regrid anyway followed by a global regrid at the next opportunity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Coarsest level for tagging. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Suggested course of action (no/local/global regrid). </dd></dl>
+
 </div>
 </div>
 <a id="aa728f1d2fe1519e19006258a6f3dd2af"></a>
@@ -675,6 +802,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Determines new layout on all levels based on taggin criteria. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Coarsest level for tagging. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -702,7 +837,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Determines the amrex::BoxArray that will need to be added at a given level. </p>
+<p>Tags cells on a level and measure distance to coarse/fine boundary. If the tagged cell is too close we expand our layout structure at that location. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level on which to tag. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Globally shortest distance between a tagged cell and coarse/fine boundary. Will be -1 if nothing has been tagged or distance is too large to reliably determine distance (&gt; blocking_factor). </dd></dl>
 
 </div>
 </div>
@@ -723,6 +865,12 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>To be called if a global regrid on level lev has been performed. Needed in case this <a class="el" href="classsledgehamr_1_1LocalRegrid.html" title="Class to perform a local regrid (if possible).">LocalRegrid</a> module invoked the global regrid such that we can reset the relevant flags. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Coarsest level on which we tagged for the global regrid. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -750,6 +898,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Attempts a local regrid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Coarsest level for tagging. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the local regrid was succesfull. A local regrid is considered successfull even if it has not been performed but no further action has been deemed necessary. </dd></dl>
+
 </div>
 </div>
 <a id="a54eaba36170ad1032ffa996aa1823ef0"></a>
@@ -767,6 +924,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Synchronizes all layout structures across OpenMP threads and MPI ranks for a particular level. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Corresponding level. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -793,6 +958,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Ensures that all levels are properly nested within the lower levels. </p>
+
 </div>
 </div>
 <a id="aa3c39f4e8b15c13b471f68e36a9dc33f"></a>
@@ -811,7 +978,13 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Ensures that the new BoxArray at level lev is properly nested with the lower levels by expanding the lower levels if needed. </p>
+<p>Will expand lower level locally to ensure the fine level is nested properly within. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Fine level. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -867,6 +1040,19 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Determines whether a box has neighbouring coarse/fine boundaries. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tilebox</td><td>Current box to check. </td></tr>
+    <tr><td class="paramname">c0</td><td>Tilebox lower box index. </td></tr>
+    <tr><td class="paramname">c1</td><td>Tilebox upper box index. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">border</td><td>Boolean map indicating whether a coarse/fine boundary is present. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Total number of neighbouring coarse fine boundaries. </dd></dl>
+
 </div>
 </div>
 <a id="aca8f2a065d1f69ad66d46eef5f01d910"></a>
@@ -884,6 +1070,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Creates all layout structures needed for the local regrid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">max_lev</td><td>Up to what level we need the layout structures [deprecated]. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -910,6 +1104,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sets up everything needed prior to a local regrid. </p>
+
 </div>
 </div>
 <a id="a5c5a104f1c94bd81627803b13225c32e"></a>
@@ -935,6 +1131,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Combines all BoxArray's on each level. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">box_arrays</td><td>Array of BoxArray's for each level. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -964,6 +1168,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Joins BoxArray's from multiple nodes. Simplifies box lists only locally for efficiency. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Corresponding level. </td></tr>
+    <tr><td class="paramname">ba</td><td>Local BoxArray to be merged globally. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a7fdb62c58cea11f1be4fd4db3d827509"></a>
@@ -988,6 +1201,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Parses all input parameters related to a local regrid. </p>
 
 </div>
 </div>
@@ -1014,6 +1229,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Checks pre-conditions whether we even need to attempt a local regrid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Coarsest level for tagging. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether we want to attempt a local regrid. </dd></dl>
 
 </div>
 </div>
@@ -1117,6 +1341,27 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Finds tagged cells within a box and measures its distance of any coarse/fine boundary. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lo</td><td>Lower coordinate of current box. </td></tr>
+    <tr><td class="paramname">hi</td><td>Higher coordinate of current box. </td></tr>
+    <tr><td class="paramname">remaining</td><td>Number of adjecent coarse/fine boundaries that could still be pushed further. </td></tr>
+    <tr><td class="paramname">tag_arr</td><td>TagArray containing all tags. </td></tr>
+    <tr><td class="paramname">c0</td><td>Lower box index of current box. </td></tr>
+    <tr><td class="paramname">c1</td><td>Upper box index of current box. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current coarse level. </td></tr>
+    <tr><td class="paramname">ibff</td><td>Fine coarse level blocking factor of type int. </td></tr>
+    <tr><td class="paramname">bff</td><td>Fine coarse level blocking factor but cast to double. </td></tr>
+    <tr><td class="paramname">border</td><td>Map that indicates locations of coarse/fine boundaries. </td></tr>
+    <tr><td class="paramname">closest_locations</td><td>Array containing the locations closest to a coarse/fine boundary on each OpenMP rank. <br  />
+ </td></tr>
+    <tr><td class="paramname">threshold</td><td>Distance threshold beyond which we don't really care about the exact distance anymore. </td></tr>
+    <tr><td class="paramname">omp_thread_num</td><td>Current OpenMP thread. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a91da1033161cc643d7e352c845a81b85"></a>
@@ -1153,7 +1398,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Wrapps an amrex::BoxArray across periodic boundary conditions. </p>
+<p>Wraps a box array accross periodic boundary conditions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ba</td><td>BoxArray. </td></tr>
+    <tr><td class="paramname">N</td><td>Total number of potential boxes along an axis. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1173,7 +1425,13 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Pre-computes wrapped index loop-up table for periodic boundary conditions. </p>
+<p>Wraps box indicies across the periodic boundary conditions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level on which to perform wrapping. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1190,7 +1448,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>N&lt;-&gt;M MPI communication matrix. Look-up table used by the <a class="el" href="classsledgehamr_1_1UniqueLayout.html" title="This class ensures the uniqueness of a grid by reducing the problem to sets of touples....">UniqueLayout</a> class. </p>
+<p>MPI communication matrix. Look-up table used by the <a class="el" href="classsledgehamr_1_1UniqueLayout.html" title="This class ensures the uniqueness of a grid by reducing the problem to sets of touples....">UniqueLayout</a> class. </p>
 
 </div>
 </div>
@@ -1278,6 +1536,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Contains the time by which we should have done a regrid. </p>
+
 </div>
 </div>
 <a id="a48b38ea21c94615db481b11a56fadd9f"></a>
@@ -1324,7 +1584,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>How often we are allowed to do a local regrid in a row and corresponding counter. </p>
+<p>How often we are allowed to do a local regrid in a row. </p>
 
 </div>
 </div>
@@ -1347,6 +1607,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Minimum distance of a tagged cell to a coarse/fine boundary for each OpenMP thread. </p>
 
 </div>
 </div>
@@ -1418,6 +1680,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Counts number of consecutive local regrids. </p>
+
 </div>
 </div>
 <a id="a4d60672b3f1690a0b299a97b36358648"></a>
@@ -1439,6 +1703,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Pointer to the simulation. </p>
 
 </div>
 </div>
@@ -1486,7 +1752,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Strong and weak threshold that decide whether we want to do a local or global regrid. </p>
+<p>Strong threshold that decide whether we want to do a local or global regrid. </p>
 
 </div>
 </div>
@@ -1509,6 +1775,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Weak threshold that decide whether we want to do a local or global regrid. </p>
 
 </div>
 </div>

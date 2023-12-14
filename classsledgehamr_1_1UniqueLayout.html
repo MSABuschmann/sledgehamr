@@ -84,57 +84,62 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af08494a86435e7206e7ad84ec31bddfc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#af08494a86435e7206e7ad84ec31bddfc">UniqueLayout</a> (<a class="el" href="classsledgehamr_1_1LocalRegrid.html">LocalRegrid</a> *local_regrid, const int N)</td></tr>
+<tr class="memdesc:af08494a86435e7206e7ad84ec31bddfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up empty layout structure by creating lookup tables.  <a href="classsledgehamr_1_1UniqueLayout.html#af08494a86435e7206e7ad84ec31bddfc">More...</a><br /></td></tr>
 <tr class="separator:af08494a86435e7206e7ad84ec31bddfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a109890bfe5a905d7c657ff63cdda6733"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a109890bfe5a905d7c657ff63cdda6733">~UniqueLayout</a> ()</td></tr>
-<tr class="separator:a109890bfe5a905d7c657ff63cdda6733"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a914ba111ceda3d653b6818666d73c4a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a914ba111ceda3d653b6818666d73c4a1">Add</a> (const <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> i, const <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> j, const <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> l) const</td></tr>
-<tr class="memdesc:a914ba111ceda3d653b6818666d73c4a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a single box.  <a href="classsledgehamr_1_1UniqueLayout.html#a914ba111ceda3d653b6818666d73c4a1">More...</a><br /></td></tr>
+<tr class="memdesc:a914ba111ceda3d653b6818666d73c4a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add location.  <a href="classsledgehamr_1_1UniqueLayout.html#a914ba111ceda3d653b6818666d73c4a1">More...</a><br /></td></tr>
 <tr class="separator:a914ba111ceda3d653b6818666d73c4a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafcd41dd368ef4eeff4c371d373e1edf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#aafcd41dd368ef4eeff4c371d373e1edf">Merge</a> (std::vector&lt; std::unique_ptr&lt; <a class="el" href="classsledgehamr_1_1UniqueLayout.html">UniqueLayout</a> &gt; &gt; &amp;uls)</td></tr>
-<tr class="memdesc:aafcd41dd368ef4eeff4c371d373e1edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merges a vector of UniqueLayouts on this node. Assumes uls[0] = this.  <a href="classsledgehamr_1_1UniqueLayout.html#aafcd41dd368ef4eeff4c371d373e1edf">More...</a><br /></td></tr>
+<tr class="memdesc:aafcd41dd368ef4eeff4c371d373e1edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates one unique layout structure from an array of layouts.  <a href="classsledgehamr_1_1UniqueLayout.html#aafcd41dd368ef4eeff4c371d373e1edf">More...</a><br /></td></tr>
 <tr class="separator:aafcd41dd368ef4eeff4c371d373e1edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc0bba833d4c0ed77f61238c715a11c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#acc0bba833d4c0ed77f61238c715a11c1">Distribute</a> ()</td></tr>
-<tr class="memdesc:acc0bba833d4c0ed77f61238c715a11c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merges all UniqueLayouts across nodes.  <a href="classsledgehamr_1_1UniqueLayout.html#acc0bba833d4c0ed77f61238c715a11c1">More...</a><br /></td></tr>
+<tr class="memdesc:acc0bba833d4c0ed77f61238c715a11c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distributes any chunks that are not owned by this MPI rank but where added to it to the owning MPI rank. Will also receive any chunks by other ranks as well.  <a href="classsledgehamr_1_1UniqueLayout.html#acc0bba833d4c0ed77f61238c715a11c1">More...</a><br /></td></tr>
 <tr class="separator:acc0bba833d4c0ed77f61238c715a11c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57b045db3bd153b7ce644f27d6b07d20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a57b045db3bd153b7ce644f27d6b07d20">Clear</a> ()</td></tr>
-<tr class="memdesc:a57b045db3bd153b7ce644f27d6b07d20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove all boxes.  <a href="classsledgehamr_1_1UniqueLayout.html#a57b045db3bd153b7ce644f27d6b07d20">More...</a><br /></td></tr>
+<tr class="memdesc:a57b045db3bd153b7ce644f27d6b07d20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the layout structure without destroying look-up tables.  <a href="classsledgehamr_1_1UniqueLayout.html#a57b045db3bd153b7ce644f27d6b07d20">More...</a><br /></td></tr>
 <tr class="separator:a57b045db3bd153b7ce644f27d6b07d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5af394ee7eee2fa5a34cd3b774f44122"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a5af394ee7eee2fa5a34cd3b774f44122">Contains</a> (const <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> i, const <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> j, const <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> k) const</td></tr>
-<tr class="memdesc:a5af394ee7eee2fa5a34cd3b774f44122"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a box of given index has been added.  <a href="classsledgehamr_1_1UniqueLayout.html#a5af394ee7eee2fa5a34cd3b774f44122">More...</a><br /></td></tr>
+<tr class="memdesc:a5af394ee7eee2fa5a34cd3b774f44122"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if location has been added to layout structure.  <a href="classsledgehamr_1_1UniqueLayout.html#a5af394ee7eee2fa5a34cd3b774f44122">More...</a><br /></td></tr>
 <tr class="separator:a5af394ee7eee2fa5a34cd3b774f44122"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae185ad5a4485ca9e0756ec445c184fc1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#ae185ad5a4485ca9e0756ec445c184fc1">Size</a> ()</td></tr>
-<tr class="memdesc:ae185ad5a4485ca9e0756ec445c184fc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns number of added boxes within the chunk this node has has been assigned to.  <a href="classsledgehamr_1_1UniqueLayout.html#ae185ad5a4485ca9e0756ec445c184fc1">More...</a><br /></td></tr>
+<tr class="memdesc:ae185ad5a4485ca9e0756ec445c184fc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of locations added to the local chunks.  <a href="classsledgehamr_1_1UniqueLayout.html#ae185ad5a4485ca9e0756ec445c184fc1">More...</a><br /></td></tr>
 <tr class="separator:ae185ad5a4485ca9e0756ec445c184fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91de57bccc10b7c094d8d2b982e4f6d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a91de57bccc10b7c094d8d2b982e4f6d6">SizeAll</a> ()</td></tr>
-<tr class="memdesc:a91de57bccc10b7c094d8d2b982e4f6d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns number of all added boxes.  <a href="classsledgehamr_1_1UniqueLayout.html#a91de57bccc10b7c094d8d2b982e4f6d6">More...</a><br /></td></tr>
+<tr class="memdesc:a91de57bccc10b7c094d8d2b982e4f6d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of location added to all chunks even if not owned by this MPI ranks.  <a href="classsledgehamr_1_1UniqueLayout.html#a91de57bccc10b7c094d8d2b982e4f6d6">More...</a><br /></td></tr>
 <tr class="separator:a91de57bccc10b7c094d8d2b982e4f6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ab7adae07b9cd4fe01b18f67d2c375a"><td class="memItemLeft" align="right" valign="top">amrex::BoxList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a5ab7adae07b9cd4fe01b18f67d2c375a">BoxList</a> (const int blocking_factor)</td></tr>
-<tr class="memdesc:a5ab7adae07b9cd4fe01b18f67d2c375a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an amrex::BoxList / amrex::BoxArray containing all boxes within the assigned chunk.  <a href="classsledgehamr_1_1UniqueLayout.html#a5ab7adae07b9cd4fe01b18f67d2c375a">More...</a><br /></td></tr>
+<tr class="memdesc:a5ab7adae07b9cd4fe01b18f67d2c375a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs BoxList from layout structure.  <a href="classsledgehamr_1_1UniqueLayout.html#a5ab7adae07b9cd4fe01b18f67d2c375a">More...</a><br /></td></tr>
 <tr class="separator:a5ab7adae07b9cd4fe01b18f67d2c375a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab68fe4fcf980ebb19d46c630fdcbad23"><td class="memItemLeft" align="right" valign="top">amrex::BoxArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#ab68fe4fcf980ebb19d46c630fdcbad23">BoxArray</a> (const int blocking_factor)</td></tr>
+<tr class="memdesc:ab68fe4fcf980ebb19d46c630fdcbad23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs BoxArray from layout structure.  <a href="classsledgehamr_1_1UniqueLayout.html#ab68fe4fcf980ebb19d46c630fdcbad23">More...</a><br /></td></tr>
 <tr class="separator:ab68fe4fcf980ebb19d46c630fdcbad23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a893f9964781c9e890fb22c154a213896"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a893f9964781c9e890fb22c154a213896">MergePlane</a> (const <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> cp, <a class="el" href="namespacesledgehamr.html#a15b630bb0a49745eb8006fea5ba4f34a">plane</a> *pm)</td></tr>
-<tr class="memdesc:a893f9964781c9e890fb22c154a213896"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an entire plane.  <a href="classsledgehamr_1_1UniqueLayout.html#a893f9964781c9e890fb22c154a213896">More...</a><br /></td></tr>
+<tr class="memdesc:a893f9964781c9e890fb22c154a213896"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merges individual planes to ensure uniqueness.  <a href="classsledgehamr_1_1UniqueLayout.html#a893f9964781c9e890fb22c154a213896">More...</a><br /></td></tr>
 <tr class="separator:a893f9964781c9e890fb22c154a213896"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8c1fef0c3730ad307e72aa6a0f06e1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#ad8c1fef0c3730ad307e72aa6a0f06e1e">IncorporatePlanes</a> ()</td></tr>
+<tr class="memdesc:ad8c1fef0c3730ad307e72aa6a0f06e1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge received planes with our own local structure.  <a href="classsledgehamr_1_1UniqueLayout.html#ad8c1fef0c3730ad307e72aa6a0f06e1e">More...</a><br /></td></tr>
+<tr class="separator:ad8c1fef0c3730ad307e72aa6a0f06e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad23e025d311884fdcf8e161e65332802"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#ad23e025d311884fdcf8e161e65332802">Wrap</a> (const int i)</td></tr>
-<tr class="memdesc:ad23e025d311884fdcf8e161e65332802"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps an MPI rank index.  <a href="classsledgehamr_1_1UniqueLayout.html#ad23e025d311884fdcf8e161e65332802">More...</a><br /></td></tr>
+<tr class="memdesc:ad23e025d311884fdcf8e161e65332802"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap MPI rank index.  <a href="classsledgehamr_1_1UniqueLayout.html#ad23e025d311884fdcf8e161e65332802">More...</a><br /></td></tr>
 <tr class="separator:ad23e025d311884fdcf8e161e65332802"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab91b0db455d3097570a0ad299bd90d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#aab91b0db455d3097570a0ad299bd90d4">Owns</a> (const <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> cp)</td></tr>
-<tr class="memdesc:aab91b0db455d3097570a0ad299bd90d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the plane cp is owned by this node.  <a href="classsledgehamr_1_1UniqueLayout.html#aab91b0db455d3097570a0ad299bd90d4">More...</a><br /></td></tr>
+<tr class="memdesc:aab91b0db455d3097570a0ad299bd90d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether plane is owned by current rank.  <a href="classsledgehamr_1_1UniqueLayout.html#aab91b0db455d3097570a0ad299bd90d4">More...</a><br /></td></tr>
 <tr class="separator:aab91b0db455d3097570a0ad299bd90d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37cd8c7f23cdd841ba8e9a6272d1aafc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a37cd8c7f23cdd841ba8e9a6272d1aafc">SendDistribution</a> (const int op)</td></tr>
+<tr class="memdesc:a37cd8c7f23cdd841ba8e9a6272d1aafc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends everthing we have of a chunk owned by another MPI rank to this rank.  <a href="classsledgehamr_1_1UniqueLayout.html#a37cd8c7f23cdd841ba8e9a6272d1aafc">More...</a><br /></td></tr>
 <tr class="separator:a37cd8c7f23cdd841ba8e9a6272d1aafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8514cd019b5153f6f5ff57ef111ddf3d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a8514cd019b5153f6f5ff57ef111ddf3d">RecvDistribution</a> (const int op)</td></tr>
+<tr class="memdesc:a8514cd019b5153f6f5ff57ef111ddf3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives everthing another MPI rank has about our local chunk.  <a href="classsledgehamr_1_1UniqueLayout.html#a8514cd019b5153f6f5ff57ef111ddf3d">More...</a><br /></td></tr>
 <tr class="separator:a8514cd019b5153f6f5ff57ef111ddf3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b85867048e4eee45dcd6a40bad496d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#a8b85867048e4eee45dcd6a40bad496d1">SendVector</a> (const int op, const std::vector&lt; <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> &gt; &amp;v)</td></tr>
+<tr class="memdesc:a8b85867048e4eee45dcd6a40bad496d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends data to another MPI rank.  <a href="classsledgehamr_1_1UniqueLayout.html#a8b85867048e4eee45dcd6a40bad496d1">More...</a><br /></td></tr>
 <tr class="separator:a8b85867048e4eee45dcd6a40bad496d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae696b0f1f1a10e6f13bbd1b8f7c217b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#aae696b0f1f1a10e6f13bbd1b8f7c217b">RecvVector</a> (const int op)</td></tr>
+<tr class="memdesc:aae696b0f1f1a10e6f13bbd1b8f7c217b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recevies data from another MPI rank.  <a href="classsledgehamr_1_1UniqueLayout.html#aae696b0f1f1a10e6f13bbd1b8f7c217b">More...</a><br /></td></tr>
 <tr class="separator:aae696b0f1f1a10e6f13bbd1b8f7c217b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8c1fef0c3730ad307e72aa6a0f06e1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1UniqueLayout.html#ad8c1fef0c3730ad307e72aa6a0f06e1e">IncorporatePlanes</a> ()</td></tr>
-<tr class="separator:ad8c1fef0c3730ad307e72aa6a0f06e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -183,29 +188,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Set up empty layout structure by creating lookup tables. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">local_regrid</td><td>Pointer to local regrid module. </td></tr>
     <tr><td class="paramname">N</td><td>Number of potential boxes along one dimension = dimN / blocking_factor. </td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a109890bfe5a905d7c657ff63cdda6733"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a109890bfe5a905d7c657ff63cdda6733">&#9670;&nbsp;</a></span>~UniqueLayout()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sledgehamr::UniqueLayout::~UniqueLayout </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -232,7 +223,7 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="namespacesledgehamr.html#a96c5b4e1d4e5fba0ef4fc3431a918753">uit</a>&#160;</td>
-          <td class="paramname"><em>l</em>&#160;</td>
+          <td class="paramname"><em>k</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -242,12 +233,12 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Add a single box. </p>
+<p>Add location. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">i</td><td>i-th index of box. </td></tr>
-    <tr><td class="paramname">j</td><td>j-th index of box. </td></tr>
-    <tr><td class="paramname">k</td><td>k-th index of box. </td></tr>
+    <tr><td class="paramname">i</td><td>i-th index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th index. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th index. </td></tr>
   </table>
   </dd>
 </dl>
@@ -270,6 +261,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructs BoxArray from layout structure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">blocking_factor</td><td>Blocking factor for BoxArray. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>BoxArray. </dd></dl>
+
 </div>
 </div>
 <a id="a5ab7adae07b9cd4fe01b18f67d2c375a"></a>
@@ -288,13 +288,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns an amrex::BoxList / amrex::BoxArray containing all boxes within the assigned chunk. </p>
+<p>Constructs BoxList from layout structure. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">blocking_factor</td><td>The blocking_factor to be assued to convert from box index type to cell indices. </td></tr>
+    <tr><td class="paramname">blocking_factor</td><td>Blocking factor for BoxList. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>BoxList. </dd></dl>
 
 </div>
 </div>
@@ -313,7 +314,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Remove all boxes. </p>
+<p>Empties the layout structure without destroying look-up tables. </p>
 
 </div>
 </div>
@@ -349,7 +350,16 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns whether a box of given index has been added. </p>
+<p>Checks if location has been added to layout structure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>i-th index of location. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th index of location. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th index of location. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether location has been added. </dd></dl>
 
 </div>
 </div>
@@ -368,7 +378,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Merges all UniqueLayouts across nodes. </p>
+<p>Distributes any chunks that are not owned by this MPI rank but where added to it to the owning MPI rank. Will also receive any chunks by other ranks as well. </p>
 
 </div>
 </div>
@@ -394,7 +404,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Adds a set of planes received by other nodes. </p>
+
+<p>Merge received planes with our own local structure. </p>
 
 </div>
 </div>
@@ -414,7 +425,13 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Merges a vector of UniqueLayouts on this node. Assumes uls[0] = this. </p>
+<p>Creates one unique layout structure from an array of layouts. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uls</td><td>Array of layouts. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -452,11 +469,11 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Adds an entire plane. </p>
+<p>Merges individual planes to ensure uniqueness. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">cp</td><td>Insertion index of plane. </td></tr>
-    <tr><td class="paramname">pm</td><td>Pointer to plane. </td></tr>
+    <tr><td class="paramname">cp</td><td>Current plane. </td></tr>
+    <tr><td class="paramname">pm</td><td>Plane to merge. </td></tr>
   </table>
   </dd>
 </dl>
@@ -487,7 +504,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns whether the plane cp is owned by this node. </p>
+<p>Returns whether plane is owned by current rank. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cp</td><td>Plane to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ownership. </dd></dl>
 
 </div>
 </div>
@@ -514,7 +538,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Receives boxes added to planes owned by this node from node op. </p>
+
+<p>Receives everthing another MPI rank has about our local chunk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">op</td><td>Other MPI rank. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -541,7 +572,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Receives a vector from node op. </p>
+
+<p>Recevies data from another MPI rank. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">op</td><td>Other MPI rank. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Received data vector. </dd></dl>
 
 </div>
 </div>
@@ -568,7 +607,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sends boxes added to planes owned by node op to op. </p>
+
+<p>Sends everthing we have of a chunk owned by another MPI rank to this rank. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">op</td><td>Other MPI rank. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -605,7 +651,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sends a vector v to node op. </p>
+
+<p>Sends data to another MPI rank. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">op</td><td>Other MPI rank. </td></tr>
+    <tr><td class="paramname">v</td><td>Data vector. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -624,7 +678,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns number of added boxes within the chunk this node has has been assigned to. </p>
+<p>Returns the number of locations added to the local chunks. </p>
 
 </div>
 </div>
@@ -643,7 +697,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns number of all added boxes. </p>
+<p>Returns the number of location added to all chunks even if not owned by this MPI ranks. </p>
 
 </div>
 </div>
@@ -671,7 +725,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Wraps an MPI rank index. </p>
+<p>Wrap MPI rank index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>MPI rank to warp. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Wrapped index. </dd></dl>
 
 </div>
 </div>

@@ -77,6 +77,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Keeps track of a location and a distance and can do MPI and OpenMP reductions to determine the one with the smallest distance.  
+ <a href="classsledgehamr_1_1Location.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="location_8h_source.html">location.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -86,34 +89,45 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a830cdbb0770f358ad6489a97d60fd15a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#a830cdbb0770f358ad6489a97d60fd15a">Location</a> (const int i_new, const int j_new, const int k_new, const int distance_sq_new)</td></tr>
 <tr class="separator:a830cdbb0770f358ad6489a97d60fd15a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a636b8dee68b9db114112bf474ebeddc0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#a636b8dee68b9db114112bf474ebeddc0">SelectClosest</a> (const int i_new, const int j_new, const int k_new, const int distance_sq_new)</td></tr>
+<tr class="memdesc:a636b8dee68b9db114112bf474ebeddc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides current location if provided new location is closer.  <a href="classsledgehamr_1_1Location.html#a636b8dee68b9db114112bf474ebeddc0">More...</a><br /></td></tr>
 <tr class="separator:a636b8dee68b9db114112bf474ebeddc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a356889bd73482be022eb59f734d42c41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#a356889bd73482be022eb59f734d42c41">SelectClosest</a> (const <a class="el" href="classsledgehamr_1_1Location.html">Location</a> location)</td></tr>
+<tr class="memdesc:a356889bd73482be022eb59f734d42c41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides current location if provided new location is closer.  <a href="classsledgehamr_1_1Location.html#a356889bd73482be022eb59f734d42c41">More...</a><br /></td></tr>
 <tr class="separator:a356889bd73482be022eb59f734d42c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a42bf115748ef2c3263d92dae4aad53ef"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classsledgehamr_1_1Location.html">Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#a42bf115748ef2c3263d92dae4aad53ef">FindClosestGlobally</a> (const std::vector&lt; <a class="el" href="classsledgehamr_1_1Location.html">Location</a> &gt; &amp;locations)</td></tr>
+<tr class="memdesc:a42bf115748ef2c3263d92dae4aad53ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the location with the globally shortest distance after doing OpenMP and MPI reduction.  <a href="classsledgehamr_1_1Location.html#a42bf115748ef2c3263d92dae4aad53ef">More...</a><br /></td></tr>
 <tr class="separator:a42bf115748ef2c3263d92dae4aad53ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a6fc5358170d0a414ea370b7ec46c7b68"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#a6fc5358170d0a414ea370b7ec46c7b68">i</a> = -1</td></tr>
+<tr class="memdesc:a6fc5358170d0a414ea370b7ec46c7b68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locations i-th index.  <a href="classsledgehamr_1_1Location.html#a6fc5358170d0a414ea370b7ec46c7b68">More...</a><br /></td></tr>
 <tr class="separator:a6fc5358170d0a414ea370b7ec46c7b68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d91b5df1ccf77983722d917e0957769"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#a1d91b5df1ccf77983722d917e0957769">j</a> = -1</td></tr>
+<tr class="memdesc:a1d91b5df1ccf77983722d917e0957769"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locations j-th index.  <a href="classsledgehamr_1_1Location.html#a1d91b5df1ccf77983722d917e0957769">More...</a><br /></td></tr>
 <tr class="separator:a1d91b5df1ccf77983722d917e0957769"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fd93c1458f1e56d8d14f9a40b3f8b61"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#a6fd93c1458f1e56d8d14f9a40b3f8b61">k</a> = -1</td></tr>
+<tr class="memdesc:a6fd93c1458f1e56d8d14f9a40b3f8b61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locations k-th index.  <a href="classsledgehamr_1_1Location.html#a6fd93c1458f1e56d8d14f9a40b3f8b61">More...</a><br /></td></tr>
 <tr class="separator:a6fd93c1458f1e56d8d14f9a40b3f8b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d6ccb32232073efdb90705116329cc4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#a5d6ccb32232073efdb90705116329cc4">distance_sq</a> = INT_MAX</td></tr>
+<tr class="memdesc:a5d6ccb32232073efdb90705116329cc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distance square of location.  <a href="classsledgehamr_1_1Location.html#a5d6ccb32232073efdb90705116329cc4">More...</a><br /></td></tr>
 <tr class="separator:a5d6ccb32232073efdb90705116329cc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a2b8955ca859f66555054105cc3d9e641"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#a2b8955ca859f66555054105cc3d9e641">Gather</a> (const int val)</td></tr>
+<tr class="memdesc:a2b8955ca859f66555054105cc3d9e641"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPI Gather.  <a href="classsledgehamr_1_1Location.html#a2b8955ca859f66555054105cc3d9e641">More...</a><br /></td></tr>
 <tr class="separator:a2b8955ca859f66555054105cc3d9e641"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb0d5875182f2b0f18e67ba1599cd016"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Location.html#aeb0d5875182f2b0f18e67ba1599cd016">AllGather</a> (const int val)</td></tr>
+<tr class="memdesc:aeb0d5875182f2b0f18e67ba1599cd016"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPI AllGather.  <a href="classsledgehamr_1_1Location.html#aeb0d5875182f2b0f18e67ba1599cd016">More...</a><br /></td></tr>
 <tr class="separator:aeb0d5875182f2b0f18e67ba1599cd016"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Keeps track of a location and a distance and can do MPI and OpenMP reductions to determine the one with the smallest distance. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2d36e13d5c97cd5558100eeb800ca0ed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2d36e13d5c97cd5558100eeb800ca0ed">&#9670;&nbsp;</a></span>Location() <span class="overload">[1/2]</span></h2>
 
@@ -212,6 +226,15 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>MPI AllGather. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">val</td><td>Value to gather. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Gathered values. </dd></dl>
+
 </div>
 </div>
 <a id="a42bf115748ef2c3263d92dae4aad53ef"></a>
@@ -238,6 +261,15 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Finds the location with the globally shortest distance after doing OpenMP and MPI reduction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">locations</td><td><a class="el" href="classsledgehamr_1_1Location.html" title="Keeps track of a location and a distance and can do MPI and OpenMP reductions to determine the one wi...">Location</a> at each OpenMP thread. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Closest location. </dd></dl>
+
 </div>
 </div>
 <a id="a2b8955ca859f66555054105cc3d9e641"></a>
@@ -263,6 +295,15 @@ Static Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>MPI Gather. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">val</td><td>Value to gather. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Gathered values. </dd></dl>
 
 </div>
 </div>
@@ -304,6 +345,17 @@ Static Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Overrides current location if provided new location is closer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i_new</td><td>New i-th location. </td></tr>
+    <tr><td class="paramname">j_new</td><td>New j-th location. </td></tr>
+    <tr><td class="paramname">k_new</td><td>New k-th location. </td></tr>
+    <tr><td class="paramname">distance_sq_new</td><td>New distance square. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a356889bd73482be022eb59f734d42c41"></a>
@@ -322,6 +374,14 @@ Static Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Overrides current location if provided new location is closer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">location</td><td>New location. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -337,6 +397,8 @@ Static Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Distance square of location. </p>
+
 </div>
 </div>
 <a id="a6fc5358170d0a414ea370b7ec46c7b68"></a>
@@ -350,6 +412,8 @@ Static Private Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Locations i-th index. </p>
 
 </div>
 </div>
@@ -365,6 +429,8 @@ Static Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Locations j-th index. </p>
+
 </div>
 </div>
 <a id="a6fd93c1458f1e56d8d14f9a40b3f8b61"></a>
@@ -378,6 +444,8 @@ Static Private Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Locations k-th index. </p>
 
 </div>
 </div>
