@@ -11,7 +11,7 @@ var searchData=
   ['clear_877',['Clear',['../classsledgehamr_1_1UniqueLayout.html#a57b045db3bd153b7ce644f27d6b07d20',1,'sledgehamr::UniqueLayout']]],
   ['clearlayout_878',['ClearLayout',['../classsledgehamr_1_1LocalRegrid.html#ad1d361cc8d3d5cdf88a3b2af70b98235',1,'sledgehamr::LocalRegrid']]],
   ['clearlevel_879',['ClearLevel',['../classsledgehamr_1_1Sledgehamr.html#a767607bce4ba621f509c6279faa7195f',1,'sledgehamr::Sledgehamr']]],
-  ['compute_880',['Compute',['../classsledgehamr_1_1Projection.html#a2dd6771d9d4b629604e890d85801c17f',1,'sledgehamr::Projection::Compute()'],['../classsledgehamr_1_1Spectrum.html#ac39ee8bcf73214b5ec624f95e6d4cdeb',1,'sledgehamr::Spectrum::Compute()']]],
+  ['compute_880',['Compute',['../classsledgehamr_1_1Projection.html#a2dd6771d9d4b629604e890d85801c17f',1,'sledgehamr::Projection::Compute()'],['../classsledgehamr_1_1Spectrum.html#a35abf040941d2fe4893b10e7f64ed716',1,'sledgehamr::Spectrum::Compute()']]],
   ['computelatestpossibleregridtime_881',['ComputeLatestPossibleRegridTime',['../classsledgehamr_1_1LocalRegrid.html#a5a4c4e0124cce6e52a2d31d422cd1867',1,'sledgehamr::LocalRegrid']]],
   ['computeparameters_882',['ComputeParameters',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a7ffb1eeb1a8c90c5dc9d8ae708528000',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
   ['computespectrum_883',['ComputeSpectrum',['../classsledgehamr_1_1GravitationalWaves.html#aa00cb3f7c6993a6bb7eb6d5475a6cfa0',1,'sledgehamr::GravitationalWaves']]],

@@ -21,7 +21,7 @@ var searchData=
   ['coarse_5flevel_5fgrid_5fsize_98',['coarse_level_grid_size',['../classsledgehamr_1_1Sledgehamr.html#a67d75bdf0fb15f5cfba92a081e694e2b',1,'sledgehamr::Sledgehamr']]],
   ['comm_5fmatrix_99',['comm_matrix',['../classsledgehamr_1_1LocalRegrid.html#a8d0f98de185f108dae15af7e2997d886',1,'sledgehamr::LocalRegrid']]],
   ['comp_5fvector_100',['comp_vector',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a36d80ca3cd90b9312f98d615be5788fa',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
-  ['compute_101',['Compute',['../classsledgehamr_1_1Projection.html#a2dd6771d9d4b629604e890d85801c17f',1,'sledgehamr::Projection::Compute()'],['../classsledgehamr_1_1Spectrum.html#ac39ee8bcf73214b5ec624f95e6d4cdeb',1,'sledgehamr::Spectrum::Compute()']]],
+  ['compute_101',['Compute',['../classsledgehamr_1_1Projection.html#a2dd6771d9d4b629604e890d85801c17f',1,'sledgehamr::Projection::Compute()'],['../classsledgehamr_1_1Spectrum.html#a35abf040941d2fe4893b10e7f64ed716',1,'sledgehamr::Spectrum::Compute()']]],
   ['computelatestpossibleregridtime_102',['ComputeLatestPossibleRegridTime',['../classsledgehamr_1_1LocalRegrid.html#a5a4c4e0124cce6e52a2d31d422cd1867',1,'sledgehamr::LocalRegrid']]],
   ['computeparameters_103',['ComputeParameters',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a7ffb1eeb1a8c90c5dc9d8ae708528000',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
   ['computespectrum_104',['ComputeSpectrum',['../classsledgehamr_1_1GravitationalWaves.html#aa00cb3f7c6993a6bb7eb6d5475a6cfa0',1,'sledgehamr::GravitationalWaves']]],

@@ -76,7 +76,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>TODO.  
+<p>Computes the spectrum given a quantity function and saves it to disk.  
  <a href="classsledgehamr_1_1Spectrum.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="spectrum_8h_source.html">spectrum.h</a>&gt;</code></p>
@@ -84,9 +84,11 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac91653c5fba10a352474e67a32da6def"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Spectrum.html#ac91653c5fba10a352474e67a32da6def">Spectrum</a> (<a class="el" href="namespacesledgehamr.html#a03384f0f8c85701b23296b6b1dd6ec14">spectrum_fct</a> function, std::string identification)</td></tr>
+<tr class="memdesc:ac91653c5fba10a352474e67a32da6def"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collects metadata.  <a href="classsledgehamr_1_1Spectrum.html#ac91653c5fba10a352474e67a32da6def">More...</a><br /></td></tr>
 <tr class="separator:ac91653c5fba10a352474e67a32da6def"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac39ee8bcf73214b5ec624f95e6d4cdeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Spectrum.html#ac39ee8bcf73214b5ec624f95e6d4cdeb">Compute</a> (const int id, const hid_t file_id, <a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *sim)</td></tr>
-<tr class="separator:ac39ee8bcf73214b5ec624f95e6d4cdeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35abf040941d2fe4893b10e7f64ed716"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Spectrum.html#a35abf040941d2fe4893b10e7f64ed716">Compute</a> (const int id, const hid_t file_id, <a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *sim)</td></tr>
+<tr class="memdesc:a35abf040941d2fe4893b10e7f64ed716"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a spectrum and saves it to disk.  <a href="classsledgehamr_1_1Spectrum.html#a35abf040941d2fe4893b10e7f64ed716">More...</a><br /></td></tr>
+<tr class="separator:a35abf040941d2fe4893b10e7f64ed716"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -96,12 +98,14 @@ Static Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ade918101436bfa2752422b2662c18e2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesledgehamr.html#a03384f0f8c85701b23296b6b1dd6ec14">spectrum_fct</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Spectrum.html#ade918101436bfa2752422b2662c18e2d">fct</a></td></tr>
+<tr class="memdesc:ade918101436bfa2752422b2662c18e2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function pointer to integrand.  <a href="classsledgehamr_1_1Spectrum.html#ade918101436bfa2752422b2662c18e2d">More...</a><br /></td></tr>
 <tr class="separator:ade918101436bfa2752422b2662c18e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57fc13c583493407b878bcf865d42015"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Spectrum.html#a57fc13c583493407b878bcf865d42015">ident</a> = &quot;None&quot;</td></tr>
+<tr class="memdesc:a57fc13c583493407b878bcf865d42015"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique identification string.  <a href="classsledgehamr_1_1Spectrum.html#a57fc13c583493407b878bcf865d42015">More...</a><br /></td></tr>
 <tr class="separator:a57fc13c583493407b878bcf865d42015"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>TODO. </p>
+<div class="textblock"><p>Computes the spectrum given a quantity function and saves it to disk. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac91653c5fba10a352474e67a32da6def"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac91653c5fba10a352474e67a32da6def">&#9670;&nbsp;</a></span>Spectrum()</h2>
@@ -137,17 +141,26 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Collects metadata. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>Integrand. </td></tr>
+    <tr><td class="paramname">identification</td><td>Unique identification string. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac39ee8bcf73214b5ec624f95e6d4cdeb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac39ee8bcf73214b5ec624f95e6d4cdeb">&#9670;&nbsp;</a></span>Compute()</h2>
+<a id="a35abf040941d2fe4893b10e7f64ed716"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35abf040941d2fe4893b10e7f64ed716">&#9670;&nbsp;</a></span>Compute()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void sledgehamr::Spectrum::Compute </td>
+          <td class="memname">i void sledgehamr::Spectrum::Compute </td>
           <td>(</td>
           <td class="paramtype">const int&#160;</td>
           <td class="paramname"><em>id</em>, </td>
@@ -171,6 +184,16 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Computes a spectrum and saves it to disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>Output counter id. </td></tr>
+    <tr><td class="paramname">file_id</td><td>HDF5 file id. </td></tr>
+    <tr><td class="paramname">sim</td><td>Pointer to the simulation. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -247,6 +270,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Function pointer to integrand. </p>
+
 </div>
 </div>
 <a id="a57fc13c583493407b878bcf865d42015"></a>
@@ -260,6 +285,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Unique identification string. </p>
 
 </div>
 </div>

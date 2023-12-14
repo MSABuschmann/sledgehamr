@@ -76,30 +76,41 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Writes slices through the field to disk.  
+ <a href="classsledgehamr_1_1Slices.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="slices_8h_source.html">slices.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aec120c942171355994b4a9eeb350d6cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#aec120c942171355994b4a9eeb350d6cf">Slices</a> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *owner, std::string prefix, bool write_with_truncation_errors)</td></tr>
+<tr class="memdesc:aec120c942171355994b4a9eeb350d6cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect metadata.  <a href="classsledgehamr_1_1Slices.html#aec120c942171355994b4a9eeb350d6cf">More...</a><br /></td></tr>
 <tr class="separator:aec120c942171355994b4a9eeb350d6cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c522f2dee8f46de70ad2bf0ebd3ed61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#a7c522f2dee8f46de70ad2bf0ebd3ed61">Write</a> ()</td></tr>
+<tr class="memdesc:a7c522f2dee8f46de70ad2bf0ebd3ed61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes slices along all the directions through all scalar fields and levels.  <a href="classsledgehamr_1_1Slices.html#a7c522f2dee8f46de70ad2bf0ebd3ed61">More...</a><br /></td></tr>
 <tr class="separator:a7c522f2dee8f46de70ad2bf0ebd3ed61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a91e3a5d49f6d65f1b5ecb598a61d9ca4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#a91e3a5d49f6d65f1b5ecb598a61d9ca4">WriteSingleSlice</a> (const <a class="el" href="classsledgehamr_1_1LevelData.html">LevelData</a> *state, int lev, hid_t file_id, std::string ident, int d1, int d2, int d3, bool is_truncation_error)</td></tr>
+<tr class="memdesc:a91e3a5d49f6d65f1b5ecb598a61d9ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a single slices.  <a href="classsledgehamr_1_1Slices.html#a91e3a5d49f6d65f1b5ecb598a61d9ca4">More...</a><br /></td></tr>
 <tr class="separator:a91e3a5d49f6d65f1b5ecb598a61d9ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab5ffbd84beab984e278e403b66e279d9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#ab5ffbd84beab984e278e403b66e279d9">folder</a></td></tr>
+<tr class="memdesc:ab5ffbd84beab984e278e403b66e279d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Local output folder.  <a href="classsledgehamr_1_1Slices.html#ab5ffbd84beab984e278e403b66e279d9">More...</a><br /></td></tr>
 <tr class="separator:ab5ffbd84beab984e278e403b66e279d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afeacdad3b3f035dbd684978800e13a84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#afeacdad3b3f035dbd684978800e13a84">with_truncation_errors</a></td></tr>
+<tr class="memdesc:afeacdad3b3f035dbd684978800e13a84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to include truncation error estimates.  <a href="classsledgehamr_1_1Slices.html#afeacdad3b3f035dbd684978800e13a84">More...</a><br /></td></tr>
 <tr class="separator:afeacdad3b3f035dbd684978800e13a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ef8f638023b15dddf1a23f6ce7a8dbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#a3ef8f638023b15dddf1a23f6ce7a8dbf">sim</a></td></tr>
+<tr class="memdesc:a3ef8f638023b15dddf1a23f6ce7a8dbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to simulation.  <a href="classsledgehamr_1_1Slices.html#a3ef8f638023b15dddf1a23f6ce7a8dbf">More...</a><br /></td></tr>
 <tr class="separator:a3ef8f638023b15dddf1a23f6ce7a8dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Writes slices through the field to disk. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aec120c942171355994b4a9eeb350d6cf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aec120c942171355994b4a9eeb350d6cf">&#9670;&nbsp;</a></span>Slices()</h2>
 
@@ -140,6 +151,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Collect metadata. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">owner</td><td>Pointer to simulation. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Local output path. </td></tr>
+    <tr><td class="paramname">write_with_truncation_errors</td><td>Whether to include truncation error estimates. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -157,6 +178,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Writes slices along all the directions through all scalar fields and levels. </p>
 
 </div>
 </div>
@@ -230,6 +253,21 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Writes a single slices. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>State data. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">file_id</td><td>HDF5 file id. </td></tr>
+    <tr><td class="paramname">ident</td><td>Unique identifier string. </td></tr>
+    <tr><td class="paramname">d1</td><td>Orientation 1. </td></tr>
+    <tr><td class="paramname">d2</td><td>Orientation 2. </td></tr>
+    <tr><td class="paramname">d3</td><td>Orientation 3. </td></tr>
+    <tr><td class="paramname">is_truncation_error</td><td>Whether state data contains truncation error estimates. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -253,6 +291,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Local output folder. </p>
+
 </div>
 </div>
 <a id="a3ef8f638023b15dddf1a23f6ce7a8dbf"></a>
@@ -275,6 +315,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Pointer to simulation. </p>
+
 </div>
 </div>
 <a id="afeacdad3b3f035dbd684978800e13a84"></a>
@@ -296,6 +338,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Whether to include truncation error estimates. </p>
 
 </div>
 </div>

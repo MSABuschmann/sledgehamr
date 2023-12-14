@@ -121,21 +121,25 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class ensures the uniqueness of a grid by reducing the problem to sets of touples. Each core can work independently on its own <a class="el" href="classsledgehamr_1_1UniqueLayout.html" title="This class ensures the uniqueness of a grid by reducing the problem to sets of touples....">UniqueLayout</a> which can then be efficiently merged across cores and nodes to a global unique grid. Memory consumption scales with the number of boxes added, not with the potential number of boxes.  <a href="classsledgehamr_1_1UniqueLayout.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1AmrexPlotFile.html">AmrexPlotFile</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an AMReX plotfile for yt compatability.  <a href="classsledgehamr_1_1AmrexPlotFile.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Checkpoint.html">Checkpoint</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes or reads a checkpoint.  <a href="classsledgehamr_1_1Checkpoint.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelWriter.html">LevelWriter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes level data to disk.  <a href="classsledgehamr_1_1LevelWriter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1OutputModule.html">OutputModule</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class handles the writing of an individual output format provided through a function pointer. It keeps track of timings to check if this particular format should be written at the current time or not.  <a href="classsledgehamr_1_1OutputModule.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html">Projection</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO.  <a href="classsledgehamr_1_1Projection.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a line-of-sight projection for an arbitrary quantity and saves it to disk. Will up-sample the 2D projection to a finer level.  <a href="classsledgehamr_1_1Projection.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html">Slices</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes slices through the field to disk.  <a href="classsledgehamr_1_1Slices.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Spectrum.html">Spectrum</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO.  <a href="classsledgehamr_1_1Spectrum.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the spectrum given a quantity function and saves it to disk.  <a href="classsledgehamr_1_1Spectrum.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1PerformanceMonitor.html">PerformanceMonitor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +178,7 @@ Typedefs</h2></td></tr>
 <tr class="memitem:abb926fb3f6061fc946caa4e07fa325e3"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; double(double)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr.html#abb926fb3f6061fc946caa4e07fa325e3">time_fct</a></td></tr>
 <tr class="separator:abb926fb3f6061fc946caa4e07fa325e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaecccbfaf8bf453c27a3368a9843262"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; double(amrex::Array4&lt; amrex::Real const  &gt; const  &amp;, const int, const int, const int, const int, const double, const double, const double, const std::vector&lt; double &gt; &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr.html#acaecccbfaf8bf453c27a3368a9843262">projection_fct</a></td></tr>
+<tr class="memdesc:acaecccbfaf8bf453c27a3368a9843262"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function typdef that computes the quantity to project.  <a href="namespacesledgehamr.html#acaecccbfaf8bf453c27a3368a9843262">More...</a><br /></td></tr>
 <tr class="separator:acaecccbfaf8bf453c27a3368a9843262"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03384f0f8c85701b23296b6b1dd6ec14"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; double(amrex::Array4&lt; amrex::Real const  &gt; const  &amp;, const int, const int, const int, const int, const double, const double, const double, const std::vector&lt; double &gt; &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr.html#a03384f0f8c85701b23296b6b1dd6ec14">spectrum_fct</a></td></tr>
 <tr class="separator:a03384f0f8c85701b23296b6b1dd6ec14"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,6 +244,8 @@ Enumerations</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Function typdef that computes the quantity to project. </p>
 
 </div>
 </div>

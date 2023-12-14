@@ -76,7 +76,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>TODO.  
+<p>Computes a line-of-sight projection for an arbitrary quantity and saves it to disk. Will up-sample the 2D projection to a finer level.  
  <a href="classsledgehamr_1_1Projection.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="projection_8h_source.html">projection.h</a>&gt;</code></p>
@@ -84,26 +84,32 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a99fad3673ddd8fa24f430d91e10e7c57"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a99fad3673ddd8fa24f430d91e10e7c57">Projection</a> (<a class="el" href="namespacesledgehamr.html#acaecccbfaf8bf453c27a3368a9843262">projection_fct</a> function, std::string identification, int projection_mode=0)</td></tr>
+<tr class="memdesc:a99fad3673ddd8fa24f430d91e10e7c57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gather metadata.  <a href="classsledgehamr_1_1Projection.html#a99fad3673ddd8fa24f430d91e10e7c57">More...</a><br /></td></tr>
 <tr class="separator:a99fad3673ddd8fa24f430d91e10e7c57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2dd6771d9d4b629604e890d85801c17f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a2dd6771d9d4b629604e890d85801c17f">Compute</a> (const int id, const hid_t file_id, <a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *sim)</td></tr>
+<tr class="memdesc:a2dd6771d9d4b629604e890d85801c17f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and saves a line-of-sight projection.  <a href="classsledgehamr_1_1Projection.html#a2dd6771d9d4b629604e890d85801c17f">More...</a><br /></td></tr>
 <tr class="separator:a2dd6771d9d4b629604e890d85801c17f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a2e5e2793bcc76892657485bc3182411e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesledgehamr.html#acaecccbfaf8bf453c27a3368a9843262">projection_fct</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a2e5e2793bcc76892657485bc3182411e">fct</a></td></tr>
+<tr class="memdesc:a2e5e2793bcc76892657485bc3182411e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function pointer to projection function.  <a href="classsledgehamr_1_1Projection.html#a2e5e2793bcc76892657485bc3182411e">More...</a><br /></td></tr>
 <tr class="separator:a2e5e2793bcc76892657485bc3182411e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae08776e4496008bc266c632608320e4e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#ae08776e4496008bc266c632608320e4e">ident</a> = &quot;None&quot;</td></tr>
+<tr class="memdesc:ae08776e4496008bc266c632608320e4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique name of projection.  <a href="classsledgehamr_1_1Projection.html#ae08776e4496008bc266c632608320e4e">More...</a><br /></td></tr>
 <tr class="separator:ae08776e4496008bc266c632608320e4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97e168351a5a4031d955ef81184f7a7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a97e168351a5a4031d955ef81184f7a7c">mode</a> = 0</td></tr>
+<tr class="memdesc:a97e168351a5a4031d955ef81184f7a7c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classsledgehamr_1_1Projection.html" title="Computes a line-of-sight projection for an arbitrary quantity and saves it to disk....">Projection</a> mode: 0: Line-of-sight sum. 1: Maximum along the line-of-sight.  <a href="classsledgehamr_1_1Projection.html#a97e168351a5a4031d955ef81184f7a7c">More...</a><br /></td></tr>
 <tr class="separator:a97e168351a5a4031d955ef81184f7a7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a334deab368101324f1834afe9fcf20a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Projection.html#a334deab368101324f1834afe9fcf20a7">Add</a> (const int i, const int j, const int k, double *projection, int *n_projection, const int ratio, const int dimN, const double val)</td></tr>
+<tr class="memdesc:a334deab368101324f1834afe9fcf20a7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classsledgehamr_1_1Projection.html" title="Computes a line-of-sight projection for an arbitrary quantity and saves it to disk....">Projection</a> operator.  <a href="classsledgehamr_1_1Projection.html#a334deab368101324f1834afe9fcf20a7">More...</a><br /></td></tr>
 <tr class="separator:a334deab368101324f1834afe9fcf20a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>TODO. </p>
+<div class="textblock"><p>Computes a line-of-sight projection for an arbitrary quantity and saves it to disk. Will up-sample the 2D projection to a finer level. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a99fad3673ddd8fa24f430d91e10e7c57"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a99fad3673ddd8fa24f430d91e10e7c57">&#9670;&nbsp;</a></span>Projection()</h2>
@@ -144,6 +150,16 @@ Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gather metadata. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>Computes quantity to project. </td></tr>
+    <tr><td class="paramname">identification</td><td>Unique name of projection. </td></tr>
+    <tr><td class="paramname">projection_mode</td><td><a class="el" href="classsledgehamr_1_1Projection.html" title="Computes a line-of-sight projection for an arbitrary quantity and saves it to disk....">Projection</a> mode. See mode for more details. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -218,6 +234,21 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p><a class="el" href="classsledgehamr_1_1Projection.html" title="Computes a line-of-sight projection for an arbitrary quantity and saves it to disk....">Projection</a> operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>i-th index of cell to project. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th index of cell to project. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th index of cell to project. </td></tr>
+    <tr><td class="paramname">projection</td><td>Existing projection. </td></tr>
+    <tr><td class="paramname">n_projection</td><td>Number of cells projected. </td></tr>
+    <tr><td class="paramname">ratio</td><td>Refinement ratio to coarse level. </td></tr>
+    <tr><td class="paramname">dimN</td><td>This levels number of theoretical cells along on axis. </td></tr>
+    <tr><td class="paramname">val</td><td>Cells value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a2dd6771d9d4b629604e890d85801c17f"></a>
@@ -252,6 +283,16 @@ Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Computes and saves a line-of-sight projection. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>Output counter id. </td></tr>
+    <tr><td class="paramname">file_id</td><td>HDF5 file id. </td></tr>
+    <tr><td class="paramname">sim</td><td>Pointer to the simulation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -267,6 +308,8 @@ Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Function pointer to projection function. </p>
+
 </div>
 </div>
 <a id="ae08776e4496008bc266c632608320e4e"></a>
@@ -281,6 +324,8 @@ Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Unique name of projection. </p>
+
 </div>
 </div>
 <a id="a97e168351a5a4031d955ef81184f7a7c"></a>
@@ -294,6 +339,8 @@ Private Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="classsledgehamr_1_1Projection.html" title="Computes a line-of-sight projection for an arbitrary quantity and saves it to disk....">Projection</a> mode: 0: Line-of-sight sum. 1: Maximum along the line-of-sight. </p>
 
 </div>
 </div>
