@@ -5,6 +5,9 @@
 
 namespace sledgehamr {
 
+/** @brief Keeps track of a location and a distance and can do MPI and OpenMP
+ *         reductions to determine the one with the smallest distance.
+ */
 class Location {
     public:
         Location() {};
@@ -19,9 +22,20 @@ class Location {
         static Location FindClosestGlobally(
                 const std::vector<Location>& locations);
 
+        /** @brief Locations i-th index.
+         */
         int i = -1;
+
+        /** @brief Locations j-th index.
+         */
         int j = -1;
+
+        /** @brief Locations k-th index.
+         */
         int k = -1;
+
+        /** @brief Distance square of location.
+         */
         int distance_sq = INT_MAX;
 
     private:

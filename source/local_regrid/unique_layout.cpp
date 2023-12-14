@@ -2,8 +2,15 @@
 
 namespace sledgehamr {
 
+/** @brief  Set up empty layout structure by creating lookup tables.
+ * @param   local_regrid    Pointer to local regrid module.
+ * @param   N               Number of potential boxes along one dimension
+ *                          = dimN / blocking_factor.
+ */
 UniqueLayout::UniqueLayout(LocalRegrid* local_regrid, const int N)
-    : Np(N), lr(local_regrid), mpi_n(amrex::ParallelDescriptor::NProcs()),
+    : Np(N),
+      lr(local_regrid),
+      mpi_n(amrex::ParallelDescriptor::NProcs()),
       mpi_mp(amrex::ParallelDescriptor::MyProc()) {
     p = std::make_unique<plane[]>(Np);
     uit Npn = mpi_n > Np ? 0 : Np/mpi_n;
@@ -21,10 +28,11 @@ UniqueLayout::UniqueLayout(LocalRegrid* local_regrid, const int N)
     Np_this = owner_of[mpi_mp].size();
 }
 
-UniqueLayout::~UniqueLayout() {
-    //delete[] p;
-}
-
+/** @brief  Add location.
+ * @param   i   i-th index.
+ * @param   j   j-th index.
+ * @param   k   k-th index.
+ */
 void UniqueLayout::Add(const uit i, const uit j, const uit k) const {
     if (!p[i].count(j))
         p[i][j] = std::set<uit>();
@@ -32,6 +40,9 @@ void UniqueLayout::Add(const uit i, const uit j, const uit k) const {
     p[i][j].insert(k);
 }
 
+/** @brief Creates one unique layout structure from an array of layouts.
+ * @param   uls Array of layouts.
+ */
 void UniqueLayout::Merge(std::vector<std::unique_ptr<UniqueLayout> >& uls) {
     // Merge all planes. Inner loop parallelized to maintain thread-safety.
     for (int l = 1; l < uls.size(); ++l) {
@@ -42,6 +53,10 @@ void UniqueLayout::Merge(std::vector<std::unique_ptr<UniqueLayout> >& uls) {
     }
 }
 
+/** @brief Distributes any chunks that are not owned by this MPI rank but where
+ *         added to it to the owning MPI rank. Will also receive any chunks by
+ *         other ranks as well.
+ */
 void UniqueLayout::Distribute() {
     // Send/receive relevant planes according to communication matrix.
     for (int c = 1; c < mpi_n; ++c) {
@@ -66,12 +81,20 @@ void UniqueLayout::Distribute() {
     }
 }
 
+/** @brief Empties the layout structure without destroying look-up tables.
+ */
 void UniqueLayout::Clear() {
     for (uit cp = 0; cp < Np; ++cp) {
         p[cp].clear();
     }
 }
 
+/** @brief Checks if location has been added to layout structure.
+ * @param   i   i-th index of location.
+ * @param   j   j-th index of location.
+ * @param   k   k-th index of location.
+ * @return  Whether location has been added.
+ */
 bool UniqueLayout::Contains(const uit i, const uit j, const uit k) const {
     if (p[i].count(j))
         return p[i][j].count(k);
@@ -79,6 +102,8 @@ bool UniqueLayout::Contains(const uit i, const uit j, const uit k) const {
     return false;
 }
 
+/** @brief Returns the number of locations added to the local chunks.
+ */
 int UniqueLayout::Size() {
     int size = 0;
 
@@ -92,6 +117,9 @@ int UniqueLayout::Size() {
     return size;
 }
 
+/** @brief Returns the number of location added to all chunks even if not owned
+ *         by this MPI ranks.
+ */
 int UniqueLayout::SizeAll() {
     int size = 0;
 
@@ -104,6 +132,10 @@ int UniqueLayout::SizeAll() {
     return size;
 }
 
+/** @brief Constructs BoxList from layout structure.
+ * @param   blocking_factor Blocking factor for BoxList.
+ * @return BoxList.
+ */
 amrex::BoxList UniqueLayout::BoxList(const int blocking_factor) {
     amrex::BoxList bl;
     int i,j,k0,km;
@@ -142,10 +174,18 @@ amrex::BoxList UniqueLayout::BoxList(const int blocking_factor) {
     return bl;
 }
 
+/** @brief Constructs BoxArray from layout structure.
+ * @param   blocking_factor Blocking factor for BoxArray.
+ * @return BoxArray.
+ */
 amrex::BoxArray UniqueLayout::BoxArray(const int blocking_factor) {
     return amrex::BoxArray(BoxList(blocking_factor));
 }
 
+/** @brief Merges individual planes to ensure uniqueness.
+ * @param   cp  Current plane.
+ * @param   pm  Plane to merge.
+ */
 void UniqueLayout::MergePlane(const uit cp, plane* pm) {
     p[cp].merge(*pm);
 
@@ -158,15 +198,27 @@ void UniqueLayout::MergePlane(const uit cp, plane* pm) {
     }
 }
 
+/** @brief Wrap MPI rank index.
+ * @param   i   MPI rank to warp.
+ * @return Wrapped index.
+ */
 inline int UniqueLayout::Wrap(const int i) {
     return i < 0 ? i+mpi_n : i%mpi_n;
 }
 
+/** @brief Returns whether plane is owned by current rank.
+ * @param   cp  Plane to check.
+ * @return Ownership.
+ */
 bool UniqueLayout::Owns(const uit cp) {
     return (std::find(owner_of[mpi_mp].begin(), owner_of[mpi_mp].end(), cp) !=
             owner_of[mpi_mp].end());
 }
 
+/** @brief Sends everthing we have of a chunk owned by another MPI rank to this
+ *         rank.
+ * @param   op  Other MPI rank.
+ */
 void UniqueLayout::SendDistribution(const int op) {
     for (uit cpo = 0; cpo < owner_of[op].size(); ++cpo) {
         uit cp = owner_of[op][cpo];
@@ -194,6 +246,9 @@ void UniqueLayout::SendDistribution(const int op) {
     }
 }
 
+/** @brief Receives everthing another MPI rank has about our local chunk.
+ * @param   op  Other MPI rank.
+ */
 void UniqueLayout::RecvDistribution(const int op) {
     nps.clear();
 
@@ -216,6 +271,10 @@ void UniqueLayout::RecvDistribution(const int op) {
     }
 }
 
+/** @brief  Sends data to another MPI rank.
+ * @param   op  Other MPI rank.
+ * @param   v   Data vector.
+ */
 inline void UniqueLayout::SendVector(const int op, const std::vector<uit>& v) {
     int size = v.size();
     MPI_Send(&size, 1, MPI_UNSIGNED, op, 501,
@@ -227,6 +286,10 @@ inline void UniqueLayout::SendVector(const int op, const std::vector<uit>& v) {
     }
 }
 
+/** @brief Recevies data from another MPI rank.
+ * @param   op  Other MPI rank.
+ * @return  Received data vector.
+ */
 inline std::vector<uit> UniqueLayout::RecvVector(const int op) {
     int size;
     std::vector<uit> v;
@@ -243,6 +306,8 @@ inline std::vector<uit> UniqueLayout::RecvVector(const int op) {
     return v;
 }
 
+/** @brief Merge received planes with our own local structure.
+ */
 void UniqueLayout::IncorporatePlanes() {
 #pragma omp parallel for
     for (uit cp = 0; cp < Np_this; ++cp){

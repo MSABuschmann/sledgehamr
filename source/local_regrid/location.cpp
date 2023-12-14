@@ -2,6 +2,12 @@
 
 namespace sledgehamr {
 
+/** @brief Overrides current location if provided new location is closer.
+ * @param   i_new           New i-th location.
+ * @param   j_new           New j-th location.
+ * @param   k_new           New k-th location.
+ * @param   distance_sq_new New distance square. 
+ */
 void Location::SelectClosest(const int i_new, const int j_new, const int k_new,
                              const int distance_sq_new) {
     if (distance_sq_new < distance_sq) {
@@ -12,10 +18,18 @@ void Location::SelectClosest(const int i_new, const int j_new, const int k_new,
     }
 }
 
+/** @brief Overrides current location if provided new location is closer.
+ * @param   location    New location.
+ */
 void Location::SelectClosest(Location location) {
     SelectClosest(location.i, location.j, location.k, location.distance_sq);
 }
 
+/** @brief Finds the location with the globally shortest distance after doing
+ *         OpenMP and MPI reduction.
+ * @param   locations   Location at each OpenMP thread.
+ * @return  Closest location.
+ */
 Location Location::FindClosestGlobally(
         const std::vector<Location>& locations) {
     Location closest;
@@ -37,6 +51,10 @@ Location Location::FindClosestGlobally(
     return closest;
 }
 
+/** @brief MPI Gather.
+ * @param   val Value to gather.
+ * @return Gathered values.
+ */
 std::vector<int> Location::Gather(const int val) {
     std::vector<int> all(amrex::ParallelDescriptor::NProcs());
     amrex::ParallelDescriptor::Gather(&val, 1, &all[0], 1,
@@ -44,12 +62,15 @@ std::vector<int> Location::Gather(const int val) {
     return all;
 }
 
+/** @brief MPI AllGather.
+ * @param   val Value to gather.
+ * @return Gathered values.
+ */
 std::vector<int> Location::AllGather(const int val) {
     std::vector<int> all(amrex::ParallelDescriptor::NProcs());
     amrex::ParallelAllGather::AllGather(&val, 1, &all[0], MPI_COMM_WORLD);
     return all;
 }
-
 
 }; // namespace sledgehamr
 

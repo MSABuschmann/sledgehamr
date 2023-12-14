@@ -2,8 +2,10 @@
 
 namespace sledgehamr {
 
-LocalRegrid::LocalRegrid(Sledgehamr* owner) {
-    sim = owner;
+/** @brief Initalize all needed structures.
+ * @param   owner   Pointer to simulation.
+ */
+LocalRegrid::LocalRegrid(Sledgehamr* owner) : sim(owner) {
     ParseInput();
     CreateCommMatrix();
 
@@ -12,6 +14,11 @@ LocalRegrid::LocalRegrid(Sledgehamr* owner) {
     nregrids = 0;
 }
 
+/** @brief Perform a local regrid on level lev after checking various
+ *         criteria.
+ * @param   lev Coarsest level for tagging.
+ * @return Whether we regridded or not.
+ */
 bool LocalRegrid::AttemptRegrid(const int lev) {
     amrex::Print() << std::endl;
     bool res = DoAttemptRegrid(lev);
@@ -19,6 +26,11 @@ bool LocalRegrid::AttemptRegrid(const int lev) {
     return res;
 }
 
+/** @brief To be called if a global regrid on level lev has been performed.
+ *         Needed in case this LocalRegrid module invoked the global regrid
+ *         such that we can reset the relevant flags.
+ * @param   lev Coarsest level on which we tagged for the global regrid.
+ */
 void LocalRegrid::DidGlobalRegrid(const int lev) {
     for (int l = 0; l <= sim->max_level; ++l) {
         no_local_regrid[l] = false;
@@ -32,6 +44,9 @@ void LocalRegrid::DidGlobalRegrid(const int lev) {
     }
 }
 
+/** @brief Creates all layout structures needed for the local regrid.
+ * @param   max_lev Up to what level we need the layout structures [deprecated].
+ */
 void LocalRegrid::InitializeLayout(const int max_lev) {
     layouts.resize(sim->finest_level + 1);
     for (int l = 1; l <= sim->finest_level; ++l) {
@@ -42,10 +57,17 @@ void LocalRegrid::InitializeLayout(const int max_lev) {
     }
 }
 
+/** @brief Cleans up all layout structures after the local regrid.
+ */
 void LocalRegrid::ClearLayout() {
     layouts.clear();
 }
 
+/** @brief Joins BoxArray's from multiple nodes. Simplifies box lists only 
+ *         locally for efficiency.
+ * @param   lev Corresponding level.
+ * @param   ba  Local BoxArray to be merged globally.
+ */
 void LocalRegrid::JoinBoxArrays(const int lev, amrex::BoxArray& ba) {
     amrex::BoxList bl = layouts[lev][0]->BoxList(sim->blocking_factor[lev][0]);
     bl.simplify(true);
@@ -56,16 +78,32 @@ void LocalRegrid::JoinBoxArrays(const int lev, amrex::BoxArray& ba) {
     ba = amrex::BoxArray(std::move(bl));
 }
 
+/** @brief Adds a particular box to the layout structure.
+ * @param   lev     Corresponding level.
+ * @param   thread  Local OpenMP thread id.
+ * @param   i       i-th box index.
+ * @param   j       j-th box index.
+ * @param   k       k-th box index.
+ */
 void LocalRegrid::AddToLayout(const int lev, const int thread, const int i,
                               const int j, const int k) {
     layouts[lev][thread]->Add(i, j, k);
 }
 
+/** @brief Synchronizes all layout structures across OpenMP threads and MPI
+ *         ranks for a particular level.
+ * @param   lev Corresponding level.
+ */
 void LocalRegrid::FinalizeLayout(const int lev) {
     layouts[lev][0]->Merge(layouts[lev]);
     layouts[lev][0]->Distribute();
 }
 
+/** @brief Checks pre-conditions whether we even need to attempt a local
+ *         regrid.
+ * @param   lev Coarsest level for tagging.
+ * @return Whether we want to attempt a local regrid.
+ */
 bool LocalRegrid::Prechecks(const int lev) {
     if (nregrids++ >= max_local_regrids) {
         if (max_local_regrids > 0) {
@@ -110,6 +148,8 @@ bool LocalRegrid::Prechecks(const int lev) {
     return true;
 }
 
+/** @brief Sets up everything needed prior to a local regrid.
+ */
 void LocalRegrid::InitializeLocalRegrid() {
     // Check if we have new levels. At the (re)start all levels will be
     // considered new.
@@ -124,6 +164,9 @@ void LocalRegrid::InitializeLocalRegrid() {
     InitializeLayout(sim->finest_level);
 }
 
+/** @brief Determines new layout on all levels based on taggin criteria.
+ * @param   lev Coarsest level for tagging.
+ */
 void LocalRegrid::DetermineAllBoxArrays(const int lev) {
     // Get the new required box array for each level. Still allowed to violate
     // nesting at this point.
@@ -134,6 +177,8 @@ void LocalRegrid::DetermineAllBoxArrays(const int lev) {
     }
 }
 
+/** @brief Ensures that all levels are properly nested within the lower levels.
+ */
 void LocalRegrid::FixAllNesting() {
     // Make sure we do not violate nesting requirements.
     for (int l = sim->finest_level; l > 1; --l) {
@@ -141,6 +186,9 @@ void LocalRegrid::FixAllNesting() {
     }
 }
 
+/** @brief Combines all BoxArray's on each level.
+ * @param   box_arrays  Array of BoxArray's for each level.
+ */
 void LocalRegrid::JoinAllBoxArrays(std::vector<amrex::BoxArray>& box_arrays) {
     // Join all boxes across MPI ranks.
     for (int l = 1; l <= sim->finest_level; ++l) {
@@ -148,6 +196,9 @@ void LocalRegrid::JoinAllBoxArrays(std::vector<amrex::BoxArray>& box_arrays) {
     }
 }
 
+/** @brief Adds all boxes on all levels to the grid.
+ * @param   box_arrays  Array of BoxArray's to be added to each level.
+ */
 void LocalRegrid::AddAllBoxes(std::vector<amrex::BoxArray>& box_arrays) {
     // Finally add new boxes to each grid.
     for (int l = 1; l <= sim->finest_level; ++l) {
@@ -157,6 +208,12 @@ void LocalRegrid::AddAllBoxes(std::vector<amrex::BoxArray>& box_arrays) {
     }
 }
 
+/** @brief Checks all thresholds and determines whether we should continue
+ *         with the local regrid.
+ * @param   lev Level to be checked.
+ * @param   ba  BoxArray to be added to the given level.
+ * @return Whether we should veto the local regrid.
+ */
 bool LocalRegrid::CheckThresholds(const int lev, amrex::BoxArray& ba) {
     bool veto = false;
 
@@ -190,6 +247,12 @@ bool LocalRegrid::CheckThresholds(const int lev, amrex::BoxArray& ba) {
     return veto;
 }
 
+/** @brief Computes the most pessimistiv time by which we should have performed
+ *         any regrid or otherwise we run risk of having features propagate
+ *         outside a refined region.
+ * @param   l   Level to be used for computation.
+ * @param   lev Coarsest level on which we tagged.
+ */
 void LocalRegrid::ComputeLatestPossibleRegridTime(const int l, const int lev) {
     if (l <= lev)
         return;
@@ -214,6 +277,12 @@ void LocalRegrid::ComputeLatestPossibleRegridTime(const int l, const int lev) {
     }
 }
 
+/** @brief Indentifies whether any part of the code wants to veto the local
+ *         regrid.
+ * @param   lev         Level to check for vetos.
+ * @param   box_arrays  Array of BoxArray's containing the local additions.
+ * @return Whether we found a veto anywhere.
+ */
 bool LocalRegrid::CheckForVeto(const int lev,
                                std::vector<amrex::BoxArray>& box_arrays) {
     bool veto = false;
@@ -228,6 +297,13 @@ bool LocalRegrid::CheckForVeto(const int lev,
     return veto;
 }
 
+/** @brief Determines the best course of action in case the local regrid was
+ *         vetoed. This could be either to do nothing, do a global regrid, or
+ *         or to do a local regrid anyway followed by a global regrid at the
+ *         next opportunity.
+ * @param   lev Coarsest level for tagging.
+ * @return Suggested course of action (no/local/global regrid).
+ */
 LocalRegrid::VetoResult LocalRegrid::DealWithVeto(const int lev) {
     amrex::Print() << "Local regrid has been vetoed. "
                    << "Global regrid on level " << veto_level
@@ -292,6 +368,12 @@ LocalRegrid::VetoResult LocalRegrid::DealWithVeto(const int lev) {
     return VetoResult::DoLocalRegrid;
 }
 
+/** @brief Attempts a local regrid.
+ * @param   lev Coarsest level for tagging.
+ * @return Whether the local regrid was succesfull. A local regrid is considered
+ *         successfull even if it has not been performed but no further action
+  *        has been deemed necessary.
+ */
 bool LocalRegrid::DoAttemptRegrid(const int lev) {
     if (!Prechecks(lev)) return false;
 
@@ -322,6 +404,8 @@ bool LocalRegrid::DoAttemptRegrid(const int lev) {
     return true;
 }
 
+/** @brief Parses all input parameters related to a local regrid.
+ */
 void LocalRegrid::ParseInput() {
     amrex::ParmParse pp_amr("amr");
     pp_amr.query("force_global_regrid_at_restart",
@@ -332,6 +416,10 @@ void LocalRegrid::ParseInput() {
     pp_amr.query("volume_threshold_accumulated", volume_threshold_accumulated);
 }
 
+/** @brief Creates a N x N communication matrix M_{ij} between N MPI ranks. The
+ *         i-th MPI rank talks to the M_{ij}-th MPI rank during the j-th
+ *         communication cycle. Each rank talks to each other rank exactly once.
+ */
 void LocalRegrid::CreateCommMatrix() {
     int N = amrex::ParallelDescriptor::NProcs();
     comm_matrix.resize(N, std::vector<int>(N, 0));
@@ -349,6 +437,9 @@ void LocalRegrid::CreateCommMatrix() {
     }
 }
 
+/** @brief Wraps box indicies across the periodic boundary conditions. 
+ * @param   lev Level on which to perform wrapping.
+ */
 void LocalRegrid::WrapIndices(const int lev) {
     if (wrapped_index.size() != lev)
         return;
@@ -367,6 +458,15 @@ void LocalRegrid::WrapIndices(const int lev) {
     wrapped_index.push_back( indices );
 }
 
+/** @brief Determines whether a box has neighbouring coarse/fine boundaries.
+ * @param   tilebox Current box to check.
+ * @param   c0      Tilebox lower box index.
+ * @param   c1      Tilebox upper box index.
+ * @param   lev     Current level.
+ * @param   border  Boolean map indicating whether a coarse/fine boundary is
+ *                  present.
+ * @return Total number of neighbouring coarse fine boundaries.
+ */
 inline int LocalRegrid::GetBoxCoarseFineBorders(
         const amrex::Box& tilebox, const amrex::IntVect& c0,
         const amrex::IntVect& c1, const int lev,
@@ -394,6 +494,25 @@ inline int LocalRegrid::GetBoxCoarseFineBorders(
     return remaining;
 }
 
+/** @brief Finds tagged cells within a box and measures its distance of any
+ *         coarse/fine boundary.
+ * @param   lo          Lower coordinate of current box.
+ * @param   hi          Higher coordinate of current box.
+ * @param   remaining   Number of adjecent coarse/fine boundaries that could
+ *                      still be pushed further.
+ * @param   tag_arr     TagArray containing all tags.
+ * @param   c0          Lower box index of current box.
+ * @param   c1          Upper box index of current box.
+ * @param   lev         Current coarse level.
+ * @param   ibff        Fine coarse level blocking factor of type int.
+ * @param   bff         Fine coarse level blocking factor but cast to double.
+ * @param   border      Map that indicates locations of coarse/fine boundaries.
+ * @param   closest_locations   Array containing the locations closest to a
+ *                              coarse/fine boundary on each OpenMP rank.                             
+ * @param   threshold           Distance threshold beyond which we don't really
+ *                              care about the exact distance anymore.
+ * @param   omp_thread_num      Current OpenMP thread.
+ */
 inline void LocalRegrid::TagAndMeasure(
         const amrex::Dim3& lo, const amrex::Dim3& hi, int remaining,
         const amrex::Array4<char>& tag_arr, const amrex::IntVect& c0,
@@ -420,6 +539,24 @@ inline void LocalRegrid::TagAndMeasure(
     }
 }
 
+/** @brief Given a location we measure the distance to all adjacent coarse/fine
+ *         boundaries. We add to our layout structure if the location is too 
+ *         close.
+ * @param   ci  Index to be checked.
+ * @param   c0          Lower box index of current box.
+ * @param   c1          Upper box index of current box.
+ * @param   ibff        Fine coarse level blocking factor of type int.
+ * @param   bff         Fine coarse level blocking factor but cast to double.
+ * @param   remaining   Number of adjecent coarse/fine boundaries that could
+ *                      still be pushed further.
+ * @param   lev         Current coarse level.
+ * @param   border      Map that indicates locations of coarse/fine boundaries.
+ * @param   closest_locations   Array containing the locations closest to a
+ *                              coarse/fine boundary on each OpenMP rank.                             
+ * @param   threshold           Distance threshold beyond which we don't really
+ *                              care about the exact distance anymore.
+ * @param   omp_thread_num      Current OpenMP thread.
+ */
 inline void LocalRegrid::CheckBorders(
         const amrex::IntVect& ci, const amrex::IntVect& c0,
         const amrex::IntVect& c1, const int ibff, const double bff,
@@ -471,6 +608,14 @@ inline void LocalRegrid::CheckBorders(
     }
 }
 
+/** @brief Tags cells on a level and measure distance to coarse/fine boundary.
+ *         If the tagged cell is too close we expand our layout structure at 
+ *         that location.
+ * @param   lev Level on which to tag.
+ * @return Globally shortest distance between a tagged cell and coarse/fine
+ *         boundary. Will be -1 if nothing has been tagged or distance is too
+ *         large to reliably determine distance (> blocking_factor).
+ */
 double LocalRegrid::DetermineNewBoxArray(const int lev) {
     const double threshold = (n_error_buf+1) * (n_error_buf+1);
     const double dimNf = sim->dimN[lev+1];
@@ -538,6 +683,10 @@ double LocalRegrid::DetermineNewBoxArray(const int lev) {
         return -1;
 }
 
+/** @brief Will expand lower level locally to ensure the fine level is nested
+ *         properly within.
+ * @param   lev Fine level.
+ */
 void LocalRegrid::FixNesting(const int lev) {
     amrex::BoxArray nest_ba = layouts[lev][0]->BoxArray(
                                     sim->blocking_factor[lev][0]);
@@ -580,6 +729,10 @@ void LocalRegrid::FixNesting(const int lev) {
     FinalizeLayout(lev-1);
 }
 
+/** @brief Wraps a box array accross periodic boundary conditions.
+ * @param   ba  BoxArray.
+ * @param   N   Total number of potential boxes along an axis.
+ */
 amrex::BoxArray LocalRegrid::WrapBoxArray(amrex::BoxArray& ba, int N) {
     amrex::BoxList new_bl;
 
@@ -602,6 +755,10 @@ amrex::BoxArray LocalRegrid::WrapBoxArray(amrex::BoxArray& ba, int N) {
     return amrex::BoxArray(new_bl);
 }
 
+/** @brief Explicitly add boxes to a given level and fill it with data.
+ * @param   lev Current level.
+ * @param   ba  BoxArray to be added to level.
+ */
 void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
     // Create temporary distribution mapping, box array and multifab with only
     // the new boxes.
