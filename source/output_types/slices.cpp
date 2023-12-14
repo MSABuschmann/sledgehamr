@@ -3,6 +3,9 @@
 
 namespace sledgehamr {
 
+/** @brief Writes slices along all the directions through all scalar fields and
+ *         levels.
+ */
 void Slices::Write() {
     for (int lev = 0; lev <= sim->GetFinestLevel(); ++lev) {
         // Create folder and file.
@@ -33,6 +36,17 @@ void Slices::Write() {
     }
 }
 
+/** @brief Writes a single slices.
+ * @param   state   State data.
+ * @param   lev     Current level.
+ * @param   file_id HDF5 file id.
+ * @param   ident   Unique identifier string.
+ * @param   d1      Orientation 1.
+ * @param   d2      Orientation 2.
+ * @param   d3      Orientation 3.
+ * @param   is_truncation_error Whether state data contains truncation error
+ *                              estimates.
+ */
 void Slices::WriteSingleSlice(const LevelData* state, int lev, hid_t file_id,
                               std::string ident, int d1, int d2, int d3,
                               bool is_truncation_error) {

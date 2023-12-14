@@ -4,12 +4,19 @@
 
 namespace sledgehamr {
 
+/** @brief Gathers metadata.
+ * @param   owner       Pointer to simulation.
+ * @oaram   prefix      Local ouptut folder.
+ * @param   output_type Id of output type, see output_id for details.
+ */
 LevelWriter::LevelWriter(Sledgehamr* owner, std::string prefix, int output_type)
     : sim(owner), folder(prefix), output_id(output_type) {
     DetermineSetup();
     ParseParams();
 }
 
+/** @brief Sets metadata according to output type.
+ */
 void LevelWriter::DetermineSetup() {
     if (output_id == sim->io_module->idx_coarse_box) {
         name = "coarse_box";
@@ -41,6 +48,8 @@ void LevelWriter::DetermineSetup() {
     }
 }
 
+/** @brief Reads relevant parameters.
+ */
 void LevelWriter::ParseParams() {
     std::string pre = "output." + name;
     amrex::ParmParse pp(pre);
@@ -48,6 +57,8 @@ void LevelWriter::ParseParams() {
     CheckDownsampleFactor();
 }
 
+/** @brief Checks if downsameple factor is valid.
+ */
 void LevelWriter::CheckDownsampleFactor() {
     if (!amrex::ParallelDescriptor::IOProcessor())
         return;
@@ -68,6 +79,8 @@ void LevelWriter::CheckDownsampleFactor() {
     }
 }
 
+/** @brief Writes levels according to metdata constraints.
+ */
 void LevelWriter::Write() {
     for (int lev = level_min; lev <= level_max; ++lev) {
         // Create folder and file.
@@ -92,6 +105,13 @@ void LevelWriter::Write() {
     }
 }
 
+/** @brief Writes a single level to disk.
+ * @param   state               State.
+ * @param   lev                 Level.
+ * @param   file_id             HDF5 file to write to.
+ * @param   ident               String identifier for dataset.
+ * @param   is_truncation_error Whether state contains truncation errors.
+ */
 void LevelWriter::WriteSingleLevel(
         const LevelData* state, int lev, hid_t file_id, std::string ident,
         bool is_truncation_error) {

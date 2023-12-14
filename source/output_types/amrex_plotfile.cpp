@@ -3,6 +3,8 @@
 
 namespace sledgehamr {
 
+/** @brief Writes the AMReX output file.
+ */
 void AmrexPlotFile::Write() {
     std::string plotfilename = folder + "/output";
     int nlevels = sim->GetFinestLevel() + 1;

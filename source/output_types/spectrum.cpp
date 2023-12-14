@@ -3,7 +3,12 @@
 #include "fft.h"
 
 namespace sledgehamr {
-
+i
+/** @brief Computes a spectrum and saves it to disk.
+ * @param   id      Output counter id.
+ * @param   file_id HDF5 file id.
+ * @param   sim     Pointer to the simulation.
+ */
 void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     const int lev = 0;
     const int dimN = sim->dimN[lev];

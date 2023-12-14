@@ -3,6 +3,11 @@
 
 namespace sledgehamr {
 
+/** @brief Computes and saves a line-of-sight projection.
+ * @param   id      Output counter id.
+ * @param   file_id HDF5 file id.
+ * @param   sim     Pointer to the simulation.
+ */
 void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     int mlevel = INT_MAX;
     amrex::ParmParse pp("output.projections");
@@ -81,6 +86,17 @@ void Projection::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
     }
 }
 
+/** @brief Projection operator.
+ * @param   i               i-th index of cell to project.
+ * @param   j               j-th index of cell to project.
+ * @param   k               k-th index of cell to project.
+ * @param   projection      Existing projection.
+ * @param   n_projection    Number of cells projected.
+ * @param   ratio           Refinement ratio to coarse level.
+ * @param   dimN            This levels number of theoretical cells along on
+ *                          axis.
+ * @param   val             Cells value.
+ */
 AMREX_FORCE_INLINE
 void Projection::Add(const int i, const int j, const int k, double* projection,
                      int* n_projection, const int ratio, const int dimN,

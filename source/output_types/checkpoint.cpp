@@ -13,6 +13,8 @@
 
 namespace sledgehamr {
 
+/** @brief Writes an entire checkpoint file.
+ */
 void Checkpoint::Write() {
     const int nlevels = sim->finest_level + 1;
     const int noutput = sim->io_module->output.size();
@@ -97,6 +99,9 @@ void Checkpoint::Write() {
     amrex::ParallelDescriptor::Barrier();
 }
 
+/** @brief Reads a checkpoint header.
+ * @return Whether read was successfull.
+ */
 bool Checkpoint::ReadHeader() {
     const int nparams = 8;
     double header[nparams];
@@ -116,6 +121,8 @@ bool Checkpoint::ReadHeader() {
     return true;
 }
 
+/** @brief Reads a checkpoint and sets data accordingly.
+ */
 void Checkpoint::Read() {
     if (sim->restart_sim)
         amrex::Print() << "Restarting from checkpoint: " << folder << std::endl;
@@ -180,11 +187,17 @@ void Checkpoint::Read() {
     UpdateLevels();
 }
 
+/** @brief Moves to next line in file stream.
+ * @param   is  filestream.
+ */
 void Checkpoint::GotoNextLine(std::istream& is) {
     constexpr std::streamsize bl_ignore_max {100000};
     is.ignore(bl_ignore_max, '\n');
 }
 
+/** @brief Updates the meta data of all output modules with the meta data in
+ *         checkpoint.
+ */
 void Checkpoint::UpdateOutputModules() {
     if (!sim->restart_sim)
         return;
@@ -224,6 +237,8 @@ void Checkpoint::UpdateOutputModules() {
     }
 }
 
+/** @brief Updates meta data of levels with that of the checkpoint.
+ */
 void Checkpoint::UpdateLevels() {
     std::string filename = GetHeaderName();
     std::vector<int> blocking_factor(sim->finest_level+1);
@@ -262,6 +277,8 @@ void Checkpoint::UpdateLevels() {
     }
 }
 
+/** @brief Deletes the checkpoint.
+ */
 void Checkpoint::Delete() {
     amrex::Print() << "Deleting checkpoint " << folder << " ..." << std::endl;
 

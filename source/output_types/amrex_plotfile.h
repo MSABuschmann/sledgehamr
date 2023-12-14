@@ -5,15 +5,26 @@
 
 namespace sledgehamr {
 
+/** @brief Writes an AMReX plotfile for yt compatability.
+ */
 class AmrexPlotFile {
   public:
+    /** @brief Constructior
+     * @param   owner   Pointer to simulation.
+     * @param   prefix  Local output folder.
+     */
     AmrexPlotFile(Sledgehamr* owner, std::string prefix)
       : sim(owner), folder(prefix) {};
 
     void Write();
 
   private:
+    /** @brief Local output folder.
+     */
     std::string folder;
+
+    /** @brief Pointer to simulation.
+     */
     Sledgehamr* sim;
 };
 

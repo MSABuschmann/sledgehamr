@@ -6,6 +6,14 @@
 
 namespace sledgehamr {
 
+/** @brief Constructor that provides the settings.
+ * @param   module_name     Name of output (to appear in file path e.g.).
+ * @param   function        Function pointer to function that writes the
+ *                          actual output.
+ * @param   is_forcable     If true, output will be written at the very end
+ *                          of the simulation independent of the time
+ *                          interval.
+ */
 OutputModule::OutputModule(std::string module_name, output_fct function,
                            bool is_forceable)
     : fct(function),
@@ -17,6 +25,8 @@ OutputModule::OutputModule(std::string module_name, output_fct function,
         CreateParentFolder(alt_prefix);
 }
 
+/** @brief Parses all parameters related to this output type.
+ */
 void OutputModule::ParseParams() {
     amrex::ParmParse pp_out("output");
     pp_out.get("output_folder", prefix);
@@ -37,6 +47,9 @@ void OutputModule::ParseParams() {
     }
 }
 
+/** @brief Creates a parent folder for the output.
+ * @param this_prefix   parent folder.
+ */
 void OutputModule::CreateParentFolder(std::string this_prefix) {
     std::string output_folder = this_prefix + "/" + name;
     if (!amrex::UtilCreateDirectory(output_folder, 0755)) {
@@ -46,6 +59,11 @@ void OutputModule::CreateParentFolder(std::string this_prefix) {
     }
 }
 
+/** @brief Does the actual writing if criteria are met.
+ * @param   time    Current time.
+ * @param   force   Output will be written independent of the current time
+ *                  interval if forceable=true.
+ */
 void OutputModule::Write(double time, bool force) {
     if (interval < 0) return;
 
