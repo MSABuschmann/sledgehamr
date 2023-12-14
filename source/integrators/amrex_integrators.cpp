@@ -4,6 +4,14 @@
 
 namespace sledgehamr {
 
+/** @brief Advances one level by one time step using the Runge-Kutta
+ *         integration scheme.
+ * @param   mf_old  Current state.
+ * @param   mf_new  New state after advancement.
+ * @param   lev     Current level.
+ * @param   dt      Time step size. 
+ * @param   dx      Grid spacing.
+ */
 void IntegratorAMReX::Integrate(LevelData& mf_old, LevelData& mf_new,
         const int lev, const double dt, const double dx) {
     // TODO Make 4th order time interpolation available.

@@ -5,6 +5,9 @@
 
 namespace sledgehamr {
 
+/** @brief Implementation of the low-storage strong stability preserving third
+ *         order Runge-Kutta integration scheme (LSSSPRK3).
+ */
 class IntegratorLsssprk3 : public Integrator {
     using Integrator::Integrator;
 

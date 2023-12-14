@@ -3,13 +3,26 @@
 
 namespace sledgehamr {
 
+/** @brief Set up integrator in advance.
+ * @param   owner   Pointer to simulation.
+ * @oaram   id      Integrator type. Must be either RknButcherTableau, Rkn4, or
+ *                  Rkn5.
+ */
 IntegratorRkn::IntegratorRkn(Sledgehamr* owner, const IntegratorType id)
-  : Integrator{owner} {
-    sim = owner;
-    integrator_type = id; 
+  : Integrator{owner},
+    sim(owner),
+    integrator_type(id) {
     SetButcherTableau();
 }
 
+/** @brief Advances one level by one time step using the Runge-Kutta-Nystroem
+ *         integration scheme.
+ * @param   mf_old  Current state.
+ * @param   mf_new  New state after advancement.
+ * @param   lev     Current level.
+ * @param   dt      Time step size. 
+ * @param   dx      Grid spacing.
+ */
 void IntegratorRkn::Integrate(LevelData& mf_old, LevelData& mf_new,
         const int lev, const double dt, const double dx) {
         const double t = mf_old.t;
@@ -107,6 +120,8 @@ void IntegratorRkn::Integrate(LevelData& mf_old, LevelData& mf_new,
                         lev, t + dt, mf_new);
 }
 
+/** @brief Sets up the correct Butcher Tableau given an integration scheme.
+ */
 void IntegratorRkn::SetButcherTableau() {
     switch (integrator_type) {
         case RknButcherTableau:
@@ -141,6 +156,8 @@ void IntegratorRkn::SetButcherTableau() {
     number_nodes = weights_b.size();
 }
 
+/** @brief Reads in a user-defined Butcher Tableau.
+ */
 void IntegratorRkn::ReadUserDefinedButcherTableau() {
     amrex::ParmParse pp("integrator");
 

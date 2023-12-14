@@ -3,10 +3,11 @@
 
 namespace sledgehamr{
 
-Integrator::Integrator(Sledgehamr* owner) {
-    sim = owner;
-}
-
+/** @brief Wrapper function to advance a level by one time step. This function 
+ *         selects and swaps data appropriately in particular regarding to the
+ *         shadow level.
+ * @param   lev Level to be advanced.
+ */
 void Integrator::Advance(const int lev) {
     if (lev >= 0) {
         sim->grid_old[lev].contains_truncation_errors = false;
@@ -29,6 +30,10 @@ void Integrator::Advance(const int lev) {
     }
 }
 
+/** @brief Creates a display name containing the selected integrator type.
+ * @param   type    Integrator type.
+ * @return Display name.
+ */
 std::string Integrator::Name(IntegratorType type) {
     switch (type) {
         case AmrexRkButcherTableau:

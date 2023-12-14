@@ -6,7 +6,8 @@
 
 namespace sledgehamr {
 
-/** @brief
+/** @brief Enum containing all valid integration types. These are the values
+ *         that are being used in the inputs file under 'integrator.type'.
  */
 enum IntegratorType {
     AmrexRkButcherTableau = 0,
@@ -27,25 +28,24 @@ class Sledgehamr;
  */
 class Integrator {
   public:
-    Integrator(Sledgehamr* owner);
-
-    /** @brief Advances a single level.
-     * @param   lev Level to be advanced.
-     */
+    Integrator(Sledgehamr* owner) : sim(owner) {};
     virtual void Advance(const int lev);
-
-    /** @brief
-     */
     static std::string Name(IntegratorType type);
     static void DebugMessage(amrex::MultiFab& mf, std::string msg);
 
   protected:
-    /** @brief
+    /** @brief Purely virtual function that advances one level by one time step
+     *         using an integration scheme of your choice.
+     * @param   mf_old  Current state.
+     * @param   mf_new  New state after advancement.
+     * @param   lev     Current level.
+     * @param   dt      Time step size.
+     * @param   dx      Grid spacing.
      */
     virtual void Integrate(LevelData& mf_old, LevelData& mf_new, const int lev,
                            const double dt, const double dx) = 0;
 
-    /** @brief Pointer to owner on whose data this class operates.
+    /** @brief Pointer to the simulation.
      */
     Sledgehamr* sim;
 };

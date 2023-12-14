@@ -5,6 +5,8 @@
 
 namespace sledgehamr {
 
+/** @brief Implements the Runge-Kutta integration scheme provided within AMReX.
+ */
 class IntegratorAMReX : public Integrator {
     using Integrator::Integrator;
 

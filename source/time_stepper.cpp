@@ -7,6 +7,10 @@
 
 namespace sledgehamr {
 
+/** @brief Initalizes all unique instances for regridding and initializes the
+ *         integrator.
+ * @param   owner   Pointer to the simulation.
+ */
 TimeStepper::TimeStepper(Sledgehamr* owner) : sim(owner) {
     local_regrid = std::make_unique<LocalRegrid>(sim);
     scheduler = std::make_unique<RegridScheduler>();
@@ -14,6 +18,9 @@ TimeStepper::TimeStepper(Sledgehamr* owner) : sim(owner) {
     SetIntegrator();
 }
 
+/** @brief Initalizes the integrator class. Will abort the entire program if
+ *         no corresponding integrator could be found.
+ */
 void TimeStepper::SetIntegrator() {
     // Initialize the correct integrator.
     amrex::ParmParse pp_inte("integrator");
@@ -54,6 +61,8 @@ void TimeStepper::SetIntegrator() {
     }
 }
 
+/** @brief Parses all parameters needed for the sub-cycling algorithm.
+ */
 void TimeStepper::ParseParams() {
     // Set regridding intervals.
     amrex::ParmParse pp_amr("amr");
@@ -71,6 +80,10 @@ void TimeStepper::ParseParams() {
     pp_out.query("output_of_initial_state", output_of_initial_state);
 }
 
+/** @brief Recursive function and the core of the sub-cycling in time
+ *         algorithm. Advances a given level by dt[level].
+ * @param   lev Level to be advanced.
+ */
 void TimeStepper::Advance(int lev) {
     // Perform or schedule regrids.
     if (sim->shadow_hierarchy) {
@@ -116,6 +129,11 @@ void TimeStepper::Advance(int lev) {
         SynchronizeTimes();
 }
 
+/** @brief Synchronizes two levels by averaging down. Computes truncation
+ *         errors if regrid is scheduled.
+ * @param   lev Synchronizes lev with either lev-1 or lev+1 depending on the
+ *              regrid status.
+ */
 void TimeStepper::SynchronizeLevels(int lev) {
     // Check if regrid has been scheduled so we can decide whether we need to
     // compute truncation error erstimate on top of averaging down. Value of
@@ -140,11 +158,18 @@ void TimeStepper::SynchronizeLevels(int lev) {
     }
 }
 
+/** @brief Synchronizes the time of all levels. This is needed to avoid
+ *         de-synchronization due to floating point precission errors during
+ *         t -> t + dt operations.
+ */
 void TimeStepper::SynchronizeTimes() {
     for (int lev=1; lev <= sim->finest_level; ++lev)
         sim->grid_new[lev].t = sim->grid_new[0].t;
 }
 
+/** @brief Prints message just before a level has been advanced.
+ * @param   lev Level that will be advanced.
+ */
 void TimeStepper::PreAdvanceMessage(int lev) {
     std::string level_message = LevelMessage(lev, sim->grid_new[lev].istep);
 
@@ -158,6 +183,9 @@ void TimeStepper::PreAdvanceMessage(int lev) {
                    << "\% coverage)" << std::endl;
 }
 
+/** @brief Prints message right after a level has been advanced.
+ * @param   lev Level that has be advanced.
+ */
 void TimeStepper::PostAdvanceMessage(int lev, double duration) {
     std::string level_message = LevelMessage(lev, sim->grid_new[lev].istep-1);
 
@@ -169,6 +197,11 @@ void TimeStepper::PostAdvanceMessage(int lev, double duration) {
                    << std::endl;
 }
 
+/** @brief Returns a display message containing a level and its step number.
+ * @param   lev     Level to appear in message.
+ * @param   istep   Corresponding step number.
+ * @return Display message.
+ */
 std::string TimeStepper::LevelMessage(int lev, int istep) {
     std::string level_name = sledgehamr::utils::LevelName(lev);
     std::string out = "  ";
@@ -179,6 +212,10 @@ std::string TimeStepper::LevelMessage(int lev, int istep) {
     return out;
 }
 
+/** @brief Schedules a regrid ahead of such that we can compute truncations
+ *         errors first if needed.
+ * @param   lev Level at which to tag cells.
+ */
 void TimeStepper::ScheduleRegrid(int lev) {
     double time  = sim->grid_new[lev].t;
     int    istep = sim->grid_new[lev].istep;
@@ -239,6 +276,10 @@ void TimeStepper::ScheduleRegrid(int lev) {
     }
 }
 
+/** @brief Checks whether a regrid has been scheduled and triggers a regrid
+ *         if so.
+ * @param   lev Current level.
+ */
 void TimeStepper::DoRegridIfScheduled(int lev) {
     double time  = sim->grid_new[lev].t;
     int    istep = sim->grid_new[lev].istep;
@@ -251,6 +292,10 @@ void TimeStepper::DoRegridIfScheduled(int lev) {
     scheduler->DidRegrid(time);
 }
 
+/** @brief Performs a regrid if needed if no truncation tags are to be
+ *         performed.
+ * @param   lev Level at which to tag cells.
+ */
 void TimeStepper::NoShadowRegrid(int lev) {
     double time = sim->grid_new[lev].t;
 
@@ -276,6 +321,11 @@ void TimeStepper::NoShadowRegrid(int lev) {
     DoRegrid(lev, time);
 }
 
+/** @brief Performs the actual regrid, either local or global as
+ *         appropriate.
+ * @param   lev     Level at which to tag cells.
+ * @param   time    Current time.
+ */
 void TimeStepper::DoRegrid(int lev, double time) {
     if (semistatic_sim) {
         sim->level_synchronizer->IncreaseCoarseLevelResolution();
