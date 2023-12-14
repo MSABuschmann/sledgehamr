@@ -77,7 +77,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Class that takes care of the sub-cycling in time algorithm as well as the scheduling regrids.  
+<p>Class that takes care of the sub-cycling in time algorithm and schedules regrids when necessary.  
  <a href="classsledgehamr_1_1TimeStepper.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="time__stepper_8h_source.html">time_stepper.h</a>&gt;</code></p>
@@ -85,6 +85,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3e07dcb8a5a92cd4a10b8e3e34f5ce57"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a3e07dcb8a5a92cd4a10b8e3e34f5ce57">TimeStepper</a> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *owner)</td></tr>
+<tr class="memdesc:a3e07dcb8a5a92cd4a10b8e3e34f5ce57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initalizes all unique instances for regridding and initializes the integrator.  <a href="classsledgehamr_1_1TimeStepper.html#a3e07dcb8a5a92cd4a10b8e3e34f5ce57">More...</a><br /></td></tr>
 <tr class="separator:a3e07dcb8a5a92cd4a10b8e3e34f5ce57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a029f92dcddadc58f020a528cd93da35d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a029f92dcddadc58f020a528cd93da35d">Advance</a> (int lev)</td></tr>
 <tr class="memdesc:a029f92dcddadc58f020a528cd93da35d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursive function and the core of the sub-cycling in time algorithm. Advances a given level by dt[level].  <a href="classsledgehamr_1_1TimeStepper.html#a029f92dcddadc58f020a528cd93da35d">More...</a><br /></td></tr>
@@ -99,8 +100,10 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:ad6770cb1fe15aac86e1d3177871e3a59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to integration module.  <a href="classsledgehamr_1_1TimeStepper.html#ad6770cb1fe15aac86e1d3177871e3a59">More...</a><br /></td></tr>
 <tr class="separator:ad6770cb1fe15aac86e1d3177871e3a59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72c737467fbb1dd826d088256708d652"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classsledgehamr_1_1LocalRegrid.html">LocalRegrid</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a72c737467fbb1dd826d088256708d652">local_regrid</a></td></tr>
+<tr class="memdesc:a72c737467fbb1dd826d088256708d652"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the local regrid module.  <a href="classsledgehamr_1_1TimeStepper.html#a72c737467fbb1dd826d088256708d652">More...</a><br /></td></tr>
 <tr class="separator:a72c737467fbb1dd826d088256708d652"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8f91c75fad99d45941504c7694198a8"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classsledgehamr_1_1RegridScheduler.html">RegridScheduler</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#aa8f91c75fad99d45941504c7694198a8">scheduler</a></td></tr>
+<tr class="memdesc:aa8f91c75fad99d45941504c7694198a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the regrid scheduler.  <a href="classsledgehamr_1_1TimeStepper.html#aa8f91c75fad99d45941504c7694198a8">More...</a><br /></td></tr>
 <tr class="separator:aa8f91c75fad99d45941504c7694198a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
@@ -112,14 +115,16 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:add57b2899e388aa1264369340a5b260e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronizes the time of all levels. This is needed to avoid de-synchronization due to floating point precission errors during t -&gt; t + dt operations.  <a href="classsledgehamr_1_1TimeStepper.html#add57b2899e388aa1264369340a5b260e">More...</a><br /></td></tr>
 <tr class="separator:add57b2899e388aa1264369340a5b260e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b0c94fc8454f5b354cbc5b81f61f0a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a3b0c94fc8454f5b354cbc5b81f61f0a9">PreAdvanceMessage</a> (int lev)</td></tr>
-<tr class="memdesc:a3b0c94fc8454f5b354cbc5b81f61f0a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints message before and after each level has been advanced.  <a href="classsledgehamr_1_1TimeStepper.html#a3b0c94fc8454f5b354cbc5b81f61f0a9">More...</a><br /></td></tr>
+<tr class="memdesc:a3b0c94fc8454f5b354cbc5b81f61f0a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints message just before a level has been advanced.  <a href="classsledgehamr_1_1TimeStepper.html#a3b0c94fc8454f5b354cbc5b81f61f0a9">More...</a><br /></td></tr>
 <tr class="separator:a3b0c94fc8454f5b354cbc5b81f61f0a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11aca9df7e117d11661528b332a0d5f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a11aca9df7e117d11661528b332a0d5f0">PostAdvanceMessage</a> (int lev, double duration)</td></tr>
+<tr class="memdesc:a11aca9df7e117d11661528b332a0d5f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints message right after a level has been advanced.  <a href="classsledgehamr_1_1TimeStepper.html#a11aca9df7e117d11661528b332a0d5f0">More...</a><br /></td></tr>
 <tr class="separator:a11aca9df7e117d11661528b332a0d5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a4fff4c771f5f7609deec6f11a6e3ed"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a7a4fff4c771f5f7609deec6f11a6e3ed">LevelMessage</a> (int lev, int istep)</td></tr>
+<tr class="memdesc:a7a4fff4c771f5f7609deec6f11a6e3ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a display message containing a level and its step number.  <a href="classsledgehamr_1_1TimeStepper.html#a7a4fff4c771f5f7609deec6f11a6e3ed">More...</a><br /></td></tr>
 <tr class="separator:a7a4fff4c771f5f7609deec6f11a6e3ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16525c28e95bde0774901bceec290280"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a16525c28e95bde0774901bceec290280">ScheduleRegrid</a> (int lev)</td></tr>
-<tr class="memdesc:a16525c28e95bde0774901bceec290280"><td class="mdescLeft">&#160;</td><td class="mdescRight">Schedules a regrid ahead of such that we can compute truncations errors first.  <a href="classsledgehamr_1_1TimeStepper.html#a16525c28e95bde0774901bceec290280">More...</a><br /></td></tr>
+<tr class="memdesc:a16525c28e95bde0774901bceec290280"><td class="mdescLeft">&#160;</td><td class="mdescRight">Schedules a regrid ahead of such that we can compute truncations errors first if needed.  <a href="classsledgehamr_1_1TimeStepper.html#a16525c28e95bde0774901bceec290280">More...</a><br /></td></tr>
 <tr class="separator:a16525c28e95bde0774901bceec290280"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a482516ed33eb74d4f54a213b5cede434"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a482516ed33eb74d4f54a213b5cede434">DoRegridIfScheduled</a> (int lev)</td></tr>
 <tr class="memdesc:a482516ed33eb74d4f54a213b5cede434"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a regrid has been scheduled and triggers a regrid if so.  <a href="classsledgehamr_1_1TimeStepper.html#a482516ed33eb74d4f54a213b5cede434">More...</a><br /></td></tr>
@@ -131,8 +136,10 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:a1f6214740fea8efe943b363d3d5f2e9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs the actual regrid, either local or global as appropriate.  <a href="classsledgehamr_1_1TimeStepper.html#a1f6214740fea8efe943b363d3d5f2e9c">More...</a><br /></td></tr>
 <tr class="separator:a1f6214740fea8efe943b363d3d5f2e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae49a3406fed80035589d8a039f6877fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#ae49a3406fed80035589d8a039f6877fc">ParseParams</a> ()</td></tr>
+<tr class="memdesc:ae49a3406fed80035589d8a039f6877fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses all parameters needed for the sub-cycling algorithm.  <a href="classsledgehamr_1_1TimeStepper.html#ae49a3406fed80035589d8a039f6877fc">More...</a><br /></td></tr>
 <tr class="separator:ae49a3406fed80035589d8a039f6877fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b24664e6d275dfb460aec743cf09a98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a9b24664e6d275dfb460aec743cf09a98">SetIntegrator</a> ()</td></tr>
+<tr class="memdesc:a9b24664e6d275dfb460aec743cf09a98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initalizes the integrator class. Will abort the entire program if no corresponding integrator could be found.  <a href="classsledgehamr_1_1TimeStepper.html#a9b24664e6d275dfb460aec743cf09a98">More...</a><br /></td></tr>
 <tr class="separator:a9b24664e6d275dfb460aec743cf09a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -141,15 +148,17 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a8ff583a364f36410e458ae0e44318b16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of times at which a given level has been regridded last.  <a href="classsledgehamr_1_1TimeStepper.html#a8ff583a364f36410e458ae0e44318b16">More...</a><br /></td></tr>
 <tr class="separator:a8ff583a364f36410e458ae0e44318b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51537c4c4d52dab56ccead8aca01165c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a51537c4c4d52dab56ccead8aca01165c">output_of_initial_state</a> = true</td></tr>
+<tr class="memdesc:a51537c4c4d52dab56ccead8aca01165c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether we want to force write output at the beginning of the sim.  <a href="classsledgehamr_1_1TimeStepper.html#a51537c4c4d52dab56ccead8aca01165c">More...</a><br /></td></tr>
 <tr class="separator:a51537c4c4d52dab56ccead8aca01165c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1d21953833ca2436f590293bf2d1b0a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#ad1d21953833ca2436f590293bf2d1b0a">semistatic_sim</a> = false</td></tr>
+<tr class="memdesc:ad1d21953833ca2436f590293bf2d1b0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether we are running a semi-static sim.  <a href="classsledgehamr_1_1TimeStepper.html#ad1d21953833ca2436f590293bf2d1b0a">More...</a><br /></td></tr>
 <tr class="separator:ad1d21953833ca2436f590293bf2d1b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2368795a43b725bc7e6daa2047d1ac50"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1TimeStepper.html#a2368795a43b725bc7e6daa2047d1ac50">sim</a></td></tr>
-<tr class="memdesc:a2368795a43b725bc7e6daa2047d1ac50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to other modules.  <a href="classsledgehamr_1_1TimeStepper.html#a2368795a43b725bc7e6daa2047d1ac50">More...</a><br /></td></tr>
+<tr class="memdesc:a2368795a43b725bc7e6daa2047d1ac50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the simulation.  <a href="classsledgehamr_1_1TimeStepper.html#a2368795a43b725bc7e6daa2047d1ac50">More...</a><br /></td></tr>
 <tr class="separator:a2368795a43b725bc7e6daa2047d1ac50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class that takes care of the sub-cycling in time algorithm as well as the scheduling regrids. </p>
+<div class="textblock"><p>Class that takes care of the sub-cycling in time algorithm and schedules regrids when necessary. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3e07dcb8a5a92cd4a10b8e3e34f5ce57"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3e07dcb8a5a92cd4a10b8e3e34f5ce57">&#9670;&nbsp;</a></span>TimeStepper()</h2>
@@ -166,6 +175,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Initalizes all unique instances for regridding and initializes the integrator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">owner</td><td>Pointer to the simulation. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -309,6 +326,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Returns a display message containing a level and its step number. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level to appear in message. </td></tr>
+    <tr><td class="paramname">istep</td><td>Corresponding step number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Display message. </dd></dl>
+
 </div>
 </div>
 <a id="a876a8b93c502e65daa1f7dafeeddf368"></a>
@@ -368,6 +395,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Parses all parameters needed for the sub-cycling algorithm. </p>
+
 </div>
 </div>
 <a id="a11aca9df7e117d11661528b332a0d5f0"></a>
@@ -404,6 +433,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Prints message right after a level has been advanced. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level that has be advanced. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a3b0c94fc8454f5b354cbc5b81f61f0a9"></a>
@@ -430,10 +467,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Prints message before and after each level has been advanced. </p>
+<p>Prints message just before a level has been advanced. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lev</td><td>Level that has/will be advanced. </td></tr>
+    <tr><td class="paramname">lev</td><td>Level that will be advanced. </td></tr>
   </table>
   </dd>
 </dl>
@@ -464,7 +501,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Schedules a regrid ahead of such that we can compute truncations errors first. </p>
+<p>Schedules a regrid ahead of such that we can compute truncations errors first if needed. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lev</td><td>Level at which to tag cells. </td></tr>
@@ -496,6 +533,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Initalizes the integrator class. Will abort the entire program if no corresponding integrator could be found. </p>
 
 </div>
 </div>
@@ -613,6 +652,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Pointer to the local regrid module. </p>
+
 </div>
 </div>
 <a id="a51537c4c4d52dab56ccead8aca01165c"></a>
@@ -634,6 +675,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Whether we want to force write output at the beginning of the sim. </p>
 
 </div>
 </div>
@@ -665,6 +708,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Pointer to the regrid scheduler. </p>
+
 </div>
 </div>
 <a id="ad1d21953833ca2436f590293bf2d1b0a"></a>
@@ -686,6 +731,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Whether we are running a semi-static sim. </p>
 
 </div>
 </div>
@@ -709,7 +756,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Pointer to other modules. </p>
+<p>Pointer to the simulation. </p>
 
 </div>
 </div>

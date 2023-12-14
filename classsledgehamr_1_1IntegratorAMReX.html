@@ -75,6 +75,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Implements the Runge-Kutta integration scheme provided within AMReX.  
+ <a href="classsledgehamr_1_1IntegratorAMReX.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="amrex__integrators_8h_source.html">amrex_integrators.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for sledgehamr::IntegratorAMReX:</div>
@@ -89,6 +92,7 @@ Inheritance diagram for sledgehamr::IntegratorAMReX:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a91f1822aaa2ea2cc748994e4ce503cbd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IntegratorAMReX.html#a91f1822aaa2ea2cc748994e4ce503cbd">Integrate</a> (<a class="el" href="classsledgehamr_1_1LevelData.html">LevelData</a> &amp;mf_old, <a class="el" href="classsledgehamr_1_1LevelData.html">LevelData</a> &amp;mf_new, const int lev, const double dt, const double dx) override</td></tr>
+<tr class="memdesc:a91f1822aaa2ea2cc748994e4ce503cbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advances one level by one time step using the Runge-Kutta integration scheme.  <a href="classsledgehamr_1_1IntegratorAMReX.html#a91f1822aaa2ea2cc748994e4ce503cbd">More...</a><br /></td></tr>
 <tr class="separator:a91f1822aaa2ea2cc748994e4ce503cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
@@ -102,19 +106,22 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a9c41e014f56f2af5f49e563560fcf847 inherit pub_methods_classsledgehamr_1_1Integrator"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Integrator.html#a9c41e014f56f2af5f49e563560fcf847">Integrator</a> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *owner)</td></tr>
 <tr class="separator:a9c41e014f56f2af5f49e563560fcf847 inherit pub_methods_classsledgehamr_1_1Integrator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8312a57d5b4f3c0f104bf94c800aa8b2 inherit pub_methods_classsledgehamr_1_1Integrator"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Integrator.html#a8312a57d5b4f3c0f104bf94c800aa8b2">Advance</a> (const int lev)</td></tr>
-<tr class="memdesc:a8312a57d5b4f3c0f104bf94c800aa8b2 inherit pub_methods_classsledgehamr_1_1Integrator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advances a single level.  <a href="classsledgehamr_1_1Integrator.html#a8312a57d5b4f3c0f104bf94c800aa8b2">More...</a><br /></td></tr>
+<tr class="memdesc:a8312a57d5b4f3c0f104bf94c800aa8b2 inherit pub_methods_classsledgehamr_1_1Integrator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper function to advance a level by one time step. This function selects and swaps data appropriately in particular regarding to the shadow level.  <a href="classsledgehamr_1_1Integrator.html#a8312a57d5b4f3c0f104bf94c800aa8b2">More...</a><br /></td></tr>
 <tr class="separator:a8312a57d5b4f3c0f104bf94c800aa8b2 inherit pub_methods_classsledgehamr_1_1Integrator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_methods_classsledgehamr_1_1Integrator"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classsledgehamr_1_1Integrator')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classsledgehamr_1_1Integrator.html">sledgehamr::Integrator</a></td></tr>
 <tr class="memitem:ae61eb914c8d9303f5731e2f019ac24c0 inherit pub_static_methods_classsledgehamr_1_1Integrator"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Integrator.html#ae61eb914c8d9303f5731e2f019ac24c0">Name</a> (<a class="el" href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9f">IntegratorType</a> type)</td></tr>
+<tr class="memdesc:ae61eb914c8d9303f5731e2f019ac24c0 inherit pub_static_methods_classsledgehamr_1_1Integrator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a display name containing the selected integrator type.  <a href="classsledgehamr_1_1Integrator.html#ae61eb914c8d9303f5731e2f019ac24c0">More...</a><br /></td></tr>
 <tr class="separator:ae61eb914c8d9303f5731e2f019ac24c0 inherit pub_static_methods_classsledgehamr_1_1Integrator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15f2ca971f8bb4f093defdbfadb34381 inherit pub_static_methods_classsledgehamr_1_1Integrator"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Integrator.html#a15f2ca971f8bb4f093defdbfadb34381">DebugMessage</a> (amrex::MultiFab &amp;mf, std::string msg)</td></tr>
 <tr class="separator:a15f2ca971f8bb4f093defdbfadb34381 inherit pub_static_methods_classsledgehamr_1_1Integrator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classsledgehamr_1_1Integrator"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classsledgehamr_1_1Integrator')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classsledgehamr_1_1Integrator.html">sledgehamr::Integrator</a></td></tr>
 <tr class="memitem:aef34ff354e471788adf90b75b74c4de3 inherit pro_attribs_classsledgehamr_1_1Integrator"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Integrator.html#aef34ff354e471788adf90b75b74c4de3">sim</a></td></tr>
-<tr class="memdesc:aef34ff354e471788adf90b75b74c4de3 inherit pro_attribs_classsledgehamr_1_1Integrator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to owner on whose data this class operates.  <a href="classsledgehamr_1_1Integrator.html#aef34ff354e471788adf90b75b74c4de3">More...</a><br /></td></tr>
+<tr class="memdesc:aef34ff354e471788adf90b75b74c4de3 inherit pro_attribs_classsledgehamr_1_1Integrator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the simulation.  <a href="classsledgehamr_1_1Integrator.html#aef34ff354e471788adf90b75b74c4de3">More...</a><br /></td></tr>
 <tr class="separator:aef34ff354e471788adf90b75b74c4de3 inherit pro_attribs_classsledgehamr_1_1Integrator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements the Runge-Kutta integration scheme provided within AMReX. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a91f1822aaa2ea2cc748994e4ce503cbd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a91f1822aaa2ea2cc748994e4ce503cbd">&#9670;&nbsp;</a></span>Integrate()</h2>
 
@@ -167,6 +174,18 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Advances one level by one time step using the Runge-Kutta integration scheme. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mf_old</td><td>Current state. </td></tr>
+    <tr><td class="paramname">mf_new</td><td>New state after advancement. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">dt</td><td>Time step size. </td></tr>
+    <tr><td class="paramname">dx</td><td>Grid spacing. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p>Implements <a class="el" href="classsledgehamr_1_1Integrator.html#a15c48ca63be078be02de1d7ff2d4b516">sledgehamr::Integrator</a>.</p>
 
 </div>
@@ -186,7 +205,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
