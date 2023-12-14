@@ -9,6 +9,12 @@ namespace sledgehamr {
 namespace utils {
 namespace hdf5 {
 
+/** @brief Template function that reads dataset of type T from an HDF5 file.
+ * @param   filename    HDF5 filename.
+ * @param   dnames      List of data set names to try.
+ * @param   data        Array pointer to data.
+ * @return Whether the read was successfull.
+ */
 template <typename T>
 static bool Read(std::string filename, std::vector<std::string> dnames,
                  T* data) {
@@ -64,6 +70,12 @@ static bool Read(std::string filename, std::vector<std::string> dnames,
     return true;
 }
 
+/** @brief Template function to write a dataset of type T to an HDF5 file.
+ * @param   file_id HDF5 file id.
+ * @param   dset    Dataset name.
+ * @param   data    Array pointer to data.
+ * @param   size    Length of data.
+ */
 template <typename T>
 static void Write(hid_t file_id, std::string dset, T* data,
                   unsigned long long size) {
@@ -92,6 +104,12 @@ static void Write(hid_t file_id, std::string dset, T* data,
     H5Dclose(dataset_id);
 }
 
+/** @brief Checks from a list of datasets whether one of them exists in a given
+ *         HDF5 file.
+ * @param   filename    HDF5 filename.
+ * @param   dnames      List of datasets.
+ * @return The existing dataset or an empty string of none exist.
+ */
 static std::string FindDataset(std::string filename,
                                 std::vector<std::string> dnames) {
     // Try and open HDF5 file.

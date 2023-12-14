@@ -8,6 +8,16 @@
 namespace sledgehamr {
 namespace utils {
 
+/** @brief This function computes the FFT of some quantity.
+ * @param   field                   State to compute the FFT of.
+ * @param   field_fft_real_or_abs   Contains the real or absolute part of the
+ *                                  FFT.
+ * @param   field_fft_imag          Contains the imaginary part of the FFT, if
+ *                                  any.
+ * @param   geom                    Geometry of the data.
+ * @param   abs                     Wheter to keep the real and imaginary part
+ *                                  of the FFT or to compute the absolute part.
+ */
 static void Fft(const amrex::MultiFab& field, const int comp,
                 amrex::MultiFab& field_fft_real_or_abs,
                 amrex::MultiFab& field_fft_imag, const amrex::Geometry& geom,

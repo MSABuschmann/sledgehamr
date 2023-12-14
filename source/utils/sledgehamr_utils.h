@@ -6,7 +6,7 @@
 namespace sledgehamr{
 namespace utils{
 
-/* @brief for constexpr approximation.
+/* @brief for loop constexpr approximation.
  */
 template <auto Start, auto End, auto Inc, class F>
 constexpr void constexpr_for(F&& f) {
@@ -40,12 +40,12 @@ static double DurationSeconds(sctp start) {
 
 /** @brief Calculates the Laplacian at a given order. Only 0th, 1st and 2nd
  *         order are currently implemented.
- * @param   state_fab   Data from which Laplacian is to be calculated.
- * @param   i           i-th center cell.
- * @param   j           j-th center cell.
- * @param   k           k-th center cell.
- * @param   c           Scalar component.
- * @param   dx2         Squared grid spacing.
+ * @param   state   Data from which Laplacian is to be calculated.
+ * @param   i       i-th center cell.
+ * @param   j       j-th center cell.
+ * @param   k       k-th center cell.
+ * @param   c       Scalar component.
+ * @param   dx2     squared grid spacing.
  */
 template<int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double Laplacian(amrex::Array4<amrex::Real const> const& state, const int i,
@@ -93,7 +93,15 @@ double Laplacian<3>(amrex::Array4<amrex::Real const> const& state, const int i,
          -1470.*state(i,  j,  k,  c) ) / (180.*dx2);
 };
 
-/** @brief TODO
+/** @brief Calculates the finite-difference gradient for a field.
+ * @param   state   Data from which gradient is to be calculated.
+ * @param   i       i-th center cell.
+ * @param   j       j-th center cell.
+ * @param   k       k-th center cell.
+ * @param   c       Scalar component.
+ * @param   dx      Grid spacing.
+ * @param   axis    Axis along which the gradient is to be calculated. Valid
+ *                  values are 'x', 'y', and 'z'.
  */
 template<int> AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 double Gradient(amrex::Array4<amrex::Real const> const& state, const int i,
@@ -191,7 +199,6 @@ static std::string OrdinalNumberSuffix(int num) {
 
 /** @brief Returns string containing the name of the level.
  * @param   lev             Level.
- * @param   shadow_hierachy Whether a shadow hierarchy has been used.
  */
 static std::string LevelName(int lev) {
     switch (lev) {
@@ -205,10 +212,14 @@ static std::string LevelName(int lev) {
     }
 }
 
+/** @brief Checks if a value is a power of two.
+ */
 static bool IsPowerOfTwo(int val) {
     return (val > 0) && ((val & (val - 1)) == 0);
 }
 
+/** @brief Checks if two values are approximately equal within a given accuracy.
+ */
 static bool ApproxEqual(double a, double b, double eps = 1e-8) {
     return (fabs(a - b) < a*eps);
 }
@@ -219,19 +230,23 @@ enum ErrorState {
     WARNING = 2
 };
 
+/** @brief Prints the value of a parameter to the display.
+ */
 template <typename T>
 static void PrintParamState(std::string param_name, T val, std::string state) {
     amrex::Print() << param_name << " = " << val << " : " << state << std::endl;
 }
 
-template <typename T> 
+/** @brief Prints whether the value of a parameter is okay.
+ */
+template <typename T>
 static void AssessParam(ErrorState validity, std::string param_name, T val,
                 std::string errror_msg, std::string warning_msg, int& nerrors,
                 bool do_thorough_checks) {
     switch (validity) {
         case OK:
             if (do_thorough_checks) {
-                PrintParamState(param_name, val, "OK"); 
+                PrintParamState(param_name, val, "OK");
             }
             break;
         case WARNING:
@@ -244,7 +259,7 @@ static void AssessParam(ErrorState validity, std::string param_name, T val,
     }
 }
 
-template <typename T> 
+template <typename T>
 static void AssessParamOK(std::string param_name, T val,
                           bool do_thorough_checks) {
     int tmp = 0;
