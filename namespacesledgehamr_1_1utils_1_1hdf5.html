@@ -77,11 +77,14 @@ $(function() {
 Functions</h2></td></tr>
 <tr class="memitem:aa4ceaa8315959e1c0c75970a33085a1f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aa4ceaa8315959e1c0c75970a33085a1f"><td class="memTemplItemLeft" align="right" valign="top">static bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils_1_1hdf5.html#aa4ceaa8315959e1c0c75970a33085a1f">Read</a> (std::string filename, std::vector&lt; std::string &gt; dnames, T *data)</td></tr>
+<tr class="memdesc:aa4ceaa8315959e1c0c75970a33085a1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template function that reads dataset of type T from an HDF5 file.  <a href="namespacesledgehamr_1_1utils_1_1hdf5.html#aa4ceaa8315959e1c0c75970a33085a1f">More...</a><br /></td></tr>
 <tr class="separator:aa4ceaa8315959e1c0c75970a33085a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dd2217f67b68136477cc14f6c0bb298"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a7dd2217f67b68136477cc14f6c0bb298"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils_1_1hdf5.html#a7dd2217f67b68136477cc14f6c0bb298">Write</a> (hid_t file_id, std::string dset, T *data, unsigned long long size)</td></tr>
+<tr class="memdesc:a7dd2217f67b68136477cc14f6c0bb298"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template function to write a dataset of type T to an HDF5 file.  <a href="namespacesledgehamr_1_1utils_1_1hdf5.html#a7dd2217f67b68136477cc14f6c0bb298">More...</a><br /></td></tr>
 <tr class="separator:a7dd2217f67b68136477cc14f6c0bb298"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05ffffa88c37d5940a34af8aa639a88a"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils_1_1hdf5.html#a05ffffa88c37d5940a34af8aa639a88a">FindDataset</a> (std::string filename, std::vector&lt; std::string &gt; dnames)</td></tr>
+<tr class="memdesc:a05ffffa88c37d5940a34af8aa639a88a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks from a list of datasets whether one of them exists in a given HDF5 file.  <a href="namespacesledgehamr_1_1utils_1_1hdf5.html#a05ffffa88c37d5940a34af8aa639a88a">More...</a><br /></td></tr>
 <tr class="separator:a05ffffa88c37d5940a34af8aa639a88a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -118,6 +121,16 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Checks from a list of datasets whether one of them exists in a given HDF5 file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>HDF5 filename. </td></tr>
+    <tr><td class="paramname">dnames</td><td>List of datasets. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The existing dataset or an empty string of none exist. </dd></dl>
 
 </div>
 </div>
@@ -162,6 +175,17 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Template function that reads dataset of type T from an HDF5 file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>HDF5 filename. </td></tr>
+    <tr><td class="paramname">dnames</td><td>List of data set names to try. </td></tr>
+    <tr><td class="paramname">data</td><td>Array pointer to data. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the read was successfull. </dd></dl>
 
 </div>
 </div>
@@ -212,6 +236,17 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Template function to write a dataset of type T to an HDF5 file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_id</td><td>HDF5 file id. </td></tr>
+    <tr><td class="paramname">dset</td><td>Dataset name. </td></tr>
+    <tr><td class="paramname">data</td><td>Array pointer to data. </td></tr>
+    <tr><td class="paramname">size</td><td>Length of data. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -97,6 +97,7 @@ Enumerations</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:adb6afe5a25796f83eb9d6f61474d277f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#adb6afe5a25796f83eb9d6f61474d277f">Fft</a> (const amrex::MultiFab &amp;field, const int comp, amrex::MultiFab &amp;field_fft_real_or_abs, amrex::MultiFab &amp;field_fft_imag, const amrex::Geometry &amp;geom, bool abs)</td></tr>
+<tr class="memdesc:adb6afe5a25796f83eb9d6f61474d277f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function computes the FFT of some quantity.  <a href="namespacesledgehamr_1_1utils.html#adb6afe5a25796f83eb9d6f61474d277f">More...</a><br /></td></tr>
 <tr class="separator:adb6afe5a25796f83eb9d6f61474d277f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a993a2febece5f3e514b5b802121a77d9"><td class="memTemplParams" colspan="2">template&lt;auto Start, auto End, auto Inc, class F &gt; </td></tr>
 <tr class="memitem:a993a2febece5f3e514b5b802121a77d9"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a993a2febece5f3e514b5b802121a77d9">constexpr_for</a> (F &amp;&amp;f)</td></tr>
@@ -123,7 +124,7 @@ Functions</h2></td></tr>
 <tr class="separator:ae8a309cb0cf241821144576c7f40fc6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b4203da40b973c819076de1563f97c5"><td class="memTemplParams" colspan="2">template&lt;int &gt; </td></tr>
 <tr class="memitem:a6b4203da40b973c819076de1563f97c5"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a6b4203da40b973c819076de1563f97c5">Gradient</a> (amrex::Array4&lt; amrex::Real const &gt; const &amp;state, const int i, const int j, const int k, const int c, const double dx, const char axis)</td></tr>
-<tr class="memdesc:a6b4203da40b973c819076de1563f97c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO.  <a href="namespacesledgehamr_1_1utils.html#a6b4203da40b973c819076de1563f97c5">More...</a><br /></td></tr>
+<tr class="memdesc:a6b4203da40b973c819076de1563f97c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the finite-difference gradient for a field.  <a href="namespacesledgehamr_1_1utils.html#a6b4203da40b973c819076de1563f97c5">More...</a><br /></td></tr>
 <tr class="separator:a6b4203da40b973c819076de1563f97c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed043752045f51be64336839193bb6c0"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
 <tr class="memitem:aed043752045f51be64336839193bb6c0"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#aed043752045f51be64336839193bb6c0">Gradient&lt; 0 &gt;</a> (amrex::Array4&lt; amrex::Real const &gt; const &amp;state, const int i, const int j, const int k, const int c, const double dx, const char axis)</td></tr>
@@ -144,14 +145,18 @@ Functions</h2></td></tr>
 <tr class="memdesc:a225f9212566a6606bf210b9d23ad52e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns string containing the name of the level.  <a href="namespacesledgehamr_1_1utils.html#a225f9212566a6606bf210b9d23ad52e0">More...</a><br /></td></tr>
 <tr class="separator:a225f9212566a6606bf210b9d23ad52e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f8ca9a4165b764b1e93bf49d0f06197"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a2f8ca9a4165b764b1e93bf49d0f06197">IsPowerOfTwo</a> (int val)</td></tr>
+<tr class="memdesc:a2f8ca9a4165b764b1e93bf49d0f06197"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a value is a power of two.  <a href="namespacesledgehamr_1_1utils.html#a2f8ca9a4165b764b1e93bf49d0f06197">More...</a><br /></td></tr>
 <tr class="separator:a2f8ca9a4165b764b1e93bf49d0f06197"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a96468f757ebbb17eb6664ccdceb3de"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a0a96468f757ebbb17eb6664ccdceb3de">ApproxEqual</a> (double a, double b, double eps=1e-8)</td></tr>
+<tr class="memdesc:a0a96468f757ebbb17eb6664ccdceb3de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if two values are approximately equal within a given accuracy.  <a href="namespacesledgehamr_1_1utils.html#a0a96468f757ebbb17eb6664ccdceb3de">More...</a><br /></td></tr>
 <tr class="separator:a0a96468f757ebbb17eb6664ccdceb3de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdc097f2ea6133767b0b04c1354fae5b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:afdc097f2ea6133767b0b04c1354fae5b"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#afdc097f2ea6133767b0b04c1354fae5b">PrintParamState</a> (std::string param_name, T val, std::string state)</td></tr>
+<tr class="memdesc:afdc097f2ea6133767b0b04c1354fae5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the value of a parameter to the display.  <a href="namespacesledgehamr_1_1utils.html#afdc097f2ea6133767b0b04c1354fae5b">More...</a><br /></td></tr>
 <tr class="separator:afdc097f2ea6133767b0b04c1354fae5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86afc7c9a138e32578b5d3e4cf887e59"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a86afc7c9a138e32578b5d3e4cf887e59"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a86afc7c9a138e32578b5d3e4cf887e59">AssessParam</a> (<a class="el" href="namespacesledgehamr_1_1utils.html#a9afd97d10183d9d59d121c5096a8be64">ErrorState</a> validity, std::string param_name, T val, std::string errror_msg, std::string warning_msg, int &amp;nerrors, bool do_thorough_checks)</td></tr>
+<tr class="memdesc:a86afc7c9a138e32578b5d3e4cf887e59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints whether the value of a parameter is okay.  <a href="namespacesledgehamr_1_1utils.html#a86afc7c9a138e32578b5d3e4cf887e59">More...</a><br /></td></tr>
 <tr class="separator:a86afc7c9a138e32578b5d3e4cf887e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12538733231611071a8d8e91cc0edec6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a12538733231611071a8d8e91cc0edec6"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a12538733231611071a8d8e91cc0edec6">AssessParamOK</a> (std::string param_name, T val, bool do_thorough_checks)</td></tr>
@@ -233,6 +238,8 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks if two values are approximately equal within a given accuracy. </p>
+
 </div>
 </div>
 <a id="a86afc7c9a138e32578b5d3e4cf887e59"></a>
@@ -300,6 +307,8 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Prints whether the value of a parameter is okay. </p>
 
 </div>
 </div>
@@ -459,6 +468,18 @@ template&lt;auto Start, auto End, auto Inc, class F &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>This function computes the FFT of some quantity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">field</td><td>State to compute the FFT of. </td></tr>
+    <tr><td class="paramname">field_fft_real_or_abs</td><td>Contains the real or absolute part of the FFT. </td></tr>
+    <tr><td class="paramname">field_fft_imag</td><td>Contains the imaginary part of the FFT, if any. </td></tr>
+    <tr><td class="paramname">geom</td><td>Geometry of the data. </td></tr>
+    <tr><td class="paramname">abs</td><td>Wheter to keep the real and imaginary part of the FFT or to compute the absolute part. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a6b4203da40b973c819076de1563f97c5"></a>
@@ -519,7 +540,19 @@ template&lt;int &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>TODO. </p>
+<p>Calculates the finite-difference gradient for a field. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>Data from which gradient is to be calculated. </td></tr>
+    <tr><td class="paramname">i</td><td>i-th center cell. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th center cell. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th center cell. </td></tr>
+    <tr><td class="paramname">c</td><td>Scalar component. </td></tr>
+    <tr><td class="paramname">dx</td><td>Grid spacing. </td></tr>
+    <tr><td class="paramname">axis</td><td>Axis along which the gradient is to be calculated. Valid values are 'x', 'y', and 'z'. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -787,6 +820,8 @@ template&lt;&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Checks if a value is a power of two. </p>
+
 </div>
 </div>
 <a id="a118d30777454d72c131f08419fcc9553"></a>
@@ -844,12 +879,12 @@ template&lt;int &gt; </div>
 <p>Calculates the Laplacian at a given order. Only 0th, 1st and 2nd order are currently implemented. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">state_fab</td><td>Data from which Laplacian is to be calculated. </td></tr>
+    <tr><td class="paramname">state</td><td>Data from which Laplacian is to be calculated. </td></tr>
     <tr><td class="paramname">i</td><td>i-th center cell. </td></tr>
     <tr><td class="paramname">j</td><td>j-th center cell. </td></tr>
     <tr><td class="paramname">k</td><td>k-th center cell. </td></tr>
     <tr><td class="paramname">c</td><td>Scalar component. </td></tr>
-    <tr><td class="paramname">dx2</td><td>Squared grid spacing. </td></tr>
+    <tr><td class="paramname">dx2</td><td>squared grid spacing. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1100,7 +1135,6 @@ template&lt;&gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lev</td><td>Level. </td></tr>
-    <tr><td class="paramname">shadow_hierachy</td><td>Whether a shadow hierarchy has been used. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1182,6 +1216,8 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Prints the value of a parameter to the display. </p>
 
 </div>
 </div>
