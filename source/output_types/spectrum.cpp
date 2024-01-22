@@ -3,7 +3,7 @@
 #include "fft.h"
 
 namespace sledgehamr {
-i
+
 /** @brief Computes a spectrum and saves it to disk.
  * @param   id      Output counter id.
  * @param   file_id HDF5 file id.
