@@ -164,6 +164,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a7ffb1eeb1a8c90c5dc9d8ae708528000"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8878eabc3801064090ce838cd5e19d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#ab8878eabc3801064090ce838cd5e19d5">SetProjections</a> ()</td></tr>
 <tr class="separator:ab8878eabc3801064090ce838cd5e19d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3c13488127f8f48904e413ed51f7e36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#ac3c13488127f8f48904e413ed51f7e36">AddSpectrumModification</a> ()</td></tr>
+<tr class="separator:ac3c13488127f8f48904e413ed51f7e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7781fbda3f9ebd7da572fb12c16639fa"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a7781fbda3f9ebd7da572fb12c16639fa">FindBubbles</a> (const double time)</td></tr>
 <tr class="separator:a7781fbda3f9ebd7da572fb12c16639fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79ca3ed8feaefb44429293a1cb8db69d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a79ca3ed8feaefb44429293a1cb8db69d">InjectBubbles</a> (const double time)</td></tr>
@@ -174,6 +176,10 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a8441b65b100bcaaceae4f0e1143490b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9da34a4f79919d54a67bc66fcb133ea7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a9da34a4f79919d54a67bc66fcb133ea7">AddBubbleValues</a> (std::vector&lt; int &gt; ab)</td></tr>
 <tr class="separator:a9da34a4f79919d54a67bc66fcb133ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22d5724e8c69a107dc1f2325c07ec232"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a22d5724e8c69a107dc1f2325c07ec232">GwSpectrum_UtimesK</a> (double time, std::string prefix)</td></tr>
+<tr class="separator:a22d5724e8c69a107dc1f2325c07ec232"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32a5ce6dd04f6fd0123983b70b1ddadb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a32a5ce6dd04f6fd0123983b70b1ddadb">GwSpectrum_2BubblesFrom1</a> (double time, std::string prefix)</td></tr>
+<tr class="separator:a32a5ce6dd04f6fd0123983b70b1ddadb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -378,6 +384,31 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ac3c13488127f8f48904e413ed51f7e36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3c13488127f8f48904e413ed51f7e36">&#9670;&nbsp;</a></span>AddSpectrumModification()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FirstOrderPhaseTransition::FirstOrderPhaseTransition::AddSpectrumModification </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3f02a919877373389b560e7a60b75c3c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f02a919877373389b560e7a60b75c3c">&#9670;&nbsp;</a></span>BeforeTimestep()</h2>
 
@@ -484,6 +515,78 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramtype">const double&#160;</td>
           <td class="paramname"><em>time</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a32a5ce6dd04f6fd0123983b70b1ddadb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32a5ce6dd04f6fd0123983b70b1ddadb">&#9670;&nbsp;</a></span>GwSpectrum_2BubblesFrom1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool FirstOrderPhaseTransition::FirstOrderPhaseTransition::GwSpectrum_2BubblesFrom1 </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>prefix</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a22d5724e8c69a107dc1f2325c07ec232"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22d5724e8c69a107dc1f2325c07ec232">&#9670;&nbsp;</a></span>GwSpectrum_UtimesK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool FirstOrderPhaseTransition::FirstOrderPhaseTransition::GwSpectrum_UtimesK </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>prefix</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>

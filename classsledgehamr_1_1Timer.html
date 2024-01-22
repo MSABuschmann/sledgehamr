@@ -113,8 +113,11 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a7111680710eb7c01c5e65be4e57805e4"><td class="memItemLeft" align="right" valign="top">std::chrono::steady_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Timer.html#a7111680710eb7c01c5e65be4e57805e4">start_time</a></td></tr>
+<tr class="memdesc:a7111680710eb7c01c5e65be4e57805e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time point of when pointer has been started last.  <a href="classsledgehamr_1_1Timer.html#a7111680710eb7c01c5e65be4e57805e4">More...</a><br /></td></tr>
+<tr class="separator:a7111680710eb7c01c5e65be4e57805e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76c397056f53a0cabe22f5c03e289a05"><td class="memItemLeft" align="right" valign="top">std::chrono::steady_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Timer.html#a76c397056f53a0cabe22f5c03e289a05">stop_time</a></td></tr>
-<tr class="memdesc:a76c397056f53a0cabe22f5c03e289a05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time point of when pointer has been started last.  <a href="classsledgehamr_1_1Timer.html#a76c397056f53a0cabe22f5c03e289a05">More...</a><br /></td></tr>
+<tr class="memdesc:a76c397056f53a0cabe22f5c03e289a05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time point of when pointer has been stopped last.  <a href="classsledgehamr_1_1Timer.html#a76c397056f53a0cabe22f5c03e289a05">More...</a><br /></td></tr>
 <tr class="separator:a76c397056f53a0cabe22f5c03e289a05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01433c84e8dcacd450f74f6a98426194"><td class="memItemLeft" align="right" valign="top">std::chrono::microseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Timer.html#a01433c84e8dcacd450f74f6a98426194">last_duration_micro</a></td></tr>
 <tr class="memdesc:a01433c84e8dcacd450f74f6a98426194"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time in milliseconds from the last starting time point to when Check() has been called last.  <a href="classsledgehamr_1_1Timer.html#a01433c84e8dcacd450f74f6a98426194">More...</a><br /></td></tr>
@@ -397,6 +400,30 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7111680710eb7c01c5e65be4e57805e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7111680710eb7c01c5e65be4e57805e4">&#9670;&nbsp;</a></span>start_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::chrono::steady_clock::time_point sledgehamr::Timer::start_time</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Time point of when pointer has been started last. </p>
+
+</div>
+</div>
 <a id="a76c397056f53a0cabe22f5c03e289a05"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a76c397056f53a0cabe22f5c03e289a05">&#9670;&nbsp;</a></span>stop_time</h2>
 
@@ -417,7 +444,6 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Time point of when pointer has been started last. </p>
 <p>Time point of when pointer has been stopped last. </p>
 
 </div>
