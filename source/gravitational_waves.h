@@ -5,13 +5,25 @@
 
 namespace sledgehamr {
 
+struct GravitationalWavesSpectrumModifier;
+
 /** @brief This will setup everything needed to simulate gravitational waves and
  *         compute the gravitational wave spectrum.
  */
 class GravitationalWaves {
   public:
     GravitationalWaves(Sledgehamr* owner);
-    void ComputeSpectrum(hid_t file_id);
+
+    void ComputeSpectrum(
+            hid_t file_id,
+            GravitationalWavesSpectrumModifier* modifier = nullptr);
+
+    /** @brief enum with the tensor components.
+     */
+    enum Gw {
+        u_xx = 0, u_yy, u_zz, u_xy, u_xz, u_yz, du_xx, du_yy, du_zz, du_xy,
+        du_xz, du_yz, NGwScalars
+    };
 
   private:
     double IndexToK(int a, int N);
@@ -41,12 +53,22 @@ class GravitationalWaves {
      */
     int projection_type = 2;
 
-    /** @brief enum with the tensor components.
-     */
-    enum Gw {
-        u_xx = 0, u_yy, u_zz, u_xy, u_xz, u_yz, du_xx, du_yy, du_zz, du_xy,
-        du_xz, du_yz, NGwScalars
+    std::unique_ptr<GravitationalWavesSpectrumModifier> default_modifier;
+};
+
+struct GravitationalWavesSpectrumModifier {
+    virtual void SelectComponents(int components[6]) {
+        components[0] = GravitationalWaves::Gw::du_xx;
+        components[1] = GravitationalWaves::Gw::du_xy;
+        components[2] = GravitationalWaves::Gw::du_xz;
+        components[3] = GravitationalWaves::Gw::du_yy;
+        components[4] = GravitationalWaves::Gw::du_yz;
+        components[5] = GravitationalWaves::Gw::du_zz;
     };
+
+    virtual void FourierSpaceModifications(
+            amrex::MultiFab du_real[6], amrex::MultiFab du_imag[6],
+            const double dk, const int dimN) {};
 };
 
 }; // namespace sledgehamr

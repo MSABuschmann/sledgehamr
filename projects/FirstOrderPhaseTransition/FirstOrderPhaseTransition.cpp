@@ -1,6 +1,7 @@
 #include <hdf5_utils.h>
 
 #include "FirstOrderPhaseTransition.h"
+#include "spectrum_modifier.h"
 
 namespace FirstOrderPhaseTransition{
 
@@ -9,6 +10,7 @@ void FirstOrderPhaseTransition::Init() {
     ParseBubbles();
     ComputeParameters();
     SetProjections();
+    AddSpectrumModification();
 
     idx_perfmon_add_bubbles = performance_monitor->timer.size();
     performance_monitor->timer.emplace_back("InjectBubbles");
@@ -29,6 +31,62 @@ void FirstOrderPhaseTransition::ParseVariables() {
     amrex::ParmParse pp_prj("project");
     pp_prj.get("lambda_bar", lambda_bar);
     pp_prj.queryarr("bubbles_to_inject", bubbles_to_inject);
+}
+
+void FirstOrderPhaseTransition::AddSpectrumModification() {
+    io_module->output.emplace_back("gw_spec_u_times_k",
+            OUTPUT_FCT(FirstOrderPhaseTransition::GwSpectrum_UtimesK));
+
+    io_module->output.emplace_back("gw_spec_two_bubbles_from_one",
+            OUTPUT_FCT(FirstOrderPhaseTransition::GwSpectrum_2BubblesFrom1));
+}
+
+bool FirstOrderPhaseTransition::GwSpectrum_UtimesK(
+        double time, std::string prefix) {
+    if (!with_gravitational_waves)
+        return false;
+
+    hid_t file_id;
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        std::string filename = prefix + "/spectra.hdf5";
+        file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                            H5P_DEFAULT);
+    }
+
+    std::unique_ptr<sledgehamr::GravitationalWavesSpectrumModifier> modifier =
+            std::make_unique<SpectrumModifier_UtimesK>();
+    gravitational_waves->ComputeSpectrum(file_id, modifier.get());
+
+    if (amrex::ParallelDescriptor::IOProcessor())
+        H5Fclose(file_id);
+
+    return true;
+}
+
+bool FirstOrderPhaseTransition::GwSpectrum_2BubblesFrom1(
+        double time, std::string prefix) {
+    if (!with_gravitational_waves || bubbles.size() < 2)
+        return false;
+
+    hid_t file_id;
+    if (amrex::ParallelDescriptor::IOProcessor()) {
+        std::string filename = prefix + "/spectra.hdf5";
+        file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+                            H5P_DEFAULT);
+    }
+
+    const double d[3] = {bubbles[1].x - bubbles[0].x,
+                         bubbles[1].y - bubbles[0].y,
+                         bubbles[1].z - bubbles[0].z};
+ 
+    std::unique_ptr<sledgehamr::GravitationalWavesSpectrumModifier> modifier =
+            std::make_unique<SpectrumModifier_2BubblesFrom1>(d);
+   gravitational_waves->ComputeSpectrum(file_id, modifier.get());
+
+    if (amrex::ParallelDescriptor::IOProcessor())
+        H5Fclose(file_id);
+
+    return true;
 }
 
 void FirstOrderPhaseTransition::SetParamsRhs(
@@ -101,9 +159,10 @@ void FirstOrderPhaseTransition::ParseBubbles() {
     const int ncomp = grid_new[0].nComp();
     for (int b = 0; b < NB; ++b) {
         Bubble B;
-        B.x = xlocs[b];
-        B.y = ylocs[b];
-        B.z = zlocs[b];
+        // Intentional flip (temporary).
+        B.x = zlocs[b] - zlocs[0];
+        B.y = ylocs[b] - ylocs[0];
+        B.z = xlocs[b] - xlocs[0];
         B.t = ts[b];
 
         if (use_profile[b] == b) {

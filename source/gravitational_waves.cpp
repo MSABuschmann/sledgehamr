@@ -12,6 +12,7 @@ namespace sledgehamr {
 GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
     sim = owner;
     idx_offset = sim->scalar_fields.size();
+    default_modifier = std::make_unique<GravitationalWavesSpectrumModifier>();
 
     // Don't assume ownership of pointer, it is transferred to
     // sim->scalar_fields.
@@ -43,7 +44,13 @@ GravitationalWaves::GravitationalWaves(Sledgehamr* owner) {
  *         the given hdf5 file.
  * @param   file_id hdf5 file handle.
  */
-void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
+void GravitationalWaves::ComputeSpectrum(
+        hid_t file_id, GravitationalWavesSpectrumModifier* modifier) {
+
+    if (modifier == nullptr) {
+        modifier = default_modifier.get();
+    }
+
     const int lev = 0;
     int dimN = sim->dimN[lev];
 
@@ -53,8 +60,8 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
 
     amrex::MultiFab du_real[6], du_imag[6];
     const int mat[3][3] = {{0, 1, 2}, {1, 3, 4}, {2, 4, 5}};
-    const int comps[6] = {Gw::du_xx, Gw::du_xy, Gw::du_xz,
-                          Gw::du_yy, Gw::du_yz, Gw::du_zz};
+    int comps[6];
+    modifier->SelectComponents(comps);
 
     for (int i = 0; i < 6; ++i) {
         du_real[i].define(ba, dm, 1, 0);
@@ -65,6 +72,8 @@ void GravitationalWaves::ComputeSpectrum(hid_t file_id) {
 
     double dk = 2.*M_PI / sim->L;
     double dimN6 = pow(dimN, 6);
+
+    modifier->FourierSpaceModifications(du_real, du_imag, dk, dimN);
 
     std::vector<int>& ks = sim->spectrum_ks;
     const int kmax = ks.size();
