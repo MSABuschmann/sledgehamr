@@ -39,7 +39,7 @@ class Timer {
 
     /** @brief Time point of when pointer has been started last.
      */
-    std::chrono::steady_clock::time_point stop_time;
+    std::chrono::steady_clock::time_point start_time;
 
     /** @brief Time point of when pointer has been stopped last.
      */
