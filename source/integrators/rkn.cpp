@@ -10,7 +10,6 @@ namespace sledgehamr {
  */
 IntegratorRkn::IntegratorRkn(Sledgehamr* owner, const IntegratorType id)
   : Integrator{owner},
-    sim(owner),
     integrator_type(id) {
     SetButcherTableau();
 }
