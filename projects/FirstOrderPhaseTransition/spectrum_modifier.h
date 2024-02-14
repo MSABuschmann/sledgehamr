@@ -66,7 +66,7 @@ struct SpectrumModifier_UtimesK
 struct SpectrumModifier_2BubblesFrom1
         : sledgehamr::GravitationalWavesSpectrumModifier {
     SpectrumModifier_2BubblesFrom1(const double distance[3]) {
-        std::memcpy(d, distance, sizeof(d)); 
+        std::memcpy(d, distance, sizeof(d));
     }
 
     virtual void FourierSpaceModifications(
@@ -103,9 +103,9 @@ struct SpectrumModifier_2BubblesFrom1
                         int kx = a >= dimN/2 ? a-dimN : a;
                         int ky = b >= dimN/2 ? b-dimN : b;
                         int kz = c >= dimN/2 ? c-dimN : c;
-                        double x = std::sqrt(kx*d[0] + ky*d[1] + kz*d[2]) * dk;
-                        double sx = std::sin(x);
-                        double cx = std::cos(x);
+                        double kd = (kx*d[0] + ky*d[1] + kz*d[2]) * dk;
+                        double sx = std::sin(kd);
+                        double cx = std::cos(kd);
 
                         for (int i = 0; i < 6; ++i) {
                             double dur = (*du_real_arr)[i](a, b, c);

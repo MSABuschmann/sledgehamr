@@ -137,7 +137,6 @@ void GravitationalWaves::ComputeSpectrum(
                             }
                         }
                     }
-
                     gw_spectrum[index] += running_sum;
                 }
             }

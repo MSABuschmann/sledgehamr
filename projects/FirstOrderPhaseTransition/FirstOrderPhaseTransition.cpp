@@ -78,10 +78,10 @@ bool FirstOrderPhaseTransition::GwSpectrum_2BubblesFrom1(
     const double d[3] = {bubbles[1].x - bubbles[0].x,
                          bubbles[1].y - bubbles[0].y,
                          bubbles[1].z - bubbles[0].z};
- 
+
     std::unique_ptr<sledgehamr::GravitationalWavesSpectrumModifier> modifier =
             std::make_unique<SpectrumModifier_2BubblesFrom1>(d);
-   gravitational_waves->ComputeSpectrum(file_id, modifier.get());
+    gravitational_waves->ComputeSpectrum(file_id, modifier.get());
 
     if (amrex::ParallelDescriptor::IOProcessor())
         H5Fclose(file_id);
