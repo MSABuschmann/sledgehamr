@@ -19,8 +19,8 @@ var searchData=
   ['npredefoutput_442',['npredefoutput',['../classsledgehamr_1_1Checkpoint.html#a03296a9b0f707ab9929958a95ae61cd2',1,'sledgehamr::Checkpoint']]],
   ['nps_443',['nps',['../classsledgehamr_1_1UniqueLayout.html#a76a21ebda59cc7b033a01d62b994da2d',1,'sledgehamr::UniqueLayout']]],
   ['nregrids_444',['nregrids',['../classsledgehamr_1_1LocalRegrid.html#a042da77091f22870797a9d406fa12506',1,'sledgehamr::LocalRegrid']]],
-  ['nscalars_445',['NScalars',['../classsledgehamr_1_1GravitationalWaves.html#af4eb42f73052f89295e321f0951df96c',1,'sledgehamr::GravitationalWaves']]],
-  ['nscalars_446',['nscalars',['../classsledgehamr_1_1Checkpoint.html#af3acc5fe1b9f0cb602de692afbbd2288',1,'sledgehamr::Checkpoint']]],
+  ['nscalars_445',['nscalars',['../classsledgehamr_1_1Checkpoint.html#af3acc5fe1b9f0cb602de692afbbd2288',1,'sledgehamr::Checkpoint']]],
+  ['nscalars_446',['NScalars',['../classsledgehamr_1_1GravitationalWaves.html#af4eb42f73052f89295e321f0951df96c',1,'sledgehamr::GravitationalWaves']]],
   ['nullfill_447',['NullFill',['../structsledgehamr_1_1NullFill.html',1,'sledgehamr']]],
   ['number_5fnodes_448',['number_nodes',['../classsledgehamr_1_1IntegratorRkn.html#a53a840937c0e5c35ce0d10a80a34d36c',1,'sledgehamr::IntegratorRkn']]]
 ];

@@ -106,6 +106,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5aa6cfaef9320be425e5a277e8b53347"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelSynchronizer.html#a5aa6cfaef9320be425e5a277e8b53347">IncreaseCoarseLevelResolution</a> ()</td></tr>
 <tr class="memdesc:a5aa6cfaef9320be425e5a277e8b53347"><td class="mdescLeft">&#160;</td><td class="mdescRight">Procedure that will increase the coarse level resolution.  <a href="classsledgehamr_1_1LevelSynchronizer.html#a5aa6cfaef9320be425e5a277e8b53347">More...</a><br /></td></tr>
 <tr class="separator:a5aa6cfaef9320be425e5a277e8b53347"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad084e86318f9816a23805e4b0f53d51a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelSynchronizer.html#ad084e86318f9816a23805e4b0f53d51a">FromArrayChunksAndUpsample</a> (const int lev, const int comp, double *data, int up)</td></tr>
+<tr class="memdesc:ad084e86318f9816a23805e4b0f53d51a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="classsledgehamr_1_1FillLevel.html#a47fcd3db3a286f70836366d0c1bb0274" title="Fill a component of the level with data given by an array. The arary should cover the entire level (n...">FillLevel::FromArray</a>, but the array only covers the local boxes owned by this node. Array is a downsampled version and will be upscaled to meet the target resolution.  <a href="classsledgehamr_1_1LevelSynchronizer.html#ad084e86318f9816a23805e4b0f53d51a">More...</a><br /></td></tr>
+<tr class="separator:ad084e86318f9816a23805e4b0f53d51a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb187b4ec4d11418262719b8b795920b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelSynchronizer.html#aeb187b4ec4d11418262719b8b795920b">ChangeNGhost</a> (int new_nghost)</td></tr>
 <tr class="memdesc:aeb187b4ec4d11418262719b8b795920b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the the number of ghost cells at all levels.  <a href="classsledgehamr_1_1LevelSynchronizer.html#aeb187b4ec4d11418262719b8b795920b">More...</a><br /></td></tr>
 <tr class="separator:aeb187b4ec4d11418262719b8b795920b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -451,6 +454,56 @@ Private Attributes</h2></td></tr>
     <tr><td class="paramname">scomp</td><td>Starting component of source. </td></tr>
     <tr><td class="paramname">scomp</td><td>Starting component of destination. </td></tr>
     <tr><td class="paramname">ncomp</td><td>Total number of components. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad084e86318f9816a23805e4b0f53d51a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad084e86318f9816a23805e4b0f53d51a">&#9670;&nbsp;</a></span>FromArrayChunksAndUpsample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::LevelSynchronizer::FromArrayChunksAndUpsample </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>lev</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>comp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>up</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Same as <a class="el" href="classsledgehamr_1_1FillLevel.html#a47fcd3db3a286f70836366d0c1bb0274" title="Fill a component of the level with data given by an array. The arary should cover the entire level (n...">FillLevel::FromArray</a>, but the array only covers the local boxes owned by this node. Array is a downsampled version and will be upscaled to meet the target resolution. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">comp</td><td>Number of field component. </td></tr>
+    <tr><td class="paramname">data</td><td>Array with local data. </td></tr>
+    <tr><td class="paramname">up</td><td>Upsample factor. </td></tr>
   </table>
   </dd>
 </dl>

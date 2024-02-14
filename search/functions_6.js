@@ -20,8 +20,9 @@ var searchData=
   ['fourierspacemodifications_957',['FourierSpaceModifications',['../structsledgehamr_1_1GravitationalWavesSpectrumModifier.html#a0242f6fc0c29fc330804ddb18e52f22d',1,'sledgehamr::GravitationalWavesSpectrumModifier::FourierSpaceModifications()'],['../structFirstOrderPhaseTransition_1_1SpectrumModifier__UtimesK.html#ac86c35fa36555d309df0209322711c6d',1,'FirstOrderPhaseTransition::SpectrumModifier_UtimesK::FourierSpaceModifications()'],['../structFirstOrderPhaseTransition_1_1SpectrumModifier__2BubblesFrom1.html#a073f02e56aefef307ebe373d7fcdca55',1,'FirstOrderPhaseTransition::SpectrumModifier_2BubblesFrom1::FourierSpaceModifications()']]],
   ['fromarray_958',['FromArray',['../classsledgehamr_1_1FillLevel.html#a47fcd3db3a286f70836366d0c1bb0274',1,'sledgehamr::FillLevel']]],
   ['fromarraychunks_959',['FromArrayChunks',['../classsledgehamr_1_1FillLevel.html#a422d6c8e962409de45ace3bfb3b41b7d',1,'sledgehamr::FillLevel']]],
-  ['fromcheckpoint_960',['FromCheckpoint',['../classsledgehamr_1_1FillLevel.html#abed1cdb4375dc48cef3fe2ed928919d2',1,'sledgehamr::FillLevel']]],
-  ['fromconst_961',['FromConst',['../classsledgehamr_1_1FillLevel.html#a0cae844e7fe47a7bef70925b34ee436e',1,'sledgehamr::FillLevel']]],
-  ['fromhdf5file_962',['FromHdf5File',['../classsledgehamr_1_1FillLevel.html#a204b7748191f00332384512697e2bc83',1,'sledgehamr::FillLevel']]],
-  ['frominitialstatefile_963',['FromInitialStateFile',['../classsledgehamr_1_1FillLevel.html#a32272a06c4a4238f47b008220a449f87',1,'sledgehamr::FillLevel']]]
+  ['fromarraychunksandupsample_960',['FromArrayChunksAndUpsample',['../classsledgehamr_1_1LevelSynchronizer.html#ad084e86318f9816a23805e4b0f53d51a',1,'sledgehamr::LevelSynchronizer']]],
+  ['fromcheckpoint_961',['FromCheckpoint',['../classsledgehamr_1_1FillLevel.html#abed1cdb4375dc48cef3fe2ed928919d2',1,'sledgehamr::FillLevel']]],
+  ['fromconst_962',['FromConst',['../classsledgehamr_1_1FillLevel.html#a0cae844e7fe47a7bef70925b34ee436e',1,'sledgehamr::FillLevel']]],
+  ['fromhdf5file_963',['FromHdf5File',['../classsledgehamr_1_1FillLevel.html#a204b7748191f00332384512697e2bc83',1,'sledgehamr::FillLevel']]],
+  ['frominitialstatefile_964',['FromInitialStateFile',['../classsledgehamr_1_1FillLevel.html#a32272a06c4a4238f47b008220a449f87',1,'sledgehamr::FillLevel']]]
 ];
