@@ -43,6 +43,8 @@ class LevelSynchronizer {
     void ComputeTruncationErrors(const int lev);
 
     void IncreaseCoarseLevelResolution();
+    void FromArrayChunksAndUpsample(const int lev, const int comp, double* data,
+                                    int up);
     void ChangeNGhost(int new_nghost);
     void RegridCoarse();
 

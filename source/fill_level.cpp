@@ -3,6 +3,8 @@
 #include "sledgehamr_utils.h"
 #include "checkpoint.h"
 
+#include <filesystem>
+
 namespace sledgehamr {
 
 /** @brief Will try to initialize data. It will use a checkpoint if one is found
@@ -55,12 +57,56 @@ void FillLevel::FromCheckpoint(std::string folder) {
  */
 void FillLevel::FromHdf5File(std::string initial_state_file) {
     amrex::ParmParse pp("input");
-
-    // Iterate over fields but introduce offset such that each node grabs a
-    // different file first.
     const int ncomp = sim->GetLevelData(lev).nComp();
     int lr = amrex::ParallelDescriptor::MyProc();
     int mr = amrex::ParallelDescriptor::NProcs();
+
+    if (initial_state_file != "" &&
+        std::filesystem::is_directory(initial_state_file)) {
+        amrex::Print() << "Read initial state from directory: "
+                       << initial_state_file << std::endl;
+
+        int up = 1;
+        pp.query("upsample", up);
+        if (!sledgehamr::utils::IsPowerOfTwo(up) || up < 1) {
+            amrex::Abort("Upsample factor input.upsample is not a power of 2!");
+        }
+
+        amrex::Box bx = sim->GetLevelData(lev).boxArray()[lr];
+        if (up > 1) {
+            amrex::Print() << "Upsample initial state by a factor of " << up 
+                           << std::endl;
+            bx.coarsen(up);
+        }
+        const long long dsetsize= bx.numPts();
+        std::unique_ptr<double[]> input_data(new double[dsetsize]);
+
+        for (int f=0; f<ncomp; ++f) {
+            std::string comp = sim->GetScalarFieldName(f);
+            std::string initial_state_file_component = initial_state_file + "/"
+                    + comp + "_" + std::to_string(lr) + ".hdf5";
+            if (!utils::hdf5::Read(initial_state_file_component,
+                    {comp, "data"}, input_data.get())) {
+                std::string msg =
+                           "Sledgehamr::IOModule::FillLevelFromHdf5File: "
+                           "Could not find initial state chunk "
+                         + initial_state_file_component + "!";
+                amrex::Abort(msg);
+            }
+
+            if (up==1) {
+                FromArrayChunks(f, input_data.get());
+            } else {
+                sim->level_synchronizer->FromArrayChunksAndUpsample(
+                        lev, f,  input_data.get(), up);
+            }
+        }
+
+        return;
+    }
+
+    // Iterate over fields but introduce offset such that each node grabs a
+    // different file first.
     for (int f=0; f<ncomp; ++f) {
         int f2 = (f+lr) % ncomp;
 
@@ -77,54 +123,56 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
         // LevelData.
         if(initial_state_file_component == "") {
             FromConst(f2, 0);
-        } else {
-            amrex::Print() << "Reading initial state for " << scalar_name
-                           << " from " << initial_state_file_component
-                           << std::endl;
-
-            // Test if chunks exist.
-            std::string chunk1 = scalar_name + "_" + std::to_string(lr);
-            std::string chunk2 = "data_" + std::to_string(lr);
-            std::string existing_chunk = utils::hdf5::FindDataset(
-                    initial_state_file_component, {chunk1, chunk2});
-
-            if (existing_chunk == "") {
-                const int dimN = sim->GetDimN(lev);
-                const long long dsetsize = dimN*dimN*dimN;
-                std::unique_ptr<double[]> input_data(new double[dsetsize]);
-
-                if (!utils::hdf5::Read(initial_state_file_component,
-                        {scalar_name, "data"}, input_data.get())) {
-                    //std::string msg =
-                    //           "Sledgehamr::IOModule::FillLevelFromHdf5File: "
-                    //           "Could not find initial state data for "
-                    //         + scalar_name + "!";
-                    //amrex::Abort(msg);
-                    const int constant = 0;
-                    amrex::Print() << "Dataset not found for " << scalar_name
-                                   << ". Will initialize to " << constant
-                                   << "." << std::endl;
-                    FromConst(f2, constant);
-                } else {
-                    FromArray(f2, input_data.get(), dimN);
-                }
-            } else {
-                amrex::Box bx = sim->GetLevelData(lev).boxArray()[lr];
-                const long long dsetsize= bx.numPts();
-                std::unique_ptr<double[]> input_data(new double[dsetsize]);
-
-               if (!utils::hdf5::Read(initial_state_file_component,
-                        {chunk1, chunk2}, input_data.get())) {
-                    std::string msg =
-                               "Sledgehamr::IOModule::FillLevelFromHdf5File: "
-                               "Could not find initial state chunk "
-                             + chunk1 + "!";
-                    amrex::Abort(msg);
-                }
-
-                FromArrayChunks(f2, input_data.get());
-            }
+            continue;
         }
+
+        amrex::Print() << "Reading initial state for " << scalar_name
+                       << " from " << initial_state_file_component
+                       << std::endl;
+
+        // Test if chunks exist.
+        std::string chunk1 = scalar_name + "_" + std::to_string(lr);
+        std::string chunk2 = "data_" + std::to_string(lr);
+        std::string existing_chunk = utils::hdf5::FindDataset(
+                initial_state_file_component, {chunk1, chunk2});
+
+        if (existing_chunk == "") {
+            const int dimN = sim->GetDimN(lev);
+            const long long dsetsize = dimN*dimN*dimN;
+            std::unique_ptr<double[]> input_data(new double[dsetsize]);
+
+            if (!utils::hdf5::Read(initial_state_file_component,
+                    {scalar_name, "data"}, input_data.get())) {
+                //std::string msg =
+                //           "Sledgehamr::IOModule::FillLevelFromHdf5File: "
+                //           "Could not find initial state data for "
+                //         + scalar_name + "!";
+                //amrex::Abort(msg);
+                const int constant = 0;
+                amrex::Print() << "Dataset not found for " << scalar_name
+                               << ". Will initialize to " << constant
+                               << "." << std::endl;
+                FromConst(f2, constant);
+            } else {
+                FromArray(f2, input_data.get(), dimN);
+            }
+            continue;
+        }
+
+        amrex::Box bx = sim->GetLevelData(lev).boxArray()[lr];
+        const long long dsetsize= bx.numPts();
+        std::unique_ptr<double[]> input_data(new double[dsetsize]);
+
+        if (!utils::hdf5::Read(initial_state_file_component,
+                {chunk1, chunk2}, input_data.get())) {
+            std::string msg =
+                       "Sledgehamr::IOModule::FillLevelFromHdf5File: "
+                       "Could not find initial state chunk "
+                     + chunk1 + "!";
+            amrex::Abort(msg);
+        }
+
+        FromArrayChunks(f2, input_data.get());
     }
 }
 

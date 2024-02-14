@@ -423,6 +423,63 @@ void LevelSynchronizer::IncreaseCoarseLevelResolution() {
     sim->ReadSpectrumKs(true);
 }
 
+/** @brief Same as FillLevel::FromArray, but the array only covers the local
+ *         boxes owned by this node. Array is a downsampled version and will
+ *         be upscaled to meet the target resolution.
+ * @param   comp    Number of field component.
+ * @param   data    Array with local data.
+ * @param   up      Upsample factor.
+ */
+void LevelSynchronizer::FromArrayChunksAndUpsample(
+        const int lev, const int comp, double* data, int up) {
+    LevelData& state = sim->GetLevelData(lev);
+
+    const int ncomp = state.nComp();
+    const int nghost = state.nGrow();
+    const double time = state.t;
+
+    amrex::Geometry fgeom = sim->geom[lev];
+    amrex::Geometry cgeom = amrex::coarsen(fgeom, amrex::IntVect(up,up,up));
+    amrex::DistributionMapping dm = state.DistributionMap();
+    amrex::BoxArray ba = state.boxArray();
+    ba.coarsen(up);
+
+    LevelData ld(ba, dm, 1, nghost, time);
+
+#pragma omp parallel
+    for (amrex::MFIter mfi(ld, false); mfi.isValid(); ++mfi) {
+        const amrex::Box& bx = mfi.tilebox();
+        const auto& state_arr = ld.array(mfi);
+
+        const amrex::Dim3 lo = amrex::lbound(bx);
+        const amrex::Dim3 hi = amrex::ubound(bx);
+        const int lx = bx.length(0);
+        const int ly = bx.length(1);
+        const int lz = bx.length(2);
+
+        for (int k = lo.z; k <= hi.z; ++k) {
+            for (int j = lo.y; j <= hi.y; ++j) {
+                AMREX_PRAGMA_SIMD
+                for (int i = lo.x; i <= hi.x; ++i) {
+                    long long ind =  static_cast<long long>(i-lo.x) * lz*ly
+                                   + static_cast<long long>(j-lo.y) * lz
+                                   + static_cast<long long>(k-lo.z);
+
+                    state_arr(i,j,k,0) = data[ind];
+                }
+            }
+        }
+    }
+
+    amrex::CpuBndryFuncFab bndry_func(nullptr);
+    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> cphysbc(cgeom,bcs,bndry_func);
+    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> fphysbc(fgeom,bcs,bndry_func);
+
+    amrex::InterpFromCoarseLevel(sim->grid_new[lev], time, ld, 0, comp, 1,
+                                 cgeom, fgeom, cphysbc, 0, fphysbc, 0,
+                                 amrex::IntVect(up,up,up), mapper, bcs, 0);
+}
+
 /** @brief Changes the the number of ghost cells at all levels.
  * @param   new_nghost  New number of ghost cells.
  */
