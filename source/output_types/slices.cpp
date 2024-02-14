@@ -8,6 +8,10 @@ namespace sledgehamr {
  */
 void Slices::Write() {
     for (int lev = 0; lev <= sim->GetFinestLevel(); ++lev) {
+        const LevelData* state = &sim->GetLevelData(lev);
+        if (with_truncation_errors && !state->contains_truncation_errors )
+            continue;
+
         // Create folder and file.
         std::string subfolder = folder + "/Level_" + std::to_string(lev);
         amrex::UtilCreateDirectory(subfolder.c_str(), 0755);
@@ -19,7 +23,6 @@ void Slices::Write() {
                                   H5P_DEFAULT);
 
         // Write field data.
-        const LevelData* state = &sim->GetLevelData(lev);
         WriteSingleSlice(state, lev, file_id, "x", 0, 1, 2, false);
         WriteSingleSlice(state, lev, file_id, "y", 1, 0, 2, false);
         WriteSingleSlice(state, lev, file_id, "z", 2, 0, 1, false);
@@ -50,16 +53,6 @@ void Slices::Write() {
 void Slices::WriteSingleSlice(const LevelData* state, int lev, hid_t file_id,
                               std::string ident, int d1, int d2, int d3,
                               bool is_truncation_error) {
-    if (is_truncation_error && !state->contains_truncation_errors &&
-        lev < sim->GetFinestLevel()) {
-        std::string msg = "Attempting to save truncation errors but none exist "
-                          "on level " + std::to_string(lev) + "!";
-        amrex::Abort(msg);
-    }
-
-    if (is_truncation_error && !state->contains_truncation_errors)
-        return;
-
     std::vector<int> le1, he1, le2, he2;
     const int ndist = is_truncation_error ? 2 : 1;
 
