@@ -26,7 +26,7 @@ LevelSynchronizer::LevelSynchronizer(Sledgehamr* owner) : sim(owner) {
 
     // Set interpolation type between levels
     amrex::ParmParse pp("amr");
-    int interpolation_type = InterpType::PCInterp;
+    int interpolation_type = InterpType::CellQuadratic;
     pp.query("interpolation_type", interpolation_type);
 
     switch (interpolation_type) {
