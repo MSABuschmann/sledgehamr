@@ -431,7 +431,7 @@ void Sledgehamr::ParseInput() {
     utils::AssessParamOK(param_name, tagging_on_gpu, do_thorough_checks);
 
     param_name = "amr.coarse_level_grid_size";
-    pp.query(param_name.c_str(), coarse_level_grid_size);
+    pp.get(param_name.c_str(), coarse_level_grid_size);
     validity = (utils::ErrorState)utils::IsPowerOfTwo(coarse_level_grid_size);
     error_msg   = param_name + " needs to be a power of 2!";
     warning_msg = "";
