@@ -412,8 +412,8 @@ void LocalRegrid::ParseInput() {
                   force_global_regrid_at_restart);
     pp_amr.query("n_error_buf", n_error_buf);
     pp_amr.query("max_local_regrids", max_local_regrids);
-    pp_amr.query("volume_threshold_single", volume_threshold_single);
-    pp_amr.query("volume_threshold_accumulated", volume_threshold_accumulated);
+    pp_amr.query("volume_threshold_strong", volume_threshold_single);
+    pp_amr.query("volume_threshold_weak", volume_threshold_accumulated);
 }
 
 /** @brief Creates a N x N communication matrix M_{ij} between N MPI ranks. The
