@@ -67,7 +67,7 @@ void TimeStepper::ParseParams() {
     // Set regridding intervals.
     amrex::ParmParse pp_amr("amr");
 
-    double reg_dt = 1e99;
+    double reg_dt = DBL_MAX;
     pp_amr.query("regrid_dt", reg_dt);
     pp_amr.query("semistatic_sim", semistatic_sim);
 
