@@ -158,7 +158,7 @@ void IntegratorRkn::SetButcherTableau() {
 /** @brief Reads in a user-defined Butcher Tableau.
  */
 void IntegratorRkn::ReadUserDefinedButcherTableau() {
-    amrex::ParmParse pp("integrator");
+    amrex::ParmParse pp("integrator.rkn");
 
     pp.getarr("weights_bar_b", weights_bar_b);
     pp.getarr("weights_b", weights_b);
