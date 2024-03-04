@@ -150,8 +150,9 @@ void LevelWriter::WriteSingleLevel(
 
         // TODO Adjust output type.
         for (int f=0; f<state->nComp(); ++f) {
-            std::unique_ptr<float[]> output_arr(new float[len]);
-            std::fill_n(output_arr.get(), len, 0.0f);
+            //std::unique_ptr<float[]> output_arr(new float[len]);
+            //std::fill_n(output_arr.get(), len, 0.0f);
+            std::vector<float> output_arr(len);
 
             for (int k=lz; k<hz; ++k) {
                 for (int j=ly; j<hy; ++j) {
@@ -177,7 +178,9 @@ void LevelWriter::WriteSingleLevel(
 
             std::string dset_name = sim->GetScalarFieldName(f) + "_" + ident
                                   + "_" + std::to_string(lex.size());
-            utils::hdf5::Write(file_id, dset_name, output_arr.get(), len);
+        //    utils::hdf5::Write(file_id, dset_name, output_arr.get(), len);
+            utils::hdf5::Write(file_id, dset_name, &(output_arr[0]), len);
+        //    output_arr.reset();
         }
 
     }
