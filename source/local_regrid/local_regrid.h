@@ -119,7 +119,7 @@ class LocalRegrid {
 
     /** @brief Size of error buffer.
      */
-    int n_error_buf = 0;
+    int n_error_buf = 1;
 
     /** @brief Number of cells contained in each level after the last global
      *         regrid.
