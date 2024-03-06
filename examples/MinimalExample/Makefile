@@ -2,6 +2,7 @@
 # If you set AMREX_HOME as an environment variable, this line will be ignored
 # AMREX_HOME    ?=
 SLEDGEHAMR_HOME ?= ../../../sledgehamr
+#SLEDGEHAMR_PROJECT_PATH =
 
 # compiler
 COMP      = gnu

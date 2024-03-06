@@ -3,25 +3,22 @@ project.name = MinimalExample
 
 # ----------------- Simulation parameters
 sim.t_start = 0.1
-sim.t_end   = 7
+sim.t_end   = 5.5
 sim.L       = 15
 sim.cfl     = 0.3
 
 # ----------------- Integrator
-integrator.type = 10 # = SSPRK3
+integrator.type = 3
 
 # ----------------- AMR parameters
 amr.coarse_level_grid_size  = 256
-amr.blocking_factor         = 8
+amr.blocking_factor         = 4
 amr.nghost                  = 2
 amr.max_refinement_levels   = 2
 amr.n_error_buf             = 3
 amr.regrid_dt               = 0.2
 
-amr.te_crit_Psi1 = 1e-3
-amr.te_crit_Psi2 = 1e-3
-amr.te_crit_Pi1  = 1e-2
-amr.te_crit_Pi2  = 1e-2
+amr.te_crit = 1e-2
 
 # ----------------- Input parameters
 input.initial_state = initial_state_256.hdf5

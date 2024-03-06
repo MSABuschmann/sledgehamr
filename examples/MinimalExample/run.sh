@@ -7,10 +7,9 @@
 #SBATCH --time=00:15:00
 cd $SLURM_SUBMIT_DIR
 
+export SLURM_CPU_BIND="cores"
 export OMP_PLACES=threads
 export OMP_PROC_BIND=spread
 export OMP_NUM_THREADS=16
-export HDF5_DISABLE_VERSION_CHECK=2
-export HDF5_USE_FILE_LOCKING='FALSE'
 
-/usr/bin/time --verbose srun --cpu_bind=cores main3d.gnu.x86-milan.MPROF.MPI.OMP.ex inputs
+srun main3d.gnu.x86-milan.MPROF.MPI.OMP.ex inputs

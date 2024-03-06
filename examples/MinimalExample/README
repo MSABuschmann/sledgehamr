@@ -8,6 +8,9 @@
 
 4.  Compile sledgehamr: make -j 6
 
-5.  Run the executable. An example slurm submission script is provided: run.sh
+5.  Use the Jupyter Notebook notebooks/MinimalExample.ipynb to generate an
+    initial state.
 
-6.  Use the example notebook to plot results: notebooks/MinimalExample.ipynb
+6.  Run the executable. An example slurm submission script is provided: run.sh
+
+5.  Use the example notebook notebooks/MinimalExample.ipynb to plot the results
