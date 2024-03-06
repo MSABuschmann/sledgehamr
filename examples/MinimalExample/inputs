@@ -8,7 +8,7 @@ sim.L       = 15
 sim.cfl     = 0.3
 
 # ----------------- Integrator
-integrator.type = 3
+integrator.type = 10
 
 # ----------------- AMR parameters
 amr.coarse_level_grid_size  = 256
