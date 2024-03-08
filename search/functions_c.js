@@ -5,7 +5,7 @@ var searchData=
   ['laplacian_3c_201_20_3e_1051',['Laplacian&lt; 1 &gt;',['../namespacesledgehamr_1_1utils.html#aa008b8de2116efb619ca5254835c5a48',1,'sledgehamr::utils']]],
   ['laplacian_3c_202_20_3e_1052',['Laplacian&lt; 2 &gt;',['../namespacesledgehamr_1_1utils.html#ae24a82d044b61281c614af5974e79d44',1,'sledgehamr::utils']]],
   ['laplacian_3c_203_20_3e_1053',['Laplacian&lt; 3 &gt;',['../namespacesledgehamr_1_1utils.html#ae8a309cb0cf241821144576c7f40fc6b',1,'sledgehamr::utils']]],
-  ['leveldata_1054',['LevelData',['../classsledgehamr_1_1LevelData.html#a0ccfa6e6171b7e36ddcb68be82c80fd3',1,'sledgehamr::LevelData::LevelData()'],['../classsledgehamr_1_1LevelData.html#aa3e83b8e4d23e14648c511f80b6bfd39',1,'sledgehamr::LevelData::LevelData(amrex::BoxArray ba, amrex::DistributionMapping dm, int ncomp, int nghost, double time=0)']]],
+  ['leveldata_1054',['LevelData',['../classsledgehamr_1_1LevelData.html#a0ccfa6e6171b7e36ddcb68be82c80fd3',1,'sledgehamr::LevelData::LevelData()'],['../classsledgehamr_1_1LevelData.html#aaa45350d26d4dba5a41cffaa6649a3d7',1,'sledgehamr::LevelData::LevelData(amrex::BoxArray ba, amrex::DistributionMapping dm, int ncomp, int nghost, double time=-DBL_MAX)']]],
   ['levelmessage_1055',['LevelMessage',['../classsledgehamr_1_1TimeStepper.html#a7a4fff4c771f5f7609deec6f11a6e3ed',1,'sledgehamr::TimeStepper']]],
   ['levelname_1056',['LevelName',['../namespacesledgehamr_1_1utils.html#a225f9212566a6606bf210b9d23ad52e0',1,'sledgehamr::utils']]],
   ['levelsynchronizer_1057',['LevelSynchronizer',['../classsledgehamr_1_1LevelSynchronizer.html#a28eb74d8fe0c22d97483543350c6eb2a',1,'sledgehamr::LevelSynchronizer']]],
