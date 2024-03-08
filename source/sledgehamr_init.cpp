@@ -51,6 +51,7 @@ void SledgehamrInit::FinishAMReXSetup() {
     pp_amr.get("coarse_level_grid_size", grid_size);
     std::vector<int> grid_vect(3,grid_size);
     pp_amr.addarr("n_cell", grid_vect);
+    pp_amr.add("max_grid_size", grid_size);
 
     // Determine maximum number of levels.
     int max_refinement_levels = 0;

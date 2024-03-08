@@ -252,7 +252,7 @@ void TimeStepper::ScheduleRegrid(int lev) {
     // This is to avoid regridding on coarse right after restarting from a
     // checkpoint. We do not have a valid grid_old yet to evolve the needed
     // shadow level.
-    if (lev == 0 && sim->grid_new[lev].t == sim->grid_old[lev].t)
+    if (lev == 0 && sim->grid_old[lev].t == -DBL_MAX)
         return;
 
     // Passed all criteria, now schedule regrid. Make sure we schedule the

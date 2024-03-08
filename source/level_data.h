@@ -20,7 +20,7 @@ class LevelData : public amrex::MultiFab {
      * @param   time    Time.
      */
     LevelData(amrex::BoxArray ba, amrex::DistributionMapping dm, int ncomp,
-              int nghost, double time=0)
+              int nghost, double time=-DBL_MAX)
         : amrex::MultiFab{ba, dm, ncomp, nghost}, t{time} {};
 
     using amrex::MultiFab::MultiFab;
@@ -59,7 +59,7 @@ class LevelData : public amrex::MultiFab {
 
     /** @brief Time corresponding to amrex::MultiFab data.
      */
-    double t = 0.;
+    double t = -DBL_MAX;
 
     /** @brief How often this level has been advanced.
      */

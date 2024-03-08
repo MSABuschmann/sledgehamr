@@ -160,7 +160,7 @@ void Checkpoint::Read() {
         // value. grid_new has to be set to the old value first since ghost
         // cells are saved in the checkpoint. We change nghost for this MultiFab
         // later below.
-        sim->grid_old[lev].define(ba, dm, nscalars, sim->nghost, time);
+        sim->grid_old[lev].define(ba, dm, nscalars, sim->nghost);
         sim->grid_new[lev].define(ba, dm, nscalars, nghost, time);
     }
 

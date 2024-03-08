@@ -13,7 +13,7 @@ class Integrator;
 class LocalRegrid;
 class RegridScheduler;
 
-/** @brief Class that takes care of the sub-cycling in time algorithm and 
+/** @brief Class that takes care of the sub-cycling in time algorithm and
  *         schedules regrids when necessary.
  */
 class TimeStepper {
@@ -37,6 +37,10 @@ class TimeStepper {
      */
     std::unique_ptr<RegridScheduler> scheduler;
 
+    /** @brief Vector of times at which a given level has been regridded last.
+     */
+    std::vector<double> last_regrid_time;
+
 private:
     void SynchronizeLevels(int lev);
     void SynchronizeTimes();
@@ -52,10 +56,6 @@ private:
 
     void ParseParams();
     void SetIntegrator();
-
-    /** @brief Vector of times at which a given level has been regridded last.
-     */
-    std::vector<double> last_regrid_time;
 
     /** @brief Whether we want to force write output at the beginning of the
      *         sim.

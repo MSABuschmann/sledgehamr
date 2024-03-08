@@ -360,14 +360,14 @@ void LevelSynchronizer::ComputeTruncationErrors(int lev) {
  */
 void LevelSynchronizer::IncreaseCoarseLevelResolution() {
     amrex::Print() << "Increase Coarse Level resolution!" << std::endl;
-
+/*
     if (sim->finest_level > 0) {
         std::string msg = std::string("Increasing coarse level resolution ")
                         + "is currently only supported if grid has not been "
                         + "refined yet.";
         amrex::Abort(msg);
     }
-
+*/
     // Initalize new level.
     const int lev = 0;
     const int ncomp = sim->grid_new[lev].nComp();
@@ -388,37 +388,66 @@ void LevelSynchronizer::IncreaseCoarseLevelResolution() {
             amrex::DistributionMapping(ba, amrex::ParallelDescriptor::NProcs());
     LevelData ld(ba, dm, ncomp, nghost, time);
 
-    // Interpolate new from old coarse level.
-    amrex::CpuBndryFuncFab bndry_func(nullptr);
-    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> cphysbc(old_geom,bcs,bndry_func);
-    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> fphysbc(new_geom,bcs,bndry_func);
+    // Interpolate new from old coarse level. Use existing fine data if
+    // possible.
+    if (sim->finest_level == 0) {
+        amrex::CpuBndryFuncFab bndry_func(nullptr);
+        amrex::PhysBCFunct<amrex::CpuBndryFuncFab> cphysbc(
+                old_geom, bcs, bndry_func);
+        amrex::PhysBCFunct<amrex::CpuBndryFuncFab> fphysbc(
+                new_geom, bcs, bndry_func);
 
-    amrex::Vector<amrex::MultiFab*> cmf{&sim->grid_new[lev]};
-    amrex::Vector<amrex::MultiFab*> fmf{&ld};
-    amrex::Vector<double> ctime{time};
-    amrex::Vector<double> ftime{time};
+        amrex::Vector<amrex::MultiFab*> cmf{&sim->grid_new[lev]};
+        amrex::Vector<amrex::MultiFab*> fmf{&ld};
+        amrex::Vector<double> ctime{time};
+        amrex::Vector<double> ftime{time};
 
-    amrex::InterpFromCoarseLevel(ld, time, sim->grid_new[lev], 0, 0, ncomp,
-                                 old_geom, new_geom, cphysbc, 0, fphysbc, 0,
-                                 amrex::IntVect(2,2,2), mapper, bcs, 0);
+        amrex::InterpFromCoarseLevel(ld, time, sim->grid_new[lev], 0, 0, ncomp,
+                                     old_geom, new_geom, cphysbc, 0, fphysbc, 0,
+                                     amrex::IntVect(2,2,2), mapper, bcs, 0);
+    } else {
+        FillPatch(1, sim->grid_new[lev].t, ld);
+    }
 
     // Replace old coarse level.
     sim->grid_new[lev].clear();
     sim->grid_old[lev].clear();
 
     std::swap(sim->grid_new[lev], ld);
-    sim->grid_old[lev].define(ba, dm, ncomp, nghost, time);
+    sim->grid_old[lev].define(ba, dm, ncomp, nghost);
 
     // Update metadata.
     sim->SetBoxArray(lev, ba);
     sim->SetDistributionMap(lev, dm);
     sim->geom[lev] = new_geom;
 
-    sim->max_level -= 1;
     sim->coarse_level_grid_size *= 2;
-    sim->dimN.erase(sim->dimN.begin());
-    sim->dx.erase(sim->dx.begin());
-    sim->dt.erase(sim->dt.begin());
+    sim->dimN[lev] *= 2;
+    sim->dx[lev] /= 2;
+    sim->dt[lev] /= 2;
+    sim->time_stepper->regrid_dt[lev] /= 2;
+
+    sim->time_stepper->local_regrid.reset();
+    sim->time_stepper->local_regrid = std::make_unique<LocalRegrid>(sim);
+
+    if (sim->max_level > 0) {
+        sim->max_level -= 1;
+        sim->finest_level -= 1;
+        sim->geom.erase(sim->geom.begin() + 1);
+        sim->dmap.erase(sim->dmap.begin() + 1);
+        sim->grids.erase(sim->grids.begin() + 1);
+        sim->dimN.erase(sim->dimN.begin() + 1);
+        sim->dx.erase(sim->dx.begin() + 1);
+        sim->dt.erase(sim->dt.begin() + 1);
+        sim->time_stepper->regrid_dt.erase(
+                sim->time_stepper->regrid_dt.begin() + 1);
+        sim->time_stepper->last_regrid_time.erase(
+                sim->time_stepper->last_regrid_time.begin() + 1);
+        sim->grid_new[1].clear();
+        sim->grid_old[1].clear();
+        sim->grid_new.erase(sim->grid_new.begin() + 1);
+        sim->grid_old.erase(sim->grid_old.begin() + 1);
+    }
 
     sim->ReadSpectrumKs(true);
 }
