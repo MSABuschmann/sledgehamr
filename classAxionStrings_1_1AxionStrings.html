@@ -92,10 +92,10 @@ Inheritance diagram for AxionStrings::AxionStrings:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac092f7c6fbfba8da7fb161790e76b5b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1AxionStrings.html#ac092f7c6fbfba8da7fb161790e76b5b7">Init</a> () override</td></tr>
-<tr class="memdesc:ac092f7c6fbfba8da7fb161790e76b5b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize project specific details. To be overriden by each project if required.  <a href="classAxionStrings_1_1AxionStrings.html#ac092f7c6fbfba8da7fb161790e76b5b7">More...</a><br /></td></tr>
+<tr class="memdesc:ac092f7c6fbfba8da7fb161790e76b5b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override Init function and let cosmology module handle the setup.  <a href="classAxionStrings_1_1AxionStrings.html#ac092f7c6fbfba8da7fb161790e76b5b7">More...</a><br /></td></tr>
 <tr class="separator:ac092f7c6fbfba8da7fb161790e76b5b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5edb8a9477568d1b5fd818e2e28bf7c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1AxionStrings.html#ac5edb8a9477568d1b5fd818e2e28bf7c">CreateLevelIf</a> (const int lev, const double time) override</td></tr>
-<tr class="memdesc:ac5edb8a9477568d1b5fd818e2e28bf7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as DoCreateLevelIf but can be overriden by the project class.  <a href="classAxionStrings_1_1AxionStrings.html#ac5edb8a9477568d1b5fd818e2e28bf7c">More...</a><br /></td></tr>
+<tr class="memdesc:ac5edb8a9477568d1b5fd818e2e28bf7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">We want to create a level only when string width is less than threshold.  <a href="classAxionStrings_1_1AxionStrings.html#ac5edb8a9477568d1b5fd818e2e28bf7c">More...</a><br /></td></tr>
 <tr class="separator:ac5edb8a9477568d1b5fd818e2e28bf7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classsledgehamr_1_1Sledgehamr"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classsledgehamr_1_1Sledgehamr')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classsledgehamr_1_1Sledgehamr.html">sledgehamr::Sledgehamr</a></td></tr>
 <tr class="memitem:aa79a7ecd89061020a65f5259a286bc3a inherit pub_methods_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#aa79a7ecd89061020a65f5259a286bc3a">Sledgehamr</a> ()</td></tr>
@@ -150,6 +150,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a586018047b3b309ce7f60d35e6aa0eff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classAxionStrings_1_1Cosmology.html">Cosmology</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1AxionStrings.html#a586018047b3b309ce7f60d35e6aa0eff">cosmo</a></td></tr>
+<tr class="memdesc:a586018047b3b309ce7f60d35e6aa0eff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Axion cosmology module to set up the scenario.  <a href="classAxionStrings_1_1AxionStrings.html#a586018047b3b309ce7f60d35e6aa0eff">More...</a><br /></td></tr>
 <tr class="separator:a586018047b3b309ce7f60d35e6aa0eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
@@ -344,7 +345,15 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Same as DoCreateLevelIf but can be overriden by the project class. </p>
+<p>We want to create a level only when string width is less than threshold. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level in question. </td></tr>
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether we want to create level or not. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classsledgehamr_1_1Sledgehamr.html#ac018ba7412bd5e0eebb4be64736aabba">sledgehamr::Sledgehamr</a>.</p>
 
@@ -373,7 +382,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Initialize project specific details. To be overriden by each project if required. </p>
+<p>Override Init function and let cosmology module handle the setup. </p>
 
 <p>Reimplemented from <a class="el" href="classsledgehamr_1_1Sledgehamr.html#a9c1605a42a34853ce9efb99f7be43a2a">sledgehamr::Sledgehamr</a>.</p>
 
@@ -399,6 +408,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Axion cosmology module to set up the scenario. </p>
 
 </div>
 </div>

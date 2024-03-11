@@ -76,23 +76,26 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to simulate axion strings.  <a href="classAxionStrings_1_1AxionStrings.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html">Cosmology</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to simulate axion strings.  <a href="classAxionStrings_1_1Cosmology.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to simulate axion strings. This is not a sledgehamr class but will set up the axion string scenario if added to the project class.  <a href="classAxionStrings_1_1Cosmology.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a21448d59d97293a04f223acd829552cf"><td class="memItemLeft" align="right" valign="top">AMREX_FORCE_INLINE double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceAxionStrings.html#a21448d59d97293a04f223acd829552cf">a_prime2</a> (amrex::Array4&lt; amrex::Real const &gt; const &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const std::vector&lt; double &gt; &amp;params)</td></tr>
-<tr class="memdesc:a21448d59d97293a04f223acd829552cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO.  <a href="namespaceAxionStrings.html#a21448d59d97293a04f223acd829552cf">More...</a><br /></td></tr>
+<tr class="memdesc:a21448d59d97293a04f223acd829552cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function computing axion energy density a'^2.  <a href="namespaceAxionStrings.html#a21448d59d97293a04f223acd829552cf">More...</a><br /></td></tr>
 <tr class="separator:a21448d59d97293a04f223acd829552cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09809ac85cef5958bcdf718e22c74602"><td class="memItemLeft" align="right" valign="top">AMREX_FORCE_INLINE double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceAxionStrings.html#a09809ac85cef5958bcdf718e22c74602">a_prime_screened</a> (amrex::Array4&lt; amrex::Real const &gt; const &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const std::vector&lt; double &gt; &amp;params)</td></tr>
+<tr class="memdesc:a09809ac85cef5958bcdf718e22c74602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function computing the squareroot of the screened axion energy density a'_{screened} = a' * r^2.  <a href="namespaceAxionStrings.html#a09809ac85cef5958bcdf718e22c74602">More...</a><br /></td></tr>
 <tr class="separator:a09809ac85cef5958bcdf718e22c74602"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a714550de8307345d236c959e1ceb8ae0"><td class="memItemLeft" align="right" valign="top">AMREX_FORCE_INLINE double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceAxionStrings.html#a714550de8307345d236c959e1ceb8ae0">r_prime2</a> (amrex::Array4&lt; amrex::Real const &gt; const &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const std::vector&lt; double &gt; &amp;params)</td></tr>
+<tr class="memdesc:a714550de8307345d236c959e1ceb8ae0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function computing r'^2.  <a href="namespaceAxionStrings.html#a714550de8307345d236c959e1ceb8ae0">More...</a><br /></td></tr>
 <tr class="separator:a714550de8307345d236c959e1ceb8ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d3ae71eee463fd016a6982b87d9c47e"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_FORCE_INLINE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceAxionStrings.html#a2d3ae71eee463fd016a6982b87d9c47e">Rhs</a> (const amrex::Array4&lt; double &gt; &amp;rhs, const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const double *params)</td></tr>
 <tr class="memdesc:a2d3ae71eee463fd016a6982b87d9c47e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that calculates the RHS of the EOM at a single cell.  <a href="namespaceAxionStrings.html#a2d3ae71eee463fd016a6982b87d9c47e">More...</a><br /></td></tr>
 <tr class="separator:a2d3ae71eee463fd016a6982b87d9c47e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af603548f1cba91c8fb6ba76d6156f958"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
 <tr class="memitem:af603548f1cba91c8fb6ba76d6156f958"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_FORCE_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceAxionStrings.html#af603548f1cba91c8fb6ba76d6156f958">GravitationalWavesRhs&lt; true &gt;</a> (const amrex::Array4&lt; double &gt; &amp;rhs, const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const double *params)</td></tr>
+<tr class="memdesc:af603548f1cba91c8fb6ba76d6156f958"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that calculates the RHS of the GW EOM at a single cell.  <a href="namespaceAxionStrings.html#af603548f1cba91c8fb6ba76d6156f958">More...</a><br /></td></tr>
 <tr class="separator:af603548f1cba91c8fb6ba76d6156f958"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad249ec2da1235854e959cb770a8c3bf6"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a> (double Psi1_1, double Psi2_1, double Psi1_2, double Psi2_2)</td></tr>
 <tr class="memdesc:ad249ec2da1235854e959cb770a8c3bf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for zero-crossings between two points in the complex scalar field.  <a href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">More...</a><br /></td></tr>
@@ -178,7 +181,22 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>TODO. </p>
+<p>Kernel function computing axion energy density a'^2. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>Data from which to calculate RHS (current state). </td></tr>
+    <tr><td class="paramname">i</td><td>i-th cell index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th cell index. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th cell index. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">dt</td><td>Time step size. </td></tr>
+    <tr><td class="paramname">dx</td><td>Grid spacing. </td></tr>
+    <tr><td class="paramname">params</td><td>Optional parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a'^2. </dd></dl>
 
 </div>
 </div>
@@ -249,6 +267,23 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kernel function computing the squareroot of the screened axion energy density a'_{screened} = a' * r^2. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>Data from which to calculate RHS (current state). </td></tr>
+    <tr><td class="paramname">i</td><td>i-th cell index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th cell index. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th cell index. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">dt</td><td>Time step size. </td></tr>
+    <tr><td class="paramname">dx</td><td>Grid spacing. </td></tr>
+    <tr><td class="paramname">params</td><td>Optional parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a'_{screened} = a' * r^2 </dd></dl>
 
 </div>
 </div>
@@ -328,6 +363,23 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Function that calculates the RHS of the GW EOM at a single cell. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rhs</td><td>Container to be filled with RHS. </td></tr>
+    <tr><td class="paramname">state</td><td>Data from which to calculate RHS (current state). </td></tr>
+    <tr><td class="paramname">i</td><td>i-th cell index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th cell index. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th cell index. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">dt</td><td>Time step size. </td></tr>
+    <tr><td class="paramname">dx</td><td>Grid spacing. </td></tr>
+    <tr><td class="paramname">params</td><td>Optional parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a714550de8307345d236c959e1ceb8ae0"></a>
@@ -397,6 +449,23 @@ template&lt;&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kernel function computing r'^2. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>Data from which to calculate RHS (current state). </td></tr>
+    <tr><td class="paramname">i</td><td>i-th cell index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th cell index. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th cell index. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">dt</td><td>Time step size. </td></tr>
+    <tr><td class="paramname">dx</td><td>Grid spacing. </td></tr>
+    <tr><td class="paramname">params</td><td>Optional parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>r'^2. </dd></dl>
 
 </div>
 </div>
@@ -486,6 +555,7 @@ template&lt;&gt; </div>
     <tr><td class="paramname">time</td><td>Current time. </td></tr>
     <tr><td class="paramname">dt</td><td>Time step size. </td></tr>
     <tr><td class="paramname">dx</td><td>Grid spacing. </td></tr>
+    <tr><td class="paramname">params</td><td>Optional parameters. </td></tr>
   </table>
   </dd>
 </dl>
@@ -606,6 +676,15 @@ template&lt;&gt; </div>
 </div><div class="memdoc">
 
 <p>Computes the winding factor along a given axis. Will be non-zero if plaquette is pierced by a string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>Current state. </td></tr>
+    <tr><td class="paramname">i</td><td>i-th cell index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-th cell index. </td></tr>
+    <tr><td class="paramname">k</td><td>k-th cell index. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>Winding factor. </dd></dl>
 
 </div>

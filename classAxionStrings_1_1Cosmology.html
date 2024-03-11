@@ -76,7 +76,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Class to simulate axion strings.  
+<p>Class to simulate axion strings. This is not a sledgehamr class but will set up the axion string scenario if added to the project class.  
  <a href="classAxionStrings_1_1Cosmology.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="cosmology_8h_source.html">cosmology.h</a>&gt;</code></p>
@@ -86,60 +86,81 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a99fd37166b1afd0a1a32fa82e378c696"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a99fd37166b1afd0a1a32fa82e378c696">Init</a> (<a class="el" href="classsledgehamr_1_1Sledgehamr.html">sledgehamr::Sledgehamr</a> *owner)</td></tr>
 <tr class="separator:a99fd37166b1afd0a1a32fa82e378c696"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f60b954ad592e90722b728067c68645"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a3f60b954ad592e90722b728067c68645">CreateLevelIf</a> (const int lev, const double time)</td></tr>
+<tr class="memdesc:a3f60b954ad592e90722b728067c68645"><td class="mdescLeft">&#160;</td><td class="mdescRight">We only want to create a new level if string width is below threshold.  <a href="classAxionStrings_1_1Cosmology.html#a3f60b954ad592e90722b728067c68645">More...</a><br /></td></tr>
 <tr class="separator:a3f60b954ad592e90722b728067c68645"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a856ccb363ed9c38dca6b97d8903041b8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a856ccb363ed9c38dca6b97d8903041b8">Mr</a> (const double eta)</td></tr>
+<tr class="memdesc:a856ccb363ed9c38dca6b97d8903041b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current radial mode mass.  <a href="classAxionStrings_1_1Cosmology.html#a856ccb363ed9c38dca6b97d8903041b8">More...</a><br /></td></tr>
 <tr class="separator:a856ccb363ed9c38dca6b97d8903041b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcad9a349f06d9b1c30ac74ad14cd882"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#abcad9a349f06d9b1c30ac74ad14cd882">H</a> (const double eta)</td></tr>
+<tr class="memdesc:abcad9a349f06d9b1c30ac74ad14cd882"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current hubble time.  <a href="classAxionStrings_1_1Cosmology.html#abcad9a349f06d9b1c30ac74ad14cd882">More...</a><br /></td></tr>
 <tr class="separator:abcad9a349f06d9b1c30ac74ad14cd882"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a098c16fc43cee19ff626c04d9613fe47"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a098c16fc43cee19ff626c04d9613fe47">StringWidth</a> (const int lev, const double eta)</td></tr>
+<tr class="memdesc:a098c16fc43cee19ff626c04d9613fe47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current string width in units of the grid spacing.  <a href="classAxionStrings_1_1Cosmology.html#a098c16fc43cee19ff626c04d9613fe47">More...</a><br /></td></tr>
 <tr class="separator:a098c16fc43cee19ff626c04d9613fe47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ef3c09b0a9d8a2b4b5e989e818b9bab"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a4ef3c09b0a9d8a2b4b5e989e818b9bab">RefinementTime</a> (const int lev)</td></tr>
+<tr class="memdesc:a4ef3c09b0a9d8a2b4b5e989e818b9bab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns time at which a level will be introduced.  <a href="classAxionStrings_1_1Cosmology.html#a4ef3c09b0a9d8a2b4b5e989e818b9bab">More...</a><br /></td></tr>
 <tr class="separator:a4ef3c09b0a9d8a2b4b5e989e818b9bab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3633f1f3c5cf9e734687ca3f9f410002"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a3633f1f3c5cf9e734687ca3f9f410002">Log</a> (const double eta)</td></tr>
+<tr class="memdesc:a3633f1f3c5cf9e734687ca3f9f410002"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes scale separation.  <a href="classAxionStrings_1_1Cosmology.html#a3633f1f3c5cf9e734687ca3f9f410002">More...</a><br /></td></tr>
 <tr class="separator:a3633f1f3c5cf9e734687ca3f9f410002"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c05274a8320be08bdc04fd0d52f171b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a0c05274a8320be08bdc04fd0d52f171b">BoxToPhysical</a> (const double L, const double eta, const double T1, const double mpl, const double gStar)</td></tr>
+<tr class="memdesc:a0c05274a8320be08bdc04fd0d52f171b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the physical box length.  <a href="classAxionStrings_1_1Cosmology.html#a0c05274a8320be08bdc04fd0d52f171b">More...</a><br /></td></tr>
 <tr class="separator:a0c05274a8320be08bdc04fd0d52f171b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75a2cfeae2bbb33bb5e8b31e68009e93"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a75a2cfeae2bbb33bb5e8b31e68009e93">Hubble</a> (const double T, const double mpl, const double gStar)</td></tr>
+<tr class="memdesc:a75a2cfeae2bbb33bb5e8b31e68009e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the physical Hubble parameter.  <a href="classAxionStrings_1_1Cosmology.html#a75a2cfeae2bbb33bb5e8b31e68009e93">More...</a><br /></td></tr>
 <tr class="separator:a75a2cfeae2bbb33bb5e8b31e68009e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85d6d760255b67a89a9d31c176dbe206"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a85d6d760255b67a89a9d31c176dbe206">XiTime</a> (double T, double mpl, double gStar)</td></tr>
 <tr class="separator:a85d6d760255b67a89a9d31c176dbe206"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63d481737c695754413fd1379b6f89f7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a63d481737c695754413fd1379b6f89f7">XiTemp</a> (double eta, double T1)</td></tr>
 <tr class="separator:a63d481737c695754413fd1379b6f89f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a526603a3e7199a54cc57e72c247ac1bc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a526603a3e7199a54cc57e72c247ac1bc">Xi</a> (const int lev, const double eta)</td></tr>
+<tr class="memdesc:a526603a3e7199a54cc57e72c247ac1bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates string length \xi.  <a href="classAxionStrings_1_1Cosmology.html#a526603a3e7199a54cc57e72c247ac1bc">More...</a><br /></td></tr>
 <tr class="separator:a526603a3e7199a54cc57e72c247ac1bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ae54916e64129e78b502dac7de606108b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#ae54916e64129e78b502dac7de606108b">ParseVariables</a> ()</td></tr>
+<tr class="memdesc:ae54916e64129e78b502dac7de606108b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse external variables.  <a href="classAxionStrings_1_1Cosmology.html#ae54916e64129e78b502dac7de606108b">More...</a><br /></td></tr>
 <tr class="separator:ae54916e64129e78b502dac7de606108b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2be5c7ab4735d4e7c1c1462a1f698d1c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a2be5c7ab4735d4e7c1c1462a1f698d1c">PrintRefinementTimes</a> ()</td></tr>
+<tr class="memdesc:a2be5c7ab4735d4e7c1c1462a1f698d1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints out when a new refinement level will be introduced.  <a href="classAxionStrings_1_1Cosmology.html#a2be5c7ab4735d4e7c1c1462a1f698d1c">More...</a><br /></td></tr>
 <tr class="separator:a2be5c7ab4735d4e7c1c1462a1f698d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9d623bb0ebef62e5567592223035289"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#aa9d623bb0ebef62e5567592223035289">SetProjections</a> ()</td></tr>
+<tr class="memdesc:aa9d623bb0ebef62e5567592223035289"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up projections.  <a href="classAxionStrings_1_1Cosmology.html#aa9d623bb0ebef62e5567592223035289">More...</a><br /></td></tr>
 <tr class="separator:aa9d623bb0ebef62e5567592223035289"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7794fe4d5b8716a8509daedea9492062"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a7794fe4d5b8716a8509daedea9492062">SetSpectra</a> ()</td></tr>
+<tr class="memdesc:a7794fe4d5b8716a8509daedea9492062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up spectrum.  <a href="classAxionStrings_1_1Cosmology.html#a7794fe4d5b8716a8509daedea9492062">More...</a><br /></td></tr>
 <tr class="separator:a7794fe4d5b8716a8509daedea9492062"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a967f28b69215998e936f82804379ae94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a967f28b69215998e936f82804379ae94">SetXiMeasurement</a> ()</td></tr>
+<tr class="memdesc:a967f28b69215998e936f82804379ae94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds custom output type to calculate string length \xi on the fly.  <a href="classAxionStrings_1_1Cosmology.html#a967f28b69215998e936f82804379ae94">More...</a><br /></td></tr>
 <tr class="separator:a967f28b69215998e936f82804379ae94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af78d9cfc07963af085317a0f2248c50c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#af78d9cfc07963af085317a0f2248c50c">GetStringTags</a> (const int lev)</td></tr>
+<tr class="memdesc:af78d9cfc07963af085317a0f2248c50c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of string-plaquette piercings.  <a href="classAxionStrings_1_1Cosmology.html#af78d9cfc07963af085317a0f2248c50c">More...</a><br /></td></tr>
 <tr class="separator:af78d9cfc07963af085317a0f2248c50c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a70d01c3a08135da355218a73fceb82"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a9a70d01c3a08135da355218a73fceb82">WriteXi</a> (double time, std::string prefix)</td></tr>
+<tr class="memdesc:a9a70d01c3a08135da355218a73fceb82"><td class="mdescLeft">&#160;</td><td class="mdescRight">OUTPUT_FUNCTION to calculate and write string length \xi.  <a href="classAxionStrings_1_1Cosmology.html#a9a70d01c3a08135da355218a73fceb82">More...</a><br /></td></tr>
 <tr class="separator:a9a70d01c3a08135da355218a73fceb82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:acb3c43334a56b3a5a14bb0532244c70f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#acb3c43334a56b3a5a14bb0532244c70f">string_width_threshold</a></td></tr>
+<tr class="memdesc:acb3c43334a56b3a5a14bb0532244c70f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum allowed string width.  <a href="classAxionStrings_1_1Cosmology.html#acb3c43334a56b3a5a14bb0532244c70f">More...</a><br /></td></tr>
 <tr class="separator:acb3c43334a56b3a5a14bb0532244c70f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f38d55470e4c1f40d3f5953ae016c87"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a8f38d55470e4c1f40d3f5953ae016c87">spectra_log_min</a> = 5</td></tr>
+<tr class="memdesc:a8f38d55470e4c1f40d3f5953ae016c87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum log for which we compute spectra.  <a href="classAxionStrings_1_1Cosmology.html#a8f38d55470e4c1f40d3f5953ae016c87">More...</a><br /></td></tr>
 <tr class="separator:a8f38d55470e4c1f40d3f5953ae016c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a8e04cbd2446993cdfd0b83d8e8ad83"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a3a8e04cbd2446993cdfd0b83d8e8ad83">interval_xi_log</a> = 0</td></tr>
+<tr class="memdesc:a3a8e04cbd2446993cdfd0b83d8e8ad83"><td class="mdescLeft">&#160;</td><td class="mdescRight">At what interval we want to write string length \xi.  <a href="classAxionStrings_1_1Cosmology.html#a3a8e04cbd2446993cdfd0b83d8e8ad83">More...</a><br /></td></tr>
 <tr class="separator:a3a8e04cbd2446993cdfd0b83d8e8ad83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a581ac71a98affe4e4553cd46e0753db5"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#a581ac71a98affe4e4553cd46e0753db5">lambda</a> = 1</td></tr>
+<tr class="memdesc:a581ac71a98affe4e4553cd46e0753db5"><td class="mdescLeft">&#160;</td><td class="mdescRight">lambda parameter in Lagrangian.  <a href="classAxionStrings_1_1Cosmology.html#a581ac71a98affe4e4553cd46e0753db5">More...</a><br /></td></tr>
 <tr class="separator:a581ac71a98affe4e4553cd46e0753db5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1ee0a9c8dcac508daa1c4d55b6f3ccf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">sledgehamr::Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAxionStrings_1_1Cosmology.html#ac1ee0a9c8dcac508daa1c4d55b6f3ccf">sim</a></td></tr>
+<tr class="memdesc:ac1ee0a9c8dcac508daa1c4d55b6f3ccf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the simulation.  <a href="classAxionStrings_1_1Cosmology.html#ac1ee0a9c8dcac508daa1c4d55b6f3ccf">More...</a><br /></td></tr>
 <tr class="separator:ac1ee0a9c8dcac508daa1c4d55b6f3ccf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class to simulate axion strings. </p>
+<div class="textblock"><p>Class to simulate axion strings. This is not a sledgehamr class but will set up the axion string scenario if added to the project class. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0c05274a8320be08bdc04fd0d52f171b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0c05274a8320be08bdc04fd0d52f171b">&#9670;&nbsp;</a></span>BoxToPhysical()</h2>
@@ -193,6 +214,19 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Computes the physical box length. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">L</td><td>Comoving box length. </td></tr>
+    <tr><td class="paramname">eta</td><td>Current time eta. </td></tr>
+    <tr><td class="paramname">T1</td><td>T_1 temperature. </td></tr>
+    <tr><td class="paramname">mpl</td><td>Planck mass. </td></tr>
+    <tr><td class="paramname">gStar</td><td>Degrees of freedom g_*. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Physical box length. </dd></dl>
+
 </div>
 </div>
 <a id="a3f60b954ad592e90722b728067c68645"></a>
@@ -229,6 +263,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>We only want to create a new level if string width is below threshold. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether we want to create level lev. </dd></dl>
+
 </div>
 </div>
 <a id="af78d9cfc07963af085317a0f2248c50c"></a>
@@ -255,6 +299,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Returns the number of string-plaquette piercings. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>On which level to identify piercings. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of tags. </dd></dl>
+
 </div>
 </div>
 <a id="abcad9a349f06d9b1c30ac74ad14cd882"></a>
@@ -280,6 +333,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Current hubble time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eta</td><td>Current time eta. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>H(eta). </dd></dl>
 
 </div>
 </div>
@@ -322,6 +384,17 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Computes the physical Hubble parameter. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td>Temperature. </td></tr>
+    <tr><td class="paramname">mpl</td><td>Planck mass. </td></tr>
+    <tr><td class="paramname">gStar</td><td>Degrees of freedom g_*. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Physical Hubble parameter. </dd></dl>
 
 </div>
 </div>
@@ -367,6 +440,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Computes scale separation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eta</td><td>Current time eta. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>log(m_r/H) </dd></dl>
+
 </div>
 </div>
 <a id="a856ccb363ed9c38dca6b97d8903041b8"></a>
@@ -393,6 +475,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Current radial mode mass. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eta</td><td>Current time eta. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>m_r(eta) </dd></dl>
+
 </div>
 </div>
 <a id="ae54916e64129e78b502dac7de606108b"></a>
@@ -418,6 +509,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Parse external variables. </p>
+
 </div>
 </div>
 <a id="a2be5c7ab4735d4e7c1c1462a1f698d1c"></a>
@@ -442,6 +535,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Prints out when a new refinement level will be introduced. </p>
 
 </div>
 </div>
@@ -469,6 +564,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Returns time at which a level will be introduced. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Level. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Refinement time for level lev. </dd></dl>
+
 </div>
 </div>
 <a id="aa9d623bb0ebef62e5567592223035289"></a>
@@ -493,6 +597,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Sets up projections. </p>
 
 </div>
 </div>
@@ -519,6 +625,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sets up spectrum. </p>
+
 </div>
 </div>
 <a id="a967f28b69215998e936f82804379ae94"></a>
@@ -543,6 +651,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Adds custom output type to calculate string length \xi on the fly. </p>
 
 </div>
 </div>
@@ -580,6 +690,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Current string width in units of the grid spacing. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+    <tr><td class="paramname">eta</td><td>Current time eta. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>String width. </dd></dl>
+
 </div>
 </div>
 <a id="a9a70d01c3a08135da355218a73fceb82"></a>
@@ -616,6 +736,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>OUTPUT_FUNCTION to calculate and write string length \xi. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">prefix</td><td>Folder to which to write output. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a526603a3e7199a54cc57e72c247ac1bc"></a>
@@ -643,6 +772,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Calculates string length \xi. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lev</td><td>On which level to calculate \xi. </td></tr>
+    <tr><td class="paramname">eta</td><td>Current time \eta. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>\xi. </dd></dl>
 
 </div>
 </div>
@@ -745,6 +884,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>At what interval we want to write string length \xi. </p>
+
 </div>
 </div>
 <a id="a581ac71a98affe4e4553cd46e0753db5"></a>
@@ -766,6 +907,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>lambda parameter in Lagrangian. </p>
 
 </div>
 </div>
@@ -789,6 +932,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Pointer to the simulation. </p>
+
 </div>
 </div>
 <a id="a8f38d55470e4c1f40d3f5953ae016c87"></a>
@@ -811,6 +956,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Minimum log for which we compute spectra. </p>
+
 </div>
 </div>
 <a id="acb3c43334a56b3a5a14bb0532244c70f"></a>
@@ -832,6 +979,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Minimum allowed string width. </p>
 
 </div>
 </div>

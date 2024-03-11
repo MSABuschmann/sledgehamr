@@ -84,110 +84,110 @@ $(function() {
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keywordflow">return</span> -1;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;}</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#a258aa27c5a8fc5888d9ea2dc1aac6c9c">   28</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespaceAxionStrings.html#a258aa27c5a8fc5888d9ea2dc1aac6c9c">WindingAxis1</a>(<span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                 <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k) {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2),</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi2))</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i+1,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi2),</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                    state(i+1,j+1,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                    state(i+1,j+1,k  ,Scalar::Psi2))</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i+1,j+1,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                    state(i+1,j+1,k  ,Scalar::Psi2),</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi2))</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j+1,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi2),</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2));</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#a9a9041fe40078924b07264b098e11606">   49</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespaceAxionStrings.html#a9a9041fe40078924b07264b098e11606">WindingAxis2</a>(<span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                 <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k) {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2),</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi2))</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i+1,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi2),</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                    state(i+1,j  ,k+1,Scalar::Psi1),</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                    state(i+1,j  ,k+1,Scalar::Psi2))</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i+1,j  ,k+1,Scalar::Psi1),</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                    state(i+1,j  ,k+1,Scalar::Psi2),</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi1),</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi2))</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k+1,Scalar::Psi1),</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi2),</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2));</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#ac537647ddba06315dd5f277c17e9c5b9">   70</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespaceAxionStrings.html#ac537647ddba06315dd5f277c17e9c5b9">WindingAxis3</a>(<span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                 <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k) {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2),</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi2))</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j+1,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi2),</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                    state(i  ,j+1,k+1,Scalar::Psi1),</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                    state(i  ,j+1,k+1,Scalar::Psi2))</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j+1,k+1,Scalar::Psi1),</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                    state(i  ,j+1,k+1,Scalar::Psi2),</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi1),</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi2))</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k+1,Scalar::Psi1),</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi2),</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi1),</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2));</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">template</span>&lt;&gt; AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE</div>
-<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5">   94</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5">TagCellForRefinement&lt;true&gt;</a>(<span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev, <span class="keyword">const</span> <span class="keywordtype">double</span> time,</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">double</span> dt, <span class="keyword">const</span> <span class="keywordtype">double</span> dx, <span class="keyword">const</span> <span class="keywordtype">double</span>* params) {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="comment">// Check all three plaquettes (in positive index direction) for string</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="comment">// piercings.</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespaceAxionStrings.html#a258aa27c5a8fc5888d9ea2dc1aac6c9c">WindingAxis1</a>(state, i, j, k) != 0) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespaceAxionStrings.html#a9a9041fe40078924b07264b098e11606">WindingAxis2</a>(state, i, j, k) != 0) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespaceAxionStrings.html#ac537647ddba06315dd5f277c17e9c5b9">WindingAxis3</a>(state, i, j, k) != 0) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">  111</a></span>&#160;<span class="preprocessor">#define AXION_STRING_TRUNCATION_MODIFIER(x) \</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">template&lt;&gt; AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">double TruncationModifier&lt;x&gt;(const amrex::Array4&lt;const double&gt;&amp; state, \</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">        const int i, const int j, const int k, const int lev, \</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">        const double time, const double dt, const double dx, \</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">        const double truncation_error, const double* params) { \</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">    return truncation_error * dt; \</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">}</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Scalar::Pi1)</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Scalar::Pi2)</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_xx)</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_yy)</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_zz)</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_xy)</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_xz)</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_yz)</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;}; <span class="comment">// namespace AxionStrings</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PROJECTS_AXION_STRINGS_KERNELS_TAGGING_H_</span></div>
-<div class="ttc" id="aAxionStrings_2kernels__tagging_8h_html_a83d6d7dca6984032536cf3560d4dc224"><div class="ttname"><a href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a></div><div class="ttdeci">#define AXION_STRING_TRUNCATION_MODIFIER(x)</div><div class="ttdoc">Modifies the truncation error criteria for Pi1 and Pi2 from its default \tau &gt; \tau_{crit} to \tau * ...</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:111</div></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#a258aa27c5a8fc5888d9ea2dc1aac6c9c">   32</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespaceAxionStrings.html#a258aa27c5a8fc5888d9ea2dc1aac6c9c">WindingAxis1</a>(<span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                 <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k) {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2),</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi2))</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i+1,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi2),</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                    state(i+1,j+1,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                    state(i+1,j+1,k  ,Scalar::Psi2))</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i+1,j+1,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                    state(i+1,j+1,k  ,Scalar::Psi2),</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi2))</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j+1,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi2),</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2));</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#a9a9041fe40078924b07264b098e11606">   53</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespaceAxionStrings.html#a9a9041fe40078924b07264b098e11606">WindingAxis2</a>(<span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                 <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k) {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2),</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi2))</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i+1,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                    state(i+1,j  ,k  ,Scalar::Psi2),</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                    state(i+1,j  ,k+1,Scalar::Psi1),</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                    state(i+1,j  ,k+1,Scalar::Psi2))</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i+1,j  ,k+1,Scalar::Psi1),</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                    state(i+1,j  ,k+1,Scalar::Psi2),</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi1),</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi2))</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k+1,Scalar::Psi1),</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi2),</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2));</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#ac537647ddba06315dd5f277c17e9c5b9">   74</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespaceAxionStrings.html#ac537647ddba06315dd5f277c17e9c5b9">WindingAxis3</a>(<span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                 <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k) {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2),</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi2))</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j+1,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                    state(i  ,j+1,k  ,Scalar::Psi2),</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                    state(i  ,j+1,k+1,Scalar::Psi1),</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                    state(i  ,j+1,k+1,Scalar::Psi2))</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j+1,k+1,Scalar::Psi1),</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                    state(i  ,j+1,k+1,Scalar::Psi2),</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi1),</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi2))</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;         + <a class="code" href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">ZeroXing</a>(state(i  ,j  ,k+1,Scalar::Psi1),</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                    state(i  ,j  ,k+1,Scalar::Psi2),</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi1),</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                    state(i  ,j  ,k  ,Scalar::Psi2));</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keyword">template</span>&lt;&gt; AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE</div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5">   98</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5">TagCellForRefinement&lt;true&gt;</a>(<span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state,</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev, <span class="keyword">const</span> <span class="keywordtype">double</span> time,</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">double</span> dt, <span class="keyword">const</span> <span class="keywordtype">double</span> dx, <span class="keyword">const</span> <span class="keywordtype">double</span>* params) {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="comment">// Check all three plaquettes (in positive index direction) for string</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="comment">// piercings.</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespaceAxionStrings.html#a258aa27c5a8fc5888d9ea2dc1aac6c9c">WindingAxis1</a>(state, i, j, k) != 0) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespaceAxionStrings.html#a9a9041fe40078924b07264b098e11606">WindingAxis2</a>(state, i, j, k) != 0) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespaceAxionStrings.html#ac537647ddba06315dd5f277c17e9c5b9">WindingAxis3</a>(state, i, j, k) != 0) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;}</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">  115</a></span>&#160;<span class="preprocessor">#define AXION_STRING_TRUNCATION_MODIFIER(x) \</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">template&lt;&gt; AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE \</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">double TruncationModifier&lt;x&gt;(const amrex::Array4&lt;const double&gt;&amp; state, \</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">        const int i, const int j, const int k, const int lev, \</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">        const double time, const double dt, const double dx, \</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">        const double truncation_error, const double* params) { \</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">    return truncation_error * dt; \</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Scalar::Pi1)</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Scalar::Pi2)</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_xx)</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_yy)</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_zz)</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_xy)</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_xz)</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<a class="code" href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a>(Gw::du_yz)</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}; <span class="comment">// namespace AxionStrings</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// PROJECTS_AXION_STRINGS_KERNELS_TAGGING_H_</span></div>
+<div class="ttc" id="aAxionStrings_2kernels__tagging_8h_html_a83d6d7dca6984032536cf3560d4dc224"><div class="ttname"><a href="AxionStrings_2kernels__tagging_8h.html#a83d6d7dca6984032536cf3560d4dc224">AXION_STRING_TRUNCATION_MODIFIER</a></div><div class="ttdeci">#define AXION_STRING_TRUNCATION_MODIFIER(x)</div><div class="ttdoc">Modifies the truncation error criteria for Pi1 and Pi2 from its default \tau &gt; \tau_{crit} to \tau * ...</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:115</div></div>
 <div class="ttc" id="aFirstOrderPhaseTransition_2setup_8h_html"><div class="ttname"><a href="FirstOrderPhaseTransition_2setup_8h.html">setup.h</a></div></div>
 <div class="ttc" id="anamespaceAxionStrings_html"><div class="ttname"><a href="namespaceAxionStrings.html">AxionStrings</a></div><div class="ttdef"><b>Definition:</b> AxionStrings.h:9</div></div>
-<div class="ttc" id="anamespaceAxionStrings_html_a258aa27c5a8fc5888d9ea2dc1aac6c9c"><div class="ttname"><a href="namespaceAxionStrings.html#a258aa27c5a8fc5888d9ea2dc1aac6c9c">AxionStrings::WindingAxis1</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE int WindingAxis1(const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k)</div><div class="ttdoc">Computes the winding factor along a given axis. Will be non-zero if plaquette is pierced by a string.</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:28</div></div>
-<div class="ttc" id="anamespaceAxionStrings_html_a66b289e6db1a4d5eb0c74a4a464da2c5"><div class="ttname"><a href="namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5">AxionStrings::TagCellForRefinement&lt; true &gt;</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE bool TagCellForRefinement&lt; true &gt;(const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const double *params)</div><div class="ttdoc">Function that tags individual cells for refinement.</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:94</div></div>
-<div class="ttc" id="anamespaceAxionStrings_html_a9a9041fe40078924b07264b098e11606"><div class="ttname"><a href="namespaceAxionStrings.html#a9a9041fe40078924b07264b098e11606">AxionStrings::WindingAxis2</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE int WindingAxis2(const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k)</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:49</div></div>
-<div class="ttc" id="anamespaceAxionStrings_html_ac537647ddba06315dd5f277c17e9c5b9"><div class="ttname"><a href="namespaceAxionStrings.html#ac537647ddba06315dd5f277c17e9c5b9">AxionStrings::WindingAxis3</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE int WindingAxis3(const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k)</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:70</div></div>
+<div class="ttc" id="anamespaceAxionStrings_html_a258aa27c5a8fc5888d9ea2dc1aac6c9c"><div class="ttname"><a href="namespaceAxionStrings.html#a258aa27c5a8fc5888d9ea2dc1aac6c9c">AxionStrings::WindingAxis1</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE int WindingAxis1(const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k)</div><div class="ttdoc">Computes the winding factor along a given axis. Will be non-zero if plaquette is pierced by a string.</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:32</div></div>
+<div class="ttc" id="anamespaceAxionStrings_html_a66b289e6db1a4d5eb0c74a4a464da2c5"><div class="ttname"><a href="namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5">AxionStrings::TagCellForRefinement&lt; true &gt;</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE bool TagCellForRefinement&lt; true &gt;(const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const double *params)</div><div class="ttdoc">Function that tags individual cells for refinement.</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:98</div></div>
+<div class="ttc" id="anamespaceAxionStrings_html_a9a9041fe40078924b07264b098e11606"><div class="ttname"><a href="namespaceAxionStrings.html#a9a9041fe40078924b07264b098e11606">AxionStrings::WindingAxis2</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE int WindingAxis2(const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k)</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:53</div></div>
+<div class="ttc" id="anamespaceAxionStrings_html_ac537647ddba06315dd5f277c17e9c5b9"><div class="ttname"><a href="namespaceAxionStrings.html#ac537647ddba06315dd5f277c17e9c5b9">AxionStrings::WindingAxis3</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE int WindingAxis3(const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k)</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:74</div></div>
 <div class="ttc" id="anamespaceAxionStrings_html_ad249ec2da1235854e959cb770a8c3bf6"><div class="ttname"><a href="namespaceAxionStrings.html#ad249ec2da1235854e959cb770a8c3bf6">AxionStrings::ZeroXing</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE int ZeroXing(double Psi1_1, double Psi2_1, double Psi1_2, double Psi2_2)</div><div class="ttdoc">Checks for zero-crossings between two points in the complex scalar field.</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:17</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
