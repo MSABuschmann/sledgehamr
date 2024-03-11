@@ -5,6 +5,7 @@ import h5py
 ## This class reads all SledgeHAMR output
 class Output:
     ## Crawls the output and loads headers.
+    # @param    output_folder   Folder containing the simulation output.
     def __init__(self, output_folder):
         self._prefix = output_folder
 
@@ -301,6 +302,15 @@ class Output:
         fin.close()
         return d
 
+    ## Helper function parsing a 2D field.
+    # @param    folder      Folder containing the chunks.
+    # @param    dim         Number of cells in each dimension.
+    # @param    direction   'x', 'y', or 'z'.
+    # @param    ranks       Number of MPI ranks = number of chunks.
+    # @param    ident       Name of component.
+    # @param    downsample  In case the field has been downsampled prior to
+    #                       writing.
+    # @return   2D field.
     def __Read2dField(self, folder, dim, direction, ranks, ident, downsample):
         field = np.ones((dim,dim), dtype=np.float32) * np.nan
         for f in range(ranks):
@@ -321,6 +331,16 @@ class Output:
             fin.close()
         return field
 
+    ## Helper function parsing a 3D field.
+    # @param    folder      Folder containing the chunks.
+    # @param    dim         Number of cells in each dimension.
+    # @param    ranks       Number of MPI ranks = number of chunks.
+    # @param    ident       Name of component.
+    # @param    downsample  In case the field has been downsampled prior to
+    #                       writing.
+    # @param    ident2      Dataset name, either "data" or "te" for truncation
+    #                       error estimates.
+    # @return   3D field.
     def __Read3dField(self, folder, dim, ranks, ident, downsample, ident2):
         field = np.ones((dim, dim, dim), dtype=np.float32) * np.nan
         for f in range(ranks):

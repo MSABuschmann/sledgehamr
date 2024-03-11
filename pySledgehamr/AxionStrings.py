@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 ## Class that handles everything special for the Axion string project
 #  such as creating initial states and computing the string length and
 #  axion spectra.
-class AxionStrings:    
+class AxionStrings:
     ## Creates an initial state for Psi1, Psi2, Pi1, and Pi2.
     # @param    L               Box length in units of 1/(a_1 H_1).
     # @param    N               Number of coarse level grid sites.
@@ -22,19 +22,19 @@ class AxionStrings:
             box_layout = np.array([])
 
         # The temperature at eta = 1 in units of f_a.
-        T1 = np.sqrt(1.687) 
+        T1 = np.sqrt(1.687)
 
         # The value of eta at the initial state.
-        eta = t_start 
+        eta = t_start
 
         # The temperature at the initial state.
-        T = T1 / eta 
+        T = T1 / eta
 
         # Grid spacing.
-        dx = L/N 
+        dx = L/N
 
         # The effective thermal mass.
-        mEffSq = lambda_param * (T**2 / 3 - 1) 
+        mEffSq = lambda_param * (T**2 / 3 - 1)
 
         # These possible values of components of the 3-momentum. There are two
         # arrays to take advantage of that our fields are real to reduce the
@@ -65,6 +65,9 @@ class AxionStrings:
         archive.close()
         print('Done.')
 
+    ## Reads the custom output where the string length $\xi$ is measured.
+    # @param    output_folder   Folder containing the simulation output.
+    # @return   Archive containing $\xi$ as a function of time.
     def GetXi(self, output_folder):
         l_eta = []
         l_log = []
@@ -88,8 +91,10 @@ class AxionStrings:
         d['log'] = np.array(l_log)
         d['xi'] = np.array(l_xi)
         return d
- 
 
+    ## Creates a plot of the radial mode and the axion side by side.
+    # @param    axion       2D axion field.
+    # @param    radial_mode 2D radial_mode.
     def PlotAxionAndRadialModeSlice(self, axion, radial_mode, save_name=""):
         fig, ax = plt.subplots(figsize=(20,10),ncols=2)
 
@@ -147,7 +152,19 @@ class AxionStrings:
         else:
             return eta * np.fft.irfftn(field_spectrum)
 
-    def __SaveField(self, file, name, box_layout, field, N, omegaK, kMags, nK,
+    ##  Generates an individual field but saves it in chunks using the provided
+    #   box layout.
+    # @param    file        Hdf5 file to which to write the state.
+    # @param    name        Component to generate
+    # @param    box_layout  The generate box layout.
+    # @param    field       Boolean value. True: Return Psi, False: Return Pi.
+    # @param    N           Number of coarse level grid sites.
+    # @param    omegaK      \omega_k.
+    # @param    kMags       Magnitude of 3-momentum.
+    # @param    nK          n_k.
+    # @param    k_max       Maximum wave number to be included.
+    # @param    eta         Starting eta of simulation.
+   def __SaveField(self, file, name, box_layout, field, N, omegaK, kMags, nK,
                     k_max, eta):
         print('Generate '+name+' ...')
         field_state = self.__GetField(field, N, omegaK, kMags, nK, k_max, eta)
@@ -169,6 +186,9 @@ class AxionStrings:
 
         del field_state
 
+    ## Parses the box layout.
+    # @param    box_layout_file File containing the box layout.
+    # @return   6D Array containing each box boundary.
     def __GetBoxLayout(self, box_layout_file):
         file = h5py.File(box_layout_file, 'r')
         x0 = np.array(file['x0'][:], dtype='int')
