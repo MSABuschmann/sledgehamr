@@ -4,6 +4,8 @@
 
 namespace AxionStrings {
 
+/* @brief Init function to parse variables and setup output types.
+ */
 void Cosmology::Init(sledgehamr::Sledgehamr* owner) {
     sim = owner;
     ParseVariables();
@@ -13,11 +15,15 @@ void Cosmology::Init(sledgehamr::Sledgehamr* owner) {
     SetXiMeasurement();
 }
 
+/** @brief Parse external variables.
+ */
 void Cosmology::ParseVariables() {
     amrex::ParmParse pp_prj("project");
     pp_prj.get("string_width_threshold", string_width_threshold);
 }
 
+/** @brief Prints out when a new refinement level will be introduced.
+ */
 void Cosmology::PrintRefinementTimes() {
     for (int lev = 1; lev <= sim->GetMaxLevel(); ++lev) {
         amrex::Print() << "Level " << lev << " ("
@@ -27,12 +33,16 @@ void Cosmology::PrintRefinementTimes() {
     }
 }
 
+/** @brief Sets up projections.
+ */
 void Cosmology::SetProjections() {
     // Add projections.
     sim->io_module->projections.emplace_back(a_prime2, "a_prime2");
     sim->io_module->projections.emplace_back(r_prime2, "r_prime2");
 }
 
+/** @brief Sets up spectrum.
+ */
 void Cosmology::SetSpectra() {
     // Add spectra and change time interval to log(m_r/H).
     sim->io_module->spectra.emplace_back(a_prime_screened, "a_prime_screened");
@@ -40,11 +50,17 @@ void Cosmology::SetSpectra() {
             TIME_FCT(Cosmology::Log));
 }
 
+/** @brief Adds custom output type to calculate string length \xi on the fly.
+ */
 void Cosmology::SetXiMeasurement() {
     sim->io_module->output.emplace_back("xi", OUTPUT_FCT(Cosmology::WriteXi));
     sim->io_module->output.back().SetTimeFunction(TIME_FCT(Cosmology::Log));
 }
 
+/** @brief OUTPUT_FUNCTION to calculate and write string length \xi.
+ * @param   time    Current time.
+ * @param   prefix  Folder to which to write output.
+ */
 bool Cosmology::WriteXi(double time, std::string prefix) {
     int lev    = sim->GetFinestLevel();
     double xi  = Xi(lev, time);
@@ -65,6 +81,11 @@ bool Cosmology::WriteXi(double time, std::string prefix) {
     return true;
 }
 
+/** @brief Calculates string length \xi.
+ * @param   lev On which level to calculate \xi.
+ * @param   eta Current time \eta.
+ * @return \xi.
+ */
 double Cosmology::Xi(const int lev, const double eta) {
     int string_tags = GetStringTags(lev);
 
@@ -86,6 +107,10 @@ double Cosmology::Xi(const int lev, const double eta) {
     return xi;
 }
 
+/** @brief Returns the number of string-plaquette piercings.
+ * @param   lev On which level to identify piercings.
+ * @return Number of tags.
+ */
 int Cosmology::GetStringTags(const int lev) {
     const sledgehamr::LevelData& state = sim->GetLevelData(lev);
     double dx = sim->GetDx(lev);

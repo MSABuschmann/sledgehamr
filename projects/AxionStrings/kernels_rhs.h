@@ -16,6 +16,7 @@ namespace AxionStrings {
  * @param   time    Current time.
  * @param   dt      Time step size.
  * @param   dx      Grid spacing.
+ * @param   params  Optional parameters.
  */
 AMREX_GPU_DEVICE AMREX_FORCE_INLINE
 void Rhs(const amrex::Array4<double>& rhs,
@@ -47,6 +48,18 @@ void Rhs(const amrex::Array4<double>& rhs,
     rhs(i, j, k, Scalar::Pi2)  = -Pi2*2./eta + laplacian_Psi2 - Psi2*potential;
 }
 
+/** @brief Function that calculates the RHS of the GW EOM at a single cell.
+ * @param   rhs     Container to be filled with RHS.
+ * @param   state   Data from which to calculate RHS (current state).
+ * @param   i       i-th cell index.
+ * @param   j       j-th cell index.
+ * @param   k       k-th cell index.
+ * @param   lev     Current level.
+ * @param   time    Current time.
+ * @param   dt      Time step size.
+ * @param   dx      Grid spacing.
+ * @param   params  Optional parameters.
+ */
 template<> AMREX_GPU_DEVICE AMREX_FORCE_INLINE
 void GravitationalWavesRhs<true>(const amrex::Array4<double>& rhs,
         const amrex::Array4<const double>& state, const int i, const int j,

@@ -3,6 +3,10 @@
 
 namespace NextToMinimalExample {
 
+/** @brief This function computes and write the average value of the radial mode
+ *       r = sqrt(Psi1**2 + Psi2**2). As the field r is becoming dynamical it
+ *       will start to oscillate around its vev <r>~1.
+ */
 bool NextToMinimalExample::WriteAvg(double time, std::string prefix) {
     // Grab current coarse level.
     const int lev = 0;

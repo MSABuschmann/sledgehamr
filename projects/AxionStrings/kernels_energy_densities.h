@@ -5,7 +5,17 @@
 
 namespace AxionStrings {
 
-/** @brief TODO
+/** @brief Kernel function computing axion energy density a'^2.
+ * @param   state   Data from which to calculate RHS (current state).
+ * @param   i       i-th cell index.
+ * @param   j       j-th cell index.
+ * @param   k       k-th cell index.
+ * @param   lev     Current level.
+ * @param   time    Current time.
+ * @param   dt      Time step size.
+ * @param   dx      Grid spacing.
+ * @param   params  Optional parameters.
+ * @return a'^2.
  */
 AMREX_FORCE_INLINE
 double a_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
@@ -21,6 +31,19 @@ double a_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
     return prime_a*prime_a;
 }
 
+/** @brief Kernel function computing the squareroot of the screened axion energy
+           density a'_{screened} = a' * r^2
+ * @param   state   Data from which to calculate RHS (current state).
+ * @param   i       i-th cell index.
+ * @param   j       j-th cell index.
+ * @param   k       k-th cell index.
+ * @param   lev     Current level.
+ * @param   time    Current time.
+ * @param   dt      Time step size.
+ * @param   dx      Grid spacing.
+ * @param   params  Optional parameters.
+ * @return a'_{screened} = a' * r^2
+ */
 AMREX_FORCE_INLINE
 double a_prime_screened(amrex::Array4<amrex::Real const> const& state,
         const int i, const int j, const int k, const int lev, const double time,
@@ -34,6 +57,18 @@ double a_prime_screened(amrex::Array4<amrex::Real const> const& state,
     return prime_a;
 }
 
+/** @brief Kernel function computing r'^2.
+ * @param   state   Data from which to calculate RHS (current state).
+ * @param   i       i-th cell index.
+ * @param   j       j-th cell index.
+ * @param   k       k-th cell index.
+ * @param   lev     Current level.
+ * @param   time    Current time.
+ * @param   dt      Time step size.
+ * @param   dx      Grid spacing.
+ * @param   params  Optional parameters.
+ * @return r'^2.
+ */
 AMREX_FORCE_INLINE
 double r_prime2(amrex::Array4<amrex::Real const> const& state, const int i,
         const int j, const int k, const int lev, const double time,
