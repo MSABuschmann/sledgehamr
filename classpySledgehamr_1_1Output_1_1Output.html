@@ -148,8 +148,10 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a04c32c08889551d132d22363351ca627"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpySledgehamr_1_1Output_1_1Output.html#a04c32c08889551d132d22363351ca627">__GetTimes</a> (self, array)</td></tr>
 <tr class="separator:a04c32c08889551d132d22363351ca627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affd3246e407286dc77f001eb81d2af20"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpySledgehamr_1_1Output_1_1Output.html#affd3246e407286dc77f001eb81d2af20">__Read2dField</a> (self, folder, dim, direction, ranks, ident, downsample)</td></tr>
+<tr class="memdesc:affd3246e407286dc77f001eb81d2af20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function parsing a 2D field.  <a href="classpySledgehamr_1_1Output_1_1Output.html#affd3246e407286dc77f001eb81d2af20">More...</a><br /></td></tr>
 <tr class="separator:affd3246e407286dc77f001eb81d2af20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b9b6d98d3356f0faf3424e87b8d098d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpySledgehamr_1_1Output_1_1Output.html#a9b9b6d98d3356f0faf3424e87b8d098d">__Read3dField</a> (self, folder, dim, ranks, ident, downsample, ident2)</td></tr>
+<tr class="memdesc:a9b9b6d98d3356f0faf3424e87b8d098d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function parsing a 3D field.  <a href="classpySledgehamr_1_1Output_1_1Output.html#a9b9b6d98d3356f0faf3424e87b8d098d">More...</a><br /></td></tr>
 <tr class="separator:a9b9b6d98d3356f0faf3424e87b8d098d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefbd9cb1acae512c8b2f93af72a9dc3d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpySledgehamr_1_1Output_1_1Output.html#aefbd9cb1acae512c8b2f93af72a9dc3d">__ParseFolderStructure</a> (self)</td></tr>
 <tr class="memdesc:aefbd9cb1acae512c8b2f93af72a9dc3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines what output exists.  <a href="classpySledgehamr_1_1Output_1_1Output.html#aefbd9cb1acae512c8b2f93af72a9dc3d">More...</a><br /></td></tr>
@@ -260,6 +262,12 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Crawls the output and loads headers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">output_folder</td><td>Folder containing the simulation output. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -650,6 +658,20 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Helper function parsing a 2D field. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folder</td><td>Folder containing the chunks. </td></tr>
+    <tr><td class="paramname">dim</td><td>Number of cells in each dimension. </td></tr>
+    <tr><td class="paramname">direction</td><td>'x', 'y', or 'z'. </td></tr>
+    <tr><td class="paramname">ranks</td><td>Number of MPI ranks = number of chunks. </td></tr>
+    <tr><td class="paramname">ident</td><td>Name of component. </td></tr>
+    <tr><td class="paramname">downsample</td><td>In case the field has been downsampled prior to writing. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>2D field. </dd></dl>
+
 </div>
 </div>
 <a id="a9b9b6d98d3356f0faf3424e87b8d098d"></a>
@@ -715,6 +737,20 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Helper function parsing a 3D field. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folder</td><td>Folder containing the chunks. </td></tr>
+    <tr><td class="paramname">dim</td><td>Number of cells in each dimension. </td></tr>
+    <tr><td class="paramname">ranks</td><td>Number of MPI ranks = number of chunks. </td></tr>
+    <tr><td class="paramname">ident</td><td>Name of component. </td></tr>
+    <tr><td class="paramname">downsample</td><td>In case the field has been downsampled prior to writing. </td></tr>
+    <tr><td class="paramname">ident2</td><td>Dataset name, either "data" or "te" for truncation error estimates. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>3D field. </dd></dl>
 
 </div>
 </div>
