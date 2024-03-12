@@ -16,15 +16,25 @@ class AxionStrings : public sledgehamr::Sledgehamr {
   public:
     SLEDGEHAMR_INITIALIZE_PROJECT(AxionStrings)
 
+    /** @brief Override Init function and let cosmology module handle the setup.
+     */
     void Init() override {
         cosmo.Init(this);
     };
 
+    /** @brief We want to create a level only when string width is less than
+     *         threshold.
+     * @param   lev     Level in question.
+     * @param   time    Current time.
+     * @return  Whether we want to create level or not.
+     */
     bool CreateLevelIf(const int lev, const double time) override {
         return cosmo.CreateLevelIf(lev, time);
     };
 
   private:
+    /** @brief Axion cosmology module to set up the scenario.
+     */
     Cosmology cosmo;
 };
 

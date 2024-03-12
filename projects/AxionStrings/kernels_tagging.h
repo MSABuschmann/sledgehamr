@@ -22,6 +22,10 @@ int ZeroXing(double Psi1_1, double Psi2_1, double Psi1_2, double Psi2_2) {
 
 /** @brief Computes the winding factor along a given axis. Will be non-zero if
  *         plaquette is pierced by a string.
+ * @param   state   Current state.
+ * @param   i       i-th cell index.
+ * @param   j       j-th cell index.
+ * @param   k       k-th cell index.
  * @return  Winding factor.
  */
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
