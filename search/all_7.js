@@ -15,7 +15,7 @@ var searchData=
   ['getfullbox_228',['GetFullBox',['../classpySledgehamr_1_1Output_1_1Output.html#a1a54898f0f9116a224424a7937ec7711',1,'pySledgehamr::Output::Output']]],
   ['getfullboxtruncationerror_229',['GetFullBoxTruncationError',['../classpySledgehamr_1_1Output_1_1Output.html#a7cdd093d84b22bbc66acb6a6de474d13',1,'pySledgehamr::Output::Output']]],
   ['getgeometry_230',['GetGeometry',['../classsledgehamr_1_1Sledgehamr.html#aa9e307f7e4247731a24ca3dddb60e02c',1,'sledgehamr::Sledgehamr']]],
-  ['getgravitationalwavespectrum_231',['GetGravitationalWaveSpectrum',['../classpySledgehamr_1_1Output_1_1Output.html#ac7013643c1d17185805a245fac2cce23',1,'pySledgehamr::Output::Output']]],
+  ['getgravitationalwavespectrum_231',['GetGravitationalWaveSpectrum',['../classpySledgehamr_1_1Output_1_1Output.html#a3452c0efaf6f032758f7257d06e7ae0c',1,'pySledgehamr::Output::Output']]],
   ['getheadername_232',['GetHeaderName',['../classsledgehamr_1_1Checkpoint.html#a80cc02344d89473f86c9ca17addd2486',1,'sledgehamr::Checkpoint']]],
   ['getl_233',['GetL',['../classsledgehamr_1_1Sledgehamr.html#a615719ce6ad99823f3007471a0401eee',1,'sledgehamr::Sledgehamr']]],
   ['getlambda_234',['GetLambda',['../classsledgehamr_1_1GravitationalWaves.html#a2d7aa6918836ae602d6866280188b08b',1,'sledgehamr::GravitationalWaves']]],
