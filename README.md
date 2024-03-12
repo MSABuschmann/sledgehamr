@@ -1,2 +1,13 @@
-# sledgehamr
-This code simulates the dynamics of any number of coupled scalar fields including gravitational wave emission on an adaptive mesh. The code in its current form has been used for various production scale runs. Documentation of the code and example applications will be added very soon!
+# Sledgehamr: Simulating scalar fields with adaptive mesh refinement
+Sledgehamr (**S**ca**L**ar fi**E**ld **D**ynamics **G**etting solv**E**d wit**H** **A**daptive **M**esh **R**efinement) 
+
+## Installation
+
+### Prerequisites
+### Create a project
+### Building the code
+### Run the code
+
+## How to cite
+
+## Publication using this code
