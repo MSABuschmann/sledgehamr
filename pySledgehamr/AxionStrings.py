@@ -164,7 +164,7 @@ class AxionStrings:
     # @param    nK          n_k.
     # @param    k_max       Maximum wave number to be included.
     # @param    eta         Starting eta of simulation.
-   def __SaveField(self, file, name, box_layout, field, N, omegaK, kMags, nK,
+    def __SaveField(self, file, name, box_layout, field, N, omegaK, kMags, nK,
                     k_max, eta):
         print('Generate '+name+' ...')
         field_state = self.__GetField(field, N, omegaK, kMags, nK, k_max, eta)
