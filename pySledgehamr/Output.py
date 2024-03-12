@@ -285,10 +285,10 @@ class Output:
     # @param    i           State number.
     # @para     names       List of spectrum names.
     # @return   d           Dictionary containing the time and spectra.
-    def GetGravitationalWaveSpectrum(self, i):
+    def GetGravitationalWaveSpectrum(self, i, spectype='gw_spectra'):
         # Get relevant parameters from header
         t = self._gravitational_wave_spectrum_headers[i,0]
-        file = self._prefix + '/gw_spectra/'+str(i)+'/spectra.hdf5'
+        file = self._prefix + '/'+spectype+'/'+str(i)+'/spectra.hdf5'
 
         fin = h5py.File(file,'r')
 
