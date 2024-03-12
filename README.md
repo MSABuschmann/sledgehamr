@@ -1,5 +1,5 @@
 # Sledgehamr: Simulating scalar fields with adaptive mesh refinement
-Sledgehamr (**S**ca**L**ar fi**E**ld **D**ynamics **G**etting solv**E**d wit**H** **A**daptive **M**esh **R**efinement) is an AMReX-based code to simulate the dynamics of coupled scalar fields on a 3-dimensional mesh. Adaptive mesh refinement (AMR) can boost performance if spatially localized regions of the scalar field require high resolution. Compatible with both GPU and CPU clusters, Sledgehammer offers a flexible and customizable framework. This framework enables various applications, such as the generation of gravitational wave spectra.
+Sledgehamr (**S**ca**L**ar fi**E**ld **D**ynamics **G**etting solv**E**d wit**H** **A**daptive **M**esh **R**efinement) is an AMReX-based code to simulate the dynamics of coupled scalar fields on a 3-dimensional mesh. Adaptive mesh refinement (AMR) can boost performance if spatially localized regions of the scalar field require high resolution. Compatible with both GPU and CPU clusters, sledgehamr offers a flexible and customizable framework. This framework enables various applications, such as the generation of gravitational wave spectra.
 
 <p align="left">
   <img width="512" height="512" src="https://github.com/MSABuschmann/sledgehamr/blob/main/assets/axion.gif">
