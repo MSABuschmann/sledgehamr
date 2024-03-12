@@ -14,22 +14,29 @@ Malte Buschmann (m.s.a.buschmann@uva.nl)
 ## Installation
 
 ### Prerequisites
+* AMReX (```git clone https://github.com/AMReX-Codes/amrex```)
+* FFTW3
+* Boost
+
 ### Create a project
-### Building the code
-### Run the code
+Sledgehamr comes with a few different physics scenarios already implemented such as axion strings and a first order phase transition of a single scalar field, as well as two example projects ```MinimalExample``` and ```NextToMinimalExample```. The accompanying paper describes in detail how other scenarios can be implemented.
+
+### Running the minimal examples
+The minimal examples can be run by following the instructions in the Jupyter notebooks ```notebooks/MinimalExample.ipynb``` and ```notebooks/NextToMinimalExample.ipynb```.
 
 ## Code documentation
-msabuschmann.github.io/sledgehamr/
+* https://msabuschmann.github.io/sledgehamr/
+* https://arxiv.org/abs/23xx.xxxxx 
 
 ## How to cite
 If you use sledgehamr, please cite its accompanying paper:
 
-Malte Buschmann, "Sledgehamr: Simulation scalar fields with adaptive mesh refinement",
+* Malte Buschmann, "Sledgehamr: Simulation scalar fields with adaptive mesh refinement",
 arXiv:23xx.xxxxx [hep-ph].
 
 BibTex:
 
-## Publication using this code
+## Publications using this code
 
 ### 2022
 * "Dark matter from axion strings with adaptive mesh refinement", M. Buschmann et al., Nature Commun. 13 (2022) 1, 1049, https://arxiv.org/abs/2108.05368
