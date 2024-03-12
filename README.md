@@ -1,5 +1,13 @@
 # Sledgehamr: Simulating scalar fields with adaptive mesh refinement
-Sledgehamr (**S**ca**L**ar fi**E**ld **D**ynamics **G**etting solv**E**d wit**H** **A**daptive **M**esh **R**efinement) 
+Sledgehamr (**S**ca**L**ar fi**E**ld **D**ynamics **G**etting solv**E**d wit**H** **A**daptive **M**esh **R**efinement) is an AMReX-based code to simulate the dynamics of coupled scalar fields on a 3-dimensional mesh. Adaptive mesh refinement (AMR) can boost performance if spatially localized regions of the scalar field require high resolution. 
+
+![](https://github.com/MSABuschmann/sledgehamr/assets/axion.gif)
+
+For a detailed description of the code please consult the accompanying paper:
+https://arxiv.org/abs/23xx.xxxxx
+
+For questions, comments, or bug reports please use the GitHub issues feature, or contact the author:
+Malte Buschmann (m.s.a.buschmann@uva.nl)
 
 ## Installation
 
@@ -8,6 +16,28 @@ Sledgehamr (**S**ca**L**ar fi**E**ld **D**ynamics **G**etting solv**E**d wit**H*
 ### Building the code
 ### Run the code
 
+## Code documentation
+msabuschmann.github.io/sledgehamr/
+
 ## How to cite
+If you use this code, please cite its accompanying paper:
+
+Malte Buschmann, "Sledgehamr: Simulation scalar fields with adaptive mesh refinement",
+arXiv:23xx.xxxxx [hep-ph].
+
+BibTex:
 
 ## Publication using this code
+
+### 2022
+* "Dark matter from axion strings with adaptive mesh refinement", M. Buschmann et al., Nature Commun. 13 (2022) 1, 1049, https://arxiv.org/abs/2108.05368
+
+### 2023
+* "The Cosmological Dynamics of String Theory Axion Strings", J. Benabou et al., https://arxiv.org/abs/2312.08425
+
+### 2024
+* "Signatures of primordial energy injection from axion strings", J. Benabou et al., Phys.Rev.D 109 (2024) 5, 055005, https://arxiv.org/abs/2308.01334
+* "Thick and Thin Wall Collisions with Adaptive Mesh Refinement", M. Buschmann et al., to appear
+* "Axion Mass Prediction from adaptive mesh refinement cosmological lattice simulations", J. Benabou et al., to appear
+
+
