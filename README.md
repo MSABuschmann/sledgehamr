@@ -41,9 +41,6 @@ BibTex:
 ### 2022
 * "Dark matter from axion strings with adaptive mesh refinement", M. Buschmann et al., Nature Commun. 13 (2022) 1, 1049, https://arxiv.org/abs/2108.05368
 
-### 2023
-* "The Cosmological Dynamics of String Theory Axion Strings", J. Benabou et al., https://arxiv.org/abs/2312.08425
-
 ### 2024
 * "Signatures of primordial energy injection from axion strings", J. Benabou et al., Phys.Rev.D 109 (2024) 5, 055005, https://arxiv.org/abs/2308.01334
 * "Thick and Thin Wall Collisions with Adaptive Mesh Refinement", M. Buschmann et al., to appear
