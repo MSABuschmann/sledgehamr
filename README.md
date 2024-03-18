@@ -8,8 +8,8 @@ Sledgehamr (**S**ca**L**ar fi**E**ld **D**ynamics **G**etting solv**E**d wit**H*
 For a detailed description of the code please consult the accompanying paper:
 https://arxiv.org/abs/23xx.xxxxx
 
-For questions, comments, or bug reports please use the GitHub issues feature, or contact the author:
-Malte Buschmann (m.s.a.buschmann@uva.nl)
+For questions, comments, or bug reports please use the GitHub issues feature, or contact me via email:
+m.s.a.buschmann@uva.nl
 
 ## Installation
 
