@@ -6,7 +6,7 @@ namespace sledgehamr {
 
 /** @brief Gathers metadata.
  * @param   owner       Pointer to simulation.
- * @oaram   prefix      Local ouptut folder.
+ * @param   prefix      Local ouptut folder.
  * @param   output_type Id of output type, see output_id for details.
  */
 LevelWriter::LevelWriter(Sledgehamr* owner, std::string prefix, int output_type)

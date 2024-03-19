@@ -5,7 +5,7 @@ namespace sledgehamr {
 
 /** @brief Set up integrator in advance.
  * @param   owner   Pointer to simulation.
- * @oaram   id      Integrator type. Must be either RknButcherTableau, Rkn4, or
+ * @param   id      Integrator type. Must be either RknButcherTableau, Rkn4, or
  *                  Rkn5.
  */
 IntegratorRkn::IntegratorRkn(Sledgehamr* owner, const IntegratorType id)

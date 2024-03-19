@@ -15,7 +15,7 @@ namespace sledgehamr {
 
 /** @brief Constructor will read relevant input parameters, create output
  *         folder(s), and set up all pre-defined output types.
- * @params  owner   Pointer to the simulation.
+ * @param  owner   Pointer to the simulation.
  */
            
 IOModule::IOModule(Sledgehamr* owner) : sim(owner) {

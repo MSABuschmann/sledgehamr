@@ -267,9 +267,9 @@ void Sledgehamr::DetermineBoxLayout() {
 }
 
 /** @brief Performs error estimation (i.e. tagging) on CPUs.
- * @params  lev     Tagging level.
- * @params  tags    Container to save tags.
- * @params  time    Current time.
+ * @param  lev     Tagging level.
+ * @param  tags    Container to save tags.
+ * @param  time    Current time.
  */
 void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     // Current state.

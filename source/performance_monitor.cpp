@@ -124,7 +124,7 @@ std::vector<int> PerformanceMonitor::TimerArgsort(std::vector<Timer> timers) {
 }
 
 /** @brief Prints total time passed of all timers.
- * @params  file_id HDF5 file to log the times. Currently not implemented.
+ * @param  file_id HDF5 file to log the times. Currently not implemented.
  */
 void PerformanceMonitor::Log(hid_t file_id) {
     std::vector<int> idx = TimerArgsort(timer);
