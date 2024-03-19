@@ -19,7 +19,7 @@ m.s.a.buschmann@uva.nl
 * Boost
 
 ### Create a project
-Sledgehamr comes with a few different physics scenarios already implemented such as axion strings and a first order phase transition of a single scalar field, as well as two example projects ```MinimalExample``` and ```NextToMinimalExample```. The accompanying paper describes in detail how other scenarios can be implemented.
+Sledgehamr comes with a few different physics scenarios already implemented such as axion strings and a first-order phase transition of a single scalar field + gravitational waves, as well as two example projects ```MinimalExample``` and ```NextToMinimalExample```. The accompanying paper describes in detail how other scenarios can be implemented.
 
 ### Running the minimal examples
 The minimal examples can be run by following the instructions in the Jupyter notebooks ```notebooks/MinimalExample.ipynb``` and ```notebooks/NextToMinimalExample.ipynb```.
