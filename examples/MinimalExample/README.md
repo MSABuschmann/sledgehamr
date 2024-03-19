@@ -11,8 +11,13 @@ and
   
 where $\Pi_i$ is the conjugate momenta of $\psi_i$, $\eta$ is time, and $a$ some constant. When following the instructions below this simulation produces output like this: 
 
+<p align="left">
+  <img src="https://github.com/MSABuschmann/sledgehamr/blob/main/assets/minimal_example_box.png">
+</p>
 
-
+<p align="left">
+  <img src="https://github.com/MSABuschmann/sledgehamr/blob/main/assets/minimal_example_slice.png">
+</p>
 
 ## How to run
 1.  Ensure prerequisites are installed: Boost, FFTW3, and HDF5.
