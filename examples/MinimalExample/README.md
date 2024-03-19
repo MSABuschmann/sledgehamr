@@ -10,18 +10,19 @@ and
 * $\Pi_i' = -\frac{2}{\eta}\Pi_i + \nabla^2\psi_i - \eta^2\psi_i(\psi_1^2+\psi_2^2-1) - a\psi_i$,
   
 where $\Pi_i$ is the conjugate momenta of $\psi_i$, $\eta$ is time, and $a$ some constant.
+The code implementation can be found under ```projects/MinimalExample/```
 
 ## How to run
 1.  Ensure prerequisites are installed: Boost, FFTW3, and HDF5.
 2.  Clone the AMReX repository (https://github.com/AMReX-Codes/amrex)
-3.  Make sure the paths to the sledgehamr repository (SLEDGEHAMR_HOME) and AMReX
-    repository (AMREX_HOME) are set in 'Makefile'. Adjust other compiler flags
+3.  Make sure the paths to the sledgehamr repository (```$SLEDGEHAMR_HOME```) and AMReX
+    repository (```$AMREX_HOME```) are set in ```Makefile```. Adjust other compiler flags
     if needed.
-4.  Compile sledgehamr: make -j 6
-5.  Use the Jupyter Notebook notebooks/MinimalExample.ipynb to generate an
+4.  Compile sledgehamr: ```make -j 6```
+5.  Use the Jupyter Notebook ```notebooks/MinimalExample.ipynb``` to generate an
     initial state.
-6.  Run the executable. An example slurm submission script is provided: run.sh
-5.  Use the example notebook notebooks/MinimalExample.ipynb to plot the results
+6.  Run the executable. An example slurm submission script is provided: ```run.sh```
+5.  Use the example notebook ```notebooks/MinimalExample.ipynb``` to plot the results
 
 ## Simulation output
 Below are illustrations of the simulation output for the two scalar degrees of freedom, the axion $a=\mathrm{arctan2}(\psi2, \psi1)$ and the radial mode $r=\sqrt{\psi_1^2+\psi_2^2}$.
