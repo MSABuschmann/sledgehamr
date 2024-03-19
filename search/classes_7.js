@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['outputmodule_566',['OutputModule',['../classsledgehamr_1_1OutputModule.html',1,'sledgehamr']]]
+  ['minimalexample_743',['MinimalExample',['../classMinimalExample_1_1MinimalExample.html',1,'MinimalExample']]]
 ];

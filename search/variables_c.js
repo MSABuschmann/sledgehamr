@@ -1,9 +1,12 @@
 var searchData=
 [
-  ['old_5fcheckpoint_996',['old_checkpoint',['../classsledgehamr_1_1IOModule.html#a9d75926888e4337742708c73db652bbb',1,'sledgehamr::IOModule']]],
-  ['output_997',['output',['../classsledgehamr_1_1IOModule.html#ab093c90582020e1f9b7d8af3814e833a',1,'sledgehamr::IOModule']]],
-  ['output_5ffolder_998',['output_folder',['../classsledgehamr_1_1IOModule.html#a411357720a9bfbb0f5dc6548090814dc',1,'sledgehamr::IOModule']]],
-  ['output_5fid_999',['output_id',['../classsledgehamr_1_1LevelWriter.html#a5f42ca4d234afaf68ccd3e80565ea5d4',1,'sledgehamr::LevelWriter']]],
-  ['output_5fof_5finitial_5fstate_1000',['output_of_initial_state',['../classsledgehamr_1_1TimeStepper.html#a51537c4c4d52dab56ccead8aca01165c',1,'sledgehamr::TimeStepper']]],
-  ['owner_5fof_1001',['owner_of',['../classsledgehamr_1_1UniqueLayout.html#aa7bfd1740c37a25fc1b20c68a037cd96',1,'sledgehamr::UniqueLayout']]]
+  ['mapper_1306',['mapper',['../classsledgehamr_1_1LevelSynchronizer.html#aba71754c5ac7a18f355d116a877880a1',1,'sledgehamr::LevelSynchronizer']]],
+  ['max_5flocal_5fregrids_1307',['max_local_regrids',['../classsledgehamr_1_1LocalRegrid.html#a713ec6e07916351b8b41ecab3f2e2a17',1,'sledgehamr::LocalRegrid']]],
+  ['maxima_5ftime_1308',['maxima_time',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a4ca640b486bddac7bcaafc4bf0c67a51',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
+  ['min_5fdistance_1309',['min_distance',['../classsledgehamr_1_1LocalRegrid.html#a7979ef82194a55c08f939f5cfd33d943',1,'sledgehamr::LocalRegrid']]],
+  ['min_5feta_1310',['min_eta',['../classAxionStringsPreevolution_1_1AxionStringsPreevolution.html#a3e652cf0f2ddaac740e1d1ec0d5bfba2',1,'AxionStringsPreevolution::AxionStringsPreevolution']]],
+  ['mode_1311',['mode',['../classsledgehamr_1_1Projection.html#a97e168351a5a4031d955ef81184f7a7c',1,'sledgehamr::Projection']]],
+  ['mpi_5fmp_1312',['mpi_mp',['../classsledgehamr_1_1UniqueLayout.html#a1711f621329eb5207d13f08f0cc376ec',1,'sledgehamr::UniqueLayout']]],
+  ['mpi_5fn_1313',['mpi_n',['../classsledgehamr_1_1UniqueLayout.html#a207024185a09bb3713adc0a55224b0e3',1,'sledgehamr::UniqueLayout']]],
+  ['mpiranks_1314',['MPIranks',['../classsledgehamr_1_1Checkpoint.html#ab678d52108ce2f0d1aafd270936c3082',1,'sledgehamr::Checkpoint']]]
 ];

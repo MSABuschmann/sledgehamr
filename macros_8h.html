@@ -686,7 +686,7 @@ Macros</h2></td></tr>
 <div class="line">                AMREX_PRAGMA_SIMD \</div>
 <div class="line">                for (<span class="keywordtype">int</span> i = lo.x; i &lt;= hi.x; ++i) { \</div>
 <div class="line">                    tagarr(i,j,k) = amrex::TagBox::CLEAR; \</div>
-<div class="line">                    bool res = TagCellForRefinement&lt;true&gt;(state_fab, i, j, k, \</div>
+<div class="line">                    bool res = <a class="code" href="namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5">TagCellForRefinement&lt;true&gt;</a>(state_fab, i, j, k, \</div>
 <div class="line">                            lev, time, dt[lev], dx[lev], params.data()); \</div>
 <div class="line">                    if (res) { \</div>
 <div class="line">                        tagarr(i,j,k) = amrex::TagBox::SET; \</div>
@@ -696,6 +696,7 @@ Macros</h2></td></tr>
 <div class="line">            } \</div>
 <div class="line">        } \</div>
 <div class="line">    };</div>
+<div class="ttc" id="anamespaceAxionStrings_html_a66b289e6db1a4d5eb0c74a4a464da2c5"><div class="ttname"><a href="namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5">AxionStrings::TagCellForRefinement&lt; true &gt;</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE bool TagCellForRefinement&lt; true &gt;(const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const double *params)</div><div class="ttdoc">Function that tags individual cells for refinement.</div><div class="ttdef"><b>Definition:</b> kernels_tagging.h:98</div></div>
 </div><!-- fragment -->
 <p>Overrides function in project class. Does tagging on CPUs but without using truncation error estimates. </p>
 
@@ -725,7 +726,7 @@ Macros</h2></td></tr>
 <div class="line">        amrex::ParallelFor(tilebox, \</div>
 <div class="line">        [=] AMREX_GPU_DEVICE (<span class="keywordtype">int</span> i, <span class="keywordtype">int</span> j, <span class="keywordtype">int</span> k) noexcept { \</div>
 <div class="line">            tagarr(i,j,k) = amrex::TagBox::CLEAR; \</div>
-<div class="line">            bool res = TagCellForRefinement&lt;true&gt;(state_fab, i, j, k, lev, \</div>
+<div class="line">            bool res = <a class="code" href="namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5">TagCellForRefinement&lt;true&gt;</a>(state_fab, i, j, k, lev, \</div>
 <div class="line">                                                  time, l_dt, l_dx, l_params); \</div>
 <div class="line">            if (res) { \</div>
 <div class="line">                tagarr(i,j,k) = amrex::TagBox::SET; \</div>

@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['operator_20int_800',['operator int',['../classsledgehamr_1_1ScalarField.html#a5897ea45641e16e6b9200621cb4444d9',1,'sledgehamr::ScalarField']]],
-  ['operator_28_29_801',['operator()',['../structsledgehamr_1_1NullFill.html#a8bfb3d98c7ccfe97336f9507e8f78d06',1,'sledgehamr::NullFill']]],
-  ['operator_3d_3d_802',['operator==',['../classsledgehamr_1_1ScheduledRegrid.html#a687cc3616f456465240e0c8605ae2bb5',1,'sledgehamr::ScheduledRegrid']]],
-  ['ordinalnumbersuffix_803',['OrdinalNumberSuffix',['../namespacesledgehamr_1_1utils.html#a373a1de4699b4545aa73c0256cf90608',1,'sledgehamr::utils']]],
-  ['outputmodule_804',['OutputModule',['../classsledgehamr_1_1OutputModule.html#ab16f53f30551f8076646acdf83225641',1,'sledgehamr::OutputModule']]],
-  ['owns_805',['Owns',['../classsledgehamr_1_1UniqueLayout.html#aab91b0db455d3097570a0ad299bd90d4',1,'sledgehamr::UniqueLayout']]]
+  ['main_1072',['main',['../main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main.cpp']]],
+  ['makenewlevelfromcoarse_1073',['MakeNewLevelFromCoarse',['../classsledgehamr_1_1Sledgehamr.html#ae6cc40f77442f989b46196439ca1310e',1,'sledgehamr::Sledgehamr']]],
+  ['makenewlevelfromscratch_1074',['MakeNewLevelFromScratch',['../classsledgehamr_1_1Sledgehamr.html#a29f2cfdb24f159a165d177012ca7f219',1,'sledgehamr::Sledgehamr']]],
+  ['merge_1075',['Merge',['../classsledgehamr_1_1UniqueLayout.html#aafcd41dd368ef4eeff4c371d373e1edf',1,'sledgehamr::UniqueLayout']]],
+  ['mergeplane_1076',['MergePlane',['../classsledgehamr_1_1UniqueLayout.html#a893f9964781c9e890fb22c154a213896',1,'sledgehamr::UniqueLayout']]],
+  ['mr_1077',['Mr',['../classAxionStrings_1_1Cosmology.html#a856ccb363ed9c38dca6b97d8903041b8',1,'AxionStrings::Cosmology']]]
 ];

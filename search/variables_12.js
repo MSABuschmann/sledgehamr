@@ -1,9 +1,18 @@
 var searchData=
 [
-  ['weights_5fb_1040',['weights_b',['../classsledgehamr_1_1IntegratorRkn.html#ac7920d5f9da25e69e81874c4172e0b68',1,'sledgehamr::IntegratorRkn']]],
-  ['weights_5fbar_5fb_1041',['weights_bar_b',['../classsledgehamr_1_1IntegratorRkn.html#a87818c23318c0f53cea29f2ceb534074',1,'sledgehamr::IntegratorRkn']]],
-  ['with_5fdissipation_1042',['with_dissipation',['../classsledgehamr_1_1Sledgehamr.html#a355e94b7c7910b4291356530ce2d240a',1,'sledgehamr::Sledgehamr']]],
-  ['with_5fgravitational_5fwaves_1043',['with_gravitational_waves',['../classsledgehamr_1_1Sledgehamr.html#affbe4047a4e7222e61195b4241ff4bb1',1,'sledgehamr::Sledgehamr']]],
-  ['with_5ftruncation_5ferrors_1044',['with_truncation_errors',['../classsledgehamr_1_1LevelWriter.html#a006a6722b24a4c1e86fe34804d1158f9',1,'sledgehamr::LevelWriter::with_truncation_errors()'],['../classsledgehamr_1_1Slices.html#afeacdad3b3f035dbd684978800e13a84',1,'sledgehamr::Slices::with_truncation_errors()']]],
-  ['wrapped_5findex_1045',['wrapped_index',['../classsledgehamr_1_1LocalRegrid.html#ab5c0c64729d05d204f461d223d01bc72',1,'sledgehamr::LocalRegrid']]]
+  ['scalar_5ffields_1352',['scalar_fields',['../classsledgehamr_1_1Sledgehamr.html#adf5dfa6bf28cbd2a7c3acf5928495222',1,'sledgehamr::Sledgehamr']]],
+  ['schedule_1353',['schedule',['../classsledgehamr_1_1RegridScheduler.html#aea3e741ec912ca69c74cf2bdbc0b8239',1,'sledgehamr::RegridScheduler']]],
+  ['scheduler_1354',['scheduler',['../classsledgehamr_1_1TimeStepper.html#aa8f91c75fad99d45941504c7694198a8',1,'sledgehamr::TimeStepper']]],
+  ['semistatic_5fsim_1355',['semistatic_sim',['../classsledgehamr_1_1TimeStepper.html#ad1d21953833ca2436f590293bf2d1b0a',1,'sledgehamr::TimeStepper']]],
+  ['shadow_5fhierarchy_1356',['shadow_hierarchy',['../classsledgehamr_1_1Sledgehamr.html#a0f4b66c05d9b5b7f5f4acb5fc5dfd84b',1,'sledgehamr::Sledgehamr']]],
+  ['shadow_5flevel_1357',['shadow_level',['../classsledgehamr_1_1Sledgehamr.html#ada6b4c3b50b154743da391ed7a5be79c',1,'sledgehamr::Sledgehamr']]],
+  ['shadow_5flevel_5fgeom_1358',['shadow_level_geom',['../classsledgehamr_1_1Sledgehamr.html#a87fd1439441652a76e34441ac9bc6bde',1,'sledgehamr::Sledgehamr']]],
+  ['shadow_5flevel_5ftmp_1359',['shadow_level_tmp',['../classsledgehamr_1_1Sledgehamr.html#a9107cfee4ed83f1e8a8478adb5beb496',1,'sledgehamr::Sledgehamr']]],
+  ['sim_1360',['sim',['../classsledgehamr_1_1LocalRegrid.html#a4d60672b3f1690a0b299a97b36358648',1,'sledgehamr::LocalRegrid::sim()'],['../classAxionStrings_1_1Cosmology.html#ac1ee0a9c8dcac508daa1c4d55b6f3ccf',1,'AxionStrings::Cosmology::sim()'],['../classsledgehamr_1_1TimeStepper.html#a2368795a43b725bc7e6daa2047d1ac50',1,'sledgehamr::TimeStepper::sim()'],['../classsledgehamr_1_1PerformanceMonitor.html#a1bb67e7a767018bda89c4edc4828460f',1,'sledgehamr::PerformanceMonitor::sim()'],['../classsledgehamr_1_1Slices.html#a3ef8f638023b15dddf1a23f6ce7a8dbf',1,'sledgehamr::Slices::sim()'],['../classsledgehamr_1_1LevelWriter.html#ad6ccf2cb857ab7c74462e7336d855dbc',1,'sledgehamr::LevelWriter::sim()'],['../classsledgehamr_1_1Checkpoint.html#a174e19b821a6ec457e6afc79bd8ee25c',1,'sledgehamr::Checkpoint::sim()'],['../classsledgehamr_1_1AmrexPlotFile.html#a59670cea8e7e9f94358e79c37f921140',1,'sledgehamr::AmrexPlotFile::sim()'],['../classsledgehamr_1_1LevelSynchronizer.html#ac25011962f65b6d136f22c18708ab6d1',1,'sledgehamr::LevelSynchronizer::sim()'],['../classsledgehamr_1_1IOModule.html#ae9bd49ecc9d30316598467dfd845d288',1,'sledgehamr::IOModule::sim()'],['../classsledgehamr_1_1Integrator.html#aef34ff354e471788adf90b75b74c4de3',1,'sledgehamr::Integrator::sim()'],['../classsledgehamr_1_1GravitationalWaves.html#afa251c68ac471802439b4d46e962369d',1,'sledgehamr::GravitationalWaves::sim()'],['../classsledgehamr_1_1FillLevel.html#ad6a502c1297b6d5492b828366b3e64d3',1,'sledgehamr::FillLevel::sim()']]],
+  ['spectra_1361',['spectra',['../classsledgehamr_1_1IOModule.html#a0d5e66413be2b95f3873eaa3fd55f8b9',1,'sledgehamr::IOModule']]],
+  ['spectra_5flog_5fmin_1362',['spectra_log_min',['../classAxionStrings_1_1Cosmology.html#a8f38d55470e4c1f40d3f5953ae016c87',1,'AxionStrings::Cosmology']]],
+  ['spectrum_5fks_1363',['spectrum_ks',['../classsledgehamr_1_1Sledgehamr.html#ab7a2e0686f9fba4e696c0d8988afc853',1,'sledgehamr::Sledgehamr']]],
+  ['start_5ftime_1364',['start_time',['../classsledgehamr_1_1Timer.html#a7111680710eb7c01c5e65be4e57805e4',1,'sledgehamr::Timer']]],
+  ['stop_5ftime_1365',['stop_time',['../classsledgehamr_1_1Timer.html#a76c397056f53a0cabe22f5c03e289a05',1,'sledgehamr::Timer']]],
+  ['string_5fwidth_5fthreshold_1366',['string_width_threshold',['../classAxionStrings_1_1Cosmology.html#acb3c43334a56b3a5a14bb0532244c70f',1,'AxionStrings::Cosmology']]]
 ];

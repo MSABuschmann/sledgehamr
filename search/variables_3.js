@@ -1,15 +1,11 @@
 var searchData=
 [
-  ['default_5fmodifier_898',['default_modifier',['../classsledgehamr_1_1GravitationalWaves.html#ad60d757a3f2804ad9c0cb47c8303db6c',1,'sledgehamr::GravitationalWaves']]],
-  ['delete_5frestart_5fcheckpoint_899',['delete_restart_checkpoint',['../classsledgehamr_1_1IOModule.html#a4de1588316ada46517018144d58f40da',1,'sledgehamr::IOModule']]],
-  ['dim0_900',['dim0',['../classsledgehamr_1_1Checkpoint.html#a9fff472f2c5d6d3a6461d2ce6b5e9640',1,'sledgehamr::Checkpoint']]],
-  ['dimn_901',['dimN',['../classsledgehamr_1_1Sledgehamr.html#a7cd2ed06ec7cffa965017fc3858948e3',1,'sledgehamr::Sledgehamr']]],
-  ['dissipation_5forder_902',['dissipation_order',['../classsledgehamr_1_1Sledgehamr.html#adccd9747c433c6d79d7393311b58073b',1,'sledgehamr::Sledgehamr']]],
-  ['dissipation_5fstrength_903',['dissipation_strength',['../classsledgehamr_1_1Sledgehamr.html#a74c116d587474586db4f44ebe5512740',1,'sledgehamr::Sledgehamr']]],
-  ['distance_5fsq_904',['distance_sq',['../classsledgehamr_1_1Location.html#a5d6ccb32232073efdb90705116329cc4',1,'sledgehamr::Location']]],
-  ['do_5fglobal_5fregrid_905',['do_global_regrid',['../classsledgehamr_1_1LocalRegrid.html#a4e903f8bbe42b29f94666c569e734bee',1,'sledgehamr::LocalRegrid']]],
-  ['do_5fthorough_5fchecks_906',['do_thorough_checks',['../classsledgehamr_1_1Sledgehamr.html#a6a06d1bf6d7436d39e8f0a809b8293a2',1,'sledgehamr::Sledgehamr']]],
-  ['downsample_5ffactor_907',['downsample_factor',['../classsledgehamr_1_1LevelWriter.html#a10bfe3bdfc584fcb12bf190fdc16d8ac',1,'sledgehamr::LevelWriter']]],
-  ['dt_908',['dt',['../classsledgehamr_1_1Sledgehamr.html#a9239f0c77e572cc155e33f602c19b8dc',1,'sledgehamr::Sledgehamr']]],
-  ['dx_909',['dx',['../classsledgehamr_1_1Sledgehamr.html#a50a57ffa146126e84ebe8c3786e7e162',1,'sledgehamr::Sledgehamr']]]
+  ['cfl_1211',['cfl',['../classsledgehamr_1_1Sledgehamr.html#ae63f7440e3ecaac50023872f8aa23d80',1,'sledgehamr::Sledgehamr']]],
+  ['check_5fmpi_5franks_1212',['check_mpi_ranks',['../classsledgehamr_1_1Sledgehamr.html#ad2185aafc7053f34e7325584ff808eb3',1,'sledgehamr::Sledgehamr']]],
+  ['coarse_5flevel_5fgrid_5fsize_1213',['coarse_level_grid_size',['../classsledgehamr_1_1Sledgehamr.html#a67d75bdf0fb15f5cfba92a081e694e2b',1,'sledgehamr::Sledgehamr']]],
+  ['comm_5fmatrix_1214',['comm_matrix',['../classsledgehamr_1_1LocalRegrid.html#a8d0f98de185f108dae15af7e2997d886',1,'sledgehamr::LocalRegrid']]],
+  ['comp_5fvector_1215',['comp_vector',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a36d80ca3cd90b9312f98d615be5788fa',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
+  ['contains_5ftruncation_5ferrors_1216',['contains_truncation_errors',['../classsledgehamr_1_1LevelData.html#af4bc919d70ab9353c53c8e70e795777d',1,'sledgehamr::LevelData']]],
+  ['cosmo_1217',['cosmo',['../classAxionStrings_1_1AxionStrings.html#a586018047b3b309ce7f60d35e6aa0eff',1,'AxionStrings::AxionStrings::cosmo()'],['../classAxionStringsPostevolution_1_1AxionStringsPostevolution.html#ae855273230ce3e0f04c0531336757854',1,'AxionStringsPostevolution::AxionStringsPostevolution::cosmo()'],['../classAxionStringsPreevolution_1_1AxionStringsPreevolution.html#a7dafc24df2cd14a779a14890dbd43013',1,'AxionStringsPreevolution::AxionStringsPreevolution::cosmo()']]],
+  ['cubic_1218',['cubic',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a455d994003b8cb9fd4b5a53aca5142b8',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]]
 ];

@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['integrator_555',['Integrator',['../classsledgehamr_1_1Integrator.html',1,'sledgehamr']]],
-  ['integratoramrex_556',['IntegratorAMReX',['../classsledgehamr_1_1IntegratorAMReX.html',1,'sledgehamr']]],
-  ['integratorlsssprk3_557',['IntegratorLsssprk3',['../classsledgehamr_1_1IntegratorLsssprk3.html',1,'sledgehamr']]],
-  ['integratorrkn_558',['IntegratorRkn',['../classsledgehamr_1_1IntegratorRkn.html',1,'sledgehamr']]],
-  ['iomodule_559',['IOModule',['../classsledgehamr_1_1IOModule.html',1,'sledgehamr']]]
+  ['gravitationalwaves_731',['GravitationalWaves',['../classsledgehamr_1_1GravitationalWaves.html',1,'sledgehamr']]],
+  ['gravitationalwavesspectrummodifier_732',['GravitationalWavesSpectrumModifier',['../structsledgehamr_1_1GravitationalWavesSpectrumModifier.html',1,'sledgehamr']]]
 ];

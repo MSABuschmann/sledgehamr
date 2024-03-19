@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gw_1055',['Gw',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240',1,'sledgehamr::GravitationalWaves']]]
+  ['gw_1402',['Gw',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240',1,'sledgehamr::GravitationalWaves']]]
 ];

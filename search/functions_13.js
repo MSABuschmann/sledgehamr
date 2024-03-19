@@ -1,22 +1,12 @@
 var searchData=
 [
-  ['wrap_869',['Wrap',['../classsledgehamr_1_1UniqueLayout.html#ad23e025d311884fdcf8e161e65332802',1,'sledgehamr::UniqueLayout']]],
-  ['wrapboxarray_870',['WrapBoxArray',['../classsledgehamr_1_1LocalRegrid.html#a91da1033161cc643d7e352c845a81b85',1,'sledgehamr::LocalRegrid']]],
-  ['wrapindices_871',['WrapIndices',['../classsledgehamr_1_1LocalRegrid.html#acf96edb1e54961ac32416d58020bd1d2',1,'sledgehamr::LocalRegrid']]],
-  ['write_872',['Write',['../namespacesledgehamr_1_1utils_1_1hdf5.html#a7dd2217f67b68136477cc14f6c0bb298',1,'sledgehamr::utils::hdf5::Write()'],['../classsledgehamr_1_1Slices.html#a7c522f2dee8f46de70ad2bf0ebd3ed61',1,'sledgehamr::Slices::Write()'],['../classsledgehamr_1_1OutputModule.html#ac862a4ba3755157550b61b045d731ecc',1,'sledgehamr::OutputModule::Write()'],['../classsledgehamr_1_1Checkpoint.html#afce96e0c85675015d2c2da0527315816',1,'sledgehamr::Checkpoint::Write()'],['../classsledgehamr_1_1IOModule.html#a00c504dbc9915e3fd10a0983cad67c5d',1,'sledgehamr::IOModule::Write()'],['../classsledgehamr_1_1AmrexPlotFile.html#a42704fddfd60f1526b97d4a8e54c8de3',1,'sledgehamr::AmrexPlotFile::Write()'],['../classsledgehamr_1_1LevelWriter.html#acb9b4e8e41e000a3977efbe1a235746a',1,'sledgehamr::LevelWriter::Write()']]],
-  ['writeamrexplotfile_873',['WriteAmrexPlotFile',['../classsledgehamr_1_1IOModule.html#a7a72c66c1be752936db00e7dd031e055',1,'sledgehamr::IOModule']]],
-  ['writeboxarray_874',['WriteBoxArray',['../classsledgehamr_1_1IOModule.html#a2d235a92fd8afd2e35586b2c5da6e72f',1,'sledgehamr::IOModule']]],
-  ['writecheckpoint_875',['WriteCheckpoint',['../classsledgehamr_1_1IOModule.html#a0d2d0771f222ab85bb990633eee26651',1,'sledgehamr::IOModule']]],
-  ['writecoarsebox_876',['WriteCoarseBox',['../classsledgehamr_1_1IOModule.html#afe583b9e93b48bdc844786c65853d116',1,'sledgehamr::IOModule']]],
-  ['writecoarseboxtruncationerror_877',['WriteCoarseBoxTruncationError',['../classsledgehamr_1_1IOModule.html#a3242f9b92d9e95444af248149dbb06c2',1,'sledgehamr::IOModule']]],
-  ['writefullbox_878',['WriteFullBox',['../classsledgehamr_1_1IOModule.html#a9964d9c64caf4a0043a8855db85afbff',1,'sledgehamr::IOModule']]],
-  ['writefullboxtruncationerror_879',['WriteFullBoxTruncationError',['../classsledgehamr_1_1IOModule.html#ab4996f34e28cf45b2719fbf55eafa4d9',1,'sledgehamr::IOModule']]],
-  ['writegravitationalwavespectrum_880',['WriteGravitationalWaveSpectrum',['../classsledgehamr_1_1IOModule.html#aac79d4b897c5809b99ecfe34d43277aa',1,'sledgehamr::IOModule']]],
-  ['writeperformancemonitor_881',['WritePerformanceMonitor',['../classsledgehamr_1_1IOModule.html#af2b724ea52a0b7932f72754b3428cfbf',1,'sledgehamr::IOModule']]],
-  ['writeprojections_882',['WriteProjections',['../classsledgehamr_1_1IOModule.html#acfbb4a5e2566343f17e73e091647118c',1,'sledgehamr::IOModule']]],
-  ['writesinglelevel_883',['WriteSingleLevel',['../classsledgehamr_1_1LevelWriter.html#a4bd495ec5c58e55de43c03a30667e34a',1,'sledgehamr::LevelWriter']]],
-  ['writesingleslice_884',['WriteSingleSlice',['../classsledgehamr_1_1Slices.html#a91e3a5d49f6d65f1b5ecb598a61d9ca4',1,'sledgehamr::Slices']]],
-  ['writeslices_885',['WriteSlices',['../classsledgehamr_1_1IOModule.html#a355d6519ee064ea5344a0b9797424441',1,'sledgehamr::IOModule']]],
-  ['writeslicestruncationerror_886',['WriteSlicesTruncationError',['../classsledgehamr_1_1IOModule.html#a1d27a579504458f712cfb2fc2b653af7',1,'sledgehamr::IOModule']]],
-  ['writespectra_887',['WriteSpectra',['../classsledgehamr_1_1IOModule.html#afa128a1e1e34565c51bc172ff9fdbce2',1,'sledgehamr::IOModule']]]
+  ['tagandmeasure_1154',['TagAndMeasure',['../classsledgehamr_1_1LocalRegrid.html#a8acdc638840f81d22adff7ad9bd1f4cf',1,'sledgehamr::LocalRegrid']]],
+  ['tagcellforrefinement_3c_20true_20_3e_1155',['TagCellForRefinement&lt; true &gt;',['../namespaceAxionStrings.html#a66b289e6db1a4d5eb0c74a4a464da2c5',1,'AxionStrings']]],
+  ['tagwithouttruncationcpu_1156',['TagWithoutTruncationCpu',['../classsledgehamr_1_1Sledgehamr.html#a72376b1fc0e22a68c8449bccc6518897',1,'sledgehamr::Sledgehamr']]],
+  ['tagwithouttruncationgpu_1157',['TagWithoutTruncationGpu',['../classsledgehamr_1_1Sledgehamr.html#acd89d0e95abb1c601a4622c400893c97',1,'sledgehamr::Sledgehamr']]],
+  ['tagwithtruncationcpu_1158',['TagWithTruncationCpu',['../classsledgehamr_1_1Sledgehamr.html#a14510bc01e24329a95ec7aa2d86ab569',1,'sledgehamr::Sledgehamr']]],
+  ['tagwithtruncationgpu_1159',['TagWithTruncationGpu',['../classsledgehamr_1_1Sledgehamr.html#af8129bf33797b5d3e64d415e7f9876a5',1,'sledgehamr::Sledgehamr']]],
+  ['timer_1160',['Timer',['../classsledgehamr_1_1Timer.html#add5408527073192c7f6384336ba73146',1,'sledgehamr::Timer']]],
+  ['timerargsort_1161',['TimerArgsort',['../classsledgehamr_1_1PerformanceMonitor.html#af7bbbe15c7c095110c7dd24d9d141c6a',1,'sledgehamr::PerformanceMonitor']]],
+  ['timestepper_1162',['TimeStepper',['../classsledgehamr_1_1TimeStepper.html#a3e07dcb8a5a92cd4a10b8e3e34f5ce57',1,'sledgehamr::TimeStepper']]]
 ];

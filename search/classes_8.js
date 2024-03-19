@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['performancemonitor_567',['PerformanceMonitor',['../classsledgehamr_1_1PerformanceMonitor.html',1,'sledgehamr']]],
-  ['projection_568',['Projection',['../classsledgehamr_1_1Projection.html',1,'sledgehamr']]]
+  ['nexttominimalexample_744',['NextToMinimalExample',['../classNextToMinimalExample_1_1NextToMinimalExample.html',1,'NextToMinimalExample']]],
+  ['nullfill_745',['NullFill',['../structsledgehamr_1_1NullFill.html',1,'sledgehamr']]]
 ];

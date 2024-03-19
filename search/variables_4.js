@@ -1,8 +1,16 @@
 var searchData=
 [
-  ['fct_910',['fct',['../classsledgehamr_1_1OutputModule.html#a19c51201e0bccaaaf8878e9e6be4f1dd',1,'sledgehamr::OutputModule::fct()'],['../classsledgehamr_1_1Projection.html#a2e5e2793bcc76892657485bc3182411e',1,'sledgehamr::Projection::fct()'],['../classsledgehamr_1_1Spectrum.html#ade918101436bfa2752422b2662c18e2d',1,'sledgehamr::Spectrum::fct()']]],
-  ['finest_5flevel_911',['finest_level',['../classsledgehamr_1_1Checkpoint.html#a5ffcb6a75f9975d86cafb7102268a673',1,'sledgehamr::Checkpoint']]],
-  ['folder_912',['folder',['../classsledgehamr_1_1AmrexPlotFile.html#a077bc6b8bdc4875dec34543bbcd881dd',1,'sledgehamr::AmrexPlotFile::folder()'],['../classsledgehamr_1_1Checkpoint.html#aad4f2b1354512f416b909d4e143183a5',1,'sledgehamr::Checkpoint::folder()'],['../classsledgehamr_1_1LevelWriter.html#aeb7a35cc21a36dbb7afb330d2ecb7e8b',1,'sledgehamr::LevelWriter::folder()'],['../classsledgehamr_1_1Slices.html#ab5ffbd84beab984e278e403b66e279d9',1,'sledgehamr::Slices::folder()']]],
-  ['force_5fglobal_5fregrid_5fat_5frestart_913',['force_global_regrid_at_restart',['../classsledgehamr_1_1LocalRegrid.html#a22ed6ede76749d7a30af53b4e996679b',1,'sledgehamr::LocalRegrid']]],
-  ['forceable_914',['forceable',['../classsledgehamr_1_1OutputModule.html#ab0d62cd11509f7caa81da76764f9c630',1,'sledgehamr::OutputModule']]]
+  ['d_1219',['d',['../structFirstOrderPhaseTransition_1_1SpectrumModifier__2BubblesFrom1.html#abeab86db58ed35d701f69e65f9776e2d',1,'FirstOrderPhaseTransition::SpectrumModifier_2BubblesFrom1']]],
+  ['default_5fmodifier_1220',['default_modifier',['../classsledgehamr_1_1GravitationalWaves.html#ad60d757a3f2804ad9c0cb47c8303db6c',1,'sledgehamr::GravitationalWaves']]],
+  ['delete_5frestart_5fcheckpoint_1221',['delete_restart_checkpoint',['../classsledgehamr_1_1IOModule.html#a4de1588316ada46517018144d58f40da',1,'sledgehamr::IOModule']]],
+  ['dim0_1222',['dim0',['../classsledgehamr_1_1Checkpoint.html#a9fff472f2c5d6d3a6461d2ce6b5e9640',1,'sledgehamr::Checkpoint']]],
+  ['dimn_1223',['dimN',['../classsledgehamr_1_1Sledgehamr.html#a7cd2ed06ec7cffa965017fc3858948e3',1,'sledgehamr::Sledgehamr']]],
+  ['dissipation_5forder_1224',['dissipation_order',['../classsledgehamr_1_1Sledgehamr.html#adccd9747c433c6d79d7393311b58073b',1,'sledgehamr::Sledgehamr']]],
+  ['dissipation_5fstrength_1225',['dissipation_strength',['../classsledgehamr_1_1Sledgehamr.html#a74c116d587474586db4f44ebe5512740',1,'sledgehamr::Sledgehamr']]],
+  ['distance_5fsq_1226',['distance_sq',['../classsledgehamr_1_1Location.html#a5d6ccb32232073efdb90705116329cc4',1,'sledgehamr::Location']]],
+  ['do_5fglobal_5fregrid_1227',['do_global_regrid',['../classsledgehamr_1_1LocalRegrid.html#a4e903f8bbe42b29f94666c569e734bee',1,'sledgehamr::LocalRegrid']]],
+  ['do_5fthorough_5fchecks_1228',['do_thorough_checks',['../classsledgehamr_1_1Sledgehamr.html#a6a06d1bf6d7436d39e8f0a809b8293a2',1,'sledgehamr::Sledgehamr']]],
+  ['downsample_5ffactor_1229',['downsample_factor',['../classsledgehamr_1_1LevelWriter.html#a10bfe3bdfc584fcb12bf190fdc16d8ac',1,'sledgehamr::LevelWriter']]],
+  ['dt_1230',['dt',['../classsledgehamr_1_1Sledgehamr.html#a9239f0c77e572cc155e33f602c19b8dc',1,'sledgehamr::Sledgehamr']]],
+  ['dx_1231',['dx',['../classsledgehamr_1_1Sledgehamr.html#a50a57ffa146126e84ebe8c3786e7e162',1,'sledgehamr::Sledgehamr']]]
 ];
