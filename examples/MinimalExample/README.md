@@ -1,6 +1,6 @@
 # Minimal Example 
 
-
+$\eta$
 1.  Ensure prerequisites are installed: Boost, FFTW3, and HDF5.
 2.  Clone the AMReX repository (https://github.com/AMReX-Codes/amrex)
 3.  Make sure the paths to the sledgehamr repository (SLEDGEHAMR_HOME) and AMReX
@@ -9,7 +9,5 @@
 4.  Compile sledgehamr: make -j 6
 5.  Use the Jupyter Notebook notebooks/MinimalExample.ipynb to generate an
     initial state.
-
 6.  Run the executable. An example slurm submission script is provided: run.sh
-
 5.  Use the example notebook notebooks/MinimalExample.ipynb to plot the results
