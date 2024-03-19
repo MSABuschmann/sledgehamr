@@ -1,0 +1,12 @@
+/**
+\mainpage sledgehamr: Technical Documentation
+
+  \tableofcontents
+
+  \section welcome Welcome to the technical documentation of sledgehamr!
+
+This site provides the low-level information about sledgehamr.
+
+Sledgehamr (ScaLar fiEld Dynamics Getting solvEd witH Adaptive Mesh Refinement) is an AMReX-based code to simulate the dynamics of coupled scalar fields on a 3-dimensional mesh. Adaptive mesh refinement (AMR) can boost performance if spatially localized regions of the scalar field require high resolution. Compatible with both GPU and CPU clusters, sledgehamr offers a flexible and customizable framework. This framework enables various applications, such as the generation of gravitational wave spectra.
+
+*/
