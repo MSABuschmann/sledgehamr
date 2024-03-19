@@ -6,17 +6,19 @@ This example is based on the same scenario as the Minimal Example, however, uses
 * We output the power-spectrum of $\dot{a}^2$.
 * We implement a custom output type where we save the time-evolution of the average value of the radial mode $r$.
 
+  The code implementation can be found under ```projects/NextToMinimalExample/```.
+
 ## How to run
 1.  Ensure prerequisites are installed: Boost, FFTW3, and HDF5.
 2.  Clone the AMReX repository (https://github.com/AMReX-Codes/amrex)
-3.  Make sure the paths to the sledgehamr repository (SLEDGEHAMR_HOME) and AMReX
-    repository (AMREX_HOME) are set in 'Makefile'. Adjust other compiler flags
+3.  Make sure the paths to the sledgehamr repository (```$SLEDGEHAMR_HOME```) and AMReX
+    repository (```$AMREX_HOME```) are set in ```Makefile```. Adjust other compiler flags
     if needed.
-4.  Compile sledgehamr: make -j 6
-5.  Use the Jupyter Notebook notebooks/MinimalExample.ipynb to generate an
+4.  Compile sledgehamr: ```make -j 6```
+5.  Use the Jupyter Notebook ```notebooks/MinimalExample.ipynb``` to generate an
     initial state if it hasn't already been generated for the Minimal Example.
-6.  Run the executable. An example slurm submission script is provided: run.sh
-5.  Use the example notebook notebooks/NextToMinimalExample.ipynb to plot the results
+6.  Run the executable. An example slurm submission script is provided: ```run.sh```
+5.  Use the example notebook ```notebooks/NextToMinimalExample.ipynb``` to plot the results
 
 ## Simulation output
 Below are illustrations of the simulation output:
