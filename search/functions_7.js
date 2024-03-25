@@ -36,7 +36,7 @@ var searchData=
   ['getslice_1011',['GetSlice',['../classpySledgehamr_1_1Output_1_1Output.html#afebc7666679daba6da2dc46511518b15',1,'pySledgehamr::Output::Output']]],
   ['getslicetruncationerror_1012',['GetSliceTruncationError',['../classpySledgehamr_1_1Output_1_1Output.html#a2329ab2824cc1b22615347a7bac1f98f',1,'pySledgehamr::Output::Output']]],
   ['getspectrum_1013',['GetSpectrum',['../classpySledgehamr_1_1Output_1_1Output.html#a183b63d92df10667a7e9b64d7f0b1c6e',1,'pySledgehamr::Output::Output']]],
-  ['getstringtags_1014',['GetStringTags',['../classAxionStrings_1_1Cosmology.html#af78d9cfc07963af085317a0f2248c50c',1,'AxionStrings::Cosmology']]],
+  ['getstringtags_1014',['GetStringTags',['../classAxionStrings_1_1Cosmology.html#abe61fc92d9890f36266ada5ec50e54a6',1,'AxionStrings::Cosmology']]],
   ['gettime_1015',['GetTime',['../classsledgehamr_1_1Checkpoint.html#a729f0dffd1a0a5996bc85407eb807714',1,'sledgehamr::Checkpoint']]],
   ['gettimes_1016',['getTimes',['../classsledgehamr_1_1LevelData.html#af7bb6719c6e75c1b18cfc02b91dc0694',1,'sledgehamr::LevelData']]],
   ['gettimesofcoarseboxes_1017',['GetTimesOfCoarseBoxes',['../classpySledgehamr_1_1Output_1_1Output.html#ac16b3f4a9fac891e73a2f87369c39866',1,'pySledgehamr::Output::Output']]],

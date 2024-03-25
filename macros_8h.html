@@ -214,8 +214,8 @@ Macros</h2></td></tr>
 <div class="line">    SLEDGEHAMR_TAG_CELL_FOR_REFINEMENT \</div>
 <div class="line">    SLEDGEHAMR_GRAVITATIONAL_WAVES_RHS \</div>
 <div class="line">    SLEDGEHAMR_GRAVITATIONAL_WAVES_BACKREACTION</div>
-<div class="ttc" id="amacros_8h_html_ac3a5d0136714b7d3b911e37e23a9cac1"><div class="ttname"><a href="macros_8h.html#ac3a5d0136714b7d3b911e37e23a9cac1">SLEDGEHAMR_EXPAND_MOMENTA</a></div><div class="ttdeci">#define SLEDGEHAMR_EXPAND_MOMENTA(r, data, field)</div><div class="ttdoc">Expand single momnetum field.</div><div class="ttdef"><b>Definition:</b> macros.h:55</div></div>
-<div class="ttc" id="amacros_8h_html_add1f521f778c91270250624d71a49a22"><div class="ttname"><a href="macros_8h.html#add1f521f778c91270250624d71a49a22">SLEDGEHAMR_MOMENTUM_ENUM</a></div><div class="ttdeci">#define SLEDGEHAMR_MOMENTUM_ENUM(...)</div><div class="ttdoc">Same as SLEDGEHAMR_SCALAR_ENUM but for momentum fields.</div><div class="ttdef"><b>Definition:</b> macros.h:73</div></div>
+<div class="ttc" id="amacros_8h_html_ac3a5d0136714b7d3b911e37e23a9cac1"><div class="ttname"><a href="macros_8h.html#ac3a5d0136714b7d3b911e37e23a9cac1">SLEDGEHAMR_EXPAND_MOMENTA</a></div><div class="ttdeci">#define SLEDGEHAMR_EXPAND_MOMENTA(r, data, field)</div><div class="ttdoc">Expand single momnetum field.</div><div class="ttdef"><b>Definition:</b> macros.h:60</div></div>
+<div class="ttc" id="amacros_8h_html_add1f521f778c91270250624d71a49a22"><div class="ttname"><a href="macros_8h.html#add1f521f778c91270250624d71a49a22">SLEDGEHAMR_MOMENTUM_ENUM</a></div><div class="ttdeci">#define SLEDGEHAMR_MOMENTUM_ENUM(...)</div><div class="ttdoc">Same as SLEDGEHAMR_SCALAR_ENUM but for momentum fields.</div><div class="ttdef"><b>Definition:</b> macros.h:78</div></div>
 </div><!-- fragment -->
 <p>Same as SLEDGEHAMR_ADD_SCALARS but for momentum fields. </p>
 
@@ -291,8 +291,8 @@ Macros</h2></td></tr>
 <div class="line">    static std::vector&lt;sledgehamr::ScalarField*&gt; l_scalar_fields; \</div>
 <div class="line">    BOOST_PP_SEQ_FOR_EACH(<a class="code" href="macros_8h.html#a2b6a88ca685d9edbf824f3406f8a3c79">SLEDGEHAMR_EXPAND_SCALARS</a>, _, \</div>
 <div class="line">                          BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__))</div>
-<div class="ttc" id="amacros_8h_html_a2b6a88ca685d9edbf824f3406f8a3c79"><div class="ttname"><a href="macros_8h.html#a2b6a88ca685d9edbf824f3406f8a3c79">SLEDGEHAMR_EXPAND_SCALARS</a></div><div class="ttdeci">#define SLEDGEHAMR_EXPAND_SCALARS(r, data, field)</div><div class="ttdoc">Expand single scalar field.</div><div class="ttdef"><b>Definition:</b> macros.h:41</div></div>
-<div class="ttc" id="amacros_8h_html_aae9a37cc48bd9568c8764ccc7563c127"><div class="ttname"><a href="macros_8h.html#aae9a37cc48bd9568c8764ccc7563c127">SLEDGEHAMR_SCALAR_ENUM</a></div><div class="ttdeci">#define SLEDGEHAMR_SCALAR_ENUM(...)</div><div class="ttdoc">Macros to create enum of scalar fields for fast and convinient component access within the project na...</div><div class="ttdef"><b>Definition:</b> macros.h:64</div></div>
+<div class="ttc" id="amacros_8h_html_a2b6a88ca685d9edbf824f3406f8a3c79"><div class="ttname"><a href="macros_8h.html#a2b6a88ca685d9edbf824f3406f8a3c79">SLEDGEHAMR_EXPAND_SCALARS</a></div><div class="ttdeci">#define SLEDGEHAMR_EXPAND_SCALARS(r, data, field)</div><div class="ttdoc">Expand single scalar field.</div><div class="ttdef"><b>Definition:</b> macros.h:46</div></div>
+<div class="ttc" id="amacros_8h_html_aae9a37cc48bd9568c8764ccc7563c127"><div class="ttname"><a href="macros_8h.html#aae9a37cc48bd9568c8764ccc7563c127">SLEDGEHAMR_SCALAR_ENUM</a></div><div class="ttdeci">#define SLEDGEHAMR_SCALAR_ENUM(...)</div><div class="ttdoc">Macros to create enum of scalar fields for fast and convinient component access within the project na...</div><div class="ttdef"><b>Definition:</b> macros.h:69</div></div>
 </div><!-- fragment -->
 <p>Macro to add multiple scalar fields and default template functions to the project namespace. </p>
 
@@ -494,7 +494,7 @@ Macros</h2></td></tr>
 <div class="line">    SLEDGEHAMR_PRJ_TAG_WITH_TRUNCATION_GPU \</div>
 <div class="line">    SLEDGEHAMR_PRJ_TAG_WITHOUT_TRUNCATION_CPU \</div>
 <div class="line">    SLEDGEHAMR_PRJ_TAG_WITHOUT_TRUNCATION_GPU</div>
-<div class="ttc" id="amacros_8h_html_a958195af97851bbf6365641437cc8e06"><div class="ttname"><a href="macros_8h.html#a958195af97851bbf6365641437cc8e06">SLEDGEHAMR_PRJ_CONSTRUCTOR</a></div><div class="ttdeci">#define SLEDGEHAMR_PRJ_CONSTRUCTOR(prj)</div><div class="ttdoc">Constructor of project class to initialize scalar fields automatically.</div><div class="ttdef"><b>Definition:</b> macros.h:230</div></div>
+<div class="ttc" id="amacros_8h_html_a958195af97851bbf6365641437cc8e06"><div class="ttname"><a href="macros_8h.html#a958195af97851bbf6365641437cc8e06">SLEDGEHAMR_PRJ_CONSTRUCTOR</a></div><div class="ttdeci">#define SLEDGEHAMR_PRJ_CONSTRUCTOR(prj)</div><div class="ttdoc">Constructor of project class to initialize scalar fields automatically.</div><div class="ttdef"><b>Definition:</b> macros.h:235</div></div>
 </div><!-- fragment -->
 <p>Add boilerplate functions to project class. </p>
 
@@ -542,7 +542,7 @@ Macros</h2></td></tr>
 <div class="line">                               BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__)) \</div>
 <div class="line">        NMomentumFields \</div>
 <div class="line">    };</div>
-<div class="ttc" id="amacros_8h_html_afee7221b0f54e3a790884d84aec6ed2f"><div class="ttname"><a href="macros_8h.html#afee7221b0f54e3a790884d84aec6ed2f">SLEDGEHAMR_SCALAR_ENUM_VALUE</a></div><div class="ttdeci">#define SLEDGEHAMR_SCALAR_ENUM_VALUE(r, data, elem)</div><div class="ttdoc">Expand enum element.</div><div class="ttdef"><b>Definition:</b> macros.h:59</div></div>
+<div class="ttc" id="amacros_8h_html_afee7221b0f54e3a790884d84aec6ed2f"><div class="ttname"><a href="macros_8h.html#afee7221b0f54e3a790884d84aec6ed2f">SLEDGEHAMR_SCALAR_ENUM_VALUE</a></div><div class="ttdeci">#define SLEDGEHAMR_SCALAR_ENUM_VALUE(r, data, elem)</div><div class="ttdoc">Expand enum element.</div><div class="ttdef"><b>Definition:</b> macros.h:64</div></div>
 </div><!-- fragment -->
 <p>Same as SLEDGEHAMR_SCALAR_ENUM but for momentum fields. </p>
 
@@ -677,7 +677,7 @@ Macros</h2></td></tr>
 <div class="line">    TagWithoutTruncationCpu( \</div>
 <div class="line">            <span class="keyword">const</span> amrex::Array4&lt;double const&gt;&amp; state_fab, \</div>
 <div class="line">            <span class="keyword">const</span> amrex::Array4&lt;char&gt;&amp; tagarr, <span class="keyword">const</span> amrex::Box&amp; tilebox, \</div>
-<div class="line">            <span class="keywordtype">double</span> time, <span class="keywordtype">int</span> lev, <span class="keywordtype">int</span>* ntags_total, \</div>
+<div class="line">            <span class="keywordtype">double</span> time, <span class="keywordtype">int</span> lev, <span class="keywordtype">long</span>* ntags_total, \</div>
 <div class="line">            <span class="keyword">const</span> std::vector&lt;double&gt;&amp; params)<span class="keyword"> override </span>{ \</div>
 <div class="line">        const amrex::Dim3 lo = amrex::lbound(tilebox); \</div>
 <div class="line">        const amrex::Dim3 hi = amrex::ubound(tilebox); \</div>
@@ -880,7 +880,7 @@ Macros</h2></td></tr>
 <div class="line">    bool TruncationErrorTagCpu(<span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; state, \</div>
 <div class="line">            <span class="keyword">const</span> amrex::Array4&lt;const double&gt;&amp; te, <span class="keyword">const</span> <span class="keywordtype">int</span> i, <span class="keyword">const</span> <span class="keywordtype">int</span> j, \</div>
 <div class="line">            <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev, <span class="keyword">const</span> <span class="keywordtype">double</span> time, <span class="keyword">const</span> <span class="keywordtype">double</span> dt, \</div>
-<div class="line">            <span class="keyword">const</span> <span class="keywordtype">double</span> dx, std::vector&lt;double&gt;&amp; te_crit, <span class="keywordtype">int</span>* ntags_trunc, \</div>
+<div class="line">            <span class="keyword">const</span> <span class="keywordtype">double</span> dx, std::vector&lt;double&gt;&amp; te_crit, <span class="keywordtype">long</span>* ntags_trunc, \</div>
 <div class="line">            <span class="keyword">const</span> std::vector&lt;double&gt;&amp; params) { \</div>
 <div class="line">        if (i%2 != 0 || j%2 != 0 || k%2 != 0) \</div>
 <div class="line">            return <span class="keyword">false</span>; \</div>

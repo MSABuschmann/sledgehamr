@@ -191,15 +191,15 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ae0a4a4db58d14e9bb4ef38ebc6edadb7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#ae0a4a4db58d14e9bb4ef38ebc6edadb7">ErrorEst</a> (int lev, amrex::TagBoxArray &amp;tags, amrex::Real time, int ngrow) override</td></tr>
 <tr class="memdesc:ae0a4a4db58d14e9bb4ef38ebc6edadb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tag cells for refinement. Overrides the pure virtual function in amrex::AmrCore.  <a href="classsledgehamr_1_1Sledgehamr.html#ae0a4a4db58d14e9bb4ef38ebc6edadb7">More...</a><br /></td></tr>
 <tr class="separator:ae0a4a4db58d14e9bb4ef38ebc6edadb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14510bc01e24329a95ec7aa2d86ab569"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a14510bc01e24329a95ec7aa2d86ab569">TagWithTruncationCpu</a> (const amrex::Array4&lt; const double &gt; &amp;state_fab, const amrex::Array4&lt; const double &gt; &amp;state_fab_te, const amrex::Array4&lt; char &gt; &amp;tagarr, const amrex::Box &amp;tilebox, double time, int lev, int *ntags_total, int *ntags_user, int *ntags_trunc, const std::vector&lt; double &gt; &amp;params_tag, const std::vector&lt; double &gt; &amp;params_mod)=0</td></tr>
-<tr class="memdesc:a14510bc01e24329a95ec7aa2d86ab569"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual function that loop over a state to tags cells for refinement. Includes user-defined tags and truncation error tags. Will automatically be overriden by the project class. Work is performed on CPUs.  <a href="classsledgehamr_1_1Sledgehamr.html#a14510bc01e24329a95ec7aa2d86ab569">More...</a><br /></td></tr>
-<tr class="separator:a14510bc01e24329a95ec7aa2d86ab569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb9820a7be5f3cfbbf89351fda1f066c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#abb9820a7be5f3cfbbf89351fda1f066c">TagWithTruncationCpu</a> (const amrex::Array4&lt; const double &gt; &amp;state_fab, const amrex::Array4&lt; const double &gt; &amp;state_fab_te, const amrex::Array4&lt; char &gt; &amp;tagarr, const amrex::Box &amp;tilebox, double time, int lev, long *ntags_total, long *ntags_user, long *ntags_trunc, const std::vector&lt; double &gt; &amp;params_tag, const std::vector&lt; double &gt; &amp;params_mod)=0</td></tr>
+<tr class="memdesc:abb9820a7be5f3cfbbf89351fda1f066c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual function that loop over a state to tags cells for refinement. Includes user-defined tags and truncation error tags. Will automatically be overriden by the project class. Work is performed on CPUs.  <a href="classsledgehamr_1_1Sledgehamr.html#abb9820a7be5f3cfbbf89351fda1f066c">More...</a><br /></td></tr>
+<tr class="separator:abb9820a7be5f3cfbbf89351fda1f066c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8129bf33797b5d3e64d415e7f9876a5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#af8129bf33797b5d3e64d415e7f9876a5">TagWithTruncationGpu</a> (const amrex::Array4&lt; const double &gt; &amp;state_fab, const amrex::Array4&lt; const double &gt; &amp;state_fab_te, const amrex::Array4&lt; char &gt; &amp;tagarr, const amrex::Box &amp;tilebox, double time, int lev, const std::vector&lt; double &gt; &amp;params_tag, const std::vector&lt; double &gt; &amp;params_mod)=0</td></tr>
 <tr class="memdesc:af8129bf33797b5d3e64d415e7f9876a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as TagWithTruncationCpu but performs work on GPUs.  <a href="classsledgehamr_1_1Sledgehamr.html#af8129bf33797b5d3e64d415e7f9876a5">More...</a><br /></td></tr>
 <tr class="separator:af8129bf33797b5d3e64d415e7f9876a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72376b1fc0e22a68c8449bccc6518897"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a72376b1fc0e22a68c8449bccc6518897">TagWithoutTruncationCpu</a> (const amrex::Array4&lt; const double &gt; &amp;state_fab, const amrex::Array4&lt; char &gt; &amp;tagarr, const amrex::Box &amp;tilebox, double time, int lev, int *ntags_total, const std::vector&lt; double &gt; &amp;params)=0</td></tr>
-<tr class="memdesc:a72376b1fc0e22a68c8449bccc6518897"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as TagWithTruncationCpu but does not include truncation error tags.  <a href="classsledgehamr_1_1Sledgehamr.html#a72376b1fc0e22a68c8449bccc6518897">More...</a><br /></td></tr>
-<tr class="separator:a72376b1fc0e22a68c8449bccc6518897"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a608d3737db354b93fb2ce85b897306"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a1a608d3737db354b93fb2ce85b897306">TagWithoutTruncationCpu</a> (const amrex::Array4&lt; const double &gt; &amp;state_fab, const amrex::Array4&lt; char &gt; &amp;tagarr, const amrex::Box &amp;tilebox, double time, int lev, long *ntags_total, const std::vector&lt; double &gt; &amp;params)=0</td></tr>
+<tr class="memdesc:a1a608d3737db354b93fb2ce85b897306"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as TagWithTruncationCpu but does not include truncation error tags.  <a href="classsledgehamr_1_1Sledgehamr.html#a1a608d3737db354b93fb2ce85b897306">More...</a><br /></td></tr>
+<tr class="separator:a1a608d3737db354b93fb2ce85b897306"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd89d0e95abb1c601a4622c400893c97"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#acd89d0e95abb1c601a4622c400893c97">TagWithoutTruncationGpu</a> (const amrex::Array4&lt; const double &gt; &amp;state_fab, const amrex::Array4&lt; char &gt; &amp;tagarr, const amrex::Box &amp;tilebox, double time, int lev, const std::vector&lt; double &gt; &amp;params)=0</td></tr>
 <tr class="memdesc:acd89d0e95abb1c601a4622c400893c97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as TagWithTruncationGpu but does not include truncation error tags.  <a href="classsledgehamr_1_1Sledgehamr.html#acd89d0e95abb1c601a4622c400893c97">More...</a><br /></td></tr>
 <tr class="separator:acd89d0e95abb1c601a4622c400893c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1956,8 +1956,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a72376b1fc0e22a68c8449bccc6518897"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72376b1fc0e22a68c8449bccc6518897">&#9670;&nbsp;</a></span>TagWithoutTruncationCpu()</h2>
+<a id="a1a608d3737db354b93fb2ce85b897306"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a608d3737db354b93fb2ce85b897306">&#9670;&nbsp;</a></span>TagWithoutTruncationCpu()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1998,7 +1998,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int *&#160;</td>
+          <td class="paramtype">long *&#160;</td>
           <td class="paramname"><em>ntags_total</em>, </td>
         </tr>
         <tr>
@@ -2086,8 +2086,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a14510bc01e24329a95ec7aa2d86ab569"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14510bc01e24329a95ec7aa2d86ab569">&#9670;&nbsp;</a></span>TagWithTruncationCpu()</h2>
+<a id="abb9820a7be5f3cfbbf89351fda1f066c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb9820a7be5f3cfbbf89351fda1f066c">&#9670;&nbsp;</a></span>TagWithTruncationCpu()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2134,19 +2134,19 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int *&#160;</td>
+          <td class="paramtype">long *&#160;</td>
           <td class="paramname"><em>ntags_total</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int *&#160;</td>
+          <td class="paramtype">long *&#160;</td>
           <td class="paramname"><em>ntags_user</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int *&#160;</td>
+          <td class="paramtype">long *&#160;</td>
           <td class="paramname"><em>ntags_trunc</em>, </td>
         </tr>
         <tr>
