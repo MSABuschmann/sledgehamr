@@ -111,7 +111,7 @@ class Cosmology {
     void SetSpectra();
     void SetXiMeasurement();
 
-    int GetStringTags(const int lev);
+    long GetStringTags(const int lev);
     bool WriteXi(double time, std::string prefix);
 
     /** @brief Minimum allowed string width.

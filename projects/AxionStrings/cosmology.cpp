@@ -87,7 +87,7 @@ bool Cosmology::WriteXi(double time, std::string prefix) {
  * @return \xi.
  */
 double Cosmology::Xi(const int lev, const double eta) {
-    int string_tags = GetStringTags(lev);
+    long string_tags = GetStringTags(lev);
 
     const double T1    = 5.4954174414835757e+17;
     const double mpl   = 1.22e19;
@@ -111,11 +111,11 @@ double Cosmology::Xi(const int lev, const double eta) {
  * @param   lev On which level to identify piercings.
  * @return Number of tags.
  */
-int Cosmology::GetStringTags(const int lev) {
+long Cosmology::GetStringTags(const int lev) {
     const sledgehamr::LevelData& state = sim->GetLevelData(lev);
     double dx = sim->GetDx(lev);
     double dt = sim->GetDt(lev);
-    int ntags = 0;
+    long ntags = 0;
 
     // Lets just do this on CPU even if GPUs available. This section is not
     // performace critical and it is a lot simpler this way.
@@ -137,7 +137,7 @@ int Cosmology::GetStringTags(const int lev) {
         }
     }
 
-    amrex::ParallelDescriptor::ReduceIntSum(ntags);
+    amrex::ParallelDescriptor::ReduceLongSum(ntags);
     return ntags;
 }
 

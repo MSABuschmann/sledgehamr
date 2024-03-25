@@ -226,8 +226,8 @@ class Sledgehamr : public amrex::AmrCore {
             const amrex::Array4<const double>& state_fab,
             const amrex::Array4<const double>& state_fab_te,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
-            double time, int lev, int* ntags_total, int* ntags_user,
-            int* ntags_trunc, const std::vector<double>& params_tag,
+            double time, int lev, long* ntags_total, long* ntags_user,
+            long* ntags_trunc, const std::vector<double>& params_tag,
             const std::vector<double>& params_mod) = 0;
 
     /** @brief Same as TagWithTruncationCpu but performs work on GPUs.
@@ -245,7 +245,7 @@ class Sledgehamr : public amrex::AmrCore {
     virtual void TagWithoutTruncationCpu(
             const amrex::Array4<const double>& state_fab,
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox,
-            double time, int lev, int* ntags_total,
+            double time, int lev, long* ntags_total,
             const std::vector<double>& params) = 0;
 
     /** @brief Same as TagWithTruncationGpu but does not include

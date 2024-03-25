@@ -279,9 +279,9 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     const LevelData& state_te = grid_old[lev];
 
     // Initialize tag counters.
-    int ntags_total = 0;
-    int ntags_user = 0;
-    std::vector<int> ntags_trunc(scalar_fields.size(), 0);
+    long ntags_total = 0;
+    long ntags_user = 0;
+    std::vector<long> ntags_trunc(scalar_fields.size(), 0);
 
     std::vector<double> params_tag, params_mod;
     SetParamsTagCellForRefinement(params_tag, time, lev);
@@ -290,7 +290,7 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
 
     // Loop over boxes and cells.
 #pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user) \
-                     reduction(vec_int_plus : ntags_trunc)
+                     reduction(vec_long_plus : ntags_trunc)
     for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
         const amrex::Box& tilebox  = mfi.tilebox();
         const amrex::Array4<double const>& state_fab    = state.array(mfi);
@@ -314,12 +314,12 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     }
 
     // Collect all tags across MPI ranks.
-    amrex::ParallelDescriptor::ReduceIntSum(ntags_total, 0);
+    amrex::ParallelDescriptor::ReduceLongSum(ntags_total, 0);
 
     if (shadow_hierarchy) {
-        amrex::ParallelDescriptor::ReduceIntSum(ntags_user, 0);
-        amrex::ParallelDescriptor::ReduceIntSum(&(ntags_trunc[0]),
-                                                ntags_trunc.size(), 0);
+        amrex::ParallelDescriptor::ReduceLongSum(ntags_user, 0);
+        amrex::ParallelDescriptor::ReduceLongSum(&(ntags_trunc[0]),
+                                                 ntags_trunc.size(), 0);
     }
 
     // Print statistics.

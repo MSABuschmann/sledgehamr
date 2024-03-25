@@ -23,6 +23,11 @@ namespace sledgehamr {
                        omp_out.begin(), std::plus<int>())) \
         initializer(omp_priv = omp_orig)
 
+#pragma omp declare reduction(vec_long_plus : std::vector<long> : \
+        std::transform(omp_out.begin(), omp_out.end(), omp_in.begin(), \
+                       omp_out.begin(), std::plus<long>())) \
+        initializer(omp_priv = omp_orig)
+
 /** @brief Expand OMP #pragma statement.
  */
 #define SLEDGEHAMR_DO_PRAGMA(x) _Pragma(#x)
@@ -181,7 +186,7 @@ namespace sledgehamr {
     bool TruncationErrorTagCpu(const amrex::Array4<const double>& state, \
             const amrex::Array4<const double>& te, const int i, const int j, \
             const int k, const int lev, const double time, const double dt, \
-            const double dx, std::vector<double>& te_crit, int* ntags_trunc, \
+            const double dx, std::vector<double>& te_crit, long* ntags_trunc, \
             const std::vector<double>& params) { \
         if (i%2 != 0 || j%2 != 0 || k%2 != 0) \
             return false; \
@@ -466,8 +471,8 @@ namespace sledgehamr {
             const amrex::Array4<double const>& state_fab, \
             const amrex::Array4<double const>& state_fab_te, \
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox, \
-            double time, int lev, int* ntags_total, int* ntags_user, \
-            int* ntags_trunc, const std::vector<double>& params_tag, \
+            double time, int lev, long* ntags_total, long* ntags_user, \
+            long* ntags_trunc, const std::vector<double>& params_tag, \
             const std::vector<double>& params_mod) override { \
         const amrex::Dim3 lo = amrex::lbound(tilebox); \
         const amrex::Dim3 hi = amrex::ubound(tilebox); \
@@ -616,7 +621,7 @@ namespace sledgehamr {
     TagWithoutTruncationCpu( \
             const amrex::Array4<double const>& state_fab, \
             const amrex::Array4<char>& tagarr, const amrex::Box& tilebox, \
-            double time, int lev, int* ntags_total, \
+            double time, int lev, long* ntags_total, \
             const std::vector<double>& params) override { \
         const amrex::Dim3 lo = amrex::lbound(tilebox); \
         const amrex::Dim3 hi = amrex::ubound(tilebox); \
