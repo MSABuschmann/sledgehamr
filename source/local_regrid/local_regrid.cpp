@@ -767,9 +767,9 @@ void LocalRegrid::AddBoxes(const int lev, amrex::BoxArray& ba) {
     amrex::MultiFab mf_old_tmp(ba, dm, sim->scalar_fields.size(), sim->nghost);
 
     // Fill temporary mf with data.
-    sim->level_synchronizer->FillIntermediatePatch(
+    sim->level_synchronizer->FillPatch(
             lev, sim->grid_new[lev].t, mf_new_tmp);
-    sim->level_synchronizer->FillIntermediatePatch(
+    sim->level_synchronizer->FillPatch(
             lev, sim->grid_old[lev].t, mf_old_tmp);
 
     // Create new joint box array.
