@@ -52,7 +52,7 @@ void Rhs(const amrex::Array4<double>& rhs,
     double rhs_Psi2_pre = -Pi2*3./eta_pre + laplacian_Psi2/eta_sq/drag
                                  - Psi2*potential_pre;
 
-    double potential_post = eta*eta*( Psi1*Psi1 + Psi2*Psi2 - 1. ) + 0.56233;
+    double potential_post = eta*eta*( Psi1*Psi1 + Psi2*Psi2 - 1. );
     double rhs_Psi1_post = -Pi1*2./eta + laplacian_Psi1 - Psi1*potential_post;
     double rhs_Psi2_post = -Pi2*2./eta + laplacian_Psi2 - Psi2*potential_post;
 
