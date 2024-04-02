@@ -1,5 +1,10 @@
+# Python
 __pycache__/
-# Ignore vim files:
+
+# vim:
 *~
 *.swp
 *.swo
+
+# generated code
+source/projects.h
