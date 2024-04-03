@@ -31,7 +31,7 @@ Sledgehamr comes with a few different physics scenarios already implemented such
 ## How to cite
 If you use sledgehamr, please cite its accompanying paper:
 
-* Malte Buschmann, "Sledgehamr: Simulation scalar fields with adaptive mesh refinement",
+* Malte Buschmann, "Sledgehamr: Simulation Scalar Fields with Adaptive Mesh Refinement",
 arXiv:23xx.xxxxx [hep-ph].
 
 BibTex:
