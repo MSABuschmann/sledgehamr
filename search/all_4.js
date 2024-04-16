@@ -37,12 +37,13 @@ var searchData=
   ['downsample_5ffactor_161',['downsample_factor',['../classsledgehamr_1_1LevelWriter.html#a10bfe3bdfc584fcb12bf190fdc16d8ac',1,'sledgehamr::LevelWriter']]],
   ['dphi2_162',['dPhi2',['../namespaceFirstOrderPhaseTransition.html#ad6523d6f8783406619cd3a34a0c9fcb5',1,'FirstOrderPhaseTransition']]],
   ['dt_163',['dt',['../classsledgehamr_1_1Sledgehamr.html#a9239f0c77e572cc155e33f602c19b8dc',1,'sledgehamr::Sledgehamr']]],
-  ['du_5fxx_164',['du_xx',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a9a03cbb81fb92a28b5a37ea87cb0cac5',1,'sledgehamr::GravitationalWaves']]],
-  ['du_5fxy_165',['du_xy',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a62cc22e2f4cc3db257a851eddabd582c',1,'sledgehamr::GravitationalWaves']]],
-  ['du_5fxz_166',['du_xz',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a8f233f96797dbfc78cccd758f51b498e',1,'sledgehamr::GravitationalWaves']]],
-  ['du_5fyy_167',['du_yy',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240ac33c81ffd3db7389931d8280c1845b15',1,'sledgehamr::GravitationalWaves']]],
-  ['du_5fyz_168',['du_yz',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a2a5f300b494682128d4ee9866679f772',1,'sledgehamr::GravitationalWaves']]],
-  ['du_5fzz_169',['du_zz',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a7349bcdba2c689f9da7457cbdaffdeff',1,'sledgehamr::GravitationalWaves']]],
-  ['durationseconds_170',['DurationSeconds',['../namespacesledgehamr_1_1utils.html#ab3e25d0c6e29f7b2eef54626f4516511',1,'sledgehamr::utils']]],
-  ['dx_171',['dx',['../classsledgehamr_1_1Sledgehamr.html#a50a57ffa146126e84ebe8c3786e7e162',1,'sledgehamr::Sledgehamr']]]
+  ['dtype0_164',['dtype0',['../classsledgehamr_1_1IntegratorPytorch.html#a12b5702f689423e35acdd357e30e42d6',1,'sledgehamr::IntegratorPytorch']]],
+  ['du_5fxx_165',['du_xx',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a9a03cbb81fb92a28b5a37ea87cb0cac5',1,'sledgehamr::GravitationalWaves']]],
+  ['du_5fxy_166',['du_xy',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a62cc22e2f4cc3db257a851eddabd582c',1,'sledgehamr::GravitationalWaves']]],
+  ['du_5fxz_167',['du_xz',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a8f233f96797dbfc78cccd758f51b498e',1,'sledgehamr::GravitationalWaves']]],
+  ['du_5fyy_168',['du_yy',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240ac33c81ffd3db7389931d8280c1845b15',1,'sledgehamr::GravitationalWaves']]],
+  ['du_5fyz_169',['du_yz',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a2a5f300b494682128d4ee9866679f772',1,'sledgehamr::GravitationalWaves']]],
+  ['du_5fzz_170',['du_zz',['../classsledgehamr_1_1GravitationalWaves.html#ab45079282000fd5167547df7592b4240a7349bcdba2c689f9da7457cbdaffdeff',1,'sledgehamr::GravitationalWaves']]],
+  ['durationseconds_171',['DurationSeconds',['../namespacesledgehamr_1_1utils.html#ab3e25d0c6e29f7b2eef54626f4516511',1,'sledgehamr::utils']]],
+  ['dx_172',['dx',['../classsledgehamr_1_1Sledgehamr.html#a50a57ffa146126e84ebe8c3786e7e162',1,'sledgehamr::Sledgehamr']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['betadecay_773',['BetaDecay',['../namespaceBetaDecay.html',1,'']]]
+  ['betadecay_777',['BetaDecay',['../namespaceBetaDecay.html',1,'']]]
 ];
