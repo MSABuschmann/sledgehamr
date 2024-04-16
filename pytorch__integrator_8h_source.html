@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>sledgehamr: /github/workspace/source/integrators/lsssprk3.h Source File</title>
+<title>sledgehamr: /github/workspace/source/integrators/pytorch_integrator.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -67,29 +67,29 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">lsssprk3.h</div>  </div>
+<div class="title">pytorch_integrator.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="lsssprk3_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef SLEDGEHAMR_INTEGRATOR_LSSSPRK3_H_</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define SLEDGEHAMR_INTEGRATOR_LSSSPRK3_H_</span></div>
+<a href="pytorch__integrator_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef SLEDGEHAMR_INTEGRATOR_PYTORCH_H_</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define SLEDGEHAMR_INTEGRATOR_PYTORCH_H_</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="integrator_8h.html">integrator.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesledgehamr.html">sledgehamr</a> {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classsledgehamr_1_1IntegratorLsssprk3.html">   11</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsledgehamr_1_1IntegratorLsssprk3.html">IntegratorLsssprk3</a> : <span class="keyword">public</span> <a class="code" href="classsledgehamr_1_1Integrator.html">Integrator</a> {</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classsledgehamr_1_1IntegratorPytorch.html">   11</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsledgehamr_1_1IntegratorPytorch.html">IntegratorPytorch</a> : <span class="keyword">public</span> <a class="code" href="classsledgehamr_1_1Integrator.html">Integrator</a> {</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">using</span> <a class="code" href="classsledgehamr_1_1Integrator.html#a9c41e014f56f2af5f49e563560fcf847">Integrator::Integrator</a>;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classsledgehamr_1_1IntegratorLsssprk3.html#a507304c8f54b9d21986576c5abbbff1d">Integrate</a>(<a class="code" href="classsledgehamr_1_1LevelData.html">LevelData</a>&amp; mf_old, <a class="code" href="classsledgehamr_1_1LevelData.html">LevelData</a>&amp; mf_new, <span class="keyword">const</span> <span class="keywordtype">int</span> lev,</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classsledgehamr_1_1IntegratorPytorch.html#aaa380c948d7cd6390e42b9cbd45d435d">Integrate</a>(<a class="code" href="classsledgehamr_1_1LevelData.html">LevelData</a> &amp;mf_old, <a class="code" href="classsledgehamr_1_1LevelData.html">LevelData</a> &amp;mf_new, <span class="keyword">const</span> <span class="keywordtype">int</span> lev,</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                           <span class="keyword">const</span> <span class="keywordtype">double</span> dt, <span class="keyword">const</span> <span class="keywordtype">double</span> dx) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;};</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;}; <span class="comment">// namespace sledgehamr</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// SLEDGEHAMR_INTEGRATOR_LSSSPRK3_H_</span></div>
-<div class="ttc" id="aclasssledgehamr_1_1IntegratorLsssprk3_html"><div class="ttname"><a href="classsledgehamr_1_1IntegratorLsssprk3.html">sledgehamr::IntegratorLsssprk3</a></div><div class="ttdoc">Implementation of the low-storage strong stability preserving third order Runge-Kutta integration sch...</div><div class="ttdef"><b>Definition:</b> lsssprk3.h:11</div></div>
-<div class="ttc" id="aclasssledgehamr_1_1IntegratorLsssprk3_html_a507304c8f54b9d21986576c5abbbff1d"><div class="ttname"><a href="classsledgehamr_1_1IntegratorLsssprk3.html#a507304c8f54b9d21986576c5abbbff1d">sledgehamr::IntegratorLsssprk3::Integrate</a></div><div class="ttdeci">virtual void Integrate(LevelData &amp;mf_old, LevelData &amp;mf_new, const int lev, const double dt, const double dx) override</div><div class="ttdoc">Advances one level by one time step using the low-storage strong stability preserving third order Run...</div><div class="ttdef"><b>Definition:</b> lsssprk3.cpp:14</div></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// SLEDGEHAMR_INTEGRATOR_PYTORCH_H_</span></div>
+<div class="ttc" id="aclasssledgehamr_1_1IntegratorPytorch_html"><div class="ttname"><a href="classsledgehamr_1_1IntegratorPytorch.html">sledgehamr::IntegratorPytorch</a></div><div class="ttdoc">Implementation of the low-storage strong stability preserving third order Runge-Kutta integration sch...</div><div class="ttdef"><b>Definition:</b> pytorch_integrator.h:11</div></div>
+<div class="ttc" id="aclasssledgehamr_1_1IntegratorPytorch_html_aaa380c948d7cd6390e42b9cbd45d435d"><div class="ttname"><a href="classsledgehamr_1_1IntegratorPytorch.html#aaa380c948d7cd6390e42b9cbd45d435d">sledgehamr::IntegratorPytorch::Integrate</a></div><div class="ttdeci">virtual void Integrate(LevelData &amp;mf_old, LevelData &amp;mf_new, const int lev, const double dt, const double dx) override</div><div class="ttdoc">Advances one level by one time step using the low-storage strong stability preserving third order Run...</div><div class="ttdef"><b>Definition:</b> pytorch_integrator.cpp:16</div></div>
 <div class="ttc" id="aclasssledgehamr_1_1Integrator_html"><div class="ttname"><a href="classsledgehamr_1_1Integrator.html">sledgehamr::Integrator</a></div><div class="ttdoc">Abstract base class that handles the time integration for a single level.</div><div class="ttdef"><b>Definition:</b> integrator.h:30</div></div>
 <div class="ttc" id="aclasssledgehamr_1_1Integrator_html_a9c41e014f56f2af5f49e563560fcf847"><div class="ttname"><a href="classsledgehamr_1_1Integrator.html#a9c41e014f56f2af5f49e563560fcf847">sledgehamr::Integrator::Integrator</a></div><div class="ttdeci">Integrator(Sledgehamr *owner)</div><div class="ttdef"><b>Definition:</b> integrator.h:32</div></div>
 <div class="ttc" id="aclasssledgehamr_1_1LevelData_html"><div class="ttname"><a href="classsledgehamr_1_1LevelData.html">sledgehamr::LevelData</a></div><div class="ttdoc">Class that holds the MultiFab data while also keeping track of time and step numbers.</div><div class="ttdef"><b>Definition:</b> level_data.h:11</div></div>

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['quadratic_1347',['quadratic',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a1820c318a08826f9774e05463808d541',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
-  ['quartic_1348',['quartic',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a30114ba7175732c76f5d5e16a6822342',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]]
+  ['quadratic_1354',['quadratic',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a1820c318a08826f9774e05463808d541',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
+  ['quartic_1355',['quartic',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a30114ba7175732c76f5d5e16a6822342',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]]
 ];
