@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['firstorderphasetransition_770',['FirstOrderPhaseTransition',['../namespaceFirstOrderPhaseTransition.html',1,'']]]
+  ['betadecay_773',['BetaDecay',['../namespaceBetaDecay.html',1,'']]]
 ];
