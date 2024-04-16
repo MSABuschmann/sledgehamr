@@ -1,8 +1,8 @@
 #ifndef SLEDGEHAMR_INTEGRATOR_H_
 #define SLEDGEHAMR_INTEGRATOR_H_
 
-#include "sledgehamr.h"
 #include "level_data.h"
+#include "sledgehamr.h"
 
 namespace sledgehamr {
 
@@ -18,7 +18,8 @@ enum IntegratorType {
     Lsssprk3 = 10,
     RknButcherTableau = 20,
     Rkn4 = 21,
-    Rkn5 = 22
+    Rkn5 = 22,
+    Pytorch = 30,
 };
 
 class Sledgehamr;
@@ -28,10 +29,10 @@ class Sledgehamr;
  */
 class Integrator {
   public:
-    Integrator(Sledgehamr* owner) : sim(owner) {};
+    Integrator(Sledgehamr *owner) : sim(owner){};
     virtual void Advance(const int lev);
     static std::string Name(IntegratorType type);
-    static void DebugMessage(amrex::MultiFab& mf, std::string msg);
+    static void DebugMessage(amrex::MultiFab &mf, std::string msg);
 
   protected:
     /** @brief Purely virtual function that advances one level by one time step
@@ -42,12 +43,12 @@ class Integrator {
      * @param   dt      Time step size.
      * @param   dx      Grid spacing.
      */
-    virtual void Integrate(LevelData& mf_old, LevelData& mf_new, const int lev,
+    virtual void Integrate(LevelData &mf_old, LevelData &mf_new, const int lev,
                            const double dt, const double dx) = 0;
 
     /** @brief Pointer to the simulation.
      */
-    Sledgehamr* sim;
+    Sledgehamr *sim;
 };
 
 }; // namespace sledgehamr

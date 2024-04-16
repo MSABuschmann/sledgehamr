@@ -9,3 +9,8 @@ CEXE_sources += lsssprk3.cpp
 
 CEXE_headers += rkn.h
 CEXE_sources += rkn.cpp
+
+CEXE_headers += pytorch_integrator.h
+CEXE_sources += pytorch_integrator.cpp
+
+

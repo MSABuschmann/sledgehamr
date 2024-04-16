@@ -8,3 +8,5 @@ __pycache__/
 
 # generated code
 source/projects.h
+tmp_build_dir
+main3d.gnu.MPROF.MPI.OMP.CUDA.ex
