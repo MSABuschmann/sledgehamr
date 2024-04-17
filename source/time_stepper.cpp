@@ -3,6 +3,7 @@
 
 #include "integrators/amrex_integrators.h"
 #include "integrators/lsssprk3.h"
+#include "integrators/pytorch_integrator.h"
 #include "integrators/rkn.h"
 
 namespace sledgehamr {

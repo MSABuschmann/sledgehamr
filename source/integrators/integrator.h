@@ -19,7 +19,7 @@ enum IntegratorType {
     RknButcherTableau = 20,
     Rkn4 = 21,
     Rkn5 = 22,
-    Pytorch = 30,
+    Pytorch = 30
 };
 
 class Sledgehamr;

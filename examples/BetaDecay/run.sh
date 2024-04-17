@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --gpus-per-task=1
 #SBATCH --qos=debug
-#SBATCH --time=00:01:00
+#SBATCH --time=00:10:00
 #SBATCH -A m3166_g
 
 cd $SLURM_SUBMIT_DIR
