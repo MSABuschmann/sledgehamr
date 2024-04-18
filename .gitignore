@@ -10,6 +10,6 @@ initial_state*
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 output
-mem_log
+memlog
 slurm-*
 Backtrace*
