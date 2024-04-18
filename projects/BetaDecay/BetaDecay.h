@@ -5,7 +5,7 @@
 namespace BetaDecay {
 
 SLEDGEHAMR_ADD_SCALARS(Phi)
-SLEDGEHAMR_ADD_CONJUGATE_MOMENTA(DUMMY)
+SLEDGEHAMR_ADD_CONJUGATE_MOMENTA(dPhi)
 
 AMREX_GPU_DEVICE AMREX_FORCE_INLINE void
 Rhs(const amrex::Array4<double> &rhs, const amrex::Array4<const double> &state,
