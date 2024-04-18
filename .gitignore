@@ -1,12 +1,15 @@
-# Python
-__pycache__/
-
-# vim:
 *~
 *.swp
 *.swo
 
-# generated code
+__pycache__/
 source/projects.h
 tmp_build_dir
-main3d.gnu.MPROF.MPI.OMP.CUDA.ex
+main*ex
+initial_state*
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+output
+mem_log
+slurm-*
+Backtrace*
