@@ -40,8 +40,8 @@ void IntegratorPytorch::Integrate(LevelData &mf_old, LevelData &mf_new,
     for (amrex::MFIter mfi(mf_new); mfi.isValid(); ++mfi) {
         const amrex::Box &bx = mfi.validbox();
 
-        const amrex::Array4<double> &in_arr = mf_new.array(mfi);
-        const amrex::Array4<double> &out_arr = mf_old.array(mfi);
+        const amrex::Array4<double> &in_arr = mf_old.array(mfi);
+        const amrex::Array4<double> &out_arr = mf_new.array(mfi);
 
         const amrex::IntVect bx_lo = bx.smallEnd();
         const amrex::IntVect nbox = bx.size();
