@@ -26,3 +26,4 @@ input.initial_state = initial_state_64.hdf5
 output.output_folder       = output
 output.slices.interval     = 0.5
 output.coarse_box.interval = 3
+output.rename_old_output   = 1

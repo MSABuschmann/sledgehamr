@@ -6,7 +6,7 @@ SLEDGEHAMR_HOME ?= ../../../sledgehamr
 
 # compiler
 COMP      = gnu
-USE_CUDA  = TRUE
+USE_CUDA  = FALSE
 
 ifeq ($(USE_CUDA),TRUE)
 	PYTORCH_ROOT := ${LIBTORCH_GPU}
