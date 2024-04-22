@@ -18,19 +18,20 @@ class FillLevel {
      * @param   level   Number of level to be filled with data (unless we
      *                  initialize from a checkpoint).
      */
-    FillLevel(Sledgehamr* owner, const int level) : sim(owner), lev(level) {};
+    FillLevel(Sledgehamr *owner, const int level) : sim(owner), lev(level){};
 
     void FromInitialStateFile();
     void FromCheckpoint(std::string folder);
     void FromHdf5File(std::string initial_state_file);
-    void FromArray(const int comp, double* data, const long long dimN);
-    void FromArrayChunks(const int comp, double* data);
+    void FromArray(const int comp, amrex::Gpu::AsyncArray<double> &data,
+                   const long long dimN);
+    void FromArrayChunks(const int comp, amrex::Gpu::AsyncArray<double> &data);
     void FromConst(const int comp, const double c);
 
   private:
     /** @brief Pointer to the simulation.
      */
-    Sledgehamr* sim;
+    Sledgehamr *sim;
 
     /** @brief Number of level to be filled with data (unless we initialize from
      *         a checkpoint).
