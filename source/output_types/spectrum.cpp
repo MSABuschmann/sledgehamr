@@ -1,6 +1,6 @@
 #include "spectrum.h"
-#include "hdf5_utils.h"
 #include "fft.h"
+#include "hdf5_utils.h"
 
 namespace sledgehamr {
 
@@ -9,14 +9,14 @@ namespace sledgehamr {
  * @param   file_id HDF5 file id.
  * @param   sim     Pointer to the simulation.
  */
-void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
+void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr *sim) {
     const int lev = 0;
     const int dimN = sim->dimN[lev];
     const double dx = sim->dx[lev];
     const double dt = sim->dt[lev];
     const double time = sim->grid_new[lev].t;
-    const LevelData& state = sim->grid_new[lev];
-    const amrex::BoxArray& ba = state.boxArray();
+    const LevelData &state = sim->grid_new[lev];
+    const amrex::BoxArray &ba = state.boxArray();
 
     amrex::MultiFab field, field_fft;
     field.define(ba, sim->dmap[lev], 1, 0);
@@ -27,9 +27,9 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
 
 #pragma omp parallel
     for (amrex::MFIter mfi(field, true); mfi.isValid(); ++mfi) {
-        const amrex::Box& bx = mfi.tilebox();
-        const auto& field_arr = field.array(mfi);
-        const auto& state_arr = state.array(mfi);
+        const amrex::Box &bx = mfi.tilebox();
+        const auto &field_arr = field.array(mfi);
+        const auto &state_arr = state.array(mfi);
 
         const amrex::Dim3 lo = amrex::lbound(bx);
         const amrex::Dim3 hi = amrex::ubound(bx);
@@ -37,8 +37,8 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
         for (int k = lo.z; k <= hi.z; ++k) {
             for (int j = lo.y; j <= hi.y; ++j) {
                 for (int i = lo.x; i <= hi.x; ++i) {
-                    field_arr(i, j, k, 0) = fct(state_arr, i, j, k, lev, time,
-                                                dt, dx, params);
+                    field_arr(i, j, k, 0) =
+                        fct(state_arr, i, j, k, lev, time, dt, dx, params);
                 }
             }
         }
@@ -46,21 +46,21 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
 
     utils::Fft(field, 0, field_fft, field_fft, sim->geom[lev], true);
 
-    double fac = pow(1./dimN, 6);
-    double dk = 2.*M_PI / sim->L;
-    double pre = fac*state.t/dk;
+    double fac = pow(1. / dimN, 6);
+    double dk = 2. * M_PI / sim->L;
+    double pre = fac * state.t / dk;
 
-    std::vector<int>& ks = sim->spectrum_ks;
+    std::vector<int> &ks = sim->spectrum_ks;
     const int kmax = ks.size();
     constexpr int NTHREADS = 16;
-    const unsigned long SpecLen = kmax*NTHREADS;
+    const unsigned long SpecLen = kmax * NTHREADS;
     std::unique_ptr<double[]> spectrum(new double[SpecLen]);
     std::fill_n(spectrum.get(), SpecLen, 0.0);
 
 #pragma omp parallel num_threads(std::min(NTHREADS, omp_get_max_threads()))
     for (amrex::MFIter mfi(field_fft, true); mfi.isValid(); ++mfi) {
-        const amrex::Box& bx = mfi.tilebox();
-        const auto& field_fft_arr = field_fft.array(mfi);
+        const amrex::Box &bx = mfi.tilebox();
+        const amrex::Array4<double> &field_fft_arr = field_fft.array(mfi);
 
         const int il = bx.smallEnd()[0];
         const int ih = bx.bigEnd()[0];
@@ -73,28 +73,28 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr* sim) {
             for (int j = jl; j <= jh; ++j) {
                 AMREX_PRAGMA_SIMD
                 for (int k = kl; k <= kh; ++k) {
-                    int li = i >= dimN/2 ? i-dimN : i;
-                    int lj = j >= dimN/2 ? j-dimN : j;
-                    int lk = k >= dimN/2 ? k-dimN : k;
-                    unsigned int sq = li*li + lj*lj + lk*lk;
+                    int li = i >= dimN / 2 ? i - dimN : i;
+                    int lj = j >= dimN / 2 ? j - dimN : j;
+                    int lk = k >= dimN / 2 ? k - dimN : k;
+                    unsigned int sq = li * li + lj * lj + lk * lk;
                     unsigned long index =
-                            std::lower_bound(ks.begin(), ks.end(), sq)
-                            - ks.begin() + omp_get_thread_num() * kmax;
-                    spectrum[index] += pre * field_fft_arr(i,j,k,0)
-                                           * field_fft_arr(i,j,k,0);
+                        std::lower_bound(ks.begin(), ks.end(), sq) -
+                        ks.begin() + omp_get_thread_num() * kmax;
+                    spectrum[index] += pre * field_fft_arr(i, j, k, 0) *
+                                       field_fft_arr(i, j, k, 0);
                 }
             }
         }
-     }
+    }
 
     for (int a = 1; a < NTHREADS; ++a) {
         for (int c = 0; c < kmax; ++c) {
-            spectrum[c] += spectrum[a*kmax + c];
+            spectrum[c] += spectrum[a * kmax + c];
         }
     }
 
-    amrex::ParallelDescriptor::ReduceRealSum(spectrum.get(), kmax,
-            amrex::ParallelDescriptor::IOProcessorNumber());
+    amrex::ParallelDescriptor::ReduceRealSum(
+        spectrum.get(), kmax, amrex::ParallelDescriptor::IOProcessorNumber());
 
     if (amrex::ParallelDescriptor::IOProcessor()) {
         if (id == 0) {

@@ -1,18 +1,18 @@
 #include <type_traits>
 
-#include <AMReX_ParmParse.H>
 #include <AMReX_MultiFabUtil.H>
+#include <AMReX_ParmParse.H>
 
+#include "fill_level.h"
+#include "hdf5_utils.h"
 #include "sledgehamr.h"
 #include "sledgehamr_utils.h"
-#include "hdf5_utils.h"
-#include "fill_level.h"
 
 namespace sledgehamr {
 
 /** @brief Creates instances of submodules and reads input parameters.
-*/
-Sledgehamr::Sledgehamr () {
+ */
+Sledgehamr::Sledgehamr() {
     amrex::Print() << "\nStarting sledgehamr..." << std::endl;
 
     ParseInput();
@@ -21,21 +21,21 @@ Sledgehamr::Sledgehamr () {
     time_stepper = std::make_unique<TimeStepper>(this);
     io_module = std::make_unique<IOModule>(this);
 
-    grid_new.resize(max_level+1);
-    grid_old.resize(max_level+1);
+    grid_new.resize(max_level + 1);
+    grid_old.resize(max_level + 1);
 
-    for (int lev=0; lev<=max_level; ++lev) {
-        dimN.push_back( coarse_level_grid_size * pow(2,lev) );
-        dx.push_back( L/(double)dimN[lev] );
-        dt.push_back( dx[lev] * cfl );
+    for (int lev = 0; lev <= max_level; ++lev) {
+        dimN.push_back(coarse_level_grid_size * pow(2, lev));
+        dx.push_back(L / (double)dimN[lev]);
+        dt.push_back(dx[lev] * cfl);
     }
 
     DoPrerunChecks();
 }
 
-/** @brief Initalizes data from scratch or from checkpoint file. Sets up the 
+/** @brief Initalizes data from scratch or from checkpoint file. Sets up the
  *         remaining modules and updates them.
-*/
+ */
 void Sledgehamr::InitSledgehamr() {
     if (with_gravitational_waves)
         gravitational_waves = std::make_unique<GravitationalWaves>(this);
@@ -62,7 +62,7 @@ void Sledgehamr::InitSledgehamr() {
     if (restart_sim) {
         io_module->RestartSim();
     } else {
-        InitFromScratch( t_start );
+        InitFromScratch(t_start);
     }
 
     if (increase_coarse_level_resolution)
@@ -77,9 +77,10 @@ void Sledgehamr::InitSledgehamr() {
 }
 
 /** @brief Starts the evolution
-*/
+ */
 void Sledgehamr::Evolve() {
-    if (no_simulation) return;
+    if (no_simulation)
+        return;
 
     amrex::Print() << "Starting evolution!" << std::endl;
 
@@ -94,7 +95,8 @@ void Sledgehamr::Evolve() {
 
         // Write any output if requested.
         amrex::Print() << "Full step took " << utils::DurationSeconds(timer)
-                       << "s.\n" << std::endl;
+                       << "s.\n"
+                       << std::endl;
         io_module->Write();
 
 #ifdef AMREX_MEM_PROFILING
@@ -119,8 +121,8 @@ void Sledgehamr::Evolve() {
  * @param   dm      New amrex::DistributionMapping.
  */
 void Sledgehamr::MakeNewLevelFromScratch(int lev, amrex::Real time,
-                                         const amrex::BoxArray& ba,
-                                         const amrex::DistributionMapping& dm) {
+                                         const amrex::BoxArray &ba,
+                                         const amrex::DistributionMapping &dm) {
     const int ncomp = scalar_fields.size();
 
     // Define lowest level from scratch.
@@ -144,10 +146,10 @@ void Sledgehamr::MakeNewLevelFromScratch(int lev, amrex::Real time,
  * @param   dm      New amrex::DistributionMapping.
  */
 void Sledgehamr::MakeNewLevelFromCoarse(int lev, amrex::Real time,
-                                        const amrex::BoxArray& ba,
-                                        const amrex::DistributionMapping& dm) {
-    const int ncomp = grid_new[lev-1].nComp();
-    const int nghost = grid_new[lev-1].nGrow();
+                                        const amrex::BoxArray &ba,
+                                        const amrex::DistributionMapping &dm) {
+    const int ncomp = grid_new[lev - 1].nComp();
+    const int nghost = grid_new[lev - 1].nGrow();
 
     grid_new[lev].define(ba, dm, ncomp, nghost, time);
     grid_old[lev].define(ba, dm, ncomp, nghost);
@@ -168,8 +170,8 @@ void Sledgehamr::MakeNewLevelFromCoarse(int lev, amrex::Real time,
  * @param   dm      New amrex::DistributionMapping.
  */
 void Sledgehamr::RemakeLevel(int lev, amrex::Real time,
-                             const amrex::BoxArray& ba,
-                             const amrex::DistributionMapping& dm) {
+                             const amrex::BoxArray &ba,
+                             const amrex::DistributionMapping &dm) {
     const int ncomp = grid_new[lev].nComp();
     const int nghost = grid_new[lev].nGrow();
 
@@ -201,14 +203,16 @@ void Sledgehamr::ClearLevel(int lev) {
  * @param   ngrow       Grid growth factor.
  * @param   ntags_user  Counts number of user-defined tags.
  */
-void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
+void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray &tags, amrex::Real time,
                           int ngrow) {
     // Skip regrid right at the beginning of the sim. Allowed to be overridden
     // if no truncation errors are used.
-    if (time == t_start && shadow_hierarchy) return;
+    if (time == t_start && shadow_hierarchy)
+        return;
 
     // Also skip if level is not supposed to be created yet.
-    if (!DoCreateLevelIf(lev+1, time)) return;
+    if (!DoCreateLevelIf(lev + 1, time))
+        return;
 
     performance_monitor->Start(performance_monitor->idx_tagging, lev);
     utils::sctp timer = utils::StartTimer();
@@ -218,8 +222,8 @@ void Sledgehamr::ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real time,
     else
         DoErrorEstCpu(lev, tags, time);
 
-    amrex::Print() << "  Tagging took " << utils::DurationSeconds(timer)
-                   << "s." << std::endl;
+    amrex::Print() << "  Tagging took " << utils::DurationSeconds(timer) << "s."
+                   << std::endl;
     performance_monitor->Stop(performance_monitor->idx_tagging, lev);
 }
 
@@ -237,7 +241,7 @@ void Sledgehamr::CreateShadowLevel() {
     shadow_level_tmp.define(ba, dm, ncomp, nghost, time);
 
     shadow_level_geom = geom[0];
-    shadow_level_geom.coarsen(amrex::IntVect(2,2,2));
+    shadow_level_geom.coarsen(amrex::IntVect(2, 2, 2));
 
     amrex::average_down(grid_old[0], shadow_level_tmp, geom[0],
                         shadow_level_geom, 0, ncomp, refRatio(0));
@@ -253,13 +257,14 @@ void Sledgehamr::DoPrerunChecks() {
         DetermineBoxLayout();
 }
 
-/** @brief Saves the coarse level box layout. 
+/** @brief Saves the coarse level box layout.
  */
 void Sledgehamr::DetermineBoxLayout() {
     amrex::Print() << "Get box layout for " << get_box_layout_nodes
                    << " nodes and exit ..." << std::endl;
 
-    amrex::Box bx(amrex::IntVect(0), amrex::IntVect(coarse_level_grid_size-1));
+    amrex::Box bx(amrex::IntVect(0),
+                  amrex::IntVect(coarse_level_grid_size - 1));
     amrex::BoxArray ba(bx);
     ChopGrids(0, ba, get_box_layout_nodes);
     io_module->WriteBoxArray(ba);
@@ -271,12 +276,12 @@ void Sledgehamr::DetermineBoxLayout() {
  * @param  tags    Container to save tags.
  * @param  time    Current time.
  */
-void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
+void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray &tags, double time) {
     // Current state.
-    const amrex::MultiFab& state = grid_new[lev];
+    const amrex::MultiFab &state = grid_new[lev];
 
     // State containing truncation errors if they have been calculated.
-    const LevelData& state_te = grid_old[lev];
+    const LevelData &state_te = grid_old[lev];
 
     // Initialize tag counters.
     long ntags_total = 0;
@@ -288,14 +293,14 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
     if (shadow_hierarchy)
         SetParamsTruncationModifier(params_mod, time, lev);
 
-    // Loop over boxes and cells.
-#pragma omp parallel reduction(+: ntags_total) reduction(+: ntags_user) \
-                     reduction(vec_long_plus : ntags_trunc)
+        // Loop over boxes and cells.
+#pragma omp parallel reduction(+ : ntags_total) reduction(+ : ntags_user)      \
+    reduction(vec_long_plus : ntags_trunc)
     for (amrex::MFIter mfi(state, true); mfi.isValid(); ++mfi) {
-        const amrex::Box& tilebox  = mfi.tilebox();
-        const amrex::Array4<double const>& state_fab    = state.array(mfi);
-        const amrex::Array4<double const>& state_fab_te = state_te.array(mfi);
-        const amrex::Array4<char>& tag_arr = tags.array(mfi);
+        const amrex::Box &tilebox = mfi.tilebox();
+        const amrex::Array4<double const> &state_fab = state.array(mfi);
+        const amrex::Array4<double const> &state_fab_te = state_te.array(mfi);
+        const amrex::Array4<char> &tag_arr = tags.array(mfi);
 
         // Tag with or without truncation errors.
         if (shadow_hierarchy && state_te.contains_truncation_errors) {
@@ -324,19 +329,19 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
 
     // Print statistics.
     long ncells = CountCells(lev);
-    double ftotal = (double)ntags_total/(double)ncells;
-    double fuser  = (double)ntags_user /(double)ncells;
-    amrex::Print()  << "  Tagged cells at level " << lev << ": " << ntags_total
-                    << " of " << ncells << " (" << ftotal*100. << "\%)"
-                    << std::endl;
+    double ftotal = (double)ntags_total / (double)ncells;
+    double fuser = (double)ntags_user / (double)ncells;
+    amrex::Print() << "  Tagged cells at level " << lev << ": " << ntags_total
+                   << " of " << ncells << " (" << ftotal * 100. << "\%)"
+                   << std::endl;
 
     if (shadow_hierarchy) {
         amrex::Print() << "    User-defined tags: " << ntags_user << std::endl;
 
-        for (int i=0; i<scalar_fields.size(); ++i) {
-            amrex::Print()  << "    Truncation error tags on "
-                            << scalar_fields[i]->name << ": " << ntags_trunc[i]
-                            << std::endl;
+        for (int i = 0; i < scalar_fields.size(); ++i) {
+            amrex::Print() << "    Truncation error tags on "
+                           << scalar_fields[i]->name << ": " << ntags_trunc[i]
+                           << std::endl;
         }
     }
 }
@@ -344,26 +349,26 @@ void Sledgehamr::DoErrorEstCpu(int lev, amrex::TagBoxArray& tags, double time) {
 /** @brief Same as Sledgehamr::DoErrorEstCpu but on GPUs. Will not keep track
  *         of tagging statistics.
  */
-void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
+void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray &tags, double time) {
     // Current state.
-    const amrex::MultiFab& state = grid_new[lev];
+    const amrex::MultiFab &state = grid_new[lev];
 
     // State containing truncation errors if they have been calculated.
-    const amrex::MultiFab& state_te = grid_old[lev];
+    const amrex::MultiFab &state_te = grid_old[lev];
 
     std::vector<double> params_tag, params_mod;
     SetParamsTagCellForRefinement(params_tag, time, lev);
     if (shadow_hierarchy)
         SetParamsTruncationModifier(params_mod, time, lev);
 
-    // Loop over boxes and cells.
+        // Loop over boxes and cells.
 #pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
     for (amrex::MFIter mfi(state, amrex::TilingIfNotGPU()); mfi.isValid();
          ++mfi) {
-        const amrex::Box& tilebox  = mfi.tilebox();
-        const amrex::Array4<double const>& state_fab    = state.array(mfi);
-        const amrex::Array4<double const>& state_fab_te = state_te.array(mfi);
-        const amrex::Array4<char>& tag_arr = tags.array(mfi);
+        const amrex::Box &tilebox = mfi.tilebox();
+        const amrex::Array4<double const> &state_fab = state.array(mfi);
+        const amrex::Array4<double const> &state_fab_te = state_te.array(mfi);
+        const amrex::Array4<char> &tag_arr = tags.array(mfi);
 
         // Tag with or without truncation errors.
         if (shadow_hierarchy) {
@@ -375,7 +380,7 @@ void Sledgehamr::DoErrorEstGpu(int lev, amrex::TagBoxArray& tags, double time) {
         }
     }
 
-    amrex::Print()  << "  Tagged cells at level " << lev << "." << std::endl;
+    amrex::Print() << "  Tagged cells at level " << lev << "." << std::endl;
 }
 
 /** @brief Parses and tests all relevant input parameters.
@@ -391,9 +396,9 @@ void Sledgehamr::ParseInput() {
         no_simulation = true;
 
     utils::ErrorState validity =
-            (utils::ErrorState)utils::IsPowerOfTwo(check_mpi_ranks);
-    std::string param_name  = "#MPI ranks";
-    std::string error_msg   = param_name + " needs to be a power of 2!";
+        (utils::ErrorState)utils::IsPowerOfTwo(check_mpi_ranks);
+    std::string param_name = "#MPI ranks";
+    std::string error_msg = param_name + " needs to be a power of 2!";
     std::string warning_msg = "";
     utils::AssessParam(validity, param_name, check_mpi_ranks, error_msg,
                        warning_msg, nerrors, do_thorough_checks);
@@ -402,12 +407,11 @@ void Sledgehamr::ParseInput() {
     pp.query(param_name.c_str(), restart_sim);
     utils::AssessParamOK(param_name, restart_sim, do_thorough_checks);
 
-    param_name  = "input.get_box_layout_nodes";
+    param_name = "input.get_box_layout_nodes";
     pp.query(param_name.c_str(), get_box_layout_nodes);
-    validity    = (utils::ErrorState)(
-            utils::IsPowerOfTwo(get_box_layout_nodes) ||
-            get_box_layout_nodes == 0);
-    error_msg   = param_name + " needs to be a power of 2!";
+    validity = (utils::ErrorState)(utils::IsPowerOfTwo(get_box_layout_nodes) ||
+                                   get_box_layout_nodes == 0);
+    error_msg = param_name + " needs to be a power of 2!";
     warning_msg = "";
     utils::AssessParam(validity, param_name, get_box_layout_nodes, error_msg,
                        warning_msg, nerrors, do_thorough_checks);
@@ -421,10 +425,10 @@ void Sledgehamr::ParseInput() {
             break;
         }
     }
-    error_msg   = param_name + " needs to be >= 0 and < amr.blocking_factor!";
+    error_msg = param_name + " needs to be >= 0 and < amr.blocking_factor!";
     warning_msg = "";
-    utils::AssessParam(validity, param_name, nghost, error_msg,
-                       warning_msg, nerrors, do_thorough_checks);
+    utils::AssessParam(validity, param_name, nghost, error_msg, warning_msg,
+                       nerrors, do_thorough_checks);
 
     param_name = "amr.tagging_on_gpu";
     pp.query(param_name.c_str(), tagging_on_gpu);
@@ -433,15 +437,15 @@ void Sledgehamr::ParseInput() {
     param_name = "amr.coarse_level_grid_size";
     pp.get(param_name.c_str(), coarse_level_grid_size);
     validity = (utils::ErrorState)utils::IsPowerOfTwo(coarse_level_grid_size);
-    error_msg   = param_name + " needs to be a power of 2!";
+    error_msg = param_name + " needs to be a power of 2!";
     warning_msg = "";
     utils::AssessParam(validity, param_name, coarse_level_grid_size, error_msg,
                        warning_msg, nerrors, do_thorough_checks);
 
     param_name = "amr.increase_coarse_level_resolution";
     pp.query(param_name.c_str(), increase_coarse_level_resolution);
-    validity = increase_coarse_level_resolution ?
-                utils::ErrorState::WARNING : utils::ErrorState::OK;
+    validity = increase_coarse_level_resolution ? utils::ErrorState::WARNING
+                                                : utils::ErrorState::OK;
     warning_msg = "Will increase coarse level resolution at the beginning.";
     utils::AssessParam(validity, param_name, increase_coarse_level_resolution,
                        "", warning_msg, nerrors, do_thorough_checks);
@@ -472,26 +476,26 @@ void Sledgehamr::ParseInput() {
  */
 void Sledgehamr::ParseInputScalars() {
     // Truncation error threshold.
-    te_crit.resize( scalar_fields.size() );
+    te_crit.resize(scalar_fields.size());
     double te_crit_default = DBL_MAX;
 
     amrex::ParmParse pp("");
-    std::string param_name  = "amr.te_crit";
+    std::string param_name = "amr.te_crit";
     pp.query(param_name.c_str(), te_crit_default);
     utils::ErrorState validity = (utils::ErrorState)(te_crit_default > 0);
-    std::string error_msg   = param_name + " needs to be > 0!";
+    std::string error_msg = param_name + " needs to be > 0!";
     std::string warning_msg = "";
     utils::AssessParam(validity, param_name, te_crit_default, error_msg,
                        warning_msg, nerrors, do_thorough_checks);
 
     shadow_hierarchy = false;
-    for (int n=0; n<scalar_fields.size(); ++n) {
+    for (int n = 0; n < scalar_fields.size(); ++n) {
         te_crit[n] = te_crit_default;
 
         param_name = "amr.te_crit_" + scalar_fields[n]->name;
         pp.query(param_name.c_str(), te_crit[n]);
         validity = (utils::ErrorState)(te_crit[n] > 0);
-        error_msg   = param_name + " needs to be > 0!";
+        error_msg = param_name + " needs to be > 0!";
         warning_msg = "";
         utils::AssessParam(validity, param_name, te_crit[n], error_msg,
                            warning_msg, nerrors, do_thorough_checks);
@@ -501,25 +505,25 @@ void Sledgehamr::ParseInputScalars() {
     }
 
     // Dissipation order and strength.
-    dissipation_strength.resize( scalar_fields.size() );
+    dissipation_strength.resize(scalar_fields.size());
     double dissipation_default = 0;
 
     param_name = "sim.dissipation_strength";
     pp.query(param_name.c_str(), dissipation_default);
     validity = (utils::ErrorState)(dissipation_default >= 0);
-    error_msg   = param_name + " needs to be >= 0!";
+    error_msg = param_name + " needs to be >= 0!";
     warning_msg = "";
     utils::AssessParam(validity, param_name, dissipation_default, error_msg,
                        warning_msg, nerrors, do_thorough_checks);
 
     with_dissipation = false;
-    for (int n=0; n<scalar_fields.size(); ++n) {
+    for (int n = 0; n < scalar_fields.size(); ++n) {
         dissipation_strength[n] = dissipation_default;
 
         param_name = "sim.dissipation_strength_" + scalar_fields[n]->name;
         pp.query(param_name.c_str(), dissipation_strength[n]);
         validity = (utils::ErrorState)(dissipation_strength[n] >= 0);
-        error_msg   = param_name + " needs to be >= 0!";
+        error_msg = param_name + " needs to be >= 0!";
         warning_msg = "";
         utils::AssessParam(validity, param_name, dissipation_strength[n],
                            error_msg, warning_msg, nerrors, do_thorough_checks);
@@ -535,10 +539,10 @@ void Sledgehamr::ParseInputScalars() {
         pp.query(param_name.c_str(), dissipation_order);
         validity = (utils::ErrorState)(dissipation_order == 2 ||
                                        dissipation_order == 3);
-        error_msg   = "Currently only " + param_name + " = 2 or 3 supported!";
+        error_msg = "Currently only " + param_name + " = 2 or 3 supported!";
         warning_msg = "";
-        utils::AssessParam(validity, param_name, dissipation_order,
-                           error_msg, warning_msg, nerrors, do_thorough_checks);
+        utils::AssessParam(validity, param_name, dissipation_order, error_msg,
+                           warning_msg, nerrors, do_thorough_checks);
     }
 }
 
@@ -550,30 +554,46 @@ void Sledgehamr::ReadSpectrumKs(bool reload) {
     if (!spectrum_ks.empty() && !reload)
         return;
 
-    if (reload)
+    if (reload) {
         spectrum_ks.clear();
+        index_to_k.clear();
+    }
 
     std::string filename = SLEDGEHAMR_DATA_PATH;
     filename += "spectra_ks.hdf5";
     std::string sdimN = std::to_string(dimN[0]);
 
-    std::string msg = "Sledgehamr::ReadSpectrumKs: Could not find precomputed "
-                      "spectrum binning! Either the path to sledgehamr was set "
-                      "wrongly during compilation (currently set to "
-                      SLEDGEHAMR_DATA_PATH ") or data for a "
-                    + std::to_string(coarse_level_grid_size) + "^3 grid has"
-                      "not yet been added to the file (github repo only comes "
-                      "with binnings for a grid up to 512^3). Spectrum binning "
-                      "for a larger grid can generated by running the Jupyter "
-                      "notebook sledgehamr/notebooks/AddSpectrumBins.ipynb.";
+    std::string msg =
+        "Sledgehamr::ReadSpectrumKs: Could not find precomputed "
+        "spectrum binning!\n Either the path to sledgehamr was set "
+        "wrongly during compilation\n (currently set to " SLEDGEHAMR_DATA_PATH
+        ")\n or data for a " +
+        std::to_string(coarse_level_grid_size) +
+        "^3 grid has"
+        "not yet been added to the file (github repo only comes "
+        "with binnings for a grid up to 512^3).\n Spectrum binning "
+        "for a larger grid can generated by running the Jupyter "
+        "notebook sledgehamr/notebooks/AddSpectrumBins.ipynb.";
 
     std::vector<int> nks(1);
-    if (!utils::hdf5::Read(filename, {sdimN+"_nks"}, &(nks[0]))) {
+    if (!utils::hdf5::Read(filename, {sdimN + "_nks"}, &(nks[0]))) {
         amrex::Abort(msg);
     }
 
     spectrum_ks.resize(nks[0]);
-    if (!utils::hdf5::Read(filename, {sdimN}, &(spectrum_ks[0]))) {
+    if (!utils::hdf5::Read(filename, {sdimN + "_bins"}, &(spectrum_ks[0]))) {
+        amrex::Abort(msg);
+    }
+
+    if (gravitational_waves == nullptr) {
+        return;
+    }
+
+    std::string projection =
+        std::to_string(gravitational_waves->GetProjectionType());
+    index_to_k.resize(dimN[0]);
+    if (!utils::hdf5::Read(filename, {sdimN + "_k" + projection},
+                           &(index_to_k[0]))) {
         amrex::Abort(msg);
     }
 }

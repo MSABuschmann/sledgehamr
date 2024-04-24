@@ -79,8 +79,7 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
             bx.coarsen(up);
         }
         const long long dsetsize = bx.numPts();
-        // std::unique_ptr<double[]> input_data(new double[dsetsize]);
-        amrex::Gpu::AsyncArray<double> input_data(dsetsize);
+        std::unique_ptr<double[]> input_data(new double[dsetsize]);
 
         for (int f = 0; f < ncomp; ++f) {
             std::string comp = sim->GetScalarFieldName(f);
@@ -88,20 +87,21 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
                 initial_state_file + "/" + comp + "_" + std::to_string(lr) +
                 ".hdf5";
             if (!utils::hdf5::Read(initial_state_file_component, {comp, "data"},
-                                   input_data.data())) {
+                                   input_data.get())) {
                 std::string msg =
                     "Sledgehamr::IOModule::FillLevelFromHdf5File: "
                     "Could not find initial state chunk " +
                     initial_state_file_component + "!";
                 amrex::Abort(msg);
             }
-
-            if (up == 1) {
-                FromArrayChunks(f, input_data);
-            } else {
-                sim->level_synchronizer->FromArrayChunksAndUpsample(
-                    lev, f, input_data.data(), up);
-            }
+            /*
+                        if (up == 1) {
+                            FromArrayChunks(f, input_data.get());
+                        } else {
+                            sim->level_synchronizer->FromArrayChunksAndUpsample(
+                                lev, f, input_data.get(), up);
+                        }
+                        */
         }
 
         return;
@@ -140,11 +140,10 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
         if (existing_chunk == "") {
             const int dimN = sim->GetDimN(lev);
             const long long dsetsize = dimN * dimN * dimN;
-            // std::unique_ptr<double[]> input_data(new double[dsetsize]);
-            amrex::Gpu::AsyncArray<double> input_data(dsetsize);
+            std::unique_ptr<double[]> input_data(new double[dsetsize]);
 
             if (!utils::hdf5::Read(initial_state_file_component,
-                                   {scalar_name, "data"}, input_data.data())) {
+                                   {scalar_name, "data"}, input_data.get())) {
                 // std::string msg =
                 //            "Sledgehamr::IOModule::FillLevelFromHdf5File: "
                 //            "Could not find initial state data for "
@@ -156,25 +155,27 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
                     << ". Will initialize to " << constant << "." << std::endl;
                 FromConst(f2, constant);
             } else {
-                FromArray(f2, input_data, dimN);
+                amrex::Gpu::AsyncArray<double> async_input_data(
+                    input_data.get(), dsetsize);
+                FromArray(f2, async_input_data, dimN);
             }
             continue;
         }
 
         amrex::Box bx = sim->GetLevelData(lev).boxArray()[lr];
         const long long dsetsize = bx.numPts();
-        // std::unique_ptr<double[]> input_data(new double[dsetsize]);
-        amrex::Gpu::AsyncArray<double> input_data(dsetsize);
+        std::unique_ptr<double[]> input_data(new double[dsetsize]);
 
         if (!utils::hdf5::Read(initial_state_file_component, {chunk1, chunk2},
-                               input_data.data())) {
+                               input_data.get())) {
             std::string msg = "Sledgehamr::IOModule::FillLevelFromHdf5File: "
                               "Could not find initial state chunk " +
                               chunk1 + "!";
             amrex::Abort(msg);
         }
-
-        FromArrayChunks(f2, input_data);
+        amrex::Gpu::AsyncArray<double> async_input_data(input_data.get(),
+                                                        dsetsize);
+        FromArrayChunks(f2, async_input_data);
     }
 }
 

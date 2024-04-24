@@ -1,28 +1,44 @@
 #ifndef SLEDGEHAMR_GRAVITATIONAL_WAVES_H_
 #define SLEDGEHAMR_GRAVITATIONAL_WAVES_H_
 
+#include <hdf5.h>
+
 #include "sledgehamr.h"
 
 namespace sledgehamr {
 
 struct GravitationalWavesSpectrumModifier;
+class Sledgehamr;
 
 /** @brief This will setup everything needed to simulate gravitational waves and
  *         compute the gravitational wave spectrum.
  */
 class GravitationalWaves {
   public:
-    GravitationalWaves(Sledgehamr* owner);
+    GravitationalWaves(Sledgehamr *owner);
 
-    void ComputeSpectrum(
-            hid_t file_id,
-            GravitationalWavesSpectrumModifier* modifier = nullptr);
+    void
+    ComputeSpectrum(hid_t file_id,
+                    GravitationalWavesSpectrumModifier *modifier = nullptr);
+
+    int GetProjectionType() const { return projection_type; }
 
     /** @brief enum with the tensor components.
      */
     enum Gw {
-        u_xx = 0, u_yy, u_zz, u_xy, u_xz, u_yz, du_xx, du_yy, du_zz, du_xy,
-        du_xz, du_yz, NGwScalars
+        u_xx = 0,
+        u_yy,
+        u_zz,
+        u_xy,
+        u_xz,
+        u_yz,
+        du_xx,
+        du_yy,
+        du_zz,
+        du_xy,
+        du_xz,
+        du_yz,
+        NGwScalars
     };
 
   private:
@@ -32,7 +48,7 @@ class GravitationalWaves {
 
     /** @brief Pointer to the simulation.
      */
-    Sledgehamr* sim;
+    Sledgehamr *sim;
 
     /** @brief Offset corresponding the number of user-defined scalar fields.
      *         We need this as all gravitional wave fields are appended to the
@@ -66,9 +82,9 @@ struct GravitationalWavesSpectrumModifier {
         components[5] = GravitationalWaves::Gw::du_zz;
     };
 
-    virtual void FourierSpaceModifications(
-            amrex::MultiFab du_real[6], amrex::MultiFab du_imag[6],
-            const double dk, const int dimN) {};
+    virtual void FourierSpaceModifications(amrex::MultiFab du_real[6],
+                                           amrex::MultiFab du_imag[6],
+                                           const double dk, const int dimN){};
 };
 
 }; // namespace sledgehamr

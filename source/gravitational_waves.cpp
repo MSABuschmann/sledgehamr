@@ -47,6 +47,7 @@ GravitationalWaves::GravitationalWaves(Sledgehamr *owner) {
  */
 void GravitationalWaves::ComputeSpectrum(
     hid_t file_id, GravitationalWavesSpectrumModifier *modifier) {
+    sim->ReadSpectrumKs();
 
     if (modifier == nullptr) {
         modifier = default_modifier.get();
@@ -180,16 +181,19 @@ void GravitationalWaves::ComputeSpectrum(
  * @return k-value.
  */
 inline double GravitationalWaves::IndexToK(int a, int N) {
-    double n_tilde = a - N <= -N / 2 - 1 ? a : a - N;
-    double two_pi_n_tilde = 2. * M_PI / static_cast<double>(N) * n_tilde;
+    return sim->index_to_k[a];
+    /*
+        double n_tilde = a - N <= -N / 2 - 1 ? a : a - N;
+        double two_pi_n_tilde = 2. * M_PI / static_cast<double>(N) * n_tilde;
 
-    if (projection_type == 1) {
-        return sin(two_pi_n_tilde);
-    } else if (projection_type == 2) {
-        return (8. * sin(two_pi_n_tilde) - sin(2. * two_pi_n_tilde)) / 6.;
-    }
+        if (projection_type == 1) {
+            return sin(two_pi_n_tilde);
+        } else if (projection_type == 2) {
+            return (8. * sin(two_pi_n_tilde) - sin(2. * two_pi_n_tilde)) / 6.;
+        }
 
-    return 0.;
+        return 0.;
+    */
 }
 
 /** @brief Projects all indicies.
