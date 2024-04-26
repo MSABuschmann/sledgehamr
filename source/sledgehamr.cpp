@@ -592,6 +592,7 @@ void Sledgehamr::ReadSpectrumKs(bool reload) {
     std::string projection =
         std::to_string(gravitational_waves->GetProjectionType());
     index_to_k.resize(dimN[0]);
+    amrex::Print() << "Load gw spectra pre-computed data." << std::endl;
     if (!utils::hdf5::Read(filename, {sdimN + "_k" + projection},
                            &(index_to_k[0]))) {
         amrex::Abort(msg);

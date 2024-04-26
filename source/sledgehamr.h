@@ -420,7 +420,7 @@ class Sledgehamr : public amrex::AmrCore {
     /** @brief Pre-computed conversion of index to k for gravitational wave
      * spectrum calculation.
      */
-    std::vector<int> index_to_k;
+    std::vector<double> index_to_k;
 
     /** @brief  Vector of respective dissipation strenths.
      */
