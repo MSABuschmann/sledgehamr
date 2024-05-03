@@ -11,7 +11,7 @@ namespace sledgehamr {
  *         integrator.
  * @param   owner   Pointer to the simulation.
  */
-TimeStepper::TimeStepper(Sledgehamr* owner) : sim(owner) {
+TimeStepper::TimeStepper(Sledgehamr *owner) : sim(owner) {
     local_regrid = std::make_unique<LocalRegrid>(sim);
     scheduler = std::make_unique<RegridScheduler>();
     ParseParams();
@@ -28,36 +28,35 @@ void TimeStepper::SetIntegrator() {
     pp_inte.get("type", inte_type);
     IntegratorType integrator_type = static_cast<IntegratorType>(inte_type);
 
-    amrex::Print() << "Integrator type: "
-                   << Integrator::Name(integrator_type)
+    amrex::Print() << "Integrator type: " << Integrator::Name(integrator_type)
                    << std::endl;
 
     switch (inte_type) {
-        case AmrexRkButcherTableau:
-            //[[fallthrough]];
-        case AmrexForwardEuler:
-            //[[fallthough]];
-        case AmrexTrapezoid:
-            //[[fallthrough]];
-        case AmrexSsprk3:
-            //[[fallthrough]];
-        case AmrexRk4:
-            integrator = std::make_unique<IntegratorAMReX>(sim);
-            break;
-        case Lsssprk3:
-            integrator = std::make_unique<IntegratorLsssprk3>(sim);
-            break;
-        case RknButcherTableau:
-            //[[fallthrough]];
-        case Rkn4:
-            //[[fallthrough]];
-        case Rkn5:
-            integrator = std::make_unique<IntegratorRkn>(sim, integrator_type);
-            break;
-        default:
-            amrex::Abort("#error: Unknown integration type: "
-                        + std::to_string(inte_type));
-            break;
+    case AmrexRkButcherTableau:
+        //[[fallthrough]];
+    case AmrexForwardEuler:
+        //[[fallthough]];
+    case AmrexTrapezoid:
+        //[[fallthrough]];
+    case AmrexSsprk3:
+        //[[fallthrough]];
+    case AmrexRk4:
+        integrator = std::make_unique<IntegratorAMReX>(sim);
+        break;
+    case Lsssprk3:
+        integrator = std::make_unique<IntegratorLsssprk3>(sim);
+        break;
+    case RknButcherTableau:
+        //[[fallthrough]];
+    case Rkn4:
+        //[[fallthrough]];
+    case Rkn5:
+        integrator = std::make_unique<IntegratorRkn>(sim, integrator_type);
+        break;
+    default:
+        amrex::Abort("#error: Unknown integration type: " +
+                     std::to_string(inte_type));
+        break;
     }
 }
 
@@ -71,9 +70,9 @@ void TimeStepper::ParseParams() {
     pp_amr.query("regrid_dt", reg_dt);
     pp_amr.query("semistatic_sim", semistatic_sim);
 
-    for (int lev=0; lev<=sim->max_level; ++lev) {
-        regrid_dt.push_back( reg_dt / pow(2, lev) );
-        last_regrid_time.push_back( sim->t_start );
+    for (int lev = 0; lev <= sim->max_level; ++lev) {
+        regrid_dt.push_back(reg_dt / pow(2, lev));
+        last_regrid_time.push_back(sim->t_start);
     }
 
     amrex::ParmParse pp_out("output");
@@ -102,7 +101,7 @@ void TimeStepper::Advance(int lev) {
     if (lev == 0 && !sim->shadow_level.isDefined())
         sim->BeforeTimestep(sim->grid_new[lev].t);
 
-    if (sim->grid_new[0].t  == sim->t_start && output_of_initial_state)
+    if (sim->grid_new[0].t == sim->t_start && output_of_initial_state)
         sim->io_module->Write(true);
 
     // Advance this level.
@@ -113,8 +112,8 @@ void TimeStepper::Advance(int lev) {
 
     // Advance any finer levels twice.
     if (lev != sim->finest_level) {
-        Advance(lev+1);
-        Advance(lev+1);
+        Advance(lev + 1);
+        Advance(lev + 1);
     }
 
     // Synchronize this level with finer/coarser levels.
@@ -139,7 +138,7 @@ void TimeStepper::SynchronizeLevels(int lev) {
     // compute truncation error erstimate on top of averaging down. Value of
     // 'index' will be -1 of no regrid has been scheduled.
     bool need_truncation_errors =
-            scheduler->NeedTruncationError(lev, sim->grid_new[lev].t);
+        scheduler->NeedTruncationError(lev, sim->grid_new[lev].t);
 
     if (lev < sim->finest_level) {
         if (sim->shadow_hierarchy && need_truncation_errors) {
@@ -151,7 +150,7 @@ void TimeStepper::SynchronizeLevels(int lev) {
         }
     }
 
-    if (lev >= 1-sim->shadow_hierarchy && need_truncation_errors) {
+    if (lev >= 1 - sim->shadow_hierarchy && need_truncation_errors) {
         // Compute truncation errors for level lev and average down between lev
         // and lev-1.
         sim->level_synchronizer->ComputeTruncationErrors(lev);
@@ -163,7 +162,7 @@ void TimeStepper::SynchronizeLevels(int lev) {
  *         t -> t + dt operations.
  */
 void TimeStepper::SynchronizeTimes() {
-    for (int lev=1; lev <= sim->finest_level; ++lev)
+    for (int lev = 1; lev <= sim->finest_level; ++lev)
         sim->grid_new[lev].t = sim->grid_new[0].t;
 }
 
@@ -174,27 +173,26 @@ void TimeStepper::PreAdvanceMessage(int lev) {
     std::string level_message = LevelMessage(lev, sim->grid_new[lev].istep);
 
     long ncells = sim->CountCells(lev);
-    double coverage_fraction = (double)ncells / pow(sim->dimN[lev],3)*100;
+    double coverage_fraction = (double)ncells / pow(sim->dimN[lev], 3) * 100;
     int nba = sim->grid_new[lev].boxArray().size();
 
     amrex::Print() << std::left << std::setw(50) << level_message
                    << "Advancing " << ncells << " cells in " << nba
-                   << " boxes ... " << "(" << coverage_fraction
-                   << "\% coverage)" << std::endl;
+                   << " boxes ... "
+                   << "(" << coverage_fraction << "\% coverage)" << std::endl;
 }
 
 /** @brief Prints message right after a level has been advanced.
  * @param   lev Level that has be advanced.
  */
 void TimeStepper::PostAdvanceMessage(int lev, double duration) {
-    std::string level_message = LevelMessage(lev, sim->grid_new[lev].istep-1);
+    std::string level_message = LevelMessage(lev, sim->grid_new[lev].istep - 1);
 
     amrex::Print() << std::left << std::setw(50) << level_message
                    << "Advanced to t=" << sim->grid_new[lev].t << " by "
                    << "dt=" << sim->dt[lev] << " in " << duration << "s."
                    << " (" << amrex::ParallelDescriptor::second()
-                   << "s since start)"
-                   << std::endl;
+                   << "s since start)" << std::endl;
 }
 
 /** @brief Returns a display message containing a level and its step number.
@@ -205,10 +203,10 @@ void TimeStepper::PostAdvanceMessage(int lev, double duration) {
 std::string TimeStepper::LevelMessage(int lev, int istep) {
     std::string level_name = sledgehamr::utils::LevelName(lev);
     std::string out = "  ";
-    for (int i=1;i<=lev;++i)
+    for (int i = 1; i <= lev; ++i)
         out += "| ";
-    out += "Level " + std::to_string(lev) + " (" + level_name + ") step #"
-          + std::to_string(istep);
+    out += "Level " + std::to_string(lev) + " (" + level_name + ") step #" +
+           std::to_string(istep);
     return out;
 }
 
@@ -217,43 +215,59 @@ std::string TimeStepper::LevelMessage(int lev, int istep) {
  * @param   lev Level at which to tag cells.
  */
 void TimeStepper::ScheduleRegrid(int lev) {
-    double time  = sim->grid_new[lev].t;
-    int    istep = sim->grid_new[lev].istep;
+    double time = sim->grid_new[lev].t;
+    int istep = sim->grid_new[lev].istep;
 
     // Check if a future regrid has already been scheduled by a coarser level.
-    if (scheduler->DoRegrid(lev, time + sim->dt[lev]))
+    if (scheduler->DoRegrid(lev, time + sim->dt[lev])) {
         return;
+    }
+
+    // Sanity check we can actually compute a shadow level. Prevents a regrid on
+    // level 1 right after a restart.
+    if (sim->grid_old[lev].t == time) {
+        return;
+    }
 
     // Regrid changes level "lev+1" so we don't regrid on max_level.
-    if (lev >= sim->max_level) return;
+    if (lev >= sim->max_level) {
+        return;
+    }
 
     // Do not regrid at the end of even time steps as we cannot compute
     // truncation errors otherwise. Not relevant for coarse level as we
     // can create shadow level whenever.
-    if (istep%2 == 0 && lev > 0) return;
+    if (istep % 2 == 0 && lev > 0) {
+        return;
+    }
 
     // Again, since we can create shadow levels whenever we could regrid
     // earlier for coarse level.
-    double time_next_opportunity = lev > 0 ? time + 3.*sim->dt[lev] :
-                                             time + 2.*sim->dt[lev];
+    double time_next_opportunity =
+        lev > 0 ? time + 3. * sim->dt[lev] : time + 2. * sim->dt[lev];
 
     // Check user requirement if we want to invoke a new level. Pass it the
     // level to be created and the time by which the next regrid could be
     // performed if we were to skip this regrid.
-    if (!sim->DoCreateLevelIf(lev+1, time_next_opportunity)) return;
+    if (!sim->DoCreateLevelIf(lev + 1, time_next_opportunity)) {
+        return;
+    }
 
     // Check if enough time since last regrid has passed. We add 3*dt[lev] since
     // we do not want to violate this criteria next time around in case we skip
     // this regrid. Only relevant if local regrid module has not requested an
     // early global regrid.
     if (time_next_opportunity <= last_regrid_time[lev] + regrid_dt[lev] &&
-        !local_regrid->do_global_regrid[lev]) return;
+        !local_regrid->do_global_regrid[lev]) {
+        return;
+    }
 
     // This is to avoid regridding on coarse right after restarting from a
     // checkpoint. We do not have a valid grid_old yet to evolve the needed
     // shadow level.
-    if (lev == 0 && sim->grid_old[lev].t == -DBL_MAX)
+    if (lev == 0 && sim->grid_old[lev].t == -DBL_MAX) {
         return;
+    }
 
     // Passed all criteria, now schedule regrid. Make sure we schedule the
     // computation of truncation errors at this and all finer levels to be
@@ -264,8 +278,8 @@ void TimeStepper::ScheduleRegrid(int lev) {
     // Print message.
     std::string level_message = LevelMessage(lev, istep);
     amrex::Print() << std::left << std::setw(50) << level_message
-                   << "Regrid scheduled for after time step #"
-                   << istep << "." << std::endl;
+                   << "Regrid scheduled for after time step #" << istep << "."
+                   << std::endl;
 
     if (lev == 0) {
         std::string level_message = LevelMessage(-1, 0);
@@ -281,8 +295,8 @@ void TimeStepper::ScheduleRegrid(int lev) {
  * @param   lev Current level.
  */
 void TimeStepper::DoRegridIfScheduled(int lev) {
-    double time  = sim->grid_new[lev].t;
-    int    istep = sim->grid_new[lev].istep;
+    double time = sim->grid_new[lev].t;
+    int istep = sim->grid_new[lev].istep;
 
     if (!scheduler->DoRegrid(lev, time))
         return;
@@ -314,7 +328,7 @@ void TimeStepper::NoShadowRegrid(int lev) {
     // Check user requirement if we want to invoke a new level. Pass it the
     // level to be created and the time by which the next regrid could be
     // performed if we were to skip this regrid.
-    if (!sim->DoCreateLevelIf(lev+1, time + sim->dt[lev]))
+    if (!sim->DoCreateLevelIf(lev + 1, time + sim->dt[lev]))
         return;
 
     // Actually do regrid if we made it this far.
@@ -340,37 +354,38 @@ void TimeStepper::DoRegrid(int lev, double time) {
 
     // Try local regrid first.
     utils::sctp timer = utils::StartTimer();
-    sim->performance_monitor->Start(
-            sim->performance_monitor->idx_local_regrid, lev);
+    sim->performance_monitor->Start(sim->performance_monitor->idx_local_regrid,
+                                    lev);
     bool successfull = local_regrid->AttemptRegrid(lev);
 
-    sim->performance_monitor->Stop(
-            sim->performance_monitor->idx_local_regrid, lev);
+    sim->performance_monitor->Stop(sim->performance_monitor->idx_local_regrid,
+                                   lev);
     amrex::Print() << "Local regrid took " << utils::DurationSeconds(timer)
                    << "s." << std::endl;
 
     // Do global regrid if local regrid failed.
     if (!successfull) {
-        amrex::Print() << std::endl << "Perform global regrid at level "
-                       << lev+1 << " and higher." << std::endl;
+        amrex::Print() << std::endl
+                       << "Perform global regrid at level " << lev + 1
+                       << " and higher." << std::endl;
 
         timer = utils::StartTimer();
         sim->performance_monitor->Start(
-                sim->performance_monitor->idx_global_regrid, lev);
+            sim->performance_monitor->idx_global_regrid, lev);
 
         sim->regrid(lev, time);
 
         sim->performance_monitor->Stop(
-                sim->performance_monitor->idx_global_regrid, lev);
+            sim->performance_monitor->idx_global_regrid, lev);
 
         local_regrid->DidGlobalRegrid(lev);
 
-        amrex::Print() << "Global regrid took "
-                       << utils::DurationSeconds(timer) << "s." << std::endl;
+        amrex::Print() << "Global regrid took " << utils::DurationSeconds(timer)
+                       << "s." << std::endl;
     }
 
     // Update las regrid times for all levels that have been regridded.
-    for (int l=lev; l <= sim->finest_level; ++l) {
+    for (int l = lev; l <= sim->finest_level; ++l) {
         last_regrid_time[l] = time;
     }
 
