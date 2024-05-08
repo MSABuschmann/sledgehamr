@@ -1,12 +1,12 @@
 #include <filesystem>
 
-#include <AMReX_VisMF.H>
-#include <AMReX_PlotFileUtil.H>
-#include <AMReX_PlotFileDataImpl.H>
-#include <AMReX_PhysBCFunct.H>
+#include <AMReX_FileSystem.H>
 #include <AMReX_FillPatchUtil.H>
 #include <AMReX_MultiFabUtil.H>
-#include <AMReX_FileSystem.H>
+#include <AMReX_PhysBCFunct.H>
+#include <AMReX_PlotFileDataImpl.H>
+#include <AMReX_PlotFileUtil.H>
+#include <AMReX_VisMF.H>
 
 #include "checkpoint.h"
 #include "hdf5_utils.h"
@@ -19,7 +19,7 @@ void Checkpoint::Write() {
     const int nlevels = sim->finest_level + 1;
     const int noutput = sim->io_module->output.size();
 
-    for(int lev = 0; lev < nlevels; ++lev) {
+    for (int lev = 0; lev < nlevels; ++lev) {
         std::string level_dir = GetLevelDirName(lev);
         amrex::UtilCreateCleanDirectory(level_dir, true);
     }
@@ -30,10 +30,10 @@ void Checkpoint::Write() {
         amrex::VisMF::IO_Buffer io_buffer(amrex::VisMF::IO_Buffer_Size);
         std::ofstream HeaderFile;
         HeaderFile.rdbuf()->pubsetbuf(io_buffer.dataPtr(), io_buffer.size());
-        HeaderFile.open(HeaderFileName.c_str(), std::ofstream::out   |
-                                           std::ofstream::trunc |
-                                           std::ofstream::binary);
-        if( !HeaderFile.good()) {
+        HeaderFile.open(HeaderFileName.c_str(), std::ofstream::out |
+                                                    std::ofstream::trunc |
+                                                    std::ofstream::binary);
+        if (!HeaderFile.good()) {
             amrex::FileOpenFailed(HeaderFileName);
         }
 
@@ -44,19 +44,18 @@ void Checkpoint::Write() {
 
         std::string filename = GetHeaderName();
         hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
-                              H5P_DEFAULT);
+                                  H5P_DEFAULT);
 
         const int nparams = 8;
         double header_data[nparams] = {
-                sim->grid_new[0].t,
-                (double)amrex::ParallelDescriptor::NProcs(),
-                (double)sim->finest_level,
-                (double)sim->dimN[0],
-                (double)sim->nghost,
-                (double)sim->scalar_fields.size(),
-                (double)noutput,
-                (double)sim->io_module->idx_checkpoints
-        };
+            sim->grid_new[0].t,
+            (double)amrex::ParallelDescriptor::NProcs(),
+            (double)sim->finest_level,
+            (double)sim->dimN[0],
+            (double)sim->nghost,
+            (double)sim->scalar_fields.size(),
+            (double)noutput,
+            (double)sim->io_module->idx_checkpoints};
         utils::hdf5::Write(file_id, "Header", header_data, nparams);
 
         // levels: blocking_factor, istep
@@ -74,7 +73,7 @@ void Checkpoint::Write() {
         for (int i = 0; i < noutput; ++i) {
             next_id[i] = sim->io_module->output[i].GetNextId();
             last_time_written[i] =
-                    sim->io_module->output[i].GetLastTimeWritten();
+                sim->io_module->output[i].GetLastTimeWritten();
         }
 
         // correct checkpoint itself since it hasn't been updated yet.
@@ -83,7 +82,7 @@ void Checkpoint::Write() {
 
         utils::hdf5::Write(file_id, "next_id", &(next_id[0]), noutput);
         utils::hdf5::Write(file_id, "last_time_written",
-                              &(last_time_written[0]), noutput);
+                           &(last_time_written[0]), noutput);
 
         H5Fclose(file_id);
     }
@@ -91,9 +90,8 @@ void Checkpoint::Write() {
     // Write the MultiFab data.
     for (int lev = 0; lev < nlevels; ++lev) {
         amrex::VisMF::Write(
-                sim->grid_new[lev],
-                amrex::MultiFabFileFullPrefix(
-                        lev, folder, "Level_", "Cell"));
+            sim->grid_new[lev],
+            amrex::MultiFabFileFullPrefix(lev, folder, "Level_", "Cell"));
     }
 
     amrex::ParallelDescriptor::Barrier();
@@ -112,12 +110,13 @@ bool Checkpoint::ReadHeader() {
 
     time = header[0];
     MPIranks = static_cast<int>(header[1]);
-    finest_level = static_cast<int>(header[2]);
+    finest_level = std::min(static_cast<int>(header[2]), sim->max_level);
     dim0 = static_cast<int>(header[3]);
     nghost = static_cast<int>(header[4]);
     nscalars = static_cast<int>(header[5]);
     noutput = static_cast<int>(header[6]);
     npredefoutput = static_cast<int>(header[7]);
+
     return true;
 }
 
@@ -128,13 +127,13 @@ void Checkpoint::Read() {
         amrex::Print() << "Restarting from checkpoint: " << folder << std::endl;
 
     if (!ReadHeader()) {
-        const char* msg = "Sledgehamr::Checkpoint::Read: "
+        const char *msg = "Sledgehamr::Checkpoint::Read: "
                           "Could not find checkpoint header!";
         amrex::Abort(msg);
     }
 
     if (nscalars != sim->scalar_fields.size()) {
-        const char* msg = "Sledgehamr::Checkpoint::Read: "
+        const char *msg = "Sledgehamr::Checkpoint::Read: "
                           "Number of scalar fields has changed!";
         amrex::Abort(msg);
     }
@@ -152,7 +151,7 @@ void Checkpoint::Read() {
         ba.readFrom(is);
         GotoNextLine(is);
 
-        amrex::DistributionMapping dm {ba, amrex::ParallelDescriptor::NProcs()};
+        amrex::DistributionMapping dm{ba, amrex::ParallelDescriptor::NProcs()};
         sim->SetBoxArray(lev, ba);
         sim->SetDistributionMap(lev, dm);
 
@@ -166,8 +165,8 @@ void Checkpoint::Read() {
 
     for (int lev = 0; lev <= finest_level; ++lev) {
         amrex::VisMF::Read(
-                sim->grid_new[lev],
-                amrex::MultiFabFileFullPrefix(lev, folder, "Level_", "Cell"));
+            sim->grid_new[lev],
+            amrex::MultiFabFileFullPrefix(lev, folder, "Level_", "Cell"));
     }
 
     if (nghost != sim->nghost) {
@@ -190,8 +189,8 @@ void Checkpoint::Read() {
 /** @brief Moves to next line in file stream.
  * @param   is  filestream.
  */
-void Checkpoint::GotoNextLine(std::istream& is) {
-    constexpr std::streamsize bl_ignore_max {100000};
+void Checkpoint::GotoNextLine(std::istream &is) {
+    constexpr std::streamsize bl_ignore_max{100000};
     is.ignore(bl_ignore_max, '\n');
 }
 
@@ -203,14 +202,14 @@ void Checkpoint::UpdateOutputModules() {
         return;
 
     if (!ReadHeader()) {
-        const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
+        const char *msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
                           "Could not find checkpoint header!";
         amrex::Abort(msg);
     }
 
-    if (noutput       != sim->io_module->output.size() ||
+    if (noutput != sim->io_module->output.size() ||
         npredefoutput != sim->io_module->idx_checkpoints) {
-        const char* msg = "Sledgehamr::Checkpoint::Read: "
+        const char *msg = "Sledgehamr::Checkpoint::Read: "
                           "Number of output types changed!";
         amrex::Abort(msg);
     }
@@ -219,14 +218,14 @@ void Checkpoint::UpdateOutputModules() {
     std::vector<int> next_id(noutput);
     std::vector<double> last_time_written(noutput);
     if (!utils::hdf5::Read(filename, {"next_id"}, &(next_id[0]))) {
-        const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
+        const char *msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
                           "Could not find next_id!";
         amrex::Abort(msg);
     }
 
     if (!utils::hdf5::Read(filename, {"last_time_written"},
-                                &(last_time_written[0]))) {
-        const char* msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
+                           &(last_time_written[0]))) {
+        const char *msg = "Sledgehamr::Checkpoint::UpdateOutputModules: "
                           "Could not find last_time_written!";
         amrex::Abort(msg);
     }
@@ -241,34 +240,33 @@ void Checkpoint::UpdateOutputModules() {
  */
 void Checkpoint::UpdateLevels() {
     std::string filename = GetHeaderName();
-    std::vector<int> blocking_factor(sim->finest_level+1);
-    std::vector<int> istep(sim->finest_level+1);
+    std::vector<int> blocking_factor(sim->finest_level + 1);
+    std::vector<int> istep(sim->finest_level + 1);
     if (!utils::hdf5::Read(filename, {"isteps"}, &(istep[0]))) {
-        const char* msg = "Sledgehamr::Checkpoint::UpdateLevels: "
+        const char *msg = "Sledgehamr::Checkpoint::UpdateLevels: "
                           "Could not find isteps!";
         amrex::Abort(msg);
     }
 
     if (!utils::hdf5::Read(filename, {"blocking_factors"},
-                            &(blocking_factor[0]))) {
-        const char* msg = "Sledgehamr::Checkpoint::UpdateLevels: "
+                           &(blocking_factor[0]))) {
+        const char *msg = "Sledgehamr::Checkpoint::UpdateLevels: "
                           "Could not find blocking_factors!";
         amrex::Abort(msg);
     }
 
     // Check if blocking factor changed and react accordingly.
-    for(int lev = 0; lev <= sim->finest_level; ++lev) {
+    for (int lev = 0; lev <= sim->finest_level; ++lev) {
         if (blocking_factor[lev] != sim->blocking_factor[lev][0]) {
             amrex::Print() << "#warning: Blocking factor on level " << lev
-                           << "changed from " << blocking_factor[lev]
-                           << " to " << sim->blocking_factor[lev][0]
-                           << std::endl;
+                           << "changed from " << blocking_factor[lev] << " to "
+                           << sim->blocking_factor[lev][0] << std::endl;
         }
 
         // If blocking factor is now larger we cannot do a local regrid. Need
         // to do a global regrid first.
         if (blocking_factor[lev] < sim->blocking_factor[lev][0]) {
-            for(int l = 0; l <= lev; ++l) {
+            for (int l = 0; l <= lev; ++l) {
                 sim->time_stepper->local_regrid->do_global_regrid[l] = true;
             }
         }
