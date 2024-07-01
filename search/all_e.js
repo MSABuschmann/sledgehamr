@@ -1,8 +1,8 @@
 var searchData=
 [
   ['n_5ferror_5fbuf_431',['n_error_buf',['../classsledgehamr_1_1LocalRegrid.html#a8403a32f1028bda506f2e2f4ea7e7eef',1,'sledgehamr::LocalRegrid']]],
-  ['name_432',['Name',['../classsledgehamr_1_1Integrator.html#ae61eb914c8d9303f5731e2f019ac24c0',1,'sledgehamr::Integrator']]],
-  ['name_433',['name',['../classsledgehamr_1_1LevelWriter.html#a2274635898326994939f191c9b2585fc',1,'sledgehamr::LevelWriter::name()'],['../classsledgehamr_1_1OutputModule.html#a13d3dd2fe747f9916ca4e06dc1933e8c',1,'sledgehamr::OutputModule::name()'],['../classsledgehamr_1_1ScalarField.html#aced45432f3745af8676420de16d85858',1,'sledgehamr::ScalarField::name()'],['../classsledgehamr_1_1Timer.html#a6c3796f78cc02e99aa0d9d5779818536',1,'sledgehamr::Timer::name()']]],
+  ['name_432',['name',['../classsledgehamr_1_1LevelWriter.html#a2274635898326994939f191c9b2585fc',1,'sledgehamr::LevelWriter::name()'],['../classsledgehamr_1_1OutputModule.html#a13d3dd2fe747f9916ca4e06dc1933e8c',1,'sledgehamr::OutputModule::name()'],['../classsledgehamr_1_1ScalarField.html#aced45432f3745af8676420de16d85858',1,'sledgehamr::ScalarField::name()'],['../classsledgehamr_1_1Timer.html#a6c3796f78cc02e99aa0d9d5779818536',1,'sledgehamr::Timer::name()']]],
+  ['name_433',['Name',['../classsledgehamr_1_1Integrator.html#ae61eb914c8d9303f5731e2f019ac24c0',1,'sledgehamr::Integrator']]],
   ['needtruncationerror_434',['NeedTruncationError',['../classsledgehamr_1_1RegridScheduler.html#a0a49110b83beb48474b92d596d7bd2d5',1,'sledgehamr::RegridScheduler']]],
   ['nerrors_435',['nerrors',['../classsledgehamr_1_1Sledgehamr.html#abec8e744b285c224cc3cba2f23dda06d',1,'sledgehamr::Sledgehamr']]],
   ['next_5fbubble_436',['next_bubble',['../classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#ae8da22a14c5f888d836c2c505e30a8f7',1,'FirstOrderPhaseTransition::FirstOrderPhaseTransition']]],
@@ -22,8 +22,8 @@ var searchData=
   ['npredefoutput_450',['npredefoutput',['../classsledgehamr_1_1Checkpoint.html#a03296a9b0f707ab9929958a95ae61cd2',1,'sledgehamr::Checkpoint']]],
   ['nps_451',['nps',['../classsledgehamr_1_1UniqueLayout.html#a76a21ebda59cc7b033a01d62b994da2d',1,'sledgehamr::UniqueLayout']]],
   ['nregrids_452',['nregrids',['../classsledgehamr_1_1LocalRegrid.html#a042da77091f22870797a9d406fa12506',1,'sledgehamr::LocalRegrid']]],
-  ['nscalars_453',['NScalars',['../classsledgehamr_1_1GravitationalWaves.html#af4eb42f73052f89295e321f0951df96c',1,'sledgehamr::GravitationalWaves']]],
-  ['nscalars_454',['nscalars',['../classsledgehamr_1_1Checkpoint.html#af3acc5fe1b9f0cb602de692afbbd2288',1,'sledgehamr::Checkpoint']]],
+  ['nscalars_453',['nscalars',['../classsledgehamr_1_1Checkpoint.html#af3acc5fe1b9f0cb602de692afbbd2288',1,'sledgehamr::Checkpoint']]],
+  ['nscalars_454',['NScalars',['../classsledgehamr_1_1GravitationalWaves.html#af4eb42f73052f89295e321f0951df96c',1,'sledgehamr::GravitationalWaves']]],
   ['nullfill_455',['NullFill',['../structsledgehamr_1_1NullFill.html',1,'sledgehamr']]],
   ['number_5fnodes_456',['number_nodes',['../classsledgehamr_1_1IntegratorRkn.html#a53a840937c0e5c35ce0d10a80a34d36c',1,'sledgehamr::IntegratorRkn']]]
 ];

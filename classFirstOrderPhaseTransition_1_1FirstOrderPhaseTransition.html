@@ -98,6 +98,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad04f711552c9b02d0cc06b9ccfaa130f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#ad04f711552c9b02d0cc06b9ccfaa130f">SetParamsRhs</a> (std::vector&lt; double &gt; &amp;params, const double time, const int lev) override</td></tr>
 <tr class="memdesc:ad04f711552c9b02d0cc06b9ccfaa130f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to be overriden by the project class to set user-defined parameters that will be passed to the Rhs computation.  <a href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#ad04f711552c9b02d0cc06b9ccfaa130f">More...</a><br /></td></tr>
 <tr class="separator:ad04f711552c9b02d0cc06b9ccfaa130f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae083bad8ea5c4e27c2d039a5c60ec219"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#ae083bad8ea5c4e27c2d039a5c60ec219">SetParamsGravitationalWaveRhs</a> (std::vector&lt; double &gt; &amp;params, const double time, const int lev) override</td></tr>
+<tr class="memdesc:ae083bad8ea5c4e27c2d039a5c60ec219"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to be overriden by the project class to set user-defined parameters that will be passed to the Rhs computation of gravitational waves.  <a href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#ae083bad8ea5c4e27c2d039a5c60ec219">More...</a><br /></td></tr>
+<tr class="separator:ae083bad8ea5c4e27c2d039a5c60ec219"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf15bc8b9d3b9f4dc0ab60fc21275256"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#abf15bc8b9d3b9f4dc0ab60fc21275256">SetParamsTruncationModifier</a> (std::vector&lt; double &gt; &amp;params, const double time, const int lev) override</td></tr>
 <tr class="memdesc:abf15bc8b9d3b9f4dc0ab60fc21275256"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to be overriden by the project class to set user-defined parameters that will be available when modifying the truncation error threshold.  <a href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#abf15bc8b9d3b9f4dc0ab60fc21275256">More...</a><br /></td></tr>
 <tr class="separator:abf15bc8b9d3b9f4dc0ab60fc21275256"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,6 +194,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a455d994003b8cb9fd4b5a53aca5142b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30114ba7175732c76f5d5e16a6822342"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a30114ba7175732c76f5d5e16a6822342">quartic</a></td></tr>
 <tr class="separator:a30114ba7175732c76f5d5e16a6822342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af770b64d60ced9e2f009c1f9c598c202"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#af770b64d60ced9e2f009c1f9c598c202">tc</a> = -1</td></tr>
+<tr class="separator:af770b64d60ced9e2f009c1f9c598c202"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cafd171300a9c9b130a6fba78bf934c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a5cafd171300a9c9b130a6fba78bf934c">t0</a> = -1</td></tr>
+<tr class="separator:a5cafd171300a9c9b130a6fba78bf934c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa73491fa2e7a5ace537ecfa7fba5abe8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classFirstOrderPhaseTransition_1_1Bubble.html">Bubble</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#aa73491fa2e7a5ace537ecfa7fba5abe8">bubbles</a></td></tr>
 <tr class="separator:aa73491fa2e7a5ace537ecfa7fba5abe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8da22a14c5f888d836c2c505e30a8f7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#ae8da22a14c5f888d836c2c505e30a8f7">next_bubble</a> = 0</td></tr>
@@ -267,9 +274,6 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a72dbd6348ab3dd777f80f005dada9d56 inherit pro_methods_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a72dbd6348ab3dd777f80f005dada9d56">StopRunning</a> (const double time)</td></tr>
 <tr class="memdesc:a72dbd6348ab3dd777f80f005dada9d56 inherit pro_methods_classsledgehamr_1_1Sledgehamr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stopping condition of the simulation. Can be overriden by the project class.  <a href="classsledgehamr_1_1Sledgehamr.html#a72dbd6348ab3dd777f80f005dada9d56">More...</a><br /></td></tr>
 <tr class="separator:a72dbd6348ab3dd777f80f005dada9d56 inherit pro_methods_classsledgehamr_1_1Sledgehamr"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac17889590166ddca3944bfd28234ee99 inherit pro_methods_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#ac17889590166ddca3944bfd28234ee99">SetParamsGravitationalWaveRhs</a> (std::vector&lt; double &gt; &amp;params, const double time, const int lev)</td></tr>
-<tr class="memdesc:ac17889590166ddca3944bfd28234ee99 inherit pro_methods_classsledgehamr_1_1Sledgehamr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to be overriden by the project class to set user-defined parameters that will be passed to the Rhs computation of gravitational waves.  <a href="classsledgehamr_1_1Sledgehamr.html#ac17889590166ddca3944bfd28234ee99">More...</a><br /></td></tr>
-<tr class="separator:ac17889590166ddca3944bfd28234ee99 inherit pro_methods_classsledgehamr_1_1Sledgehamr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad38a472702a9bb491988bdc7ead8f27b inherit pro_methods_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#ad38a472702a9bb491988bdc7ead8f27b">SetParamsTagCellForRefinement</a> (std::vector&lt; double &gt; &amp;params, const double time, const int lev)</td></tr>
 <tr class="memdesc:ad38a472702a9bb491988bdc7ead8f27b inherit pro_methods_classsledgehamr_1_1Sledgehamr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to be overriden by the project class to set user-defined parameters that will be passed to the tagging procedure.  <a href="classsledgehamr_1_1Sledgehamr.html#ad38a472702a9bb491988bdc7ead8f27b">More...</a><br /></td></tr>
 <tr class="separator:ad38a472702a9bb491988bdc7ead8f27b inherit pro_methods_classsledgehamr_1_1Sledgehamr"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -732,6 +736,60 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ae083bad8ea5c4e27c2d039a5c60ec219"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae083bad8ea5c4e27c2d039a5c60ec219">&#9670;&nbsp;</a></span>SetParamsGravitationalWaveRhs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FirstOrderPhaseTransition::FirstOrderPhaseTransition::SetParamsGravitationalWaveRhs </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>time</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>lev</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Function to be overriden by the project class to set user-defined parameters that will be passed to the Rhs computation of gravitational waves. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params</td><td>Parameters to be set. </td></tr>
+    <tr><td class="paramname">time</td><td>Current time. </td></tr>
+    <tr><td class="paramname">lev</td><td>Current level. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classsledgehamr_1_1Sledgehamr.html#ac17889590166ddca3944bfd28234ee99">sledgehamr::Sledgehamr</a>.</p>
+
+</div>
+</div>
 <a id="ad04f711552c9b02d0cc06b9ccfaa130f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad04f711552c9b02d0cc06b9ccfaa130f">&#9670;&nbsp;</a></span>SetParamsRhs()</h2>
 
@@ -1097,6 +1155,50 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::quartic</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5cafd171300a9c9b130a6fba78bf934c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cafd171300a9c9b130a6fba78bf934c">&#9670;&nbsp;</a></span>t0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::t0 = -1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af770b64d60ced9e2f009c1f9c598c202"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af770b64d60ced9e2f009c1f9c598c202">&#9670;&nbsp;</a></span>tc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::tc = -1</td>
         </tr>
       </table>
   </td>
