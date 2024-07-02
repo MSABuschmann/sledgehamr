@@ -18,7 +18,6 @@ m.s.a.buschmann@uva.nl
 ### Prerequisites
 * AMReX (```git clone https://github.com/AMReX-Codes/amrex```)
 * FFTW3
-* Boost
 
 ### Running the minimal examples
 The minimal examples can be run by following the instructions in the Jupyter notebooks ```notebooks/MinimalExample.ipynb``` and ```notebooks/NextToMinimalExample.ipynb```.
