@@ -40,7 +40,7 @@ VPATH_LOCATIONS   += $(AMREX_HOME)/Src/Extern/SWFFT
 LIBRARIES += -L$(FFTW_DIR) -lfftw3_mpi -lfftw3_omp -lfftw3
 
 # Boost
-LIBRARIES += -lboost_system -lboost_filesystem
+#LIBRARIES += -lboost_system -lboost_filesystem
 
 # HDF5
 ENABLE_HDF5 = yes
