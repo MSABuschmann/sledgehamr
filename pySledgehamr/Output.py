@@ -550,7 +550,10 @@ class Output:
             file = folder + str(i) + '/spectra.hdf5'
             if not path.exists( file ):
                 break
-            fin = h5py.File(file,'r')
+            try:
+                fin = h5py.File(file,'r')
+            except:
+                print("Warning could not open file", file)
             self._gravitational_wave_spectrum_headers.append(fin['Header'][:])
             i = i + 1
 
