@@ -179,6 +179,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a8441b65b100bcaaceae4f0e1143490b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9da34a4f79919d54a67bc66fcb133ea7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a9da34a4f79919d54a67bc66fcb133ea7">AddBubbleValues</a> (std::vector&lt; int &gt; ab)</td></tr>
 <tr class="separator:a9da34a4f79919d54a67bc66fcb133ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acda80c240062c4b9aa4f6d89d273ad04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#acda80c240062c4b9aa4f6d89d273ad04">MoveBubblesToCentre</a> ()</td></tr>
+<tr class="separator:acda80c240062c4b9aa4f6d89d273ad04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22d5724e8c69a107dc1f2325c07ec232"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a22d5724e8c69a107dc1f2325c07ec232">GwSpectrum_UtimesK</a> (double time, std::string prefix)</td></tr>
 <tr class="separator:a22d5724e8c69a107dc1f2325c07ec232"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32a5ce6dd04f6fd0123983b70b1ddadb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a32a5ce6dd04f6fd0123983b70b1ddadb">GwSpectrum_2BubblesFrom1</a> (double time, std::string prefix)</td></tr>
@@ -346,6 +348,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:ab7a2e0686f9fba4e696c0d8988afc853 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#ab7a2e0686f9fba4e696c0d8988afc853">spectrum_ks</a></td></tr>
 <tr class="memdesc:ab7a2e0686f9fba4e696c0d8988afc853 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique bins for spectrum calculation.  <a href="classsledgehamr_1_1Sledgehamr.html#ab7a2e0686f9fba4e696c0d8988afc853">More...</a><br /></td></tr>
 <tr class="separator:ab7a2e0686f9fba4e696c0d8988afc853 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ea5822f96da4a44cacb45e42f5eaae7 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a9ea5822f96da4a44cacb45e42f5eaae7">gw_spectrum_ks</a></td></tr>
+<tr class="memdesc:a9ea5822f96da4a44cacb45e42f5eaae7 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique bins for gravitational wave spectrum calculation.  <a href="classsledgehamr_1_1Sledgehamr.html#a9ea5822f96da4a44cacb45e42f5eaae7">More...</a><br /></td></tr>
+<tr class="separator:a9ea5822f96da4a44cacb45e42f5eaae7 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95225de67b90ac304487555ed9130fa1 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a95225de67b90ac304487555ed9130fa1">index_to_k</a></td></tr>
 <tr class="memdesc:a95225de67b90ac304487555ed9130fa1 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pre-computed conversion of index to k for gravitational wave spectrum calculation.  <a href="classsledgehamr_1_1Sledgehamr.html#a95225de67b90ac304487555ed9130fa1">More...</a><br /></td></tr>
 <tr class="separator:a95225de67b90ac304487555ed9130fa1 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -674,6 +679,31 @@ Additional Inherited Members</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const double&#160;</td>
           <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acda80c240062c4b9aa4f6d89d273ad04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acda80c240062c4b9aa4f6d89d273ad04">&#9670;&nbsp;</a></span>MoveBubblesToCentre()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FirstOrderPhaseTransition::FirstOrderPhaseTransition::MoveBubblesToCentre </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>

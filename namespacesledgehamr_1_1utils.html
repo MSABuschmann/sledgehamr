@@ -70,7 +70,8 @@ $(function() {
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">sledgehamr::utils Namespace Reference</div>  </div>
 </div><!--header-->
@@ -96,9 +97,13 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:adb6afe5a25796f83eb9d6f61474d277f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#adb6afe5a25796f83eb9d6f61474d277f">Fft</a> (const amrex::MultiFab &amp;field, const int comp, amrex::MultiFab &amp;field_fft_real_or_abs, amrex::MultiFab &amp;field_fft_imag, const amrex::Geometry &amp;geom, bool abs)</td></tr>
-<tr class="memdesc:adb6afe5a25796f83eb9d6f61474d277f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function computes the FFT of some quantity.  <a href="namespacesledgehamr_1_1utils.html#adb6afe5a25796f83eb9d6f61474d277f">More...</a><br /></td></tr>
-<tr class="separator:adb6afe5a25796f83eb9d6f61474d277f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49d5c16427d612347dd0ac57ef46bd06"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a49d5c16427d612347dd0ac57ef46bd06">ChopGrids</a> (amrex::BoxArray &amp;ba, int target_size)</td></tr>
+<tr class="separator:a49d5c16427d612347dd0ac57ef46bd06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfc99653afbdee805783cdcd0504ee34"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#adfc99653afbdee805783cdcd0504ee34">WriteThis</a> (const amrex::MultiFab *state, hid_t file_id, int comp)</td></tr>
+<tr class="memdesc:adfc99653afbdee805783cdcd0504ee34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a field. Debug function for FFT.  <a href="namespacesledgehamr_1_1utils.html#adfc99653afbdee805783cdcd0504ee34">More...</a><br /></td></tr>
+<tr class="separator:adfc99653afbdee805783cdcd0504ee34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae44a6bb47815d0664867656d1eddd5f0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#ae44a6bb47815d0664867656d1eddd5f0">Fft</a> (const amrex::MultiFab &amp;field, const int comp, amrex::MultiFab &amp;field_fft_real_or_abs, amrex::MultiFab &amp;field_fft_imag, const amrex::Geometry &amp;geom, bool abs, int zero_padding=1)</td></tr>
+<tr class="separator:ae44a6bb47815d0664867656d1eddd5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a993a2febece5f3e514b5b802121a77d9"><td class="memTemplParams" colspan="2">template&lt;auto Start, auto End, auto Inc, class F &gt; </td></tr>
 <tr class="memitem:a993a2febece5f3e514b5b802121a77d9"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a993a2febece5f3e514b5b802121a77d9">constexpr_for</a> (F &amp;&amp;f)</td></tr>
 <tr class="separator:a993a2febece5f3e514b5b802121a77d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,6 +166,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a12538733231611071a8d8e91cc0edec6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a12538733231611071a8d8e91cc0edec6"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a12538733231611071a8d8e91cc0edec6">AssessParamOK</a> (std::string param_name, T val, bool do_thorough_checks)</td></tr>
 <tr class="separator:a12538733231611071a8d8e91cc0edec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aaf5b82dd1c80da794452c8a2fd85f1e7"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#aaf5b82dd1c80da794452c8a2fd85f1e7">fft_counter</a> = 0</td></tr>
+<tr class="memdesc:aaf5b82dd1c80da794452c8a2fd85f1e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function computes the FFT of some quantity.  <a href="namespacesledgehamr_1_1utils.html#aaf5b82dd1c80da794452c8a2fd85f1e7">More...</a><br /></td></tr>
+<tr class="separator:aaf5b82dd1c80da794452c8a2fd85f1e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a20000254cca749b444d45b8da9e613ff"></a>
@@ -356,6 +367,42 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a49d5c16427d612347dd0ac57ef46bd06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49d5c16427d612347dd0ac57ef46bd06">&#9670;&nbsp;</a></span>ChopGrids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void sledgehamr::utils::ChopGrids </td>
+          <td>(</td>
+          <td class="paramtype">amrex::BoxArray &amp;&#160;</td>
+          <td class="paramname"><em>ba</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>target_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a993a2febece5f3e514b5b802121a77d9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a993a2febece5f3e514b5b802121a77d9">&#9670;&nbsp;</a></span>constexpr_for()</h2>
 
@@ -410,8 +457,8 @@ template&lt;auto Start, auto End, auto Inc, class F &gt; </div>
 
 </div>
 </div>
-<a id="adb6afe5a25796f83eb9d6f61474d277f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb6afe5a25796f83eb9d6f61474d277f">&#9670;&nbsp;</a></span>Fft()</h2>
+<a id="ae44a6bb47815d0664867656d1eddd5f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae44a6bb47815d0664867656d1eddd5f0">&#9670;&nbsp;</a></span>Fft()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -453,7 +500,13 @@ template&lt;auto Start, auto End, auto Inc, class F &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>abs</em>&#160;</td>
+          <td class="paramname"><em>abs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>zero_padding</em> = <code>1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -467,18 +520,6 @@ template&lt;auto Start, auto End, auto Inc, class F &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>This function computes the FFT of some quantity. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">field</td><td>State to compute the FFT of. </td></tr>
-    <tr><td class="paramname">field_fft_real_or_abs</td><td>Contains the real or absolute part of the FFT. </td></tr>
-    <tr><td class="paramname">field_fft_imag</td><td>Contains the imaginary part of the FFT, if any. </td></tr>
-    <tr><td class="paramname">geom</td><td>Geometry of the data. </td></tr>
-    <tr><td class="paramname">abs</td><td>Wheter to keep the real and imaginary part of the FFT or to compute the absolute part. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -1243,6 +1284,92 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="adfc99653afbdee805783cdcd0504ee34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfc99653afbdee805783cdcd0504ee34">&#9670;&nbsp;</a></span>WriteThis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void sledgehamr::utils::WriteThis </td>
+          <td>(</td>
+          <td class="paramtype">const amrex::MultiFab *&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">hid_t&#160;</td>
+          <td class="paramname"><em>file_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>comp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Writes a field. Debug function for FFT. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>State. </td></tr>
+    <tr><td class="paramname">file_id</td><td>HDF5 file to write to. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="aaf5b82dd1c80da794452c8a2fd85f1e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf5b82dd1c80da794452c8a2fd85f1e7">&#9670;&nbsp;</a></span>fft_counter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sledgehamr::utils::fft_counter = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This function computes the FFT of some quantity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">field</td><td>State to compute the FFT of. </td></tr>
+    <tr><td class="paramname">field_fft_real_or_abs</td><td>Contains the real or absolute part of the FFT. </td></tr>
+    <tr><td class="paramname">field_fft_imag</td><td>Contains the imaginary part of the FFT, if any. </td></tr>
+    <tr><td class="paramname">geom</td><td>Geometry of the data. </td></tr>
+    <tr><td class="paramname">abs</td><td>Wheter to keep the real and imaginary part of the FFT or to compute the absolute part. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

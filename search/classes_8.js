@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['nexttominimalexample_751',['NextToMinimalExample',['../classNextToMinimalExample_1_1NextToMinimalExample.html',1,'NextToMinimalExample']]],
-  ['nullfill_752',['NullFill',['../structsledgehamr_1_1NullFill.html',1,'sledgehamr']]]
+  ['nexttominimalexample_760',['NextToMinimalExample',['../classNextToMinimalExample_1_1NextToMinimalExample.html',1,'NextToMinimalExample']]],
+  ['nullfill_761',['NullFill',['../structsledgehamr_1_1NullFill.html',1,'sledgehamr']]]
 ];

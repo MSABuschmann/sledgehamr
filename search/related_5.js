@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['spectrum_1459',['Spectrum',['../classsledgehamr_1_1Sledgehamr.html#ac2ea35640432a8a1420bd335b9d2abef',1,'sledgehamr::Sledgehamr']]]
+  ['spectrum_1477',['Spectrum',['../classsledgehamr_1_1Sledgehamr.html#ac2ea35640432a8a1420bd335b9d2abef',1,'sledgehamr::Sledgehamr']]]
 ];
