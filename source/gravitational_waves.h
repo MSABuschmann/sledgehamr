@@ -22,6 +22,7 @@ class GravitationalWaves {
                     GravitationalWavesSpectrumModifier *modifier = nullptr);
 
     int GetProjectionType() const { return projection_type; }
+    int GetZeroPadding() const { return zero_padding; }
 
     /** @brief enum with the tensor components.
      */
@@ -68,6 +69,11 @@ class GravitationalWaves {
      *         Will be set by 'output.gw_spectra.projection_type'.
      */
     int projection_type = 2;
+
+    /** @brief Defines the amount of zero padding during the FFT when computing
+     *         the spectrum. Must be a power of 2. 1 means no zero padding.
+     */
+    int zero_padding = 1;
 
     std::unique_ptr<GravitationalWavesSpectrumModifier> default_modifier;
 };

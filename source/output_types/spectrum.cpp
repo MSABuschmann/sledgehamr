@@ -20,7 +20,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr *sim) {
 
     amrex::MultiFab field, field_fft;
     field.define(ba, sim->dmap[lev], 1, 0);
-    field_fft.define(ba, sim->dmap[lev], 1, 0);
+    // field_fft.define(ba, sim->dmap[lev], 1, 0);
 
     std::vector<double> params;
     sim->SetParamsSpectra(params, time);

@@ -217,9 +217,36 @@ void FirstOrderPhaseTransition::ParseBubbles() {
         bubbles[b].p_bubble = &(bubbles[use_profile[b]]);
     }
 
+    MoveBubblesToCentre();
+
     // std::sort( bubbles.begin(), bubbles.end() );
     amrex::Print() << bubbles.size() << " bubble(s) found to be injected."
                    << std::endl;
+}
+
+void FirstOrderPhaseTransition::MoveBubblesToCentre() {
+    if (bubbles.size() > 2) {
+        return;
+    }
+
+    double shiftx = 0, shifty = 0, shiftz = 0;
+    double C = L / 2.;
+
+    if (bubbles.size() == 1) {
+        bubbles[0].x = C;
+        bubbles[0].y = C;
+        bubbles[0].z = C;
+        return;
+    }
+
+    double cx = (bubbles[0].x + bubbles[1].x) / 2.;
+    double cy = (bubbles[0].y + bubbles[1].y) / 2.;
+    double cz = (bubbles[0].z + bubbles[1].z) / 2.;
+    for (Bubble &bubble : bubbles) {
+        bubble.x += C - cx;
+        bubble.y += C - cy;
+        bubble.z += C - cz;
+    }
 }
 
 std::vector<int> FirstOrderPhaseTransition::FindBubbles(const double time) {

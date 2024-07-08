@@ -39,6 +39,8 @@ GravitationalWaves::GravitationalWaves(Sledgehamr *owner) {
                             "implemented!";
     utils::AssessParam(validity, param_name, projection_type, error_msg, "",
                        sim->nerrors, sim->do_thorough_checks);
+
+    pp.query("output.gw_spectra.zero_padding_factor", zero_padding);
 }
 
 /** @brief Will compute the gravitional wave spectrum and write the result in
@@ -54,30 +56,32 @@ void GravitationalWaves::ComputeSpectrum(
     }
 
     const int lev = 0;
-    int dimN = sim->dimN[lev];
+    int dimN = sim->dimN[lev] * zero_padding;
+    double L = sim->L * static_cast<double>(zero_padding);
 
     const LevelData &ld = sim->grid_new[lev];
-    const amrex::BoxArray &ba = ld.boxArray();
-    const amrex::DistributionMapping &dm = ld.DistributionMap();
+    // const amrex::BoxArray &ba = ld.boxArray();
+    // const amrex::DistributionMapping &dm = ld.DistributionMap();
 
-    amrex::MultiFab du_real[6], du_imag[6];
+    amrex::MultiFab du_real[6];
+    amrex::MultiFab du_imag[6];
     const int mat[3][3] = {{0, 1, 2}, {1, 3, 4}, {2, 4, 5}};
     int comps[6];
     modifier->SelectComponents(comps);
 
     for (int i = 0; i < 6; ++i) {
-        du_real[i].define(ba, dm, 1, 0);
-        du_imag[i].define(ba, dm, 1, 0);
+        // du_real[i].define(ba, dm, 1, 0);
+        // du_imag[i].define(ba, dm, 1, 0);
         utils::Fft(ld, comps[i] + idx_offset, du_real[i], du_imag[i],
-                   sim->geom[lev], false);
+                   sim->geom[lev], false, zero_padding);
     }
 
-    double dk = 2. * M_PI / sim->L;
+    double dk = 2. * M_PI / L;
     double dimN6 = pow(dimN, 6);
 
     modifier->FourierSpaceModifications(du_real, du_imag, dk, dimN);
 
-    std::vector<int> &ks = sim->spectrum_ks;
+    std::vector<int> &ks = sim->gw_spectrum_ks;
     const int kmax = ks.size();
     constexpr int NTHREADS = 16;
     const unsigned long SpecLen = kmax * NTHREADS;
@@ -167,8 +171,9 @@ void GravitationalWaves::ComputeSpectrum(
     }
 
     if (amrex::ParallelDescriptor::IOProcessor()) {
-        const int nparams = 3;
-        double header_data[nparams] = {ld.t, (double)dimN, (double)kmax};
+        const int nparams = 5;
+        double header_data[nparams] = {ld.t, (double)dimN, (double)kmax, L,
+                                       (double)zero_padding};
         utils::hdf5::Write(file_id, "Header", header_data, nparams);
         utils::hdf5::Write(file_id, "k", &(ks[0]), kmax);
         utils::hdf5::Write(file_id, "Spectrum", gw_spectrum.get(), kmax);

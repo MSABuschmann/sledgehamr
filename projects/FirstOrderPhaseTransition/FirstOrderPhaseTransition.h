@@ -42,6 +42,7 @@ class FirstOrderPhaseTransition : public sledgehamr::Sledgehamr {
     void InjectBubbleLevels(std::vector<int> ab);
     void FillBubbleLayout(const int lev, std::vector<int> ab);
     void AddBubbleValues(std::vector<int> ab);
+    void MoveBubblesToCentre();
 
     bool GwSpectrum_UtimesK(double time, std::string prefix);
     bool GwSpectrum_2BubblesFrom1(double time, std::string prefix);

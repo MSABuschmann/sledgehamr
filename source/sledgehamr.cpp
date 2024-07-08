@@ -556,19 +556,32 @@ void Sledgehamr::ReadSpectrumKs(bool reload) {
 
     if (reload) {
         spectrum_ks.clear();
+        gw_spectrum_ks.clear();
         index_to_k.clear();
     }
 
+    ReadK(spectrum_ks, dimN[0]);
+
+    if (gravitational_waves == nullptr) {
+        return;
+    }
+
+    int dim = dimN[0] * gravitational_waves->GetZeroPadding();
+    ReadK(gw_spectrum_ks, dim);
+    ReadProj(dim);
+}
+
+void Sledgehamr::ReadK(std::vector<int> &spec, int dim) {
     std::string filename = SLEDGEHAMR_DATA_PATH;
     filename += "spectra_ks.hdf5";
-    std::string sdimN = std::to_string(dimN[0]);
+    std::string sdimN = std::to_string(dim);
 
     std::string msg =
         "Sledgehamr::ReadSpectrumKs: Could not find precomputed "
         "spectrum binning!\n Either the path to sledgehamr was set "
         "wrongly during compilation\n (currently set to " SLEDGEHAMR_DATA_PATH
         ")\n or data for a " +
-        std::to_string(coarse_level_grid_size) +
+        sdimN +
         "^3 grid has"
         "not yet been added to the file (github repo only comes "
         "with binnings for a grid up to 512^3).\n Spectrum binning "
@@ -580,22 +593,23 @@ void Sledgehamr::ReadSpectrumKs(bool reload) {
         amrex::Abort(msg);
     }
 
-    spectrum_ks.resize(nks[0]);
-    if (!utils::hdf5::Read(filename, {sdimN + "_bins"}, &(spectrum_ks[0]))) {
+    spec.resize(nks[0]);
+    if (!utils::hdf5::Read(filename, {sdimN + "_bins"}, &(spec[0]))) {
         amrex::Abort(msg);
     }
+}
 
-    if (gravitational_waves == nullptr) {
-        return;
-    }
-
+void Sledgehamr::ReadProj(int dim) {
+    std::string filename = SLEDGEHAMR_DATA_PATH;
+    filename += "spectra_ks.hdf5";
+    std::string sdimN = std::to_string(dim);
     std::string projection =
         std::to_string(gravitational_waves->GetProjectionType());
-    index_to_k.resize(dimN[0]);
+    index_to_k.resize(dim);
     amrex::Print() << "Load gw spectra pre-computed data." << std::endl;
     if (!utils::hdf5::Read(filename, {sdimN + "_k" + projection},
                            &(index_to_k[0]))) {
-        amrex::Abort(msg);
+        amrex::Abort("Could not read projection!");
     }
 }
 

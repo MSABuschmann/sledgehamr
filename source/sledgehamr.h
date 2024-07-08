@@ -417,6 +417,10 @@ class Sledgehamr : public amrex::AmrCore {
      */
     std::vector<int> spectrum_ks;
 
+    /** @brief Unique bins for gravitational wave spectrum calculation.
+     */
+    std::vector<int> gw_spectrum_ks;
+
     /** @brief Pre-computed conversion of index to k for gravitational wave
      * spectrum calculation.
      */
@@ -446,6 +450,8 @@ class Sledgehamr : public amrex::AmrCore {
     void ParseInput();
     void ParseInputScalars();
     void ReadSpectrumKs(bool reload = false);
+    void ReadK(std::vector<int> &spec, int dim);
+    void ReadProj(int dim);
     void DoPrerunChecks();
     void DetermineBoxLayout();
 
