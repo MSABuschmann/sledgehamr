@@ -75,6 +75,8 @@ class GravitationalWaves {
      */
     int zero_padding = 1;
 
+    bool unbinned = true;
+
     std::unique_ptr<GravitationalWavesSpectrumModifier> default_modifier;
 };
 

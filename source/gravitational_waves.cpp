@@ -41,6 +41,7 @@ GravitationalWaves::GravitationalWaves(Sledgehamr *owner) {
                        sim->nerrors, sim->do_thorough_checks);
 
     pp.query("output.gw_spectra.zero_padding_factor", zero_padding);
+    pp.query("output.gw_spectra.unbinned", unbinned);
 }
 
 /** @brief Will compute the gravitional wave spectrum and write the result in
@@ -81,14 +82,25 @@ void GravitationalWaves::ComputeSpectrum(
 
     modifier->FourierSpaceModifications(du_real, du_imag, dk, dimN);
 
-    std::vector<int> &ks = sim->gw_spectrum_ks;
-    const int kmax = ks.size();
-    constexpr int NTHREADS = 16;
-    const unsigned long SpecLen = kmax * NTHREADS;
+    int NTHREADS;
+    std::vector<int> ks;
+    if (unbinned) {
+        ks = sim->gw_spectrum_ks;
+        NTHREADS = 16;
+    } else {
+        for (int k = 0;
+             k <= std::sqrt(3.) / 2. * static_cast<double>(dimN) + .5; ++k) {
+            ks.push_back(k * k);
+        }
+        NTHREADS = 256;
+    }
+
+    int kmax = ks.size();
+    unsigned long SpecLen = kmax * NTHREADS;
     std::unique_ptr<double[]> gw_spectrum(new double[SpecLen]);
     std::fill_n(gw_spectrum.get(), SpecLen, 0.0);
 
-    // Non-trivial load-balancing here. Not sure what wins.
+// Non-trivial load-balancing here. Not sure what wins.
 #pragma omp parallel num_threads(std::min(NTHREADS, omp_get_max_threads()))
     for (amrex::MFIter mfi(du_real[0], true); mfi.isValid(); ++mfi) {
         const amrex::Box &bx = mfi.tilebox();
@@ -120,14 +132,6 @@ void GravitationalWaves::ComputeSpectrum(
             for (int b = lo.y; b <= hi.y; ++b) {
                 AMREX_PRAGMA_SIMD
                 for (int a = lo.x; a <= hi.x; ++a) {
-                    int li = a >= dimN / 2 ? a - dimN : a;
-                    int lj = b >= dimN / 2 ? b - dimN : b;
-                    int lk = c >= dimN / 2 ? c - dimN : c;
-                    unsigned int sq = li * li + lj * lj + lk * lk;
-                    unsigned long index =
-                        std::lower_bound(ks.begin(), ks.end(), sq) -
-                        ks.begin() + omp_get_thread_num() * kmax;
-
                     int abc[3] = {a, b, c};
                     double running_sum = 0;
 
@@ -149,12 +153,25 @@ void GravitationalWaves::ComputeSpectrum(
                             }
                         }
                     }
+
+                    int li = a >= dimN / 2 ? a - dimN : a;
+                    int lj = b >= dimN / 2 ? b - dimN : b;
+                    int lk = c >= dimN / 2 ? c - dimN : c;
+                    unsigned int sq = li * li + lj * lj + lk * lk;
+                    unsigned long index;
+                    if (unbinned) {
+                        index = std::lower_bound(ks.begin(), ks.end(), sq) -
+                                ks.begin() + omp_get_thread_num() * kmax;
+                    } else {
+                        index = static_cast<long>(
+                            std::sqrt(static_cast<double>(sq)) + .5);
+                    }
+
                     gw_spectrum[index] += running_sum;
                 }
             }
         }
     }
-
     for (int a = 1; a < NTHREADS; ++a) {
         for (int c = 0; c < kmax; ++c) {
             gw_spectrum[c] += gw_spectrum[a * kmax + c];
@@ -171,9 +188,10 @@ void GravitationalWaves::ComputeSpectrum(
     }
 
     if (amrex::ParallelDescriptor::IOProcessor()) {
-        const int nparams = 5;
-        double header_data[nparams] = {ld.t, (double)dimN, (double)kmax, L,
-                                       (double)zero_padding};
+        const int nparams = 6;
+        double header_data[nparams] = {
+            ld.t, (double)dimN,         (double)kmax,
+            L,    (double)zero_padding, (double)unbinned};
         utils::hdf5::Write(file_id, "Header", header_data, nparams);
         utils::hdf5::Write(file_id, "k", &(ks[0]), kmax);
         utils::hdf5::Write(file_id, "Spectrum", gw_spectrum.get(), kmax);
@@ -189,12 +207,14 @@ inline double GravitationalWaves::IndexToK(int a, int N) {
     return sim->index_to_k[a];
     /*
         double n_tilde = a - N <= -N / 2 - 1 ? a : a - N;
-        double two_pi_n_tilde = 2. * M_PI / static_cast<double>(N) * n_tilde;
+        double two_pi_n_tilde = 2. * M_PI / static_cast<double>(N) *
+       n_tilde;
 
         if (projection_type == 1) {
             return sin(two_pi_n_tilde);
         } else if (projection_type == 2) {
-            return (8. * sin(two_pi_n_tilde) - sin(2. * two_pi_n_tilde)) / 6.;
+            return (8. * sin(two_pi_n_tilde) - sin(2. * two_pi_n_tilde))
+       / 6.;
         }
 
         return 0.;

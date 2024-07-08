@@ -481,11 +481,6 @@ static void Fft(const amrex::MultiFab &field, const int comp,
             }
         }
     }
-
-    amrex::Print() << "final: " << field_fft_real_or_abs.contains_nan()
-                   << std::flush << std::endl;
-    amrex::Print() << "final: " << field_fft_imag.contains_nan() << std::flush
-                   << std::endl;
 }
 
 }; // namespace utils
