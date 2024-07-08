@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['z_1422',['z',['../classFirstOrderPhaseTransition_1_1Bubble.html#a5ea04c29ed7b772a72857ef14a94c67f',1,'FirstOrderPhaseTransition::Bubble']]],
-  ['zero_5fpadding_1423',['zero_padding',['../classsledgehamr_1_1GravitationalWaves.html#a22bce7b3f2cce0888b0accfd85c30b6e',1,'sledgehamr::GravitationalWaves']]]
+  ['y_1423',['y',['../classFirstOrderPhaseTransition_1_1Bubble.html#a63ffae8f6e1b29b9cfbe6bccb29d4591',1,'FirstOrderPhaseTransition::Bubble']]]
 ];
