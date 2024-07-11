@@ -68,20 +68,14 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">fft.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;AMReX_BCUtil.H&gt;</code><br />
-<code>#include &lt;AMReX_FillPatchUtil.H&gt;</code><br />
-<code>#include &lt;AMReX_PhysBCFunct.H&gt;</code><br />
+<div class="textblock"><code>#include &lt;Distribution.H&gt;</code><br />
 <code>#include &lt;AlignedAllocator.h&gt;</code><br />
 <code>#include &lt;Dfft.H&gt;</code><br />
-<code>#include &lt;Distribution.H&gt;</code><br />
-<code>#include &lt;iterator&gt;</code><br />
-<code>#include &quot;<a class="el" href="hdf5__utils_8h_source.html">hdf5_utils.h</a>&quot;</code><br />
 </div>
 <p><a href="fft_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -94,19 +88,9 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a49d5c16427d612347dd0ac57ef46bd06"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#a49d5c16427d612347dd0ac57ef46bd06">sledgehamr::utils::ChopGrids</a> (amrex::BoxArray &amp;ba, int target_size)</td></tr>
-<tr class="separator:a49d5c16427d612347dd0ac57ef46bd06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfc99653afbdee805783cdcd0504ee34"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#adfc99653afbdee805783cdcd0504ee34">sledgehamr::utils::WriteThis</a> (const amrex::MultiFab *state, hid_t file_id, int comp)</td></tr>
-<tr class="memdesc:adfc99653afbdee805783cdcd0504ee34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a field. Debug function for FFT.  <a href="namespacesledgehamr_1_1utils.html#adfc99653afbdee805783cdcd0504ee34">More...</a><br /></td></tr>
-<tr class="separator:adfc99653afbdee805783cdcd0504ee34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae44a6bb47815d0664867656d1eddd5f0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#ae44a6bb47815d0664867656d1eddd5f0">sledgehamr::utils::Fft</a> (const amrex::MultiFab &amp;field, const int comp, amrex::MultiFab &amp;field_fft_real_or_abs, amrex::MultiFab &amp;field_fft_imag, const amrex::Geometry &amp;geom, bool abs, int zero_padding=1)</td></tr>
-<tr class="separator:ae44a6bb47815d0664867656d1eddd5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:aaf5b82dd1c80da794452c8a2fd85f1e7"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#aaf5b82dd1c80da794452c8a2fd85f1e7">sledgehamr::utils::fft_counter</a> = 0</td></tr>
-<tr class="memdesc:aaf5b82dd1c80da794452c8a2fd85f1e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function computes the FFT of some quantity.  <a href="namespacesledgehamr_1_1utils.html#aaf5b82dd1c80da794452c8a2fd85f1e7">More...</a><br /></td></tr>
-<tr class="separator:aaf5b82dd1c80da794452c8a2fd85f1e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb6afe5a25796f83eb9d6f61474d277f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr_1_1utils.html#adb6afe5a25796f83eb9d6f61474d277f">sledgehamr::utils::Fft</a> (const amrex::MultiFab &amp;field, const int comp, amrex::MultiFab &amp;field_fft_real_or_abs, amrex::MultiFab &amp;field_fft_imag, const amrex::Geometry &amp;geom, bool abs)</td></tr>
+<tr class="memdesc:adb6afe5a25796f83eb9d6f61474d277f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function computes the FFT of some quantity.  <a href="namespacesledgehamr_1_1utils.html#adb6afe5a25796f83eb9d6f61474d277f">More...</a><br /></td></tr>
+<tr class="separator:adb6afe5a25796f83eb9d6f61474d277f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
