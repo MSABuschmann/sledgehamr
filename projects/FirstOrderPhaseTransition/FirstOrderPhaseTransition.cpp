@@ -29,7 +29,22 @@ void FirstOrderPhaseTransition::SetProjections() {
 
 void FirstOrderPhaseTransition::ParseVariables() {
     amrex::ParmParse pp_prj("project");
-    pp_prj.get("lambda_bar", lambda_bar);
+
+    pp_prj.query("potential_type", potential_type);
+    switch (potential_type) {
+    case PotentialType::PureLambdaBar:
+        pp_prj.get("lambda_bar", lambda_bar);
+        break;
+    case PotentialType::Piecewise:
+        pp_prj.get("lambda_bar", lambda_bar);
+        pp_prj.get("vbar", vbar);
+        pp_prj.get("vareps", vareps);
+        pp_prj.get("phiesc", phiesc);
+        break;
+    default:
+        amrex::Abort("Unkown potential type!");
+    }
+
     pp_prj.queryarr("bubbles_to_inject", bubbles_to_inject);
     pp_prj.query("tc", tc);
     pp_prj.query("t0", t0);
@@ -95,10 +110,14 @@ bool FirstOrderPhaseTransition::GwSpectrum_2BubblesFrom1(double time,
 
 void FirstOrderPhaseTransition::SetParamsRhs(std::vector<double> &params,
                                              const double time, const int lev) {
-    params.resize(3);
-    params[0] = quadratic;
-    params[1] = cubic;
-    params[2] = quartic;
+    params.resize(7);
+    params[0] = static_cast<double>(potential_type);
+    params[1] = quadratic;
+    params[2] = cubic;
+    params[3] = quartic;
+    params[4] = vbar;
+    params[5] = vareps;
+    params[6] = phiesc;
 }
 
 void FirstOrderPhaseTransition::SetParamsGravitationalWaveRhs(
@@ -229,7 +248,6 @@ void FirstOrderPhaseTransition::MoveBubblesToCentre() {
         return;
     }
 
-    double shiftx = 0, shifty = 0, shiftz = 0;
     double C = L / 2.;
 
     if (bubbles.size() == 1) {

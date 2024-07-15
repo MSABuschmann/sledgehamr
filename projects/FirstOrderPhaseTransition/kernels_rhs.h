@@ -21,12 +21,28 @@ AMREX_GPU_DEVICE AMREX_FORCE_INLINE void
 Rhs(const amrex::Array4<double> &rhs, const amrex::Array4<const double> &state,
     const int i, const int j, const int k, const int lev, const double time,
     const double dt, const double dx, const double *params) {
-    double quadratic = params[0];
-    double cubic = params[1];
-    double quartic = params[2];
+    int potential_type = static_cast<int>(params[0]);
+    double quadratic = params[1];
+    double cubic = params[2];
+    double quartic = params[3];
+    double vbar = params[4];
+    double vareps = params[5];
+    double phiesc = params[6];
     double Phi = state(i, j, k, Scalar::Phi);
-    double potential =
-        quadratic * Phi + cubic * Phi * Phi + quartic * Phi * Phi * Phi;
+
+    double potential = 0;
+    switch (potential_type) {
+    case PotentialType::PureLambdaBar:
+        potential =
+            quadratic * Phi + cubic * Phi * Phi + quartic * Phi * Phi * Phi;
+        break;
+    case PotentialType::Piecewise:
+        double cond = Phi < phiesc;
+        potential = cond * (quadratic * Phi + cubic * Phi * Phi +
+                            quartic * Phi * Phi * Phi) -
+                    (1 - cond) * vareps * vareps * (Phi - vbar);
+        break;
+    }
 
     constexpr int order = 2;
     double laplacian_Phi = sledgehamr::utils::Laplacian<order>(
