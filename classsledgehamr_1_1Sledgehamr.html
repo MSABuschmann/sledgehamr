@@ -301,6 +301,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ab7a2e0686f9fba4e696c0d8988afc853"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#ab7a2e0686f9fba4e696c0d8988afc853">spectrum_ks</a></td></tr>
 <tr class="memdesc:ab7a2e0686f9fba4e696c0d8988afc853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique bins for spectrum calculation.  <a href="classsledgehamr_1_1Sledgehamr.html#ab7a2e0686f9fba4e696c0d8988afc853">More...</a><br /></td></tr>
 <tr class="separator:ab7a2e0686f9fba4e696c0d8988afc853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ea5822f96da4a44cacb45e42f5eaae7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a9ea5822f96da4a44cacb45e42f5eaae7">gw_spectrum_ks</a></td></tr>
+<tr class="memdesc:a9ea5822f96da4a44cacb45e42f5eaae7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique bins for gravitational wave spectrum calculation.  <a href="classsledgehamr_1_1Sledgehamr.html#a9ea5822f96da4a44cacb45e42f5eaae7">More...</a><br /></td></tr>
+<tr class="separator:a9ea5822f96da4a44cacb45e42f5eaae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95225de67b90ac304487555ed9130fa1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a95225de67b90ac304487555ed9130fa1">index_to_k</a></td></tr>
 <tr class="memdesc:a95225de67b90ac304487555ed9130fa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pre-computed conversion of index to k for gravitational wave spectrum calculation.  <a href="classsledgehamr_1_1Sledgehamr.html#a95225de67b90ac304487555ed9130fa1">More...</a><br /></td></tr>
 <tr class="separator:a95225de67b90ac304487555ed9130fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -334,6 +337,10 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ab8e0b3e9ba9e578338d93f95457e73cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#ab8e0b3e9ba9e578338d93f95457e73cf">ReadSpectrumKs</a> (bool reload=false)</td></tr>
 <tr class="memdesc:ab8e0b3e9ba9e578338d93f95457e73cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the spectrum binning from file. Aborts if they are not found.  <a href="classsledgehamr_1_1Sledgehamr.html#ab8e0b3e9ba9e578338d93f95457e73cf">More...</a><br /></td></tr>
 <tr class="separator:ab8e0b3e9ba9e578338d93f95457e73cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b8c1bfb7f691ff1758d98d223b0b167"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a6b8c1bfb7f691ff1758d98d223b0b167">ReadK</a> (std::vector&lt; int &gt; &amp;spec, int dim)</td></tr>
+<tr class="separator:a6b8c1bfb7f691ff1758d98d223b0b167"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e781f8fd9a462b4d69f4f2ccd8bd4b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a0e781f8fd9a462b4d69f4f2ccd8bd4b0">ReadProj</a> (int dim)</td></tr>
+<tr class="separator:a0e781f8fd9a462b4d69f4f2ccd8bd4b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3af328657301bae99c866eabcb232ab7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a3af328657301bae99c866eabcb232ab7">DoPrerunChecks</a> ()</td></tr>
 <tr class="memdesc:a3af328657301bae99c866eabcb232ab7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether we want to save the coarse level box layout for chunking of the initial state.  <a href="classsledgehamr_1_1Sledgehamr.html#a3af328657301bae99c866eabcb232ab7">More...</a><br /></td></tr>
 <tr class="separator:a3af328657301bae99c866eabcb232ab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1523,6 +1530,68 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Parses all input parameters related to the individual scalar fields. </p>
+
+</div>
+</div>
+<a id="a6b8c1bfb7f691ff1758d98d223b0b167"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b8c1bfb7f691ff1758d98d223b0b167">&#9670;&nbsp;</a></span>ReadK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::Sledgehamr::ReadK </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>spec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dim</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0e781f8fd9a462b4d69f4f2ccd8bd4b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e781f8fd9a462b4d69f4f2ccd8bd4b0">&#9670;&nbsp;</a></span>ReadProj()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sledgehamr::Sledgehamr::ReadProj </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dim</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2785,6 +2854,30 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Holds old simulation data from the previous time step for all levels. </p>
+
+</div>
+</div>
+<a id="a9ea5822f96da4a44cacb45e42f5eaae7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ea5822f96da4a44cacb45e42f5eaae7">&#9670;&nbsp;</a></span>gw_spectrum_ks</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;int&gt; sledgehamr::Sledgehamr::gw_spectrum_ks</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unique bins for gravitational wave spectrum calculation. </p>
 
 </div>
 </div>

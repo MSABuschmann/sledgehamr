@@ -179,6 +179,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a8441b65b100bcaaceae4f0e1143490b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9da34a4f79919d54a67bc66fcb133ea7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a9da34a4f79919d54a67bc66fcb133ea7">AddBubbleValues</a> (std::vector&lt; int &gt; ab)</td></tr>
 <tr class="separator:a9da34a4f79919d54a67bc66fcb133ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acda80c240062c4b9aa4f6d89d273ad04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#acda80c240062c4b9aa4f6d89d273ad04">MoveBubblesToCentre</a> ()</td></tr>
+<tr class="separator:acda80c240062c4b9aa4f6d89d273ad04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22d5724e8c69a107dc1f2325c07ec232"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a22d5724e8c69a107dc1f2325c07ec232">GwSpectrum_UtimesK</a> (double time, std::string prefix)</td></tr>
 <tr class="separator:a22d5724e8c69a107dc1f2325c07ec232"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32a5ce6dd04f6fd0123983b70b1ddadb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a32a5ce6dd04f6fd0123983b70b1ddadb">GwSpectrum_2BubblesFrom1</a> (double time, std::string prefix)</td></tr>
@@ -186,14 +188,22 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:adef10df82e65dc3f2c1834e1bd961424"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#adef10df82e65dc3f2c1834e1bd961424">lambda_bar</a></td></tr>
+<tr class="memitem:a932232a04fc3903bdaa892e8129fb13a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a932232a04fc3903bdaa892e8129fb13a">potential_type</a> = 0</td></tr>
+<tr class="separator:a932232a04fc3903bdaa892e8129fb13a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adef10df82e65dc3f2c1834e1bd961424"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#adef10df82e65dc3f2c1834e1bd961424">lambda_bar</a> = 0</td></tr>
 <tr class="separator:adef10df82e65dc3f2c1834e1bd961424"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1820c318a08826f9774e05463808d541"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a1820c318a08826f9774e05463808d541">quadratic</a></td></tr>
+<tr class="memitem:a1820c318a08826f9774e05463808d541"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a1820c318a08826f9774e05463808d541">quadratic</a> = 0</td></tr>
 <tr class="separator:a1820c318a08826f9774e05463808d541"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a455d994003b8cb9fd4b5a53aca5142b8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a455d994003b8cb9fd4b5a53aca5142b8">cubic</a></td></tr>
+<tr class="memitem:a455d994003b8cb9fd4b5a53aca5142b8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a455d994003b8cb9fd4b5a53aca5142b8">cubic</a> = 0</td></tr>
 <tr class="separator:a455d994003b8cb9fd4b5a53aca5142b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30114ba7175732c76f5d5e16a6822342"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a30114ba7175732c76f5d5e16a6822342">quartic</a></td></tr>
+<tr class="memitem:a30114ba7175732c76f5d5e16a6822342"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a30114ba7175732c76f5d5e16a6822342">quartic</a> = 0</td></tr>
 <tr class="separator:a30114ba7175732c76f5d5e16a6822342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3020877bfd84449d9584dc05649fe862"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a3020877bfd84449d9584dc05649fe862">vbar</a></td></tr>
+<tr class="separator:a3020877bfd84449d9584dc05649fe862"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10c82a41f2d4b32784643e081394b942"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a10c82a41f2d4b32784643e081394b942">vareps</a></td></tr>
+<tr class="separator:a10c82a41f2d4b32784643e081394b942"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a474ee614325f76291662f56c59c5f0aa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a474ee614325f76291662f56c59c5f0aa">phiesc</a></td></tr>
+<tr class="separator:a474ee614325f76291662f56c59c5f0aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af770b64d60ced9e2f009c1f9c598c202"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#af770b64d60ced9e2f009c1f9c598c202">tc</a> = -1</td></tr>
 <tr class="separator:af770b64d60ced9e2f009c1f9c598c202"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cafd171300a9c9b130a6fba78bf934c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFirstOrderPhaseTransition_1_1FirstOrderPhaseTransition.html#a5cafd171300a9c9b130a6fba78bf934c">t0</a> = -1</td></tr>
@@ -346,6 +356,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:ab7a2e0686f9fba4e696c0d8988afc853 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#ab7a2e0686f9fba4e696c0d8988afc853">spectrum_ks</a></td></tr>
 <tr class="memdesc:ab7a2e0686f9fba4e696c0d8988afc853 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique bins for spectrum calculation.  <a href="classsledgehamr_1_1Sledgehamr.html#ab7a2e0686f9fba4e696c0d8988afc853">More...</a><br /></td></tr>
 <tr class="separator:ab7a2e0686f9fba4e696c0d8988afc853 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ea5822f96da4a44cacb45e42f5eaae7 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a9ea5822f96da4a44cacb45e42f5eaae7">gw_spectrum_ks</a></td></tr>
+<tr class="memdesc:a9ea5822f96da4a44cacb45e42f5eaae7 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique bins for gravitational wave spectrum calculation.  <a href="classsledgehamr_1_1Sledgehamr.html#a9ea5822f96da4a44cacb45e42f5eaae7">More...</a><br /></td></tr>
+<tr class="separator:a9ea5822f96da4a44cacb45e42f5eaae7 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95225de67b90ac304487555ed9130fa1 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Sledgehamr.html#a95225de67b90ac304487555ed9130fa1">index_to_k</a></td></tr>
 <tr class="memdesc:a95225de67b90ac304487555ed9130fa1 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pre-computed conversion of index to k for gravitational wave spectrum calculation.  <a href="classsledgehamr_1_1Sledgehamr.html#a95225de67b90ac304487555ed9130fa1">More...</a><br /></td></tr>
 <tr class="separator:a95225de67b90ac304487555ed9130fa1 inherit pro_attribs_classsledgehamr_1_1Sledgehamr"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -686,6 +699,31 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="acda80c240062c4b9aa4f6d89d273ad04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acda80c240062c4b9aa4f6d89d273ad04">&#9670;&nbsp;</a></span>MoveBubblesToCentre()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FirstOrderPhaseTransition::FirstOrderPhaseTransition::MoveBubblesToCentre </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aeff45aee2b9190012ac9fcca0e8520cd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeff45aee2b9190012ac9fcca0e8520cd">&#9670;&nbsp;</a></span>ParseBubbles()</h2>
 
@@ -1000,7 +1038,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::cubic</td>
+          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::cubic = 0</td>
         </tr>
       </table>
   </td>
@@ -1066,7 +1104,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::lambda_bar</td>
+          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::lambda_bar = 0</td>
         </tr>
       </table>
   </td>
@@ -1122,6 +1160,50 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a474ee614325f76291662f56c59c5f0aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a474ee614325f76291662f56c59c5f0aa">&#9670;&nbsp;</a></span>phiesc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::phiesc</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a932232a04fc3903bdaa892e8129fb13a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a932232a04fc3903bdaa892e8129fb13a">&#9670;&nbsp;</a></span>potential_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FirstOrderPhaseTransition::FirstOrderPhaseTransition::potential_type = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1820c318a08826f9774e05463808d541"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1820c318a08826f9774e05463808d541">&#9670;&nbsp;</a></span>quadratic</h2>
 
@@ -1132,7 +1214,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::quadratic</td>
+          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::quadratic = 0</td>
         </tr>
       </table>
   </td>
@@ -1154,7 +1236,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::quartic</td>
+          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::quartic = 0</td>
         </tr>
       </table>
   </td>
@@ -1199,6 +1281,50 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::tc = -1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a10c82a41f2d4b32784643e081394b942"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10c82a41f2d4b32784643e081394b942">&#9670;&nbsp;</a></span>vareps</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::vareps</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3020877bfd84449d9584dc05649fe862"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3020877bfd84449d9584dc05649fe862">&#9670;&nbsp;</a></span>vbar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double FirstOrderPhaseTransition::FirstOrderPhaseTransition::vbar</td>
         </tr>
       </table>
   </td>
