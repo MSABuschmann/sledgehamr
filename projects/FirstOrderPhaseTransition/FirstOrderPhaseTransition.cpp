@@ -33,9 +33,11 @@ void FirstOrderPhaseTransition::ParseVariables() {
     pp_prj.query("potential_type", potential_type);
     switch (potential_type) {
     case PotentialType::PureLambdaBar:
+        amrex::Print("Running with pure \bar\lambda potential.");
         pp_prj.get("lambda_bar", lambda_bar);
         break;
     case PotentialType::Piecewise:
+        amrex::Print("Running with piece-wise potential.");
         pp_prj.get("lambda_bar", lambda_bar);
         pp_prj.get("vbar", vbar);
         pp_prj.get("vareps", vareps);
