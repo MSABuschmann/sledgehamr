@@ -5,6 +5,7 @@ namespace AxionOnly {
 void AxionOnly::Init() {
     ParseVariables();
     SetProjections();
+    SetSpectrum();
 }
 
 void AxionOnly::ParseVariables() {
@@ -16,15 +17,19 @@ void AxionOnly::ParseVariables() {
 }
 
 void AxionOnly::SetProjections() {
-    io_module->projections.emplace_back(theta_prime2, "theta_prime2");
+    io_module->projections.emplace_back(dtheta_prime2, "dtheta_prime2");
+}
+
+void AxionOnly::SetSpectrum() {
+    io_module->spectra.emplace_back(theta_spectrum, "theta");
+    io_module->spectra.emplace_back(dtheta_spectrum, "dtheta");
 }
 
 void AxionOnly::SetParamsRhs(std::vector<double> &params, const double time,
                              const int lev) {
     const double eta = time;
-    const double eta_growth =
-        std::pow(std::min(eta, eta_c) / eta_star, n) / N_QCD;
-    params.push_back(eta_growth);
+    const double ma_sq = std::pow(std::min(eta, eta_c) / eta_star, n) / N_QCD;
+    params.push_back(ma_sq);
 }
 
 }; // namespace AxionOnly

@@ -26,9 +26,12 @@ class AxionOnly : public sledgehamr::Sledgehamr {
   private:
     void ParseVariables();
     void SetProjections();
+    void SetSpectrum();
 
     double eta_c;
+    double eta_star;
     double n;
+    double N_QCD;
 };
 
 }; // namespace AxionOnly

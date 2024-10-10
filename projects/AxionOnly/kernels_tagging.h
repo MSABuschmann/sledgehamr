@@ -17,10 +17,10 @@ namespace AxionOnly {
         const int k, const int lev, const double time, const double dt,        \
         const double dx, const double truncation_error,                        \
         const double *params) {                                                \
-        return truncation_error * dt;                                          \
+        return truncation_error / dt;                                          \
     }
 
-AXION_STRING_TRUNCATION_MODIFIER(Scalar::dtheta)
+AXION_STRING_TRUNCATION_MODIFIER(Scalar::theta)
 
 }; // namespace AxionOnly
 

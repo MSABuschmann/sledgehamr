@@ -33,8 +33,8 @@ Rhs(const amrex::Array4<double> &rhs, const amrex::Array4<const double> &state,
         state, i, j, k, Scalar::theta, dx * dx);
 
     // Compute EOM.
-    double eta_grow = params[0];
-    double potential = eta_grow * eta * eta * std::sin(theta);
+    double ma_sq = params[0];
+    double potential = ma_sq * eta * eta * std::sin(theta);
 
     rhs(i, j, k, Scalar::theta) = dtheta;
     rhs(i, j, k, Scalar::dtheta) =
