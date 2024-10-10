@@ -110,7 +110,7 @@ Macros</h2></td></tr>
 <div class="line">        <span class="keyword">const</span> <span class="keywordtype">int</span> k, <span class="keyword">const</span> <span class="keywordtype">int</span> lev, <span class="keyword">const</span> <span class="keywordtype">double</span> time, <span class="keyword">const</span> <span class="keywordtype">double</span> dt,        \</div>
 <div class="line">        <span class="keyword">const</span> <span class="keywordtype">double</span> dx, <span class="keyword">const</span> <span class="keywordtype">double</span> truncation_error,                        \</div>
 <div class="line">        <span class="keyword">const</span> <span class="keywordtype">double</span> *params) {                                                \</div>
-<div class="line">        return truncation_error * dt;                                          \</div>
+<div class="line">        return truncation_error / dt;                                          \</div>
 <div class="line">    }</div>
 </div><!-- fragment -->
 <p>Modifies the truncation error criteria for Pi1 and Pi2 from its default \tau &gt; \tau_{crit} to \tau * \Delta t_{\ell} &gt; \tau_{crit}. </p>
