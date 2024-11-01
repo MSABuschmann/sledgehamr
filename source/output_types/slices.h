@@ -15,18 +15,21 @@ class Slices {
      * @param   write_with_truncation_errors    Whether to include truncation
                                                 error estimates.
      */
-    Slices(Sledgehamr* owner, std::string prefix,
+    Slices(Sledgehamr *owner, std::string prefix,
            bool write_with_truncation_errors)
-        : sim(owner),
-          folder(prefix),
-          with_truncation_errors(write_with_truncation_errors) {};
+        : sim(owner), folder(prefix),
+          with_truncation_errors(write_with_truncation_errors) {
+        ParseParams();
+    };
 
     void Write();
 
   private:
-    void WriteSingleSlice(const LevelData* state, int lev, hid_t file_id,
+    void WriteSingleSlice(const LevelData *state, int lev, hid_t file_id,
                           std::string ident, int d1, int d2, int d3,
                           bool is_truncation_error);
+
+    void ParseParams();
 
     /** @brief Local output folder.
      */
@@ -36,9 +39,11 @@ class Slices {
      */
     bool with_truncation_errors;
 
+    std::vector<double> slice_location = {0, 0, 0};
+
     /** @brief Pointer to simulation.
      */
-    Sledgehamr* sim;
+    Sledgehamr *sim;
 };
 
 }; // namespace sledgehamr
