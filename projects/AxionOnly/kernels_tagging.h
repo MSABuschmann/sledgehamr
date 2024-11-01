@@ -17,10 +17,21 @@ namespace AxionOnly {
         const int k, const int lev, const double time, const double dt,        \
         const double dx, const double truncation_error,                        \
         const double *params) {                                                \
-        return truncation_error / dt;                                          \
+        return truncation_error * dt / time;                                   \
     }
 
-AXION_STRING_TRUNCATION_MODIFIER(Scalar::theta)
+#define AXION_STRING_TRUNCATION_MODIFIER2(x)                                   \
+    template <>                                                                \
+    AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE double TruncationModifier<x>(     \
+        const amrex::Array4<const double> &state, const int i, const int j,    \
+        const int k, const int lev, const double time, const double dt,        \
+        const double dx, const double truncation_error,                        \
+        const double *params) {                                                \
+        return truncation_error / time;                                        \
+    }
+
+AXION_STRING_TRUNCATION_MODIFIER(Scalar::dtheta)
+AXION_STRING_TRUNCATION_MODIFIER2(Scalar::theta)
 
 }; // namespace AxionOnly
 
