@@ -10,7 +10,7 @@ namespace AxionOnly {
  * @param   truncation_error    \tau
  * @return f(\tau) for criteria f(\tau) > \tau_{crit}.
  */
-#define AXION_STRING_TRUNCATION_MODIFIER(x)                                    \
+#define AXION_ONLY_TRUNCATION_MODIFIER(x)                                      \
     template <>                                                                \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE double TruncationModifier<x>(     \
         const amrex::Array4<const double> &state, const int i, const int j,    \
@@ -20,7 +20,7 @@ namespace AxionOnly {
         return truncation_error * dt / time;                                   \
     }
 
-#define AXION_STRING_TRUNCATION_MODIFIER2(x)                                   \
+#define AXION_ONLY_TRUNCATION_MODIFIER2(x)                                     \
     template <>                                                                \
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE double TruncationModifier<x>(     \
         const amrex::Array4<const double> &state, const int i, const int j,    \
@@ -30,8 +30,8 @@ namespace AxionOnly {
         return truncation_error / time;                                        \
     }
 
-AXION_STRING_TRUNCATION_MODIFIER(Scalar::dtheta)
-AXION_STRING_TRUNCATION_MODIFIER2(Scalar::theta)
+AXION_ONLY_TRUNCATION_MODIFIER(Scalar::dtheta)
+AXION_ONLY_TRUNCATION_MODIFIER2(Scalar::theta)
 
 }; // namespace AxionOnly
 
