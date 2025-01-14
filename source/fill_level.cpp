@@ -110,7 +110,7 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
     // Iterate over fields but introduce offset such that each node grabs a
     // different file first.
     for (int f = 0; f < ncomp; ++f) {
-        int f2 = (f + lr) % ncomp;
+        int f2 = f; //(f + lr) % ncomp;
 
         // Determine which input file to use if any.
         std::string initial_state_file_component = "";
@@ -137,8 +137,19 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
         std::string existing_chunk = utils::hdf5::FindDataset(
             initial_state_file_component, {chunk1, chunk2});
 
+        int up = 1;
+        pp.query("upsample", up);
+        if (!sledgehamr::utils::IsPowerOfTwo(up) || up < 1) {
+            amrex::Abort("Upsample factor input.upsample is not a power of 2!");
+        }
+
+        if (up > 1) {
+            amrex::Print() << "Upsample initial state file by a factor of "
+                           << up << std::endl;
+        }
+
         if (existing_chunk == "") {
-            const int dimN = sim->GetDimN(lev);
+            const int dimN = sim->GetDimN(lev) / up;
             const long long dsetsize = dimN * dimN * dimN;
             std::unique_ptr<double[]> input_data(new double[dsetsize]);
 
@@ -155,9 +166,14 @@ void FillLevel::FromHdf5File(std::string initial_state_file) {
                     << ". Will initialize to " << constant << "." << std::endl;
                 FromConst(f2, constant);
             } else {
-                amrex::Gpu::AsyncArray<double> async_input_data(
-                    input_data.get(), dsetsize);
-                FromArray(f2, async_input_data, dimN);
+                if (up == 1) {
+                    amrex::Gpu::AsyncArray<double> async_input_data(
+                        input_data.get(), dsetsize);
+                    FromArray(f2, async_input_data, dimN);
+                } else {
+                    sim->level_synchronizer->FromArrayChunksAndUpsample(
+                        0, f2, input_data.get(), up);
+                }
             }
             continue;
         }
@@ -253,5 +269,4 @@ void FillLevel::FromConst(const int comp, const double c) {
                            });
     }
 }
-
 }; // namespace sledgehamr
