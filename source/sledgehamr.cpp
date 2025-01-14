@@ -97,6 +97,7 @@ void Sledgehamr::Evolve() {
         amrex::Print() << "Full step took " << utils::DurationSeconds(timer)
                        << "s.\n"
                        << std::endl;
+        last_full_time = utils::DurationSeconds(timer);
         io_module->Write();
 
 #ifdef AMREX_MEM_PROFILING
