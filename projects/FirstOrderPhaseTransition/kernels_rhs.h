@@ -45,6 +45,7 @@ Rhs(const amrex::Array4<double> &rhs, const amrex::Array4<const double> &state,
     }
 
     constexpr int order = 2;
+    // constexpr int order = 1;
     double laplacian_Phi = sledgehamr::utils::Laplacian<order>(
         state, i, j, k, Scalar::Phi, dx * dx);
 
@@ -63,6 +64,7 @@ AMREX_GPU_DEVICE AMREX_FORCE_INLINE void GravitationalWavesRhs<true>(
     // Compute Laplacians.
     double dx2 = dx * dx;
     constexpr int order = 2;
+    // constexpr int order = 1;
     double laplacian_u_xx =
         sledgehamr::utils::Laplacian<order>(state, i, j, k, Gw::u_xx, dx2);
     double laplacian_u_yy =
@@ -78,6 +80,7 @@ AMREX_GPU_DEVICE AMREX_FORCE_INLINE void GravitationalWavesRhs<true>(
 
     // Compute gradients.
     constexpr int order2 = 2;
+    // constexpr int order2 = 1;
     double grad_x_Phi = sledgehamr::utils::Gradient<order2>(
         state, i, j, k, Scalar::Phi, dx, 'x');
     double grad_y_Phi = sledgehamr::utils::Gradient<order2>(
@@ -86,9 +89,9 @@ AMREX_GPU_DEVICE AMREX_FORCE_INLINE void GravitationalWavesRhs<true>(
         state, i, j, k, Scalar::Phi, dx, 'z');
 
     double C = 1;
-    if (time > tc && tc >= 0) {
-        C = std::exp(-(time - tc) * (time - tc) / (t0 * t0));
-    }
+    // if (time > tc && tc >= 0) {
+    //     C = std::exp(-(time - tc) * (time - tc) / (t0 * t0));
+    // }
 
     // Compute EOM.
     rhs(i, j, k, Gw::u_xx) = state(i, j, k, Gw::du_xx);
