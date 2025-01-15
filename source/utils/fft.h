@@ -4,9 +4,10 @@
 #include <AMReX_BCUtil.H>
 #include <AMReX_FillPatchUtil.H>
 #include <AMReX_PhysBCFunct.H>
-#include <AlignedAllocator.h>
-#include <Dfft.H>
-#include <Distribution.H>
+// #include <AlignedAllocator.h>
+// #include <Dfft.H>
+// #include <Distribution.H>
+#include <AMReX_FFT.H>
 #include <iterator>
 
 #include "hdf5_utils.h"
@@ -144,27 +145,6 @@ static void Fft(const amrex::MultiFab &field, const int comp,
     const amrex::Box original_V = original_ba.minimalBox();
     const int N = original_V.length(0);
     const int N_padded = N * zero_padding;
-    /*
-        const amrex::Box padded_V(
-            amrex::IntVect(0, 0, 0),
-            amrex::IntVect(N_padded - 1, N_padded - 1, N_padded - 1));
-        const amrex::BoxArray padded_V_ba(padded_V);
-        amrex::BoxList extra_bl = padded_V_ba.complementIn(original_V);
-        amrex::BoxArray extra_ba(std::move(extra_bl));
-        ChopGrids(extra_ba, amrex::ParallelDescriptor::NProcs());
-        amrex::BoxList tmp_padded_bl = original_ba.boxList();
-        tmp_padded_bl.join(extra_ba.boxList());
-        amrex::BoxArray tmp_padded_ba(tmp_padded_bl);
-
-        // Get new crude DistributionMap
-        amrex::DistributionMapping extra_dm(extra_ba,
-                                            amrex::ParallelDescriptor::NProcs());
-        amrex::Vector<int> extra_pmap = extra_dm.ProcessorMap();
-        amrex::Vector<int> tmp_padded_pmap = original_pmap;
-        std::move(extra_pmap.begin(), extra_pmap.end(),
-                  std::back_inserter(tmp_padded_pmap));
-        amrex::DistributionMapping tmp_padded_dm(tmp_padded_pmap);
-    */
 
     amrex::Vector<int> tmp_padded_pmap;
     amrex::BoxList tmp_padded_bl;
@@ -189,23 +169,10 @@ static void Fft(const amrex::MultiFab &field, const int comp,
     padded_geom.refine(
         amrex::IntVect(zero_padding, zero_padding, zero_padding));
 
-    //    amrex::Print() << "orignal ba\n" << original_ba << std::endl;
-    //    amrex::Print() << "original dm\n" << field.DistributionMap() <<
-    //    std::endl; amrex::Print() << "original geom\n" << geom << std::endl;
-    //    amrex::Print() << "padded ba\n" << tmp_padded_ba << std::endl;
-    //    amrex::Print() << "padded dm\n" << tmp_padded_dm << std::endl;
-    //    amrex::Print() << "padded geom\n" << padded_geom << std::endl;
-
     amrex::MultiFab tmp_field(original_ba, field.DistributionMap(), 1, 0);
     tmp_field.ParallelCopy(field, comp, 0, 1, 0, 0);
     amrex::MultiFab tmp_padded_field(tmp_padded_ba, tmp_padded_dm, 1, 0,
                                      amrex::MFInfo().SetAlloc(false));
-
-    //    amrex::Print() << "nans: " << field.contains_nan() << " "
-    //                   << tmp_field.contains_nan() << " " << std::flush
-    //                   << std::endl;
-    //    amrex::Print() << "**********************************************"
-    //                   << std::endl;
 
     const int offset = original_ba.size();
     for (amrex::MFIter mfi(tmp_padded_field); mfi.isValid(); ++mfi) {
@@ -244,158 +211,50 @@ static void Fft(const amrex::MultiFab &field, const int comp,
 
     amrex::FillPatchSingleLevel(padded_field, 0, smf, stime, 0, 0, 1,
                                 padded_geom, physbc, 0);
+    // Use the new amrex::FFT setup
+    amrex::Box domain = padded_ba.minimalBox();
+    amrex::FFT::R2C my_fft(domain);
 
-    if (false) {
-        std::string subfolder =
-            "debug_output/fft_" + std::to_string(++fft_counter);
-        amrex::UtilCreateDirectory(subfolder.c_str(), 0755);
+    // create storage for the FFT
+    auto const &[cba, cdm] = my_fft.getSpectralDataLayout();
 
-        std::string filename =
-            subfolder + "/" +
-            std::to_string(amrex::ParallelDescriptor::MyProc()) + ".hdf5";
-        hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
-                                  H5P_DEFAULT);
+    // amrex::Print() << "padded ba" << padded_ba << std::endl;
+    // amrex::Print() << "cba" << cba << std::endl;
 
-        amrex::Print() << "Writing " << subfolder << std::endl;
-        WriteThis(&field, file_id, comp);
+    field_fft_real_or_abs.define(cba, cdm, 1, 0);
+    field_fft_imag.define(cba, cdm, 1, 0);
 
-        H5Fclose(file_id);
-    }
-    if (false) {
-        std::string subfolder =
-            "debug_output/fft_" + std::to_string(++fft_counter);
-        amrex::UtilCreateDirectory(subfolder.c_str(), 0755);
+    amrex::FabArray<amrex::BaseFab<amrex::GpuComplex<amrex::Real>>> phi_fft(
+        cba, cdm, 1, 0);
+    my_fft.forward(padded_field, phi_fft);
 
-        std::string filename =
-            subfolder + "/" +
-            std::to_string(amrex::ParallelDescriptor::MyProc()) + ".hdf5";
-        hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
-                                  H5P_DEFAULT);
+    for (amrex::MFIter mfi(phi_fft); mfi.isValid(); ++mfi) {
 
-        amrex::Print() << "Writing " << subfolder << std::endl;
-        WriteThis(&tmp_padded_field, file_id, 0);
+        amrex::Array4<amrex::GpuComplex<amrex::Real>> const &phi_fft_ptr =
+            phi_fft.array(mfi);
+        amrex::Array4<amrex::Real> real_or_abs =
+            field_fft_real_or_abs.array(mfi);
+        amrex::Array4<amrex::Real> imag = field_fft_imag.array(mfi);
 
-        H5Fclose(file_id);
-    }
-    if (false) {
-        std::string subfolder =
-            "debug_output/fft_" + std::to_string(++fft_counter);
-        amrex::UtilCreateDirectory(subfolder.c_str(), 0755);
+        const amrex::Box &bx = mfi.fabbox();
 
-        std::string filename =
-            subfolder + "/" +
-            std::to_string(amrex::ParallelDescriptor::MyProc()) + ".hdf5";
-        hid_t file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
-                                  H5P_DEFAULT);
-
-        amrex::Print() << "Writing " << subfolder << std::endl;
-        WriteThis(&padded_field, file_id, 0);
-
-        H5Fclose(file_id);
-    }
-
-    //    amrex::Print() << "nans: " << field.contains_nan() << " "
-    //                   << padded_field.contains_nan() << std::flush <<
-    //                   std::endl;
-    //    amrex::Print() << "**********************************************"
-    //                   << std::endl;
-
-    /*
-    // Get crude zero-padded boxArray.
-    const amrex::BoxArray &original_ba = field.boxArray();
-    amrex::Box minimal_box = original_ba.minimalBox();
-    minimal_box.refine(zero_padding);
-    // check this yields volume outside of ba domain.
-    amrex::BoxList extra_bl = original_ba.complementIn(minimal_box);
-    amrex::BoxArray extra_ba(std::move(extra_bl));
-    ChopGrids(extra_ba, amrex::ParallelDescriptor::NProcs());
-    amrex::BoxList new_bl = original_ba.boxList();
-    new_bl.join(extra_ba.boxList());
-    amrex::BoxArray new_ba(new_bl);
-
-    // Get new crude DistributionMap
-    const amrex::DistributionMapping &original_dm = field.DistributionMap();
-    amrex::DistributionMapping extra_dm(extra_ba,
-                                        amrex::ParallelDescriptor::NProcs());
-    amrex::Vector<int> extra_pmap = extra_dm.ProcessorMap();
-    amrex::Vector<int> new_pmap = original_dm.ProcessorMap();
-    std::move(extra_pmap.begin(), extra_pmap.end(),
-              std::back_inserter(new_pmap));
-    amrex::DistributionMapping new_dm(new_pmap);
-
-    // Fill new crude MultiFab
-    amrex::MultiFab field_tmp(new_ba, new_dm, 1, 0);
-    for (amrex::MFIter mfi(field, false); mfi.isValid(); ++mfi) {
-        const amrex::Box &bx = mfi.tilebox();
-        const auto &state_arr = field.array(mfi);
-        const auto &field_tmp_arr = field_tmp.array(mfi);
-
-        amrex::ParallelFor(
-            bx, [=] AMREX_GPU_DEVICE(int i, int j, int k) noexcept {
-                field_tmp_arr(i, j, k, 0) = state_arr(i, j, k, comp);
+        if (abs) {
+            amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE(int i, int j,
+                                                        int k) noexcept {
+                real_or_abs(i, j, k, 0) = std::sqrt(
+                    phi_fft_ptr(i, j, k).real() * phi_fft_ptr(i, j, k).real() +
+                    phi_fft_ptr(i, j, k).imag() * phi_fft_ptr(i, j, k).imag());
             });
+        } else {
+            amrex::ParallelFor(
+                bx, [=] AMREX_GPU_DEVICE(int i, int j, int k) noexcept {
+                    real_or_abs(i, j, k, 0) = phi_fft_ptr(i, j, k).real();
+                    imag(i, j, k, 0) = phi_fft_ptr(i, j, k).imag();
+                });
+        }
     }
 
-    // Now refine layout so we can feed it into SWFFT
-    amrex::BoxArray padded_ba(minimal_box);
-    ChopGrids(padded_ba, amrex::ParallelDescriptor::NProcs());
-    amrex::DistributionMapping padded_dm(padded_ba,
-                                         amrex::ParallelDescriptor::NProcs());
-    amrex::Geometry padded_geom(geom);
-    padded_geom.refine(
-        amrex::IntVect(zero_padding, zero_padding, zero_padding));
-
-    amrex::MultiFab padded_field(padded_ba, padded_dm, 1, 0);
-
-    amrex::Print() << "********************* bef" <<
-    field_tmp.contains_nan()
-                   << " " << padded_field.contains_nan() << std::endl;
-    padded_field.ParallelCopy(field_tmp);
-    amrex::Print() << "********************* aft" <<
-    field_tmp.contains_nan()
-                   << " " << padded_field.contains_nan() << std::endl;
-                   */
     /*
-    amrex::Vector<amrex::BCRec> bcs;
-    bcs.resize(1);
-    for (int i = 0; i < AMREX_SPACEDIM; ++i) {
-        bcs[0].setLo(i, amrex::BCType::int_dir);
-        bcs[0].setHi(i, amrex::BCType::int_dir);
-    }
-
-    amrex::CpuBndryFuncFab bndry_func(nullptr);
-    amrex::PhysBCFunct<amrex::CpuBndryFuncFab> physbc(padded_geom, bcs,
-                                                      bndry_func);
-    amrex::Vector<amrex::MultiFab *> smf{
-        static_cast<amrex::MultiFab *>(&field_tmp)};
-    amrex::Vector<double> stime{0};
-
-    amrex::FillPatchSingleLevel(padded_field, 0, smf, stime, 0, 0, 1,
-                                padded_geom, physbc, 0);
-    */
-    //    tmp_field.clear();
-    field_fft_real_or_abs.define(padded_ba, padded_dm, 1, 0);
-    field_fft_imag.define(padded_ba, padded_dm, 1, 0);
-
-    // Debug output
-    /*
-    amrex::Print() << "original_ba:\n"
-                   << original_ba << std::flush << std::endl;
-    amrex::Print() << "minimal_box:\n" << minimal_box << std::endl;
-    amrex::Print() << "extra ba:\n" << extra_ba << std::flush << std::endl;
-    amrex::Print() << "new ba:\n" << new_ba << std::flush << std::endl;
-    amrex::Print() << "original dm\n" << original_dm << std::flush << std::endl;
-    amrex::Print() << "extra dm\n" << extra_dm << std::flush << std::endl;
-    amrex::Print() << "new dm\n" << new_dm << std::flush << std::endl;
-    amrex::Print() << "padded ba\n" << padded_ba << std::flush << std::endl;
-    amrex::Print() << "padded dm\n" << padded_dm << std::flush << std::endl;
-    amrex::Print() << "contains nan tmp field\n"
-                   << field_tmp.contains_nan() << std::flush << std::endl;
-    amrex::Print() << "contains nan padded field\n"
-                   << padded_field.contains_nan() << std::flush << std::endl;
-    amrex::Print() << "padded geom domains\n"
-                   << padded_geom.Domain() << std::flush << std::endl;
-    */
     // Now setup SWFFT
     int nx = padded_ba[0].size()[0];
     int ny = padded_ba[0].size()[1];
@@ -481,6 +340,7 @@ static void Fft(const amrex::MultiFab &field, const int comp,
             }
         }
     }
+    */
 }
 
 }; // namespace utils

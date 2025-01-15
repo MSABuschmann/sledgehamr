@@ -61,9 +61,6 @@ void GravitationalWaves::ComputeSpectrum(
     double L = sim->L * static_cast<double>(zero_padding);
 
     const LevelData &ld = sim->grid_new[lev];
-    // const amrex::BoxArray &ba = ld.boxArray();
-    // const amrex::DistributionMapping &dm = ld.DistributionMap();
-
     amrex::MultiFab du_real[6];
     amrex::MultiFab du_imag[6];
     const int mat[3][3] = {{0, 1, 2}, {1, 3, 4}, {2, 4, 5}};
@@ -71,8 +68,6 @@ void GravitationalWaves::ComputeSpectrum(
     modifier->SelectComponents(comps);
 
     for (int i = 0; i < 6; ++i) {
-        // du_real[i].define(ba, dm, 1, 0);
-        // du_imag[i].define(ba, dm, 1, 0);
         utils::Fft(ld, comps[i] + idx_offset, du_real[i], du_imag[i],
                    sim->geom[lev], false, zero_padding);
     }
