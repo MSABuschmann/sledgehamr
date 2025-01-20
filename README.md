@@ -54,7 +54,9 @@ BibTex:
 
 ### 2024
 * "Signatures of primordial energy injection from axion strings", J. Benabou et al., Phys.Rev.D 109 (2024) 5, 055005, https://arxiv.org/abs/2308.01334
+* "Axion mass prediction from adaptive mesh refinement cosmological lattice simulations", J. Benabou et al., https://arxiv.org/abs/2412.08699
+
+### 2025
 * "Thick and Thin Wall Collisions with Adaptive Mesh Refinement", M. Buschmann et al., to appear
-* "Axion Mass Prediction from adaptive mesh refinement cosmological lattice simulations", J. Benabou et al., to appear
 
 
