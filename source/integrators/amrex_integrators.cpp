@@ -18,7 +18,7 @@ void IntegratorAMReX::Integrate(LevelData &mf_old, LevelData &mf_new,
     // TODO Make 4th order time interpolation available.
     amrex::TimeIntegrator<amrex::MultiFab> integrator(mf_old);
 
-    auto source_fun = [&](amrex::MultiFab &rhs, amrex::MultiFab &state,
+    auto source_fun = [&](amrex::MultiFab &rhs, const amrex::MultiFab &state,
                           const double time) {
         sim->level_synchronizer->FillIntermediatePatch(lev, time, state);
         sim->FillRhs(rhs, state, time, lev, dt, dx);
