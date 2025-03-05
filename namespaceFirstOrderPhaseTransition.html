@@ -64,6 +64,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">FirstOrderPhaseTransition Namespace Reference</div>  </div>
@@ -82,6 +83,13 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFirstOrderPhaseTransition_1_1SpectrumModifier__2BubblesFrom1.html">SpectrumModifier_2BubblesFrom1</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a1a4a522cc31d811a5cdf61358dec1cba"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFirstOrderPhaseTransition.html#a1a4a522cc31d811a5cdf61358dec1cba">PotentialType</a> { <a class="el" href="namespaceFirstOrderPhaseTransition.html#a1a4a522cc31d811a5cdf61358dec1cbaaa85fc1a13957a9e278a4011f5c3e1d68">PureLambdaBar</a> = 0
+, <a class="el" href="namespaceFirstOrderPhaseTransition.html#a1a4a522cc31d811a5cdf61358dec1cbaa684a747d73b49fb1da17e43efdbb17a7">Piecewise</a> = 1
+ }</td></tr>
+<tr class="separator:a1a4a522cc31d811a5cdf61358dec1cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ad6523d6f8783406619cd3a34a0c9fcb5"><td class="memItemLeft" align="right" valign="top">AMREX_FORCE_INLINE double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFirstOrderPhaseTransition.html#ad6523d6f8783406619cd3a34a0c9fcb5">dPhi2</a> (amrex::Array4&lt; double const &gt; const &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const std::vector&lt; double &gt; &amp;params)</td></tr>
@@ -98,6 +106,25 @@ Functions</h2></td></tr>
 <tr class="memitem:a9c780f1bdd6cdb0610f43d449425ac96"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_FORCE_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceFirstOrderPhaseTransition.html#a9c780f1bdd6cdb0610f43d449425ac96">GravitationalWavesRhs&lt; true &gt;</a> (const amrex::Array4&lt; double &gt; &amp;rhs, const amrex::Array4&lt; const double &gt; &amp;state, const int i, const int j, const int k, const int lev, const double time, const double dt, const double dx, const double *params)</td></tr>
 <tr class="separator:a9c780f1bdd6cdb0610f43d449425ac96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a1a4a522cc31d811a5cdf61358dec1cba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a4a522cc31d811a5cdf61358dec1cba">&#9670;&nbsp;</a></span>PotentialType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceFirstOrderPhaseTransition.html#a1a4a522cc31d811a5cdf61358dec1cba">FirstOrderPhaseTransition::PotentialType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1a4a522cc31d811a5cdf61358dec1cbaaa85fc1a13957a9e278a4011f5c3e1d68"></a>PureLambdaBar&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a1a4a522cc31d811a5cdf61358dec1cbaa684a747d73b49fb1da17e43efdbb17a7"></a>Piecewise&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a0cbc764b329e5dab3eab1fddf0fc01ce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0cbc764b329e5dab3eab1fddf0fc01ce">&#9670;&nbsp;</a></span>AddBubble()</h2>

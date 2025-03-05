@@ -95,6 +95,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Integrator.html">Integrator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract base class that handles the time integration for a single level.  <a href="classsledgehamr_1_1Integrator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IntegratorLeapfrog.html">IntegratorLeapfrog</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of the leap-frog integration scheme (kick-drift-kick).  <a href="classsledgehamr_1_1IntegratorLeapfrog.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1IntegratorLsssprk3.html">IntegratorLsssprk3</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of the low-storage strong stability preserving third order Runge-Kutta integration scheme (LSSSPRK3).  <a href="classsledgehamr_1_1IntegratorLsssprk3.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,10 +198,11 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9fadca1527bd7465be0f755b074511c3b88">AmrexRk4</a> = 4
 , <a class="el" href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9fadf89c1119c9c1f0b21c163dce6ffada8">Lsssprk3</a> = 10
+, <a class="el" href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9faa3931048f4270d156340520021eb78af">Leapfrog</a> = 11
 , <a class="el" href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9fa42d18ac02ae16f72e2bfed448fd50d81">RknButcherTableau</a> = 20
-, <a class="el" href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9fa2c21bd25755d4d56fd6fcd75b7de99a1">Rkn4</a> = 21
 , <br />
-&#160;&#160;<a class="el" href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9fa306a5c613a0c3c63787e344e07a40eab">Rkn5</a> = 22
+&#160;&#160;<a class="el" href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9fa2c21bd25755d4d56fd6fcd75b7de99a1">Rkn4</a> = 21
+, <a class="el" href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9fa306a5c613a0c3c63787e344e07a40eab">Rkn5</a> = 22
 <br />
  }</td></tr>
 <tr class="memdesc:ab8eb85c1c6f942455809cf1820479f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum containing all valid integration types. These are the values that are being used in the inputs file under 'integrator.type'.  <a href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9f">More...</a><br /></td></tr>
@@ -328,6 +332,7 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="ab8eb85c1c6f942455809cf1820479f9fad91267866d6b185b5b3dd2b2b04f3a6e"></a>AmrexSsprk3&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ab8eb85c1c6f942455809cf1820479f9fadca1527bd7465be0f755b074511c3b88"></a>AmrexRk4&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ab8eb85c1c6f942455809cf1820479f9fadf89c1119c9c1f0b21c163dce6ffada8"></a>Lsssprk3&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab8eb85c1c6f942455809cf1820479f9faa3931048f4270d156340520021eb78af"></a>Leapfrog&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ab8eb85c1c6f942455809cf1820479f9fa42d18ac02ae16f72e2bfed448fd50d81"></a>RknButcherTableau&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ab8eb85c1c6f942455809cf1820479f9fa2c21bd25755d4d56fd6fcd75b7de99a1"></a>Rkn4&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ab8eb85c1c6f942455809cf1820479f9fa306a5c613a0c3c63787e344e07a40eab"></a>Rkn5&#160;</td><td class="fielddoc"></td></tr>
