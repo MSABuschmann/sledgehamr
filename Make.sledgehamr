@@ -34,9 +34,14 @@ CEXE_headers += $(shell ls $(SLEDGEHAMR_PROJECT_PATH)/*/*.h | xargs -n 1 basenam
 include $(SLEDGEHAMR_HOME_ABS)/Make.projects
 
 # SWFFT
-include $(AMREX_HOME)/Src/Extern/SWFFT/Make.package
-INCLUDE_LOCATIONS += $(AMREX_HOME)/Src/Extern/SWFFT
-VPATH_LOCATIONS   += $(AMREX_HOME)/Src/Extern/SWFFT
+#include $(AMREX_HOME)/Src/Extern/SWFFT/Make.package
+#INCLUDE_LOCATIONS += $(AMREX_HOME)/Src/Extern/SWFFT
+#VPATH_LOCATIONS   += $(AMREX_HOME)/Src/Extern/SWFFT
+
+include $(AMREX_HOME)/Src/FFT/Make.package
+INCLUDE_LOCATIONS += $(AMREX_HOME)/Src/FFT
+VPATH_LOCATIONS   += $(AMREX_HOME)/Src/FFT
+
 LIBRARIES += -L$(FFTW_DIR) -lfftw3_mpi -lfftw3_omp -lfftw3
 
 # Boost
@@ -49,6 +54,7 @@ LIBRARIES += -lhdf5
 # AMReX
 USE_MPI = TRUE
 USE_OMP = TRUE
+USE_FFT = TRUE
 DIM = 3
 
 include $(AMREX_HOME)/Tools/GNUMake/Make.defs

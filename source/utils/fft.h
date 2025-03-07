@@ -1,13 +1,18 @@
 #ifndef SLEDGEHAMR_FFT_H_
 #define SLEDGEHAMR_FFT_H_
 
+// #define OLD_FFT
+
 #include <AMReX_BCUtil.H>
 #include <AMReX_FillPatchUtil.H>
 #include <AMReX_PhysBCFunct.H>
-// #include <AlignedAllocator.h>
-// #include <Dfft.H>
-// #include <Distribution.H>
+#ifdef OLD_FFT
+#include <AlignedAllocator.h>
+#include <Dfft.H>
+#include <Distribution.H>
+#else
 #include <AMReX_FFT.H>
+#endif
 #include <iterator>
 
 #include "hdf5_utils.h"
@@ -211,6 +216,8 @@ static void Fft(const amrex::MultiFab &field, const int comp,
 
     amrex::FillPatchSingleLevel(padded_field, 0, smf, stime, 0, 0, 1,
                                 padded_geom, physbc, 0);
+
+#ifndef OLD_FFT
     // Use the new amrex::FFT setup
     amrex::Box domain = padded_ba.minimalBox();
     amrex::FFT::R2C my_fft(domain);
@@ -253,8 +260,8 @@ static void Fft(const amrex::MultiFab &field, const int comp,
                 });
         }
     }
+#else
 
-    /*
     // Now setup SWFFT
     int nx = padded_ba[0].size()[0];
     int ny = padded_ba[0].size()[1];
@@ -340,7 +347,7 @@ static void Fft(const amrex::MultiFab &field, const int comp,
             }
         }
     }
-    */
+#endif
 }
 
 }; // namespace utils
