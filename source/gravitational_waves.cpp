@@ -68,6 +68,12 @@ void GravitationalWaves::ComputeSpectrum(
     modifier->SelectComponents(comps);
 
     for (int i = 0; i < 6; ++i) {
+#ifdef OLD_FFT
+        const amrex::BoxArray &ba = ld.boxArray();
+        const amrex::DistributionMapping &dm = ld.DistributionMap();
+        du_real[i].define(ba, dm, 1, 0);
+        du_imag[i].define(ba, dm, 1, 0);
+#endif
         utils::Fft(ld, comps[i] + idx_offset, du_real[i], du_imag[i],
                    sim->geom[lev], false, zero_padding);
     }
@@ -127,27 +133,10 @@ void GravitationalWaves::ComputeSpectrum(
             for (int b = lo.y; b <= hi.y; ++b) {
                 AMREX_PRAGMA_SIMD
                 for (int a = lo.x; a <= hi.x; ++a) {
+                    // To account of negative frequencies
+                    double multpl = (a == 0 || a == dimN / 2) ? 1. : 2.;
                     int abc[3] = {a, b, c};
                     double running_sum = 0;
-
-                    for (int i = 0; i < 3; ++i) {
-                        for (int j = 0; j < 3; ++j) {
-                            for (int l = 0; l < 3; ++l) {
-                                for (int m = 0; m < 3; ++m) {
-                                    running_sum +=
-                                        GetLambda(i, j, l, m, abc, dimN) *
-                                        (du_real_arr[mat[i][j]]->operator()(
-                                             a, b, c) *
-                                             du_real_arr[mat[l][m]]->operator()(
-                                                 a, b, c) +
-                                         du_imag_arr[mat[i][j]]->operator()(
-                                             a, b, c) *
-                                             du_imag_arr[mat[l][m]]->operator()(
-                                                 a, b, c));
-                                }
-                            }
-                        }
-                    }
 
                     int li = a >= dimN / 2 ? a - dimN : a;
                     int lj = b >= dimN / 2 ? b - dimN : b;
@@ -162,6 +151,25 @@ void GravitationalWaves::ComputeSpectrum(
                             std::sqrt(static_cast<double>(sq)) + .5);
                     }
 
+                    for (int i = 0; i < 3; ++i) {
+                        for (int j = 0; j < 3; ++j) {
+                            for (int l = 0; l < 3; ++l) {
+                                for (int m = 0; m < 3; ++m) {
+                                    running_sum +=
+                                        GetLambda(i, j, l, m, abc, dimN) *
+                                        multpl *
+                                        (du_real_arr[mat[i][j]]->operator()(
+                                             a, b, c) *
+                                             du_real_arr[mat[l][m]]->operator()(
+                                                 a, b, c) +
+                                         du_imag_arr[mat[i][j]]->operator()(
+                                             a, b, c) *
+                                             du_imag_arr[mat[l][m]]->operator()(
+                                                 a, b, c));
+                                }
+                            }
+                        }
+                    }
                     gw_spectrum[index] += running_sum;
                 }
             }
