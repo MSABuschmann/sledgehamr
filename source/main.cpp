@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
     // term solution for this.
     amrex::ParmParse pp("amrex");
     pp.add("the_arena_is_managed", 1);
+    pp.add("use_gpu_aware_mpi", 0);
 
     amrex::Initialize(argc, argv);
 
