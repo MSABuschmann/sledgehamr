@@ -66,7 +66,8 @@ $(function() {
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">sledgehamr Namespace Reference</div>  </div>
 </div><!--header-->
@@ -207,6 +208,15 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ab8eb85c1c6f942455809cf1820479f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum containing all valid integration types. These are the values that are being used in the inputs file under 'integrator.type'.  <a href="namespacesledgehamr.html#ab8eb85c1c6f942455809cf1820479f9f">More...</a><br /></td></tr>
 <tr class="separator:ab8eb85c1c6f942455809cf1820479f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a217ce2b0b9a87d4a91dc43790d14583c"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_FORCE_INLINE double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr.html#a217ce2b0b9a87d4a91dc43790d14583c">gw_GetProjection</a> (int i, int j, double abc[3])</td></tr>
+<tr class="memdesc:a217ce2b0b9a87d4a91dc43790d14583c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects all indicies.  <a href="namespacesledgehamr.html#a217ce2b0b9a87d4a91dc43790d14583c">More...</a><br /></td></tr>
+<tr class="separator:a217ce2b0b9a87d4a91dc43790d14583c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e3e69cc3ab95ebb38283412df2f07eb"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_FORCE_INLINE double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesledgehamr.html#a4e3e69cc3ab95ebb38283412df2f07eb">gw_GetLambda</a> (int i, int j, int l, int m, int abc[3], const double *index_to_k)</td></tr>
+<tr class="memdesc:a4e3e69cc3ab95ebb38283412df2f07eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lambda from projections.  <a href="namespacesledgehamr.html#a4e3e69cc3ab95ebb38283412df2f07eb">More...</a><br /></td></tr>
+<tr class="separator:a4e3e69cc3ab95ebb38283412df2f07eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Yes, I know this file is disgusting. This is what we get for not wanting everyone to write a bunch of complicated boilerplate every single time but also want to avoid all this function overhead for performance ... </p>
@@ -337,6 +347,119 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="ab8eb85c1c6f942455809cf1820479f9fa2c21bd25755d4d56fd6fcd75b7de99a1"></a>Rkn4&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ab8eb85c1c6f942455809cf1820479f9fa306a5c613a0c3c63787e344e07a40eab"></a>Rkn5&#160;</td><td class="fielddoc"></td></tr>
 </table>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a4e3e69cc3ab95ebb38283412df2f07eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e3e69cc3ab95ebb38283412df2f07eb">&#9670;&nbsp;</a></span>gw_GetLambda()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_DEVICE AMREX_FORCE_INLINE double sledgehamr::gw_GetLambda </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>abc</em>[3], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>index_to_k</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes lambda from projections. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>i-index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-index. </td></tr>
+    <tr><td class="paramname">l</td><td>l-index. </td></tr>
+    <tr><td class="paramname">m</td><td>m-index. </td></tr>
+    <tr><td class="paramname">abc</td><td>a-, b-, and c-index. </td></tr>
+    <tr><td class="paramname">N</td><td>Total index length. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Lambda </dd></dl>
+
+</div>
+</div>
+<a id="a217ce2b0b9a87d4a91dc43790d14583c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a217ce2b0b9a87d4a91dc43790d14583c">&#9670;&nbsp;</a></span>gw_GetProjection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_DEVICE AMREX_FORCE_INLINE double sledgehamr::gw_GetProjection </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>abc</em>[3]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Projects all indicies. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>i-index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-index. </td></tr>
+    <tr><td class="paramname">abc</td><td>a-, b-, and c- index. </td></tr>
+    <tr><td class="paramname">N</td><td>Total index length. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Projected value. </dd></dl>
 
 </div>
 </div>
