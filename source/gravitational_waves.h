@@ -43,10 +43,6 @@ class GravitationalWaves {
     };
 
   private:
-    double IndexToK(int a, int N);
-    double GetProjection(int i, int j, int abc[3], int N);
-    double GetLambda(int i, int j, int l, int m, int abc[3], int N);
-
     /** @brief Pointer to the simulation.
      */
     Sledgehamr *sim;
@@ -92,8 +88,49 @@ struct GravitationalWavesSpectrumModifier {
 
     virtual void FourierSpaceModifications(amrex::MultiFab du_real[6],
                                            amrex::MultiFab du_imag[6],
-                                           const double dk, const int dimN){};
+                                           const double dk, const int dimN) {};
 };
+
+/** @brief Projects all indicies.
+ * @param   i   i-index.
+ * @param   j   j-index.
+ * @param   abc a-, b-, and c- index.
+ * @param   N   Total index length.
+ * @return Projected value.
+ */
+AMREX_GPU_DEVICE AMREX_FORCE_INLINE double gw_GetProjection(int i, int j,
+                                                            double abc[3]) {
+    double norm = abc[0] * abc[0] + abc[1] * abc[1] + abc[2] * abc[2];
+    int l = amrex::min(i, j);
+    int m = amrex::max(i, j);
+
+    double proj = abc[l] * abc[m];
+
+    return static_cast<double>(l == m) - proj / norm;
+}
+
+/** @brief Computes lambda from projections.
+ * @param   i   i-index.
+ * @param   j   j-index.
+ * @param   l   l-index.
+ * @param   m   m-index.
+ * @param   abc a-, b-, and c-index.
+ * @param   N   Total index length.
+ * @return Lambda
+ */
+AMREX_GPU_DEVICE AMREX_FORCE_INLINE double
+gw_GetLambda(int i, int j, int l, int m, int abc[3], const double *index_to_k) {
+    if (abc[0] == 0 && abc[1] == 0 && abc[2] == 0)
+        return 0.;
+
+    double abc_d[3];
+    abc_d[0] = index_to_k[abc[0]];
+    abc_d[1] = index_to_k[abc[1]];
+    abc_d[2] = index_to_k[abc[2]];
+
+    return gw_GetProjection(i, l, abc_d) * gw_GetProjection(j, m, abc_d) -
+           gw_GetProjection(i, j, abc_d) * gw_GetProjection(l, m, abc_d) / 2.;
+}
 
 }; // namespace sledgehamr
 
