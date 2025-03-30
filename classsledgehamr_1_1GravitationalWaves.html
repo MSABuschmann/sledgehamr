@@ -69,6 +69,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classsledgehamr_1_1GravitationalWaves-members.html">List of all members</a>  </div>
@@ -116,8 +117,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a86464c7fd8ef0762722c7bb21286eb16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a319402277392debda392286003eef091"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a319402277392debda392286003eef091">GetProjectionType</a> () const</td></tr>
 <tr class="separator:a319402277392debda392286003eef091"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca0924605a03af7834d26bee8e96b88c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#aca0924605a03af7834d26bee8e96b88c">GetZeroPadding</a> () const</td></tr>
-<tr class="separator:aca0924605a03af7834d26bee8e96b88c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ad7086d64ceda987947542d6520b4a314"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ad7086d64ceda987947542d6520b4a314">IndexToK</a> (int a, int N)</td></tr>
+<tr class="memdesc:ad7086d64ceda987947542d6520b4a314"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a given index to k-space given a projection type.  <a href="classsledgehamr_1_1GravitationalWaves.html#ad7086d64ceda987947542d6520b4a314">More...</a><br /></td></tr>
+<tr class="separator:ad7086d64ceda987947542d6520b4a314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75f8c4ad778f968ca006189f6326a17b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a75f8c4ad778f968ca006189f6326a17b">GetProjection</a> (int i, int j, int abc[3], int N)</td></tr>
+<tr class="memdesc:a75f8c4ad778f968ca006189f6326a17b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects all indicies.  <a href="classsledgehamr_1_1GravitationalWaves.html#a75f8c4ad778f968ca006189f6326a17b">More...</a><br /></td></tr>
+<tr class="separator:a75f8c4ad778f968ca006189f6326a17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d7aa6918836ae602d6866280188b08b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a2d7aa6918836ae602d6866280188b08b">GetLambda</a> (int i, int j, int l, int m, int abc[3], int N)</td></tr>
+<tr class="memdesc:a2d7aa6918836ae602d6866280188b08b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lambda from projections.  <a href="classsledgehamr_1_1GravitationalWaves.html#a2d7aa6918836ae602d6866280188b08b">More...</a><br /></td></tr>
+<tr class="separator:a2d7aa6918836ae602d6866280188b08b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -130,11 +141,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a485542991a40b578f80cf9b772395b0b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a485542991a40b578f80cf9b772395b0b">projection_type</a> = 2</td></tr>
 <tr class="memdesc:a485542991a40b578f80cf9b772395b0b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classsledgehamr_1_1Projection.html" title="Computes a line-of-sight projection for an arbitrary quantity and saves it to disk....">Projection</a> type when computing the spectrum. This should be set to the same order as the gradient computation in the EOM. However, since this defined in a kernel function we need to keep this is a free parameter here and rely on the user to select the appropiate projection type through the input file. Will be set by 'output.gw_spectra.projection_type'.  <a href="classsledgehamr_1_1GravitationalWaves.html#a485542991a40b578f80cf9b772395b0b">More...</a><br /></td></tr>
 <tr class="separator:a485542991a40b578f80cf9b772395b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22bce7b3f2cce0888b0accfd85c30b6e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a22bce7b3f2cce0888b0accfd85c30b6e">zero_padding</a> = 1</td></tr>
-<tr class="memdesc:a22bce7b3f2cce0888b0accfd85c30b6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the amount of zero padding during the FFT when computing the spectrum. Must be a power of 2. 1 means no zero padding.  <a href="classsledgehamr_1_1GravitationalWaves.html#a22bce7b3f2cce0888b0accfd85c30b6e">More...</a><br /></td></tr>
-<tr class="separator:a22bce7b3f2cce0888b0accfd85c30b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b20a3de2e9ec9b34db5cbc4565ba76d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#a3b20a3de2e9ec9b34db5cbc4565ba76d">unbinned</a> = true</td></tr>
-<tr class="separator:a3b20a3de2e9ec9b34db5cbc4565ba76d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad60d757a3f2804ad9c0cb47c8303db6c"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structsledgehamr_1_1GravitationalWavesSpectrumModifier.html">GravitationalWavesSpectrumModifier</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1GravitationalWaves.html#ad60d757a3f2804ad9c0cb47c8303db6c">default_modifier</a></td></tr>
 <tr class="separator:ad60d757a3f2804ad9c0cb47c8303db6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -242,6 +248,140 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2d7aa6918836ae602d6866280188b08b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d7aa6918836ae602d6866280188b08b">&#9670;&nbsp;</a></span>GetLambda()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double sledgehamr::GravitationalWaves::GetLambda </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>abc</em>[3], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>N</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes lambda from projections. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>i-index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-index. </td></tr>
+    <tr><td class="paramname">l</td><td>l-index. </td></tr>
+    <tr><td class="paramname">m</td><td>m-index. </td></tr>
+    <tr><td class="paramname">abc</td><td>a-, b-, and c-index. </td></tr>
+    <tr><td class="paramname">N</td><td>Total index length. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Lambda </dd></dl>
+
+</div>
+</div>
+<a id="a75f8c4ad778f968ca006189f6326a17b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75f8c4ad778f968ca006189f6326a17b">&#9670;&nbsp;</a></span>GetProjection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double sledgehamr::GravitationalWaves::GetProjection </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>abc</em>[3], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>N</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Projects all indicies. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>i-index. </td></tr>
+    <tr><td class="paramname">j</td><td>j-index. </td></tr>
+    <tr><td class="paramname">abc</td><td>a-, b-, and c- index. </td></tr>
+    <tr><td class="paramname">N</td><td>Total index length. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Projected value. </dd></dl>
+
+</div>
+</div>
 <a id="a319402277392debda392286003eef091"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a319402277392debda392286003eef091">&#9670;&nbsp;</a></span>GetProjectionType()</h2>
 
@@ -267,8 +407,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aca0924605a03af7834d26bee8e96b88c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca0924605a03af7834d26bee8e96b88c">&#9670;&nbsp;</a></span>GetZeroPadding()</h2>
+<a id="ad7086d64ceda987947542d6520b4a314"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7086d64ceda987947542d6520b4a314">&#9670;&nbsp;</a></span>IndexToK()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -277,18 +417,39 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int sledgehamr::GravitationalWaves::GetZeroPadding </td>
+          <td class="memname">double sledgehamr::GravitationalWaves::IndexToK </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>N</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Converts a given index to k-space given a projection type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>Index to be converted. </td></tr>
+    <tr><td class="paramname">N</td><td>Total index length. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>k-value. </dd></dl>
 
 </div>
 </div>
@@ -408,52 +569,6 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Pointer to the simulation. </p>
-
-</div>
-</div>
-<a id="a3b20a3de2e9ec9b34db5cbc4565ba76d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b20a3de2e9ec9b34db5cbc4565ba76d">&#9670;&nbsp;</a></span>unbinned</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool sledgehamr::GravitationalWaves::unbinned = true</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a22bce7b3f2cce0888b0accfd85c30b6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22bce7b3f2cce0888b0accfd85c30b6e">&#9670;&nbsp;</a></span>zero_padding</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int sledgehamr::GravitationalWaves::zero_padding = 1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Defines the amount of zero padding during the FFT when computing the spectrum. Must be a power of 2. 1 means no zero padding. </p>
 
 </div>
 </div>

@@ -95,8 +95,6 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a91e3a5d49f6d65f1b5ecb598a61d9ca4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#a91e3a5d49f6d65f1b5ecb598a61d9ca4">WriteSingleSlice</a> (const <a class="el" href="classsledgehamr_1_1LevelData.html">LevelData</a> *state, int lev, hid_t file_id, std::string ident, int d1, int d2, int d3, bool is_truncation_error)</td></tr>
 <tr class="memdesc:a91e3a5d49f6d65f1b5ecb598a61d9ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a single slices.  <a href="classsledgehamr_1_1Slices.html#a91e3a5d49f6d65f1b5ecb598a61d9ca4">More...</a><br /></td></tr>
 <tr class="separator:a91e3a5d49f6d65f1b5ecb598a61d9ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff84c20af786c8654d6e96452ac92b23"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#aff84c20af786c8654d6e96452ac92b23">ParseParams</a> ()</td></tr>
-<tr class="separator:aff84c20af786c8654d6e96452ac92b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -106,8 +104,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:afeacdad3b3f035dbd684978800e13a84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#afeacdad3b3f035dbd684978800e13a84">with_truncation_errors</a></td></tr>
 <tr class="memdesc:afeacdad3b3f035dbd684978800e13a84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to include truncation error estimates.  <a href="classsledgehamr_1_1Slices.html#afeacdad3b3f035dbd684978800e13a84">More...</a><br /></td></tr>
 <tr class="separator:afeacdad3b3f035dbd684978800e13a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae55651f02ec0b611c2a15a2142502987"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#ae55651f02ec0b611c2a15a2142502987">slice_location</a> = {0, 0, 0}</td></tr>
-<tr class="separator:ae55651f02ec0b611c2a15a2142502987"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ef8f638023b15dddf1a23f6ce7a8dbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsledgehamr_1_1Sledgehamr.html">Sledgehamr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1Slices.html#a3ef8f638023b15dddf1a23f6ce7a8dbf">sim</a></td></tr>
 <tr class="memdesc:a3ef8f638023b15dddf1a23f6ce7a8dbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to simulation.  <a href="classsledgehamr_1_1Slices.html#a3ef8f638023b15dddf1a23f6ce7a8dbf">More...</a><br /></td></tr>
 <tr class="separator:a3ef8f638023b15dddf1a23f6ce7a8dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,31 +164,6 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aff84c20af786c8654d6e96452ac92b23"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff84c20af786c8654d6e96452ac92b23">&#9670;&nbsp;</a></span>ParseParams()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void sledgehamr::Slices::ParseParams </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7c522f2dee8f46de70ad2bf0ebd3ed61"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7c522f2dee8f46de70ad2bf0ebd3ed61">&#9670;&nbsp;</a></span>Write()</h2>
 
@@ -345,28 +316,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Pointer to simulation. </p>
-
-</div>
-</div>
-<a id="ae55651f02ec0b611c2a15a2142502987"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae55651f02ec0b611c2a15a2142502987">&#9670;&nbsp;</a></span>slice_location</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;double&gt; sledgehamr::Slices::slice_location = {0, 0, 0}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
