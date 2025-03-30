@@ -33,17 +33,22 @@ Sledgehamr comes with a few different physics scenarios already implemented such
 If you use sledgehamr, please cite its accompanying paper:
 
 * Malte Buschmann, "Sledgehamr: Simulation Scalar Fields with Adaptive Mesh Refinement",
-arXiv:2404.02950
+Astrophys.J. 979 (2025) 2, 220, arXiv:2404.02950
 
 BibTex:
 ```
-@misc{buschmann2024sledgehamr,
-      title={Sledgehamr: Simulating Scalar Fields with Adaptive Mesh Refinement}, 
-      author={Malte Buschmann},
-      year={2024},
-      eprint={2404.02950},
-      archivePrefix={arXiv},
-      primaryClass={hep-ph}
+@article{Buschmann:2024bfj,
+    author = "Buschmann, Malte",
+    title = "{Sledgehamr: Simulating Scalar Fields with Adaptive Mesh Refinement}",
+    eprint = "2404.02950",
+    archivePrefix = "arXiv",
+    primaryClass = "hep-ph",
+    doi = "10.3847/1538-4357/ad9ea2",
+    journal = "Astrophys. J.",
+    volume = "979",
+    number = "2",
+    pages = "220",
+    year = "2025"
 }
 ```
 
