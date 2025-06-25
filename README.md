@@ -62,6 +62,7 @@ BibTex:
 * "Axion mass prediction from adaptive mesh refinement cosmological lattice simulations", J. Benabou et al., https://arxiv.org/abs/2412.08699
 
 ### 2025
+* "Sledgehamr: Simulating Scalar Fields with Adaptive Mesh Refinement", M. Buschmann, Astrophys.J. 979 (2025) 2, 220, https://arxiv.org/abs/2404.02950
 * "Thick and Thin Wall Collisions with Adaptive Mesh Refinement", M. Buschmann et al., to appear
 
 
