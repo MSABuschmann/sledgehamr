@@ -29,7 +29,25 @@ void FirstOrderPhaseTransition::SetProjections() {
 
 void FirstOrderPhaseTransition::ParseVariables() {
     amrex::ParmParse pp_prj("project");
-    pp_prj.get("lambda_bar", lambda_bar);
+
+    pp_prj.query("potential_type", potential_type);
+    switch (potential_type) {
+    case PotentialType::PureLambdaBar:
+        amrex::Print() << "Running with pure \bar\lambda potential."
+                       << std::endl;
+        pp_prj.get("lambda_bar", lambda_bar);
+        break;
+    case PotentialType::Piecewise:
+        amrex::Print() << "Running with piece-wise potential." << std::endl;
+        pp_prj.get("lambda_bar", lambda_bar);
+        pp_prj.get("vbar", vbar);
+        pp_prj.get("vareps", vareps);
+        pp_prj.get("phiesc", phiesc);
+        break;
+    default:
+        amrex::Abort("Unkown potential type!");
+    }
+
     pp_prj.queryarr("bubbles_to_inject", bubbles_to_inject);
     pp_prj.query("tc", tc);
     pp_prj.query("t0", t0);
@@ -95,10 +113,14 @@ bool FirstOrderPhaseTransition::GwSpectrum_2BubblesFrom1(double time,
 
 void FirstOrderPhaseTransition::SetParamsRhs(std::vector<double> &params,
                                              const double time, const int lev) {
-    params.resize(3);
-    params[0] = quadratic;
-    params[1] = cubic;
-    params[2] = quartic;
+    params.resize(7);
+    params[0] = static_cast<double>(potential_type);
+    params[1] = quadratic;
+    params[2] = cubic;
+    params[3] = quartic;
+    params[4] = vbar;
+    params[5] = vareps;
+    params[6] = phiesc;
 }
 
 void FirstOrderPhaseTransition::SetParamsGravitationalWaveRhs(
@@ -217,9 +239,35 @@ void FirstOrderPhaseTransition::ParseBubbles() {
         bubbles[b].p_bubble = &(bubbles[use_profile[b]]);
     }
 
+    MoveBubblesToCentre();
+
     // std::sort( bubbles.begin(), bubbles.end() );
     amrex::Print() << bubbles.size() << " bubble(s) found to be injected."
                    << std::endl;
+}
+
+void FirstOrderPhaseTransition::MoveBubblesToCentre() {
+    if (bubbles.size() > 2) {
+        return;
+    }
+
+    double C = L / 2.;
+
+    if (bubbles.size() == 1) {
+        bubbles[0].x = C;
+        bubbles[0].y = C;
+        bubbles[0].z = C;
+        return;
+    }
+
+    double cx = (bubbles[0].x + bubbles[1].x) / 2.;
+    double cy = (bubbles[0].y + bubbles[1].y) / 2.;
+    double cz = (bubbles[0].z + bubbles[1].z) / 2.;
+    for (Bubble &bubble : bubbles) {
+        bubble.x += C - cx;
+        bubble.y += C - cy;
+        bubble.z += C - cz;
+    }
 }
 
 std::vector<int> FirstOrderPhaseTransition::FindBubbles(const double time) {

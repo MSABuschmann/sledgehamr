@@ -342,7 +342,7 @@ class Output:
     #                       error estimates.
     # @return   3D field.
     def __Read3dField(self, folder, dim, ranks, ident, downsample, ident2):
-        field = np.ones((dim, dim, dim), dtype=np.float32) * np.nan
+        field = np.ones((dim, dim, dim), dtype=np.float64) * np.nan
         for f in range(ranks):
             file = folder + '/' + str(f) + '.hdf5'
 

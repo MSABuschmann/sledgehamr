@@ -7,5 +7,8 @@ CEXE_sources += amrex_integrators.cpp
 CEXE_headers += lsssprk3.h
 CEXE_sources += lsssprk3.cpp
 
+CEXE_headers += leapfrog.h
+CEXE_sources += leapfrog.cpp
+
 CEXE_headers += rkn.h
 CEXE_sources += rkn.cpp

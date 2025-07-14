@@ -3,9 +3,9 @@
 
 #include <sledgehamr.h>
 
-#include "setup.h"
-#include "kernels_tagging.h"
 #include "kernels_energy_densities.h"
+#include "kernels_tagging.h"
+#include "setup.h"
 
 namespace AxionStrings {
 
@@ -14,7 +14,7 @@ namespace AxionStrings {
  */
 class Cosmology {
   public:
-    void Init(sledgehamr::Sledgehamr* owner);
+    void Init(sledgehamr::Sledgehamr *owner);
 
     /** @brief We only want to create a new level if string width is below
      *         threshold.
@@ -23,24 +23,20 @@ class Cosmology {
      * @return  Whether we want to create level lev.
      */
     bool CreateLevelIf(const int lev, const double time) {
-        return StringWidth(lev-1, time) <= string_width_threshold;
+        return StringWidth(lev - 1, time) <= string_width_threshold;
     }
 
     /** @brief Current radial mode mass.
      * @param   eta Current time eta.
      * @return m_r(eta)
      */
-    double Mr(const double eta) {
-        return std::sqrt(2. * lambda) * eta;
-    }
+    double Mr(const double eta) { return std::sqrt(2. * lambda) * eta; }
 
     /** @brief Current hubble time.
      * @param   eta Current time eta.
      * @return H(eta).
      */
-    double H(const double eta) {
-        return 1./eta;
-    }
+    static double H(const double eta) { return 1. / eta; }
 
     /** @brief Current string width in units of the grid spacing.
      * @param   lev Current level.
@@ -48,7 +44,7 @@ class Cosmology {
      * @return String width.
      */
     double StringWidth(const int lev, const double eta) {
-        return 1./(Mr(eta) * sim->GetDx(lev));
+        return 1. / (Mr(eta) * sim->GetDx(lev));
     }
 
     /** @brief Returns time at which a level will be introduced.
@@ -56,8 +52,8 @@ class Cosmology {
      * @return Refinement time for level lev.
      */
     double RefinementTime(const int lev) {
-        return sim->GetDimN(lev) / (sqrt(2.*lambda)
-                * string_width_threshold * sim->GetL());
+        return sim->GetDimN(lev) /
+               (sqrt(2. * lambda) * string_width_threshold * sim->GetL());
     }
 
     /** @brief  Computes scale separation.
@@ -67,7 +63,7 @@ class Cosmology {
     double Log(const double eta) {
         if (eta <= 0)
             return -DBL_MAX;
-        return std::log( Mr(eta) / H(eta) );
+        return std::log(Mr(eta) / H(eta));
     }
 
     /** @brief  Computes the physical box length.
@@ -90,17 +86,15 @@ class Cosmology {
      * @return Physical Hubble parameter.
      */
     double Hubble(const double T, const double mpl, const double gStar) {
-        return std::sqrt(4.*std::pow(M_PI, 3) / 45. * gStar * std::pow(T, 4)
-                / std::pow(mpl, 2));
+        return std::sqrt(4. * std::pow(M_PI, 3) / 45. * gStar * std::pow(T, 4) /
+                         std::pow(mpl, 2));
     }
 
     double XiTime(double T, double mpl, double gStar) {
         return 0.3012 / std::sqrt(gStar) * mpl / std::pow(T, 2);
     }
 
-    double XiTemp(double eta, double T1) {
-        return T1 / eta;
-    }
+    double XiTemp(double eta, double T1) { return T1 / eta; }
 
     double Xi(const int lev, const double eta);
 
@@ -132,7 +126,7 @@ class Cosmology {
 
     /** @brief Pointer to the simulation.
      */
-    sledgehamr::Sledgehamr* sim;
+    sledgehamr::Sledgehamr *sim;
 };
 
 }; // namespace AxionStrings

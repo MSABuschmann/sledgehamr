@@ -1,0 +1,11 @@
+#ifndef PROJECTS_AXION_ONLY_SETUP_H_
+#define PROJECTS_AXION_ONLY_SETUP_H_
+
+namespace AxionOnly {
+
+SLEDGEHAMR_ADD_SCALARS(theta)
+SLEDGEHAMR_ADD_CONJUGATE_MOMENTA(dtheta)
+
+}; // namespace AxionOnly
+
+#endif // PROJECTS_AXION_ONLY_SETUP_H_

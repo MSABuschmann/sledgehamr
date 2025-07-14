@@ -245,7 +245,7 @@ class Sledgehamr : public amrex::AmrCore {
     /** @brief Initialize project specific details. To be overriden by each
      *         project if required.
      */
-    virtual void Init(){};
+    virtual void Init() {};
 
     /** @brief Function to check whether a given level is allowed to be created
      *         by a given time. Will always allow a level to be created by
@@ -269,7 +269,7 @@ class Sledgehamr : public amrex::AmrCore {
     /** @brief Any work that should be done before a coarse level time step.
      *         To be overriden by the project class.
      */
-    virtual void BeforeTimestep(const double time){};
+    virtual void BeforeTimestep(const double time) {};
 
     /** @brief Stopping condition of the simulation. Can be overriden by the
      *         project class.
@@ -284,7 +284,7 @@ class Sledgehamr : public amrex::AmrCore {
      * @param   lev     Current level.
      */
     virtual void SetParamsRhs(std::vector<double> &params, const double time,
-                              const int lev){};
+                              const int lev) {};
 
     /** @brief Function to be overriden by the project class to set user-defined
      *         parameters that will be passed to the Rhs computation of
@@ -295,7 +295,7 @@ class Sledgehamr : public amrex::AmrCore {
      */
     virtual void SetParamsGravitationalWaveRhs(std::vector<double> &params,
                                                const double time,
-                                               const int lev){};
+                                               const int lev) {};
 
     /** @brief Function to be overriden by the project class to set user-defined
      *         parameters that will be passed to the tagging procedure.
@@ -305,7 +305,7 @@ class Sledgehamr : public amrex::AmrCore {
      */
     virtual void SetParamsTagCellForRefinement(std::vector<double> &params,
                                                const double time,
-                                               const int lev){};
+                                               const int lev) {};
 
     /** @brief Function to be overriden by the project class to set user-defined
      *         parameters that will be available when modifying the truncation
@@ -316,7 +316,7 @@ class Sledgehamr : public amrex::AmrCore {
      */
     virtual void SetParamsTruncationModifier(std::vector<double> &params,
                                              const double time,
-                                             const int lev){};
+                                             const int lev) {};
 
     /** @brief Function to be overriden by the project class to set user-defined
      *         parameters that will be passed to the spectrum computation.
@@ -325,7 +325,7 @@ class Sledgehamr : public amrex::AmrCore {
      * @param   lev     Current level.
      */
     virtual void SetParamsSpectra(std::vector<double> &params,
-                                  const double time){};
+                                  const double time) {};
 
     /** @brief Function to be overriden by the project class to set user-defined
      *         parameters that will be passed to the computation of projections.
@@ -334,7 +334,7 @@ class Sledgehamr : public amrex::AmrCore {
      * @param   lev     Current level.
      */
     virtual void SetParamsProjections(std::vector<double> &params,
-                                      const double time){};
+                                      const double time) {};
 
     void CreateShadowLevel();
 
@@ -417,6 +417,10 @@ class Sledgehamr : public amrex::AmrCore {
      */
     std::vector<int> spectrum_ks;
 
+    /** @brief Unique bins for gravitational wave spectrum calculation.
+     */
+    std::vector<int> gw_spectrum_ks;
+
     /** @brief Pre-computed conversion of index to k for gravitational wave
      * spectrum calculation.
      */
@@ -439,6 +443,8 @@ class Sledgehamr : public amrex::AmrCore {
      */
     bool restart_sim = false;
 
+    double last_full_time = 0;
+
   private:
     void DoErrorEstCpu(int lev, amrex::TagBoxArray &tags, double time);
     void DoErrorEstGpu(int lev, amrex::TagBoxArray &tags, double time);
@@ -446,6 +452,8 @@ class Sledgehamr : public amrex::AmrCore {
     void ParseInput();
     void ParseInputScalars();
     void ReadSpectrumKs(bool reload = false);
+    void ReadK(std::vector<int> &spec, int dim);
+    void ReadProj(int dim);
     void DoPrerunChecks();
     void DetermineBoxLayout();
 

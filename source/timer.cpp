@@ -8,7 +8,7 @@ void Timer::Start() {
     if (is_running)
         return;
 
-    //amrex::ParallelDescriptor::Barrier();
+    // amrex::ParallelDescriptor::Barrier();
     start_time = std::chrono::steady_clock::now();
     is_running = true;
 }
@@ -19,9 +19,9 @@ void Timer::Stop() {
     if (!is_running)
         return;
 
-    //amrex::ParallelDescriptor::Barrier();
+    // amrex::ParallelDescriptor::Barrier();
     CheckClock();
-    total_micro +=  static_cast<double>(last_duration_micro.count());
+    total_micro += static_cast<double>(last_duration_micro.count());
     is_running = false;
 }
 
@@ -36,17 +36,17 @@ double Timer::GetTotalTimeSeconds() {
         extra_micro = static_cast<double>(last_duration_micro.count());
     }
 
-    return (total_micro + extra_micro)/1e6;
+    return (total_micro + extra_micro) / 1e6;
 };
 
-/** @brief Same as GetTotalTimeSeconds() but only time since the timer was 
+/** @brief Same as GetTotalTimeSeconds() but only time since the timer was
  *         last started.
  */
 double Timer::GetLastDurationSeconds() {
     if (is_running)
         CheckClock();
 
-    return static_cast<double>(last_duration_micro.count())/1e6;
+    return static_cast<double>(last_duration_micro.count()) / 1e6;
 };
 
 /** @brief Computes time passed between now and the last starting time point
@@ -54,9 +54,8 @@ double Timer::GetLastDurationSeconds() {
  */
 void Timer::CheckClock() {
     stop_time = std::chrono::steady_clock::now();
-    last_duration_micro =
-            std::chrono::duration_cast<std::chrono::microseconds>(
-                stop_time - start_time);
+    last_duration_micro = std::chrono::duration_cast<std::chrono::microseconds>(
+        stop_time - start_time);
 }
 
 }; // namespace sledgehamr

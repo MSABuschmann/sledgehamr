@@ -20,7 +20,7 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr *sim) {
 
     amrex::MultiFab field, field_fft;
     field.define(ba, sim->dmap[lev], 1, 0);
-    field_fft.define(ba, sim->dmap[lev], 1, 0);
+    // field_fft.define(ba, sim->dmap[lev], 1, 0);
 
     std::vector<double> params;
     sim->SetParamsSpectra(params, time);
@@ -73,6 +73,8 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr *sim) {
             for (int j = jl; j <= jh; ++j) {
                 AMREX_PRAGMA_SIMD
                 for (int k = kl; k <= kh; ++k) {
+                    // To account for negative frequencies
+                    double multpl = (i == 0 || i == dimN / 2) ? 1. : 2.;
                     int li = i >= dimN / 2 ? i - dimN : i;
                     int lj = j >= dimN / 2 ? j - dimN : j;
                     int lk = k >= dimN / 2 ? k - dimN : k;
@@ -80,7 +82,8 @@ void Spectrum::Compute(const int id, const hid_t file_id, Sledgehamr *sim) {
                     unsigned long index =
                         std::lower_bound(ks.begin(), ks.end(), sq) -
                         ks.begin() + omp_get_thread_num() * kmax;
-                    spectrum[index] += pre * field_fft_arr(i, j, k, 0) *
+                    spectrum[index] += multpl * pre *
+                                       field_fft_arr(i, j, k, 0) *
                                        field_fft_arr(i, j, k, 0);
                 }
             }

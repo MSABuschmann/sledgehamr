@@ -2,6 +2,7 @@
 #include "sledgehamr_utils.h"
 
 #include "integrators/amrex_integrators.h"
+#include "integrators/leapfrog.h"
 #include "integrators/lsssprk3.h"
 #include "integrators/rkn.h"
 
@@ -45,6 +46,9 @@ void TimeStepper::SetIntegrator() {
         break;
     case Lsssprk3:
         integrator = std::make_unique<IntegratorLsssprk3>(sim);
+        break;
+    case Leapfrog:
+        integrator = std::make_unique<IntegratorLeapfrog>(sim);
         break;
     case RknButcherTableau:
         //[[fallthrough]];
@@ -178,8 +182,8 @@ void TimeStepper::PreAdvanceMessage(int lev) {
 
     amrex::Print() << std::left << std::setw(50) << level_message
                    << "Advancing " << ncells << " cells in " << nba
-                   << " boxes ... "
-                   << "(" << coverage_fraction << "\% coverage)" << std::endl;
+                   << " boxes ... " << "(" << coverage_fraction
+                   << "\% coverage)" << std::endl;
 }
 
 /** @brief Prints message right after a level has been advanced.
