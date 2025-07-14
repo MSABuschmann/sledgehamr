@@ -101,9 +101,10 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a42aba2d4f665f9c80536ef55a825278c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelWriter.html#a42aba2d4f665f9c80536ef55a825278c">CheckDownsampleFactor</a> ()</td></tr>
 <tr class="memdesc:a42aba2d4f665f9c80536ef55a825278c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if downsameple factor is valid.  <a href="classsledgehamr_1_1LevelWriter.html#a42aba2d4f665f9c80536ef55a825278c">More...</a><br /></td></tr>
 <tr class="separator:a42aba2d4f665f9c80536ef55a825278c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bd495ec5c58e55de43c03a30667e34a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelWriter.html#a4bd495ec5c58e55de43c03a30667e34a">WriteSingleLevel</a> (const <a class="el" href="classsledgehamr_1_1LevelData.html">LevelData</a> *state, int lev, hid_t file_id, std::string ident, bool is_truncation_error)</td></tr>
-<tr class="memdesc:a4bd495ec5c58e55de43c03a30667e34a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a single level to disk.  <a href="classsledgehamr_1_1LevelWriter.html#a4bd495ec5c58e55de43c03a30667e34a">More...</a><br /></td></tr>
-<tr class="separator:a4bd495ec5c58e55de43c03a30667e34a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20c1c541f393cd754ece8338c872ec69"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a20c1c541f393cd754ece8338c872ec69"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelWriter.html#a20c1c541f393cd754ece8338c872ec69">WriteSingleLevel</a> (const <a class="el" href="classsledgehamr_1_1LevelData.html">LevelData</a> *state, int lev, hid_t file_id, std::string ident, bool is_truncation_error)</td></tr>
+<tr class="memdesc:a20c1c541f393cd754ece8338c872ec69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a single level to disk.  <a href="classsledgehamr_1_1LevelWriter.html#a20c1c541f393cd754ece8338c872ec69">More...</a><br /></td></tr>
+<tr class="separator:a20c1c541f393cd754ece8338c872ec69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -134,6 +135,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a10bfe3bdfc584fcb12bf190fdc16d8ac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelWriter.html#a10bfe3bdfc584fcb12bf190fdc16d8ac">downsample_factor</a> = 1</td></tr>
 <tr class="memdesc:a10bfe3bdfc584fcb12bf190fdc16d8ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Downsample data by this factor before writing.  <a href="classsledgehamr_1_1LevelWriter.html#a10bfe3bdfc584fcb12bf190fdc16d8ac">More...</a><br /></td></tr>
 <tr class="separator:a10bfe3bdfc584fcb12bf190fdc16d8ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af70657c59b1ac718652a5df1aecbcca0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsledgehamr_1_1LevelWriter.html#af70657c59b1ac718652a5df1aecbcca0">precision</a> = 32</td></tr>
+<tr class="memdesc:af70657c59b1ac718652a5df1aecbcca0"><td class="mdescLeft">&#160;</td><td class="mdescRight">floating point precision.  <a href="classsledgehamr_1_1LevelWriter.html#af70657c59b1ac718652a5df1aecbcca0">More...</a><br /></td></tr>
+<tr class="separator:af70657c59b1ac718652a5df1aecbcca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Writes level data to disk. </p>
@@ -283,11 +287,13 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a4bd495ec5c58e55de43c03a30667e34a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4bd495ec5c58e55de43c03a30667e34a">&#9670;&nbsp;</a></span>WriteSingleLevel()</h2>
+<a id="a20c1c541f393cd754ece8338c872ec69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20c1c541f393cd754ece8338c872ec69">&#9670;&nbsp;</a></span>WriteSingleLevel()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -521,6 +527,30 @@ Private Attributes</h2></td></tr>
 <li>io_module-&gt;idx_full_box</li>
 <li>io_module-&gt;idx_full_box_truncation_error </li>
 </ul>
+
+</div>
+</div>
+<a id="af70657c59b1ac718652a5df1aecbcca0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af70657c59b1ac718652a5df1aecbcca0">&#9670;&nbsp;</a></span>precision</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sledgehamr::LevelWriter::precision = 32</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>floating point precision. </p>
 
 </div>
 </div>

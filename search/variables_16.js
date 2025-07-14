@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['x_1402',['x',['../classFirstOrderPhaseTransition_1_1Bubble.html#abd805e552c647c5eb31176359e8de884',1,'FirstOrderPhaseTransition::Bubble']]],
-  ['xi_5f0_1403',['xi_0',['../classAxionStringsPreevolution_1_1AxionStringsPreevolution.html#ac1ef2fd5770c7fa03d480cd169c3eda4',1,'AxionStringsPreevolution::AxionStringsPreevolution']]]
+  ['weights_5fb_1466',['weights_b',['../classsledgehamr_1_1IntegratorRkn.html#ac7920d5f9da25e69e81874c4172e0b68',1,'sledgehamr::IntegratorRkn']]],
+  ['weights_5fbar_5fb_1467',['weights_bar_b',['../classsledgehamr_1_1IntegratorRkn.html#a87818c23318c0f53cea29f2ceb534074',1,'sledgehamr::IntegratorRkn']]],
+  ['with_5fdissipation_1468',['with_dissipation',['../classsledgehamr_1_1Sledgehamr.html#a355e94b7c7910b4291356530ce2d240a',1,'sledgehamr::Sledgehamr']]],
+  ['with_5fgravitational_5fwaves_1469',['with_gravitational_waves',['../classsledgehamr_1_1Sledgehamr.html#affbe4047a4e7222e61195b4241ff4bb1',1,'sledgehamr::Sledgehamr']]],
+  ['with_5ftruncation_5ferrors_1470',['with_truncation_errors',['../classsledgehamr_1_1LevelWriter.html#a006a6722b24a4c1e86fe34804d1158f9',1,'sledgehamr::LevelWriter::with_truncation_errors()'],['../classsledgehamr_1_1Slices.html#afeacdad3b3f035dbd684978800e13a84',1,'sledgehamr::Slices::with_truncation_errors()']]],
+  ['wrapped_5findex_1471',['wrapped_index',['../classsledgehamr_1_1LocalRegrid.html#ab5c0c64729d05d204f461d223d01bc72',1,'sledgehamr::LocalRegrid']]]
 ];
