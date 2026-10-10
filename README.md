@@ -63,6 +63,6 @@ BibTex:
 ### 2025
 * "Sledgehamr: Simulating Scalar Fields with Adaptive Mesh Refinement", M. Buschmann, Astrophys.J. 979 (2025) 2, 220, https://arxiv.org/abs/2404.02950
 * "Axion mass prediction from adaptive mesh refinement cosmological lattice simulations", J. Benabou et al., Phys.Rev.Lett. 134 (2025) 24, 241003, https://arxiv.org/abs/2412.08699
-* "Thick and Thin Wall Collisions with Adaptive Mesh Refinement", M. Buschmann et al., to appear
+* "A Pairwise Surrogate for Gravitational-Wave Spectra from Highly Relativistic Vacuum Bubble Collisions", M. Buschmann and T. Operkuch, https://arxiv.org/abs/2610.12389 
 
 
